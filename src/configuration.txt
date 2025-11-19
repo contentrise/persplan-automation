@@ -1,0 +1,18 @@
+# Allgemeine Einstellungen für PersPlan-Schichtcrawler
+month=11
+year=2025
+vertragstyp=2
+export_dir=exports
+max_ma_loop=
+
+# Einstellungen für Urlaubsplanung
+urlaub_month=10
+urlaub_year=2025
+save_uu=true
+
+# Tagesplan (alt)
+tagesplan_in_tagen=7
+
+
+kleidungs_max_rows=0
+// kleidungs_debug_rows=user_tbl_row_3451

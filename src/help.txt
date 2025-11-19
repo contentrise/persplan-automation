@@ -1,0 +1,45 @@
+
+python3 -m src.main login --headless=true --slowmo=150
+python3 -m src.main planung --headless=true --slowmo=0
+python3 -m src.urlaub_scraper --headless=false --slowmo=150
+python3 src/analyse_connector.py
+
+python3 -m src.main login --headless=true --slowmo=150
+python3 -m src.schichtplan_py --headless=true --slowmo=0
+
+
+Schicht bestätigen / Tagesplan (alt)
+
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.main schicht-bestaetigen --headless=true --slowmo=150
+
+Kleidungsrueckgabe (Ausgeschiedene)
+
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.main kleidungsrueckgabe --headless=true --slowmo=150
+
+
+.venv starten
+
+cd ~/Desktop/persplan-schichten
+source .venv/bin/activate
+
+
+Der Mitarbeiter oder die Mitarbeiterin hat in dem Zeitraum bereits abgeglichene schichten
+
+
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.urlaub_scraper --headless=false --slowmo=150
+
+Der Mitarbeiter ist in dem Zeitraum des Urlaubs ganz oder teilweise nicht eingetreten!
+Der Mitarbeiter ist in dem Zeitraum des Urlaubs ganz oder teilweise nicht eingetreten!
+
+
+Mitarbeiteranlage - Start Flow
+
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.main mitarbeiteranlage --headless=false --slowmo=150
+
+
+
+python3 personalbogen-phraser.py
