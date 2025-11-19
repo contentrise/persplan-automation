@@ -4,9 +4,14 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import re
 from urllib.parse import urljoin
+
+import boto3
 from playwright.sync_api import Page, Frame, Locator, sync_playwright
 
 from src import config
+
+S3_BUCKET = "greatstaff-data-storage"
+S3_PREFIX = "staffing"
 
 
 def _wait_for_frame(page: Page, name: str, timeout_seconds: int = 20) -> Frame:
@@ -585,10 +590,10 @@ def process_veranstaltungen(
     return report_rows
 
 
-def write_orange_report(rows: list[dict[str, str]]) -> None:
+def write_orange_report(rows: list[dict[str, str]]) -> Path | None:
     if not rows:
         print("[INFO] Keine gelben Mitarbeiter – es wird keine CSV erstellt.")
-        return
+        return None
 
     export_dir = Path(config.EXPORT_DIR)
     export_dir.mkdir(parents=True, exist_ok=True)
@@ -611,6 +616,31 @@ def write_orange_report(rows: list[dict[str, str]]) -> None:
             )
 
     print(f"[OK] CSV mit gelben Mitarbeitern gespeichert: {path}")
+    return path
+
+
+def upload_report_to_s3(path: Path | None) -> None:
+    """
+    Lädt die CSV in den gewünschten Bucket hoch.
+    """
+    if path is None:
+        return
+
+    if not S3_BUCKET:
+        print("[INFO] Kein S3_BUCKET konfiguriert – Upload übersprungen.")
+        return
+
+    prefix = S3_PREFIX.strip().strip("/")
+    date_folder = datetime.now().strftime("%Y-%m-%d")
+    key_parts = [part for part in [prefix, date_folder, path.name] if part]
+    key = "/".join(key_parts)
+
+    s3 = boto3.client("s3")
+    try:
+        s3.upload_file(str(path), S3_BUCKET, key)
+        print(f"[OK] CSV nach S3 hochgeladen: s3://{S3_BUCKET}/{key}")
+    except Exception as exc:
+        print(f"[WARNUNG] Upload nach S3 fehlgeschlagen: {exc}")
 
 
 def run_schicht_bestaetigen(headless: bool | None = None, slowmo_ms: int | None = None) -> None:
@@ -641,7 +671,8 @@ def run_schicht_bestaetigen(headless: bool | None = None, slowmo_ms: int | None 
             events = collect_event_links(frame)
             phonebook = build_phonebook_from_overview(frame)
             rows = process_veranstaltungen(page, events, phonebook)
-            write_orange_report(rows)
+            csv_path = write_orange_report(rows)
+            upload_report_to_s3(csv_path)
         finally:
             print("[INFO] Browser wird geschlossen …")
             browser.close()
