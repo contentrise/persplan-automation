@@ -17,6 +17,7 @@ Usage:
 import json
 import os
 import subprocess
+import sys
 import tempfile
 import time
 
@@ -25,7 +26,8 @@ import boto3
 
 QUEUE_URL = os.environ.get("QUEUE_URL") or "https://sqs.eu-central-1.amazonaws.com/648862944706/zulagen-upload"
 REGION = os.environ.get("REGION") or os.environ.get("AWS_DEFAULT_REGION") or "eu-central-1"
-PYTHON_CMD = os.environ.get("PYTHON_CMD", "python3")
+# Standard: nimm das laufende Python (damit das venv auch für den Child-Prozess gilt)
+PYTHON_CMD = os.environ.get("PYTHON_CMD", sys.executable)
 SLOWMO_MS = os.environ.get("SLOWMO_MS", "0")
 DELAY_SEC = os.environ.get("DELAY_SEC", "0.05")
 
