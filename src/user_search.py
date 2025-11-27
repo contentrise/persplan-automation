@@ -168,18 +168,18 @@ def _open_user_overview(page: Page) -> Union[Frame, Page]:
         frame.goto(target_url, wait_until="domcontentloaded", timeout=30000)
         target = frame
 
-    # Robust warten, bis die Suche und Tabelle sichtbar sind
+    # Robust warten, bis die Suche und Tabelle sichtbar sind (etwas länger, Server kann träge sein)
     target.wait_for_selector(
         ".scn_datatable_outer_table_user_tbl, div.dataTables_filter, #user_tbl_filter",
-        timeout=8000,
+        timeout=20000,
     )
     target.wait_for_selector(
         ".scn_datatable_outer_table_user_tbl input[type='search'], input[aria-controls='user_tbl'], input[type='search']",
-        timeout=8000,
+        timeout=20000,
     )
     target.wait_for_selector(
         ".scn_datatable_outer_table_user_tbl table#user_tbl tbody tr, table#user_tbl tbody tr",
-        timeout=8000,
+        timeout=20000,
     )
     return target
 
@@ -202,11 +202,16 @@ def _locate_search_input(target: Union[Frame, Page]):
     return target.locator("input").first  # letzter Fallback
 
 
-def _search_and_click(target: Union[Frame, Page], queries: list[str], delay: float) -> Page | None:
+def _search_and_click(
+    target: Union[Frame, Page], queries: list[str], delay: float, deadline: float | None = None
+) -> Page | None:
     """
     Füllt das Suchfeld mit den gegebenen Queries.
     Bei genau einem Treffer wird geklickt. Liefert die Page, auf der nach dem Klick weitergearbeitet wird.
     """
+    if deadline is None:
+        deadline = time.time() + 30  # Hard-Timeout für die Suche
+
     search_input = _locate_search_input(target)
     if search_input.count() == 0:
         raise RuntimeError("[FEHLER] Suchfeld in user.php nicht gefunden.")
@@ -215,6 +220,9 @@ def _search_and_click(target: Union[Frame, Page], queries: list[str], delay: flo
     parent_page = target.page if isinstance(target, Frame) else target
 
     for query in queries:
+        if time.time() > deadline:
+            print("[INFO] Suche abgebrochen (Timeout nach 30s).")
+            break
         search_input.fill(query)
         time.sleep(max(0.05, delay))
         match_count = rows.count()
@@ -297,6 +305,7 @@ def run_user_search(
         raise RuntimeError("[FEHLER] Keine gültigen Suchbegriffe gefunden.")
 
     print(f"[INFO] Verwende Suchbegriffe: {queries}")
+    search_deadline = time.time() + 30  # Gesamttimeout für die Suche
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
@@ -308,7 +317,7 @@ def run_user_search(
 
         try:
             frame = _open_user_overview(page)
-            result_page = _search_and_click(frame, queries, delay)
+            result_page = _search_and_click(frame, queries, delay, deadline=search_deadline)
             if result_page:
                 print("[OK] Treffer geklickt – navigiere zu 'Zulagen' …")
                 _navigate_to_zulagen(result_page)
