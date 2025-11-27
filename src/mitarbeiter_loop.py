@@ -84,6 +84,106 @@ def _extract_kommentar(page: Page) -> str:
     return ""
 
 
+def _extract_austrittsdatum(page: Page) -> str:
+    """
+    Öffnet den Reiter „Vertragsdaten“ und liest das Feld #austritt aus.
+    Rückgabe: z. B. '31.03.2026', 'unbefristet' oder ''.
+    """
+    austritt_text = ""
+    try:
+        link = page.locator("a", has_text="Vertragsdaten")
+        if link.count() == 0:
+            print("[WARNUNG] Kein Link 'Vertragsdaten' gefunden – überspringe Austrittsprüfung.")
+            return ""
+
+        link.first.scroll_into_view_if_needed()
+        link.first.click()
+        page.wait_for_load_state("domcontentloaded", timeout=8000)
+
+        for _ in range(24):
+            target = page.locator("#austritt")
+            if target.count() > 0:
+                austritt_text = target.first.inner_text().strip()
+                if austritt_text:
+                    break
+            time.sleep(0.25)
+
+        if not austritt_text:
+            html = page.content()
+            match = re.search(r"Austrittsdatum[^<]*</td>\s*<td[^>]*>(.*?)</td>", html, re.IGNORECASE | re.DOTALL)
+            if match:
+                austritt_text = re.sub("<[^<]+?>", "", match.group(1)).replace("&nbsp;", " ").strip()
+
+        austritt_text = " ".join(austritt_text.split())  # Mehrfach-Spaces normalisieren
+        return austritt_text
+
+    except Exception as e:
+        print(f"[WARNUNG] Austrittsdatum konnte nicht gelesen werden: {e}")
+        return ""
+
+
+def _open_tab(page: Page, labels: list[str], wait_selector: str | None = None) -> None:
+    """
+    Klickt auf eines der übergebenen Tab-Labels (bevorzugt im #tableOfSubmenue) und wartet, bis die Seite geladen ist.
+    """
+    target_link = None
+    for _ in range(60):
+        for label in labels:
+            candidates = [
+                page.locator("#tableOfSubmenue a", has_text=label),
+                page.locator("a", has_text=label),
+            ]
+            for locator in candidates:
+                if locator.count() > 0:
+                    target_link = locator.first
+                    break
+            if target_link:
+                break
+        if target_link:
+            break
+        time.sleep(0.25)
+
+    if not target_link:
+        label_text = ", ".join(labels)
+        raise Exception(f"Kein Link für '{label_text}' sichtbar.")
+
+    target_link.scroll_into_view_if_needed()
+    target_link.click()
+    page.wait_for_load_state("domcontentloaded", timeout=10000)
+    if wait_selector:
+        page.wait_for_selector(wait_selector, timeout=10000)
+    time.sleep(0.5)
+
+
+def _apply_month_year_filter(target, month: int, year: str):
+    """
+    Setzt Monat/Jahr im Mitarbeiter-Tab und verwendet einen Index-Fallback,
+    falls das Dropdown andere Werte nutzt (z. B. 0-basierte Monate).
+    """
+    month_value = str(month)
+    year_value = str(year)
+
+    target.wait_for_selector("select#von_monat", timeout=8000)
+    target.wait_for_selector("select#von_jahr", timeout=8000)
+
+    target.select_option("select#von_monat", value=month_value)
+    actual_month = target.locator("select#von_monat").input_value()
+
+    if actual_month != month_value:
+        fallback_index = max(month - 1, 0)
+        print(
+            f"[WARNUNG] Monat={month_value} nicht übernommen (aktuell {actual_month}). "
+            f"Versuche Index {fallback_index} …"
+        )
+        target.select_option("select#von_monat", index=fallback_index)
+        actual_month = target.locator("select#von_monat").input_value()
+
+    target.select_option("select#von_jahr", value=year_value)
+    time.sleep(0.2)
+    target.wait_for_load_state("networkidle", timeout=10000)
+    print(f"[OK] Monat/Jahr gesetzt: {actual_month}/{year_value}")
+
+
 def loop_all_mitarbeiter(page: Page, csv_path: str, view: str = "anfragen"):
     """
     Geht auf der Staffing-Seite alle Mitarbeiter durch,
@@ -208,47 +308,30 @@ def loop_all_mitarbeiter(page: Page, csv_path: str, view: str = "anfragen"):
                 continue
 
             try:
-                # Personalnummer lesen
+                # Zuerst Vertragsdaten öffnen und Austritt holen
+                austrittsdatum = _extract_austrittsdatum(new_page)
+                if austrittsdatum:
+                    print(f"[OK] Austrittsdatum: {austrittsdatum}")
+                else:
+                    print("[INFO] Kein Austrittsdatum hinterlegt (oder unbefristet).")
+
+                # Zur passenden Ansicht zurücknavigieren (wichtig nach Vertragsdaten)
+                wait_selector = "#tbl_ma_dienstplane" if view_key == "dienstplan" else "#tbl_ma_anfragen"
+                _open_tab(new_page, tab_labels, wait_selector=wait_selector)
+
+                # Personalnummer lesen (nachdem wir wieder im Ziel-Tab sind)
                 personalnummer = _extract_personalnummer(new_page)
                 if personalnummer:
                     print(f"[OK] Personalnummer erkannt: {personalnummer}")
                 else:
                     print("[WARNUNG] Keine Personalnummer gefunden.")
 
-                # Auf entsprechendes Tab klicken
-                target_link = None
-                for _ in range(60):
-                    for label in tab_labels:
-                        locator = new_page.locator("a", has_text=label)
-                        if locator.count() > 0:
-                            target_link = locator.first
-                            break
-                    if target_link:
-                        break
-                    time.sleep(0.25)
-
-                if not target_link:
-                    label_text = ", ".join(tab_labels)
-                    raise Exception(f"Kein Link für '{label_text}' sichtbar.")
-
-                target_link.scroll_into_view_if_needed()
-                target_link.click()
-                new_page.wait_for_load_state("domcontentloaded", timeout=10000)
-                time.sleep(0.5)
-
-                # Monat / Jahr setzen
-                month_value = str(config.MONTH)
-                year_value = str(config.YEAR)
-
-                new_page.wait_for_selector("select#von_monat", timeout=8000)
-                new_page.wait_for_selector("select#von_jahr", timeout=8000)
-
-                new_page.select_option("select#von_monat", value=month_value)
-                time.sleep(0.2)
-                new_page.select_option("select#von_jahr", value=year_value)
-                time.sleep(0.2)
-
-                new_page.wait_for_load_state("networkidle", timeout=10000)
+                # Monat / Jahr setzen (immer anwenden, nicht nur im Dienstplan-Tab)
+                try:
+                    _apply_month_year_filter(new_page, config.MONTH, config.YEAR)
+                except Exception as e:
+                    print(f"[WARNUNG] Konnte Monat/Jahr nicht setzen: {e}")
+                    new_page.wait_for_load_state("networkidle", timeout=8000)
 
                 # Kommentar (Status der Tabelle) extrahieren
                 kommentar = ""
@@ -263,6 +346,7 @@ def loop_all_mitarbeiter(page: Page, csv_path: str, view: str = "anfragen"):
                 for e in eintraege:
                     e["mitarbeiter"] = employee_name
                     e["personalnummer"] = personalnummer or ""
+                    e["austrittsdatum"] = austrittsdatum or ""
                     e["telefon"] = phone_number or ""
                     e["kommentar"] = kommentar or ""
                     results.append(e)

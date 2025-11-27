@@ -89,12 +89,8 @@ def open_schichtplan(page: Page):
     # 🟢 Filter + Monat setzen & Anzeigen klicken
     # ========================
     try:
-        # Vertragstyp setzen
-        vertragstyp_value = str(config.VERTRAGSTYP)
-        print(f"[INFO] Wähle Vertragstyp (value={vertragstyp_value}) aus …")
-        frame_content.wait_for_selector("select[name='filter_vertragstypen[]']", timeout=5000)
-        frame_content.select_option("select[name='filter_vertragstypen[]']", value=vertragstyp_value)
-        time.sleep(0.8)
+        # Vertragstyp nicht mehr filtern – direkt weiter
+        print("[INFO] Überspringe Vertragstyp-Filter – verwende vorhandene Auswahl …")
 
         # Monat setzen
         month_value = str(config.MONTH)

@@ -4,8 +4,7 @@ python3 -m src.main planung --headless=true --slowmo=0
 python3 -m src.urlaub_scraper --headless=false --slowmo=150
 python3 src/analyse_connector.py
 
-python3 -m src.main login --headless=true --slowmo=150
-python3 -m src.schichtplan_py --headless=true --slowmo=0
+≈
 
 
 Schicht bestätigen / Tagesplan (alt)
@@ -17,6 +16,9 @@ Kleidungsrueckgabe (Ausgeschiedene)
 
 python3 -m src.main login --headless=false --slowmo=150
 python3 -m src.main kleidungsrueckgabe --headless=true --slowmo=150
+
+Neuer user.php-Sucher (Flow-Kontaktdaten)
+python3 -m src.user_search --flow-file "flow (2).json" --headless=false --slowmo=0 --delay=0.15
 
 
 .venv starten

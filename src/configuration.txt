@@ -1,5 +1,5 @@
 # Allgemeine Einstellungen für PersPlan-Schichtcrawler
-month=11
+month=12
 year=2025
 vertragstyp=2
 export_dir=exports
