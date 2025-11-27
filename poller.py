@@ -38,8 +38,17 @@ s3 = boto3.client("s3", region_name=REGION)
 
 
 def _process_message(msg: dict):
-    body = json.loads(msg["Body"])
-    record = body["Records"][0]
+    body_raw = msg.get("Body", "")
+    try:
+        body = json.loads(body_raw)
+    except Exception:
+        raise ValueError(f"Unbekanntes Message-Format: {body_raw!r}")
+
+    records = body.get("Records") if isinstance(body, dict) else None
+    if not records:
+        raise ValueError(f"Keine S3-Records im Message-Body: {body_raw!r}")
+
+    record = records[0]
     bucket = record["s3"]["bucket"]["name"]
     key = record["s3"]["object"]["key"]
 
