@@ -139,17 +139,29 @@ def _click_zulage_hinzufuegen(page: Page, deposit_total: float, today_str: str, 
 
 
 def _build_queries(contact: dict) -> list[str]:
-    """Erzeugt Suchbegriffe aus den verfügbaren Kontaktfeldern."""
+    """Erzeugt Suchbegriffe aus den verfügbaren Kontaktfeldern (priorisiert)."""
     queries: list[str] = []
     first = (contact.get("firstName") or "").strip()
     last = (contact.get("lastName") or "").strip()
     phone = (contact.get("phone") or "").strip()
     email = (contact.get("email") or "").strip()
+    personalnummer = (contact.get("personalnummer") or contact.get("personnelNumber") or "").strip()
 
     full_name = " ".join(part for part in [first, last] if part).strip()
     phone_clean = "".join(ch for ch in phone if ch.isdigit() or ch == "+")
 
-    for candidate in [full_name, email, phone, phone_clean, last, first]:
+    # Priorität: Personalnummer (eindeutig) -> Phone -> Email -> Name-Varianten
+    candidates = [
+        personalnummer,
+        phone,
+        phone_clean,
+        email,
+        full_name,
+        last,
+        first,
+    ]
+
+    for candidate in candidates:
         if candidate and candidate not in queries:
             queries.append(candidate)
     return queries

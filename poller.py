@@ -42,6 +42,7 @@ s3 = boto3.client("s3", region_name=REGION)
 def _process_message(msg: dict):
     msg_id = msg.get("MessageId", "?")
     body_raw = msg.get("Body", "")
+    print(f"[INFO] [{msg_id}] Roh-Body: {body_raw}")
     try:
         body = json.loads(body_raw)
     except Exception:
