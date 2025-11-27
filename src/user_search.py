@@ -10,6 +10,7 @@ from urllib.parse import urljoin
 from playwright.sync_api import Frame, Page, TimeoutError, sync_playwright
 
 from src import config
+from src.login import do_login
 
 
 def _wait_for_inhalt_frame(page: Page, timeout_seconds: int = 5) -> Frame | None:
@@ -316,7 +317,15 @@ def run_user_search(
         page.goto(config.BASE_URL, wait_until="domcontentloaded")
 
         try:
+            # erster Versuch mit gespeichertem State
             frame = _open_user_overview(page)
+        except Exception as exc:
+            print(f"[WARNUNG] Übersicht nicht geladen (Session evtl. abgelaufen): {exc} – versuche Login …")
+            page = browser.new_page()
+            do_login(page)
+            frame = _open_user_overview(page)
+
+        try:
             result_page = _search_and_click(frame, queries, delay, deadline=search_deadline)
             if result_page:
                 print("[OK] Treffer geklickt – navigiere zu 'Zulagen' …")

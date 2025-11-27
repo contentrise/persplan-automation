@@ -40,25 +40,27 @@ s3 = boto3.client("s3", region_name=REGION)
 
 
 def _process_message(msg: dict):
+    msg_id = msg.get("MessageId", "?")
     body_raw = msg.get("Body", "")
     try:
         body = json.loads(body_raw)
     except Exception:
-        raise ValueError(f"Unbekanntes Message-Format: {body_raw!r}")
+        raise ValueError(f"[{msg_id}] Unbekanntes Message-Format: {body_raw!r}")
 
     records = body.get("Records") if isinstance(body, dict) else None
     if not records:
-        raise ValueError(f"Keine S3-Records im Message-Body: {body_raw!r}")
+        raise ValueError(f"[{msg_id}] Keine S3-Records im Message-Body: {body_raw!r}")
 
     record = records[0]
     bucket = record["s3"]["bucket"]["name"]
     key = record["s3"]["object"]["key"]
 
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".json")
+    print(f"[INFO] [{msg_id}] Lade {bucket}/{key} …")
     s3.download_file(bucket, key, tmp.name)
 
-    print(f"[INFO] Starte scraper für {bucket}/{key} …")
-    subprocess.run(
+    print(f"[INFO] [{msg_id}] Starte scraper für {bucket}/{key} …")
+    result = subprocess.run(
         [
             PYTHON_CMD,
             "-m",
@@ -74,6 +76,7 @@ def _process_message(msg: dict):
         ],
         check=False,
     )
+    print(f"[INFO] [{msg_id}] Scraper beendet mit Code {result.returncode}")
 
 
 def main():
