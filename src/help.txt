@@ -18,7 +18,13 @@ python3 -m src.main login --headless=false --slowmo=150
 python3 -m src.main kleidungsrueckgabe --headless=true --slowmo=150
 
 Neuer user.php-Sucher (Flow-Kontaktdaten)
-python3 -m src.user_search --flow-file "flow (2).json" --headless=false --slowmo=0 --delay=0.15
+python3 -m src.main login --headless=true --slowmo=150
+python3 -m src.user_search --flow-file "flow (2).json" --headless=false --slowmo=50
+
+SQS-Poller (headless; triggert user_search bei neuen Flow-JSONs aus S3/SQS)
+QUEUE_URL=https://sqs.<region>.amazonaws.com/<account>/zulagen-upload \
+AWS_ACCESS_KEY_ID=... AWS_SECRET_ACCESS_KEY=... AWS_DEFAULT_REGION=eu-central-1 \
+python3 poller.py
 
 
 .venv starten
