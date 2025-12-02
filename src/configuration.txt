@@ -6,7 +6,7 @@ export_dir=exports
 max_ma_loop=
 
 # Einstellungen für Urlaubsplanung
-urlaub_month=10
+urlaub_month=11
 urlaub_year=2025
 save_uu=true
 

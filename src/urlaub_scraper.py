@@ -1,9 +1,12 @@
-from playwright.sync_api import sync_playwright
-import time
+import argparse
 import calendar
+import time
 from datetime import datetime
-from src import config
 from pathlib import Path
+
+from playwright.sync_api import sync_playwright
+
+from src import config
 
 
 def get_last_day_of_month(year, month):
@@ -42,7 +45,9 @@ def log_warnung(name, eintritt, austritt):
         f.write(f"[{ts}] {name} → Eintritt {eintritt}, Austritt {austritt} (Eintrittsänderung übersprungen)\n")
 
 
-def run_urlaub_scraper(headless=False, slowmo_ms=150):
+def run_urlaub_scraper(headless=None, slowmo_ms=None):
+    headless = config.HEADLESS if headless is None else headless
+    slowmo_ms = config.SLOWMO_MS if slowmo_ms is None else slowmo_ms
     print("[INFO] Starte Urlaubsplanung-Scraper …")
 
     with sync_playwright() as p:
@@ -265,5 +270,15 @@ def run_urlaub_scraper(headless=False, slowmo_ms=150):
         browser.close()
 
 
+def main():
+    parser = argparse.ArgumentParser(description="Urlaubsplanung-Scraper")
+    parser.add_argument("--headless", choices=["true", "false"], default=None)
+    parser.add_argument("--slowmo", type=int, default=None)
+    args = parser.parse_args()
+
+    headless = None if args.headless is None else (args.headless.lower() == "true")
+    run_urlaub_scraper(headless=headless, slowmo_ms=args.slowmo)
+
+
 if __name__ == "__main__":
-    run_urlaub_scraper(headless=False, slowmo_ms=150)
+    main()

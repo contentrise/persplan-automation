@@ -1,7 +1,7 @@
 
 python3 -m src.main login --headless=true --slowmo=150
 python3 -m src.main planung --headless=true --slowmo=0
-python3 -m src.urlaub_scraper --headless=false --slowmo=150
+python3 -m src.urlaub_scraper --headless=true --slowmo=150
 python3 src/analyse_connector.py
 
 ≈
