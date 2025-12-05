@@ -45,6 +45,11 @@ SCRAPER_COMMAND = os.environ.get(
     "SCRAPER_COMMAND",
     "-m src.main schicht-bestaetigen --headless true",
 )
+SCRAPER_LOGIN_COMMAND = os.environ.get(
+    "SCRAPER_LOGIN_COMMAND",
+    "-m src.main login --headless true",
+).strip()
+LOGIN_STEP_NAME = (os.environ.get("SCRAPER_LOGIN_STEP") or "login").strip().lower()
 PYTHON_CMD = os.environ.get("SCRAPER_PYTHON_CMD", "python")
 POLL_INTERVAL = float(os.environ.get("SCRAPER_POLL_INTERVAL", "60"))
 
@@ -88,20 +93,43 @@ def claim_run() -> Optional[dict]:
     return payload
 
 
-def run_scraper_process() -> Path:
-    """Startet Playwright und ermittelt die neu erzeugte CSV-Datei."""
-    EXPORT_DIR.mkdir(parents=True, exist_ok=True)
-    before = snapshot_exports()
+def run_playwright_command(command: str, *, expect_export: bool) -> Optional[Path]:
+    """Führt einen Playwright-Befehl aus und liefert optional die erzeugte CSV."""
+    normalized_command = command.strip()
+    if not normalized_command:
+        raise RuntimeError("Kein Playwright-Befehl konfiguriert")
 
-    cmd = [PYTHON_CMD, *shlex.split(SCRAPER_COMMAND)]
-    LOGGER.info("Starte Scraper: %s", " ".join(cmd))
+    EXPORT_DIR.mkdir(parents=True, exist_ok=True)
+    before = snapshot_exports() if expect_export else {}
+
+    cmd = [PYTHON_CMD, *shlex.split(normalized_command)]
+    LOGGER.info("Starte Playwright: %s", " ".join(cmd))
     subprocess.run(cmd, cwd=str(BASE_DIR), check=True)
+
+    if not expect_export:
+        return None
 
     new_file = detect_new_export(before)
     if not new_file:
         raise RuntimeError("Keine neue CSV im exports-Ordner gefunden")
     LOGGER.info("Neue Datei erkannt: %s", new_file)
     return new_file
+
+
+def run_scraper_process() -> Path:
+    """Startet den eigentlichen Schicht-Scraper und liefert den Export."""
+    export_path = run_playwright_command(SCRAPER_COMMAND, expect_export=True)
+    if not export_path:
+        raise RuntimeError("Scraper-Lauf hat keine CSV erzeugt")
+    return export_path
+
+
+def run_login_process() -> None:
+    """Führt den Login-Durchlauf aus, um SessionStorage/Cookies zu erneuern."""
+    if not SCRAPER_LOGIN_COMMAND:
+        raise RuntimeError("SCRAPER_LOGIN_COMMAND ist nicht gesetzt")
+    LOGGER.info("Führe Login-Skript aus, um Sitzungsdaten zu erneuern …")
+    run_playwright_command(SCRAPER_LOGIN_COMMAND, expect_export=False)
 
 
 def snapshot_exports() -> Dict[str, float]:
@@ -120,6 +148,56 @@ def detect_new_export(before: Dict[str, float]) -> Optional[Path]:
         if str(candidate) not in before or candidate.stat().st_mtime > before.get(str(candidate), 0):
             return candidate
     return candidates[0] if candidates else None
+
+
+def parse_job_metadata(job: dict) -> dict:
+    """Parst das metadata-Feld aus der API-Antwort."""
+    metadata = job.get("metadata")
+    if not metadata:
+        return {}
+    if isinstance(metadata, dict):
+        return metadata
+    if isinstance(metadata, str):
+        try:
+            parsed = json.loads(metadata)
+            if isinstance(parsed, dict):
+                return parsed
+        except json.JSONDecodeError:
+            LOGGER.warning("Konnte metadata nicht lesen: %s", metadata)
+    return {}
+
+
+def determine_job_step(job: dict, metadata: dict) -> str:
+    """Ermittelt den Step aus metadata.step (Fallback job['step'])."""
+    candidate = None
+    if metadata:
+        candidate = metadata.get("step") or metadata.get("phase")
+    if not candidate:
+        candidate = job.get("step")
+    return str(candidate or "").strip().lower()
+
+
+def is_truthy(value) -> bool:
+    """Hilfsfunktion, um boolesche Flags aus metadata zu lesen."""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "y", "on"}
+    return False
+
+
+def should_only_run_login(metadata: dict) -> bool:
+    """Gibt an, ob ein Lauf nur den Login-Schritt ausführen soll."""
+    if not metadata:
+        return False
+    if is_truthy(metadata.get("loginOnly")) or is_truthy(metadata.get("onlyLogin")):
+        return True
+    mode = metadata.get("mode") or metadata.get("runMode")
+    if isinstance(mode, str) and mode.strip().lower() in {"login-only", "login"}:
+        return True
+    return False
 
 
 def upload_to_s3(file_path: Path) -> Optional[str]:
@@ -171,8 +249,29 @@ def process_run(job: dict) -> None:
     if not run_id:
         LOGGER.warning("Antwort ohne runId erhalten: %s", job)
         return
+    metadata = parse_job_metadata(job)
+    step = determine_job_step(job, metadata)
+    login_requested = bool(LOGIN_STEP_NAME) and step == LOGIN_STEP_NAME
+    login_only = login_requested and should_only_run_login(metadata)
 
     try:
+        if login_requested:
+            LOGGER.info("Run %s als Login-Phase erkannt – starte Login-Befehl zuerst", run_id)
+            run_login_process()
+            LOGGER.info("Login-Phase abgeschlossen")
+            if login_only:
+                summary = {
+                    "step": step or LOGIN_STEP_NAME,
+                    "loginOnly": True,
+                    "generatedAt": datetime.utcnow().isoformat(),
+                }
+                completion_payload = {
+                    "summary": summary,
+                    "message": metadata.get("loginMessage") or "Session aktualisiert (Login-Run)",
+                }
+                mark_complete(run_id, "success", completion_payload)
+                return
+
         export_path = run_scraper_process()
         file_key = upload_to_s3(export_path)
         row_count = count_rows(export_path)
@@ -181,12 +280,18 @@ def process_run(job: dict) -> None:
             "totalRows": max(row_count - 1, 0),
             "generatedAt": datetime.utcnow().isoformat(),
         }
+        if login_requested:
+            summary["loginStep"] = {"executed": True, "step": step or LOGIN_STEP_NAME}
+
+        message = f"{row_count - 1} Kontakte verarbeitet"
+        if login_requested:
+            message = f"{message} (inkl. Login)"
         completion_payload = {
             "fileKey": file_key,
             "fileName": export_path.name,
             "folderDate": folder_date,
             "summary": summary,
-            "message": f"{row_count - 1} Kontakte verarbeitet",
+            "message": message,
         }
         mark_complete(run_id, "success", completion_payload)
     except Exception as exc:  # pylint: disable=broad-except
