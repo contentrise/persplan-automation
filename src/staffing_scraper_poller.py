@@ -50,7 +50,7 @@ COMPLETE_ENDPOINT = f"{API_BASE}/staffing/scraper/complete"
 SCRAPER_SECRET = os.environ.get("STAFFING_RUN_SECRET") or os.environ.get("STAFFING_SCRAPER_SECRET")
 SCRAPER_COMMAND = os.environ.get(
     "SCRAPER_COMMAND",
-    "-m src.main planung --headless true",
+    "-m src.schichtplan_py --headless true",
 ).strip()
 SCRAPER_LOGIN_COMMAND = os.environ.get(
     "SCRAPER_LOGIN_COMMAND",
