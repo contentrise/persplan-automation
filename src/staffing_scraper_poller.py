@@ -34,6 +34,13 @@ logging.basicConfig(
 LOGGER = logging.getLogger("staffing_scraper")
 
 BASE_DIR = Path(__file__).resolve().parent
+PARENT_DIR = BASE_DIR.parent if BASE_DIR.parent != BASE_DIR else BASE_DIR
+DEFAULT_WORKING_DIR = BASE_DIR
+if not (BASE_DIR / "src").is_dir():
+    parent_candidate = PARENT_DIR
+    if parent_candidate and parent_candidate.exists() and (parent_candidate / "src").is_dir():
+        DEFAULT_WORKING_DIR = parent_candidate
+SCRAPER_WORKING_DIR = Path(os.environ.get("SCRAPER_WORKING_DIR") or DEFAULT_WORKING_DIR)
 EXPORT_DIR = Path(os.environ.get("SCRAPER_EXPORT_DIR") or BASE_DIR / "exports")
 
 API_BASE = os.environ.get("STAFFING_API_BASE", "https://api.greatstaff.com").rstrip("/")
@@ -50,7 +57,8 @@ SCRAPER_LOGIN_COMMAND = os.environ.get(
     "-m src.main login --headless true",
 ).strip()
 LOGIN_STEP_NAME = (os.environ.get("SCRAPER_LOGIN_STEP") or "login").strip().lower()
-PYTHON_CMD = os.environ.get("SCRAPER_PYTHON_CMD", "python")
+PYTHON_CMD = os.environ.get("SCRAPER_PYTHON_CMD", "python3")
+FORCE_HEADLESS = os.environ.get("SCRAPER_FORCE_HEADLESS", "true").strip().lower() not in {"false", "0", "off"}
 POLL_INTERVAL = float(os.environ.get("SCRAPER_POLL_INTERVAL", "60"))
 
 S3_BUCKET = os.environ.get("STAFFING_BUCKET") or os.environ.get("STAFFING_S3_BUCKET")
@@ -102,9 +110,16 @@ def run_playwright_command(command: str, *, expect_export: bool) -> Optional[Pat
     EXPORT_DIR.mkdir(parents=True, exist_ok=True)
     before = snapshot_exports() if expect_export else {}
 
-    cmd = [PYTHON_CMD, *shlex.split(normalized_command)]
-    LOGGER.info("Starte Playwright: %s", " ".join(cmd))
-    subprocess.run(cmd, cwd=str(BASE_DIR), check=True)
+    if not SCRAPER_WORKING_DIR.exists():
+        raise RuntimeError(f"Arbeitsverzeichnis {SCRAPER_WORKING_DIR} existiert nicht")
+
+    cmd = enforce_headless_args([PYTHON_CMD, *shlex.split(normalized_command)])
+    LOGGER.info(
+        "Starte Playwright: %s (cwd=%s)",
+        " ".join(cmd),
+        SCRAPER_WORKING_DIR,
+    )
+    subprocess.run(cmd, cwd=str(SCRAPER_WORKING_DIR), check=True)
 
     if not expect_export:
         return None
@@ -198,6 +213,37 @@ def should_only_run_login(metadata: dict) -> bool:
     if isinstance(mode, str) and mode.strip().lower() in {"login-only", "login"}:
         return True
     return False
+
+
+def enforce_headless_args(cmd: list[str]) -> list[str]:
+    """Stellt sicher, dass Playwright immer mit --headless true ausgeführt wird."""
+    if not FORCE_HEADLESS or not cmd:
+        return cmd
+
+    updated = list(cmd)
+    headless_index = None
+    for idx, token in enumerate(updated):
+        if token.startswith("--headless"):
+            headless_index = idx
+            break
+
+    if headless_index is None:
+        updated.extend(["--headless", "true"])
+        return updated
+
+    token = updated[headless_index]
+    if token == "--headless":
+        if headless_index + 1 < len(updated):
+            updated[headless_index + 1] = "true"
+        else:
+            updated.append("true")
+        return updated
+    if token.startswith("--headless="):
+        updated[headless_index] = "--headless=true"
+        return updated
+
+    updated.insert(headless_index + 1, "true")
+    return updated
 
 
 def upload_to_s3(file_path: Path) -> Optional[str]:
