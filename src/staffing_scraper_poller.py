@@ -51,7 +51,7 @@ SCRAPER_SECRET = os.environ.get("STAFFING_RUN_SECRET") or os.environ.get("STAFFI
 SCRAPER_COMMAND = os.environ.get(
     "SCRAPER_COMMAND",
     "-m src.main planung --headless true",
-)
+).strip()
 SCRAPER_LOGIN_COMMAND = os.environ.get(
     "SCRAPER_LOGIN_COMMAND",
     "-m src.main login --headless true",
@@ -131,20 +131,19 @@ def run_playwright_command(command: str, *, expect_export: bool) -> Optional[Pat
     return new_file
 
 
-def run_scraper_process() -> Path:
+def run_scraper_process(command: str) -> Path:
     """Startet den eigentlichen Schicht-Scraper und liefert den Export."""
-    export_path = run_playwright_command(SCRAPER_COMMAND, expect_export=True)
+    export_path = run_playwright_command(command, expect_export=True)
     if not export_path:
         raise RuntimeError("Scraper-Lauf hat keine CSV erzeugt")
     return export_path
 
 
-def run_login_process() -> None:
+def run_login_process(metadata: Optional[dict] = None) -> None:
     """Führt den Login-Durchlauf aus, um SessionStorage/Cookies zu erneuern."""
-    if not SCRAPER_LOGIN_COMMAND:
-        raise RuntimeError("SCRAPER_LOGIN_COMMAND ist nicht gesetzt")
+    command = resolve_command(LOGIN_STEP_NAME, metadata, SCRAPER_LOGIN_COMMAND)
     LOGGER.info("Führe Login-Skript aus, um Sitzungsdaten zu erneuern …")
-    run_playwright_command(SCRAPER_LOGIN_COMMAND, expect_export=False)
+    run_playwright_command(command, expect_export=False)
 
 
 def snapshot_exports() -> Dict[str, float]:
@@ -213,6 +212,20 @@ def should_only_run_login(metadata: dict) -> bool:
     if isinstance(mode, str) and mode.strip().lower() in {"login-only", "login"}:
         return True
     return False
+
+
+def resolve_command(step: str, metadata: Optional[dict], default_command: str) -> str:
+    """Ermittelt den konkreten Playwright-Befehl (z. B. aus metadata.command)."""
+    command = None
+    if metadata and isinstance(metadata, dict):
+        command = metadata.get("command") or metadata.get("scraperCommand")
+        if isinstance(command, str):
+            command = command.strip()
+    if command:
+        return command
+    if default_command:
+        return default_command.strip()
+    raise RuntimeError(f"Kein gültiger Playwright-Befehl für Step '{step or 'unknown'}' konfiguriert")
 
 
 def enforce_headless_args(cmd: list[str]) -> list[str]:
@@ -303,7 +316,7 @@ def process_run(job: dict) -> None:
     try:
         if login_requested:
             LOGGER.info("Run %s als Login-Phase erkannt – starte Login-Befehl zuerst", run_id)
-            run_login_process()
+            run_login_process(metadata)
             LOGGER.info("Login-Phase abgeschlossen")
             if login_only:
                 summary = {
@@ -318,7 +331,9 @@ def process_run(job: dict) -> None:
                 mark_complete(run_id, "success", completion_payload)
                 return
 
-        export_path = run_scraper_process()
+        command = resolve_command(step or "planung", metadata, SCRAPER_COMMAND)
+        LOGGER.info("Nutze Playwright-Command für Step '%s': %s", step or "planung", command)
+        export_path = run_scraper_process(command)
         file_key = upload_to_s3(export_path)
         row_count = count_rows(export_path)
         folder_date = os.environ.get("STAFFING_FOLDER_DATE") or datetime.now().strftime("%Y-%m-%d")
