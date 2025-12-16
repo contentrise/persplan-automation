@@ -1,10 +1,16 @@
 
-python3 -m src.main login --headless=true --slowmo=150
 python3 -m src.main planung --headless=true --slowmo=0
 python3 -m src.urlaub_scraper --headless=true --slowmo=150
 python3 src/analyse_connector.py
 
 ≈
+
+
+Planung Zeitraum (3 Wochen)
+
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.main planung-zeitraum --headless=false --slowmo=150 --days-forward=120 --wait-seconds=5
+# Export landet als CSV in ./exports/planung_offene_<timestamp>.csv
 
 
 Schicht bestätigen / Tagesplan (alt)
@@ -51,3 +57,28 @@ python3 -m src.main mitarbeiteranlage --headless=false --slowmo=150
 
 
 python3 personalbogen-phraser.py
+
+
+
+python3 -m src.main login --headless=true --slowmo=150
+python3 -m src.schichtplan_py --headless=true --slowmo=150
+
+
+Tagesplan Vortag (nur Datum setzen & anzeigen)
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.main tagesplan-vortag --headless=false --slowmo=150 --wait-seconds=5
+
+
+
+PDF Phraser für Vertragsanpassungen:
+python3 vertragsanpassung_phraser.py
+
+
+Absagenscraper:
+python3 -m src.main login --headless=false --slowmo=150
+python3 absagen.py --headless=false --slowmo=150 --hold=5
+
+
+Kundenphraser:
+python3 -m src.main login --headless=true --slowmo=150
+python3 -m src.main kunden --headless=true --slowmo=150
