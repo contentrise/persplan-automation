@@ -247,7 +247,11 @@ def _locate_search_input(target: Union[Frame, Page]):
 
 
 def _search_and_click(
-    target: Union[Frame, Page], queries: list[str], delay: float, deadline: float | None = None
+    target: Union[Frame, Page],
+    queries: list[str],
+    delay: float,
+    deadline: float | None = None,
+    exact_personalnummer: str | None = None,
 ) -> Page | None:
     """
     Füllt das Suchfeld mit den gegebenen Queries.
@@ -271,6 +275,56 @@ def _search_and_click(
         time.sleep(max(0.05, delay))
         match_count = rows.count()
         print(f"[INFO] Suche '{query}' → {match_count} Treffer")
+
+        if exact_personalnummer and query == exact_personalnummer:
+            for idx in range(match_count):
+                row = rows.nth(idx)
+                try:
+                    persnr = (row.locator("td").first.inner_text() or "").strip()
+                except Exception:
+                    persnr = ""
+                if persnr == exact_personalnummer:
+                    link = row.locator("a.ma_akte_link_text, a.ma_akte_link_img").first
+                    if link.count() == 0:
+                        link = row.locator("a").first
+                    if link.count() == 0:
+                        print("[WARNUNG] Kein klickbarer Link in der Trefferzeile gefunden.")
+                        return None
+
+                    print(f"[AKTION] Exakter PersNr-Treffer '{persnr}' – klicke Eintrag …")
+                    href = link.get_attribute("href") or ""
+
+                    # 1) Popups (neuer Tab) abfangen
+                    try:
+                        with parent_page.context.expect_page(timeout=5000) as new_page_event:
+                            link.click()
+                        new_page = new_page_event.value
+                        new_page.wait_for_load_state("domcontentloaded", timeout=15000)
+                        return new_page
+                    except TimeoutError:
+                        pass
+
+                    # 2) Navigation im selben Tab
+                    try:
+                        with parent_page.expect_navigation(wait_until="domcontentloaded", timeout=12000):
+                            link.click()
+                        return parent_page
+                    except TimeoutError:
+                        # 3) Fallback: direkter GET
+                        if href:
+                            try:
+                                parent_page.goto(
+                                    urljoin(config.BASE_URL, href),
+                                    wait_until="domcontentloaded",
+                                    timeout=15000,
+                                )
+                                return parent_page
+                            except Exception:
+                                pass
+                        # 4) Letzter Versuch: Klick ohne Wait
+                        link.click()
+                        return parent_page
+            print(f"[WARNUNG] PersNr '{exact_personalnummer}' nicht in den Treffern gefunden.")
 
         if match_count == 1:
             row = rows.first
@@ -373,6 +427,7 @@ def run_user_search(
     last_day = calendar.monthrange(today.year, today.month)[1]
     last_day_str = f"{last_day:02d}.{today.month:02d}.{today.year}"
 
+    personalnummer = (contact.get("personalnummer") or contact.get("personnelNumber") or "").strip()
     queries = _build_queries(contact)
     if not queries:
         raise RuntimeError("[FEHLER] Keine gültigen Suchbegriffe gefunden.")
@@ -397,7 +452,13 @@ def run_user_search(
 
         search_deadline = time.time() + 30  # Gesamttimeout für die Suche
         try:
-            result_page = _search_and_click(frame, queries, delay, deadline=search_deadline)
+            result_page = _search_and_click(
+                frame,
+                queries,
+                delay,
+                deadline=search_deadline,
+                exact_personalnummer=personalnummer or None,
+            )
             if result_page:
                 print("[OK] Treffer geklickt – navigiere zu 'Zulagen' …")
                 _navigate_to_zulagen(result_page)
