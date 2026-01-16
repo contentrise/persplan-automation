@@ -177,17 +177,21 @@ def _build_queries(contact: dict) -> list[str]:
     full_name = " ".join(part for part in [first, last] if part).strip()
     phone_clean = "".join(ch for ch in phone if ch.isdigit() or ch == "+")
 
-    # Priorität: Personalnummer (eindeutig) -> Phone -> Email -> Name-Varianten
-    candidates = [
-        personalnummer,
-        phone,
-        phone_clean,
-        email,
-        full_name,
-        last,
-        first,
-    ]
+    # Priorität: Personalnummer -> Phone -> Email -> Name-Varianten
+    if personalnummer:
+        return [personalnummer]
 
+    if phone or phone_clean:
+        candidates = [phone, phone_clean]
+        for candidate in candidates:
+            if candidate and candidate not in queries:
+                queries.append(candidate)
+        return queries
+
+    if email:
+        return [email]
+
+    candidates = [full_name, last, first]
     for candidate in candidates:
         if candidate and candidate not in queries:
             queries.append(candidate)
@@ -374,8 +378,6 @@ def run_user_search(
         raise RuntimeError("[FEHLER] Keine gültigen Suchbegriffe gefunden.")
 
     print(f"[INFO] Verwende Suchbegriffe: {queries}")
-    search_deadline = time.time() + 30  # Gesamttimeout für die Suche
-
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
         context = browser.new_context(storage_state=str(state_path))
@@ -393,6 +395,7 @@ def run_user_search(
             do_login(page)
             frame = _open_user_overview(page)
 
+        search_deadline = time.time() + 30  # Gesamttimeout für die Suche
         try:
             result_page = _search_and_click(frame, queries, delay, deadline=search_deadline)
             if result_page:
