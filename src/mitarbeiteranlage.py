@@ -4,6 +4,7 @@ import csv
 import os
 import glob
 import re
+import json
 from stdnum import iban
 from schwifty import IBAN
 
@@ -38,6 +39,77 @@ def parse_phone_number(raw_number: str):
         country_code = "0049"
 
     return country_code, local_number
+
+
+def _pick_value(payload: dict, keys: list[str]) -> str:
+    for key in keys:
+        value = payload.get(key)
+        if value is None:
+            continue
+        text = str(value).strip()
+        if text:
+            return text
+    return ""
+
+
+def _row_from_json(payload: dict) -> dict:
+    return {
+        "Anrede": _pick_value(payload, ["anrede"]),
+        "Vorname": _pick_value(payload, ["vorname"]),
+        "Nachname": _pick_value(payload, ["nachname"]),
+        "Email": _pick_value(payload, ["email"]),
+        "Geburtsdatum": _pick_value(payload, ["geburtsdatum"]),
+        "Geburtsort": _pick_value(payload, ["geburtsort"]),
+        "Staatsbürgerschaft": _pick_value(payload, ["staatsbuergerschaft"]),
+        "Straße und Hausnummer": _pick_value(payload, ["anschrift"]),
+        "Postleitzahl": _pick_value(payload, ["postleitzahl", "plz"]),
+        "Ort": _pick_value(payload, ["ort"]),
+        "Bundesland": _pick_value(payload, ["bundesland", "bundesland_copy", "bundesland_name"]),
+        "Land": _pick_value(payload, ["land_copy", "land"]),
+        "Sozialversicherungsnummer": _pick_value(payload, ["sozialversicherungsnummer"]),
+        "Personalausweisnummer": _pick_value(payload, ["personalausweisnummer"]),
+        "Mobil": _pick_value(payload, ["mobil"]),
+        "IBAN": _pick_value(payload, ["iban"]),
+        "BIC": _pick_value(payload, ["bic"]),
+        "Krankenkasse": _pick_value(payload, ["krankenkasse"]),
+        "Kontoinhaber": _pick_value(payload, ["kontoinhaber"]),
+        "Steuer Identifikationsnummer": _pick_value(payload, ["steuernummer"]),
+    }
+
+
+def _normalize_date_ddmmyyyy(value: str) -> str:
+    raw = value.strip()
+    if not raw:
+        return ""
+    match = re.match(r"^(\d{4})[.\-/](\d{1,2})[.\-/](\d{1,2})$", raw)
+    if match:
+        year, month, day = match.groups()
+        return f"{day.zfill(2)}.{month.zfill(2)}.{year}"
+    match = re.match(r"^(\d{1,2})[.\-/](\d{1,2})[.\-/](\d{4})$", raw)
+    if match:
+        day, month, year = match.groups()
+        return f"{day.zfill(2)}.{month.zfill(2)}.{year}"
+    return raw
+
+
+def load_mitarbeiteranlage_record() -> dict:
+    input_dir = "perso-input"
+    json_candidates = glob.glob(os.path.join(input_dir, "*.json"))
+    if not json_candidates:
+        raise Exception("[FEHLER] Keine JSON-Datei im Ordner 'perso-input' gefunden.")
+    if len(json_candidates) > 1:
+        raise Exception("[FEHLER] Mehr als eine JSON-Datei im Ordner 'perso-input' gefunden.")
+
+    json_path = json_candidates[0]
+    print(f"[INFO] Verwende JSON-Datei: {json_path}")
+    with open(json_path, encoding="utf-8") as handle:
+        payload = json.load(handle)
+    if not isinstance(payload, dict):
+        raise Exception("[FEHLER] JSON-Datei muss ein Objekt mit Feldern sein.")
+    row = _row_from_json(payload)
+    if not any(row.values()):
+        raise Exception("[FEHLER] JSON-Datei enthält keine verwertbaren Felder.")
+    return row
 
 
 def open_mitarbeiteranlage(page: Page):
@@ -86,18 +158,7 @@ def open_mitarbeiteranlage(page: Page):
     if not form_frame:
         raise Exception("[FEHLER] Seite 'mitarbeiter_anlegen.php' nicht gefunden.")
 
-    input_dir = "mitarbeiteranlage-input"
-    csv_files = glob.glob(os.path.join(input_dir, "*.csv"))
-    if not csv_files:
-        raise Exception(f"[FEHLER] Keine CSV-Dateien im Ordner '{input_dir}' gefunden!")
-    csv_path = csv_files[0]
-    print(f"[INFO] Verwende CSV-Datei: {csv_path}")
-
-    with open(csv_path, newline='', encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter=",")
-        row = next(reader, None)
-    if not row:
-        raise Exception("[FEHLER] CSV-Datei enthält keine Datensätze!")
+    row = load_mitarbeiteranlage_record()
 
     mappings = {
         "Anrede": ["anrede"],
@@ -110,7 +171,7 @@ def open_mitarbeiteranlage(page: Page):
         "Straße und Hausnummer": ["anschrift"],
         "Postleitzahl": ["plz"],
         "Ort": ["ort"],
-        "Bundesland": ["bundesland"],
+        "Bundesland": ["bundesland", "bundesland_id", "bundeslandId", "bundesland_select"],
         "Land": ["geburtsland", "land"],
         "Sozialversicherungsnummer": ["sozialversicherungsnummer"],
         "Personalausweisnummer": ["personalausweisnummer"],
@@ -159,13 +220,17 @@ def open_mitarbeiteranlage(page: Page):
                             print(f"[OK] {html_name} (select fallback index 1) → {value}")
                 elif tag in ["input", "textarea"]:
                     if html_name.lower() in ["geburtsdatum", "geburts_datum", "birthday"]:
-                        if "-" in value:
-                            parts = value.split("-")
-                            if len(parts) == 3:
-                                value = f"{parts[2]}.{parts[1]}.{parts[0]}"
-                        el.fill(value)
-                        el.press("Enter")
-                        print(f"[OK] {html_name} (format dd.mm.yyyy) → {value}")
+                        formatted = _normalize_date_ddmmyyyy(value)
+                        el.evaluate(
+                            """(node, val) => {
+                                node.value = val;
+                                node.dispatchEvent(new Event('input', { bubbles: true }));
+                                node.dispatchEvent(new Event('change', { bubbles: true }));
+                                node.dispatchEvent(new Event('blur', { bubbles: true }));
+                            }""",
+                            formatted,
+                        )
+                        print(f"[OK] {html_name} (format dd.mm.yyyy) → {formatted}")
                     else:
                         el.fill(value)
                         print(f"[OK] {html_name} → {value}")
@@ -213,7 +278,6 @@ def open_mitarbeiteranlage(page: Page):
             print(f"[FEHLER] IBAN ungültig → {iban_value}")
 
     for field, csv_name in {
-        "bank": "Krankenkasse",
         "kontoinhaber": "Kontoinhaber",
         "steuernummer": "Steuer Identifikationsnummer"
     }.items():
@@ -226,6 +290,106 @@ def open_mitarbeiteranlage(page: Page):
             print(f"[OK] {field} → {value}")
         except Exception as e:
             print(f"[FEHLER] {field}: {e}")
+
+    anrede = str(row.get("Anrede", "")).strip().lower()
+    geschlecht_value = ""
+    if "frau" in anrede:
+        geschlecht_value = "W"
+    elif "mann" in anrede:
+        geschlecht_value = "M"
+    if geschlecht_value:
+        try:
+            gender_locator = form_frame.locator("[name='geschlecht'], [id='geschlecht']").first
+            if gender_locator.count() > 0:
+                tag = gender_locator.evaluate("el => el.tagName.toLowerCase()")
+                if tag == "select":
+                    try:
+                        gender_locator.select_option(value=geschlecht_value)
+                    except Exception:
+                        gender_locator.select_option(label=geschlecht_value)
+                    print(f"[OK] geschlecht → {geschlecht_value}")
+                else:
+                    gender_locator.fill(geschlecht_value)
+                    print(f"[OK] geschlecht (input) → {geschlecht_value}")
+        except Exception as e:
+            print(f"[FEHLER] geschlecht: {e}")
+
+    try:
+        bank_field = form_frame.locator("[name='bank'], [id='bank']").first
+        if bank_field.count() > 0:
+            bank_field.fill("")
+            print("[OK] bank → (leer)")
+    except Exception as e:
+        print(f"[FEHLER] bank leeren: {e}")
+
+    print("[INFO] Versuche auf 'Hinzufügen' zu klicken …")
+    add_clicked = False
+    for selector in [
+        "button:has-text('Hinzufügen')",
+        "button:has-text('hinzufügen')",
+        "button#iban",
+    ]:
+        locator = form_frame.locator(selector)
+        if locator.count() > 0:
+            try:
+                locator.first.scroll_into_view_if_needed()
+                locator.first.click()
+                print(f"[OK] Hinzufügen geklickt ({selector})")
+                add_clicked = True
+                break
+            except Exception as e:
+                print(f"[WARNUNG] Klick fehlgeschlagen ({selector}): {e}")
+                continue
+
+    if not add_clicked:
+        print("[HINWEIS] Kein Hinzufügen-Button gefunden.")
+
+    print("[INFO] Prüfe auf Hinweis-Modal und bestätige …")
+    try:
+        found = False
+        for _ in range(40):
+            for frame in page.frames:
+                confirm_button = frame.locator(
+                    "div.ui-dialog button:has-text('fortfahren'), button:has-text('fortfahren')"
+                )
+                if confirm_button.count() > 0 and confirm_button.first.is_visible():
+                    confirm_button.first.scroll_into_view_if_needed()
+                    confirm_button.first.click(force=True)
+                    print("[OK] Hinweis-Modal bestätigt (fortfahren).")
+                    found = True
+                    break
+            if found:
+                break
+            time.sleep(0.25)
+        if not found:
+            print("[HINWEIS] Hinweis-Modal/fortfahren nicht gefunden.")
+    except Exception as e:
+        print(f"[WARNUNG] Hinweis-Modal prüfen fehlgeschlagen: {e}")
+
+    print("[INFO] Warte 45 Sekunden für manuelle Auslese …")
+    time.sleep(45)
+
+    print("[INFO] Prüfe auf Logindaten-Modal und wähle E-Mail …")
+    try:
+        found = False
+        for _ in range(40):
+            for frame in page.frames:
+                email_button = frame.locator(
+                    "div.ui-dialog:has-text('Logindaten') button:has-text('E-Mail'), button:has-text('E-Mail')"
+                )
+                if email_button.count() > 0 and email_button.first.is_visible():
+                    email_button.first.scroll_into_view_if_needed()
+                    email_button.first.click(force=True)
+                    print("[OK] Logindaten-Modal bestätigt (E-Mail).")
+                    found = True
+                    break
+            if found:
+                break
+            time.sleep(0.25)
+        if not found:
+            print("[HINWEIS] Logindaten-Modal/E-Mail nicht gefunden.")
+    except Exception as e:
+        print(f"[WARNUNG] Logindaten-Modal prüfen fehlgeschlagen: {e}")
 
     print("[FERTIG] Formularbefüllung abgeschlossen.")
     print("[INFO] Fenster bleibt 10 Sekunden offen …")

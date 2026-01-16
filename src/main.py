@@ -16,6 +16,7 @@ from src.kleidungsrueckgabe import run_kleidungsrueckgabe
 from src.tagesplan_vortag import run_tagesplan_vortag
 from src.planung_zeitraum import run_planung_zeitraum
 from src.kunden_scraper import run_kunden_scraper
+from src.mitarbeiter_vervollstaendigen import run_mitarbeiter_vervollstaendigen
 
 
 def run_login(save_state: str | None, headless: bool | None, slowmo_ms: int | None):
@@ -248,6 +249,19 @@ def main():
         help="Wie lange nach dem Anwenden des Filters gewartet werden soll",
     )
 
+    p_vervoll = sub.add_parser(
+        "mitarbeiter-vervollstaendigen",
+        help="Öffnet user.php, sucht per E-Mail und klickt den Nachnamen",
+    )
+    p_vervoll.add_argument("--headless", choices=["true", "false"], default=None)
+    p_vervoll.add_argument("--slowmo", type=int, default=None)
+    p_vervoll.add_argument(
+        "--wait-seconds",
+        type=int,
+        default=45,
+        help="Pause nach dem Klick (Sek.)",
+    )
+
     args = parser.parse_args()
 
     headless = None if args.headless is None else (args.headless.lower() == "true")
@@ -282,6 +296,12 @@ def main():
             slowmo_ms=args.slowmo,
             days_forward=args.days_forward,
             hold_seconds=args.wait_seconds,
+        )
+    elif args.cmd == "mitarbeiter-vervollstaendigen":
+        run_mitarbeiter_vervollstaendigen(
+            headless=headless,
+            slowmo_ms=args.slowmo,
+            wait_seconds=args.wait_seconds,
         )
 
 

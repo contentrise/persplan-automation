@@ -13,6 +13,9 @@ def get_last_day_of_month(year, month):
     last_day = calendar.monthrange(year, month)[1]
     return f"{last_day:02d}.{month:02d}.{year}"
 
+def get_first_day_of_month(year, month):
+    return f"01.{month:02d}.{year}"
+
 
 def get_first_day_of_next_month(year, month):
     if month == 12:
@@ -120,6 +123,14 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
 
                 page.select_option("#tageskennzeichen", "UU")
                 print("   → Fehlzeitenkennzeichnung = 'UU'")
+
+                first_day_str = get_first_day_of_month(config.URLAUB_YEAR, config.URLAUB_MONTH)
+                von_field = page.locator("#von")
+                page.evaluate(
+                    "(args) => args.el.value = args.value",
+                    {"el": von_field.element_handle(), "value": first_day_str}
+                )
+                print(f"   → 'von' = {first_day_str}")
 
                 last_day_str = get_last_day_of_month(config.URLAUB_YEAR, config.URLAUB_MONTH)
                 bis_field = page.locator("#bis")
@@ -244,6 +255,12 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                                             bezahlt_box.uncheck()
 
                                         page.select_option("#tageskennzeichen", "UU")
+                                        first_day_str = get_first_day_of_month(config.URLAUB_YEAR, config.URLAUB_MONTH)
+                                        von_field = page.locator("#von")
+                                        page.evaluate(
+                                            "(args) => args.el.value = args.value",
+                                            {"el": von_field.element_handle(), "value": first_day_str}
+                                        )
                                         bis_field = page.locator("#bis")
                                         page.evaluate(
                                             "(args) => args.el.value = args.value",

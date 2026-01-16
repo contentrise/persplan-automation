@@ -1,9 +1,11 @@
 
 python3 -m src.main planung --headless=true --slowmo=0
-python3 -m src.urlaub_scraper --headless=true --slowmo=150
+python3 -m src.urlaub_scraper --headless=false --slowmo=150
 python3 src/analyse_connector.py
 
-≈
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.urlaub_scraper --headless=false --slowmo=150
+
 
 
 Planung Zeitraum (3 Wochen)
@@ -82,3 +84,40 @@ python3 absagen.py --headless=false --slowmo=150 --hold=5
 Kundenphraser:
 python3 -m src.main login --headless=true --slowmo=150
 python3 -m src.main kunden --headless=true --slowmo=150
+
+MA Anlage:
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.main mitarbeiteranlage --headless=false --slowmo=150
+
+MA Anlage vollständig:
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.main mitarbeiter-vervollstaendigen --headless=false --slowmo=150
+Wenn alle Daten in Lohnabrechnung durch sind und nach "Daten speichern" ein Modal kommt, auf "Fertig" bestätigen:
+<div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-focus" role="button"><span class="ui-button-text">Fertig</span></button><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button"><span class="ui-button-text">Abbrechen</span></button></div>
+
+
+
+
+KB ist immer Knappschaft Hauptverwaltung [Bn: 98000006]
+KB ist tasatsächliche Krankenkasse auch Krankenkasse vom Personalfragebogen
+tz ist immer tatsächliche Krankenkasse und tatsächliche Krankenkasse bleibt leer
+
+
+
+Bei Tätigkeitsbezeichnung im modal immer 63301 und rest auto befüllt
+In diesem Modal dann auf "Fertig" klicken (Modal: class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-draggable ui-resizable")
+
+Personengruppenschlüssel:
+tz ist 101, gb ist 109 und kb ist 110
+
+Vertragsform
+TZ und GB unbefristet teilzeit
+KB befristet Teilzeit
+
+
+Steuerkasse bei KB und TZ = 1
+Steuerklasse GB = M
+
+
+Bei Vertragsdaten bitte 01.01.2026 = 14,96
+01.09.2026=15,33 und 01.04.2027=15,87

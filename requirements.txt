@@ -2,3 +2,7 @@ playwright
 python-dotenv==1.0.1
 pandas
 boto3
+easyocr==1.7.2
+pdf2image==1.17.0
+certifi
+pytesseract

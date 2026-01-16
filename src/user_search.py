@@ -56,6 +56,11 @@ def _format_amount(amount: float) -> str:
     return f"{amount:0.2f}".replace(".", ",")
 
 
+def _normalize_negative(amount: float) -> float:
+    """Stellt sicher, dass der Ansatz als negativer Wert eingetragen wird."""
+    return -abs(float(amount))
+
+
 def _navigate_to_zulagen(page: Page) -> None:
     """Klickt im geöffneten Mitarbeiter-Profil auf 'Zulagen'."""
     # Falls doch Frames genutzt werden
@@ -92,7 +97,31 @@ def _navigate_to_zulagen(page: Page) -> None:
         pass
 
 
-def _click_zulage_hinzufuegen(page: Page, deposit_total: float, today_str: str, last_day_str: str) -> None:
+def _fill_zulage_form(
+    target: Union[Frame, Page],
+    bezeichnung: str,
+    bemerkung: str,
+    ansatz: float,
+    lohnart: str,
+    last_day_str: str,
+) -> None:
+    """Füllt das Zulage-Formular mit den gegebenen Daten."""
+    target.fill("#bezeichnung", bezeichnung)
+    target.fill("#bemerkung", bemerkung)
+    target.fill("#ansatz", _format_amount(ansatz))
+    target.select_option("#rhythmus", "einmalig")
+    target.select_option("#lohnart", lohnart)
+    target.fill("#gueltig_bis", last_day_str)
+
+
+def _click_zulage_hinzufuegen(
+    page: Page,
+    bezeichnung: str,
+    bemerkung: str,
+    ansatz: float,
+    lohnart: str,
+    last_day_str: str,
+) -> None:
     """Klickt auf 'Zulage hinzufügen', füllt das Formular und stoppt kurz."""
     frame = _wait_for_inhalt_frame(page, timeout_seconds=2)
     target: Union[Frame, Page] = frame if frame else page
@@ -116,13 +145,11 @@ def _click_zulage_hinzufuegen(page: Page, deposit_total: float, today_str: str, 
         return
 
     try:
-        target.fill("#bezeichnung", "Servicekleidung")
-        target.fill("#bemerkung", f"Ausgabe am {today_str}")
-        target.fill("#ansatz", _format_amount(deposit_total))
-        target.select_option("#rhythmus", "einmalig")
-        target.select_option("#lohnart", "90")
-        target.fill("#gueltig_bis", last_day_str)
-        print(f"[OK] Formular gefüllt: Ansatz={deposit_total}, Rhythmus=einmalig, Lohnart=90, gültig bis {last_day_str}")
+        _fill_zulage_form(target, bezeichnung, bemerkung, ansatz, lohnart, last_day_str)
+        print(
+            "[OK] Formular gefüllt: Bezeichnung="
+            f"{bezeichnung}, Ansatz={ansatz}, Rhythmus=einmalig, Lohnart={lohnart}, gültig bis {last_day_str}"
+        )
     except Exception as exc:
         print(f"[WARNUNG] Konnte Formularfelder nicht befüllen: {exc}")
 
@@ -284,6 +311,24 @@ def _search_and_click(
     return None
 
 
+def _sum_items(flow_data: dict, item_type: str) -> float:
+    """Summiert Preise für Items eines bestimmten Typs (z. B. 'sale', 'deposit')."""
+    items = flow_data.get("items") if isinstance(flow_data, dict) else None
+    if not isinstance(items, list):
+        return 0.0
+    total = 0.0
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        if item.get("type") != item_type:
+            continue
+        try:
+            total += float(str(item.get("price", 0)).replace(",", "."))
+        except Exception:
+            continue
+    return total
+
+
 def run_user_search(
     flow_file: str = "flow (2).json",
     headless: bool | None = None,
@@ -307,6 +352,17 @@ def run_user_search(
             deposit_total = float(str(deposit_total).replace(",", "."))
         except Exception:
             deposit_total = 0
+    if not deposit_total:
+        deposit_total = _sum_items(flow_data, "deposit")
+
+    sale_total = flow_data.get("saleTotal", 0) or 0
+    if not isinstance(sale_total, (int, float)):
+        try:
+            sale_total = float(str(sale_total).replace(",", "."))
+        except Exception:
+            sale_total = 0
+    if not sale_total:
+        sale_total = _sum_items(flow_data, "sale")
 
     today = datetime.now()
     today_str = today.strftime("%d.%m.%Y")
@@ -343,7 +399,25 @@ def run_user_search(
                 print("[OK] Treffer geklickt – navigiere zu 'Zulagen' …")
                 _navigate_to_zulagen(result_page)
                 print("[OK] Zulagen geöffnet – klicke auf 'Zulage hinzufügen' und befülle Formular …")
-                _click_zulage_hinzufuegen(result_page, deposit_total, today_str, last_day_str)
+                bemerkung = f"Ausgabe am {today_str}"
+                if sale_total:
+                    _click_zulage_hinzufuegen(
+                        result_page,
+                        "Verkauf Schuhe",
+                        bemerkung,
+                        _normalize_negative(sale_total),
+                        "91",
+                        last_day_str,
+                    )
+                if deposit_total:
+                    _click_zulage_hinzufuegen(
+                        result_page,
+                        "Servicekleidung",
+                        bemerkung,
+                        _normalize_negative(deposit_total),
+                        "90",
+                        last_day_str,
+                    )
             else:
                 print("[INFO] Kein eindeutiger Treffer – nichts geklickt.")
         finally:
