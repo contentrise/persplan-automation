@@ -55,15 +55,15 @@ SCRAPER_SECRET = (
 )
 
 STEP_COMMANDS = {
-    "anlage": os.environ.get(
-        "PERSONAL_SCRAPER_COMMAND_ANLAGE",
-        os.environ.get("STAFFING_SCRAPER_COMMAND_ANLAGE"),
-        "-m src.main mitarbeiteranlage --headless true",
+    "anlage": (
+        os.environ.get("PERSONAL_SCRAPER_COMMAND_ANLAGE")
+        or os.environ.get("STAFFING_SCRAPER_COMMAND_ANLAGE")
+        or "-m src.main mitarbeiteranlage --headless true"
     ).strip(),
-    "vervollstaendigen": os.environ.get(
-        "PERSONAL_SCRAPER_COMMAND_VOLL",
-        os.environ.get("STAFFING_SCRAPER_COMMAND_VOLL"),
-        "-m src.main mitarbeiter-vervollstaendigen --headless true",
+    "vervollstaendigen": (
+        os.environ.get("PERSONAL_SCRAPER_COMMAND_VOLL")
+        or os.environ.get("STAFFING_SCRAPER_COMMAND_VOLL")
+        or "-m src.main mitarbeiter-vervollstaendigen --headless true"
     ).strip(),
 }
 
