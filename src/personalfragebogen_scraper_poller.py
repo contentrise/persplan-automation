@@ -66,6 +66,11 @@ STEP_COMMANDS = {
         or "-m src.main mitarbeiter-vervollstaendigen --headless true"
     ).strip(),
 }
+LOGIN_COMMAND = (
+    os.environ.get("PERSONAL_SCRAPER_COMMAND_LOGIN")
+    or os.environ.get("STAFFING_SCRAPER_COMMAND_LOGIN")
+    or "-m src.main login --headless true"
+).strip()
 
 session = requests.Session()
 session.headers.update({"Content-Type": "application/json"})
@@ -133,6 +138,18 @@ def run_playwright(command: str, env: dict) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, cwd=str(SCRAPER_WORKING_DIR), env=env, capture_output=True, text=True)
 
 
+def run_login() -> None:
+    if not LOGIN_COMMAND:
+        raise RuntimeError("LOGIN_COMMAND fehlt")
+    env = os.environ.copy()
+    result = run_playwright(LOGIN_COMMAND, env=env)
+    if result.returncode != 0:
+        stdout = (result.stdout or "").strip()
+        stderr = (result.stderr or "").strip()
+        raise RuntimeError(f"Login fehlgeschlagen (rc={result.returncode})\n{stdout}\n{stderr}")
+    LOGGER.info("Login erfolgreich.")
+
+
 def mark_complete(run_id: str, status: str, payload: dict) -> None:
     data = {"runId": run_id, "status": status}
     data.update(payload)
@@ -164,6 +181,8 @@ def process_run(job: dict) -> None:
     started_at = time.time()
     log_chunks = []
     try:
+        LOGGER.info("Starte Login vor Run %s ...", run_id)
+        run_login()
         entry = fetch_entry(entry_id)
         payload = entry.get("data") or {}
         contract_data = payload.get("contract_transfer") or {}
