@@ -1,0 +1,385 @@
+<table width="100%" bgcolor="#c0c0c0" cellpadding="0" cellspacing="3" style="margin: 0; padding:0;">
+    <tbody><tr>
+        <td>
+            <fieldset class="fieldsetBGcolor">
+                <legend><b>Vertragsdaten</b></legend>
+                <table width="100%" border="0">
+                    <tbody><tr>                      <td style="vertical-align: top">
+                            <table border="0" cellpadding="3">
+    <tbody><tr>
+        <td>Sofortmeldepflichtig:</td>
+        <td><div id="sofortmeldepflichtig">Nein</div></td>
+        <td><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_sofortmeldepflichtig_aendern(4692);"></td>
+    </tr>
+<tr>
+    <td>Abrechnungskreis:</td>
+    <td><div id="abrechnungskreis"></div></td>
+    <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'abrechnungskreis' );"></td>
+</tr>
+    <tr>
+        <td style="width: 130px;"><img src="/images/transparent.gif" class="information sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Grundlohn/Basislohn bei Gehaltsangaben bitte auf 0 setzen!" onclick="myAlert( 'Grundlohn/Basislohn bei Gehaltsangaben bitte auf 0 setzen!', 'Info' );"> Grundlohn:
+        </td>
+        <td style="width: 100px;" nowrap=""><div id="lohn">14,96</div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'lohn' );"></td>
+    </tr>
+    <tr>
+        <td style="width: 130px;">Grundlohn in Worten:</td>
+        <td style="width: 100px;"><div id="grundlohn_in_worten"></div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'grundlohn_in_worten', 'grundlohn_in_worten' );"></td>
+    </tr>
+        <tr>
+            <td style="width: 130px;">Übertarifliche Zulage:</td>
+            <td style="width: 100px;"><div id="uebertarifliche_zulage">0,00</div></td>
+            <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'uebertarifliche_zulage' );"></td>
+        </tr>
+        <tr>
+            <td style="width: 130px;">Lohnartennummer der übertariflichen Zulage:</td>
+            <td style="width: 100px;"><div id="uebertarifliche_zulage_lohnart"></div></td>
+            <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'uebertarifliche_zulage_lohnart', 'uebertarifliche_zulage_lohnart' );"></td>
+        </tr>
+        <tr>
+            <td style="width: 130px;">Pauschale Übertarifliche Zulage:</td>
+            <td style="width: 100px;"><div id="pauschaleUebertariflicheZulage">0,00</div></td>
+            <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'pauschaleUebertariflicheZulage' );"></td>
+        </tr>
+        <tr>
+            <td style="width: 130px;">Lohnartennummer der pauschalen übertariflichen Zulage:</td>
+            <td style="width: 100px;"><div id="pauschaleUebertariflicheZulageLohnart"></div></td>
+            <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'pauschaleUebertariflicheZulageLohnart' );"></td>
+        </tr>
+    <tr>
+        <td style="width: 130px;"><img src="/images/transparent.gif" class="information sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Sollte beim Abgleich durch den Tarif eine andere Lohnarten Nummer gewählt sein, so werden die entsprechenden Stunden auf die im Abgleich vorliegenden Lohnarten gebucht." onclick="myAlert( 'Sollte beim Abgleich durch den Tarif eine andere Lohnarten Nummer gewählt sein, so werden die entsprechenden Stunden auf die im Abgleich vorliegenden Lohnarten gebucht.', 'Info' );"> Standard Lohnarten-Nr.:</td>
+        <td style="width: 100px;"><div id="lohnarten_nummer"></div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'lohnarten_nummer', 'lohnarten_nummer' );"></td>
+    </tr>
+    <tr>
+       <td style="width: 130px;">Standardlohnart Urlaub</td>
+       <td style="width: 100px;"><div id="standardlohnart_urlaub"><img src="/images/transparent.gif" class="information sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Keine Einstellung hinterlegt -&gt; Nutzung der übergeordneten Einstellung" onclick="myAlert( 'Keine Einstellung hinterlegt -&gt; Nutzung der übergeordneten Einstellung', 'Info' );"></div></td>
+       <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'standardlohnart_urlaub', 'standardlohnart_urlaub' );"></td>
+    </tr>
+    <tr>
+       <td style="width: 130px;">Standardlohnart Krank</td>
+       <td style="width: 100px;"><div id="standardlohnart_krank"><img src="/images/transparent.gif" class="information sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Keine Einstellung hinterlegt -&gt; Nutzung der übergeordneten Einstellung" onclick="myAlert( 'Keine Einstellung hinterlegt -&gt; Nutzung der übergeordneten Einstellung', 'Info' );"></div></td>
+       <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'standardlohnart_krank', 'standardlohnart_krank' );"></td>
+  </tr>
+    <tr>
+       <td style="width: 130px;">Standardlohnart Resturlaub</td>
+       <td style="width: 100px;"><div id="standardlohnart_resturlaub"><img src="/images/transparent.gif" class="information sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Keine Einstellung hinterlegt -&gt; Nutzung der übergeordneten Einstellung" onclick="myAlert( 'Keine Einstellung hinterlegt -&gt; Nutzung der übergeordneten Einstellung', 'Info' );"></div></td>
+       <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'standardlohnart_resturlaub', 'standardlohnart_resturlaub' );"></td>
+    </tr>
+    <tr>
+        <td style="width: 130px;"><img src="/images/transparent.gif" class="information sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Ist ein Gehalt eingetragen, so wird dieses im Controlling bevorzugt. Bitte daher den Grundlohn/Basislohn auf 0 setzen, da es ansonsten möglich ist das System zu verwirren. Der Stundensatz berechnet sich dann auf das Gehalt dividiert durch 4,25 * den minimalen Stunden des Vertrages." onclick="myAlert( 'Ist ein Gehalt eingetragen, so wird dieses im Controlling bevorzugt. Bitte daher den Grundlohn/Basislohn auf 0 setzen, da es ansonsten möglich ist das System zu verwirren. Der Stundensatz berechnet sich dann auf das Gehalt dividiert durch 4,25 * den minimalen Stunden des Vertrages.', 'Info' );"> Gehalt:</td>
+        <td style="width: 100px;"><div id="gehalt">0,00</div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_gehalt_aendern(4692, 'gehalt' );"></td>
+    </tr>
+    <tr>
+        <td style="width: 130px;">Gehalt in Worten:</td>
+        <td style="width: 100px;"><div id="gehalt_in_worten"></div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'gehalt_in_worten', 'gehalt_in_worten' );"></td>
+    </tr>
+    <tr>
+        <td><img src="/images/transparent.gif" class="information sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Ist ein Gehalt eingetragen, so wird dieses im Controlling bevorzugt. Bitte daher den Grundlohn/Basislohn auf 0 setzen, da es ansonsten möglich ist das System zu verwirren. Der Stundensatz berechnet sich dann auf das Gehalt dividiert durch 4,25 * den minimalen Stunden des Vertrages." onclick="myAlert( 'Ist ein Gehalt eingetragen, so wird dieses im Controlling bevorzugt. Bitte daher den Grundlohn/Basislohn auf 0 setzen, da es ansonsten möglich ist das System zu verwirren. Der Stundensatz berechnet sich dann auf das Gehalt dividiert durch 4,25 * den minimalen Stunden des Vertrages.', 'Info' );"><img src="/images/transparent.gif" class="information sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Sollte hier ein Tarif eingetragen sein, so wird dieser Tarif als default-Wert im Abgleich gesetzt und sticht alle anderen default-Einstellungen." onclick="myAlert( 'Sollte hier ein Tarif eingetragen sein, so wird dieser Tarif als default-Wert im Abgleich gesetzt und sticht alle anderen default-Einstellungen.', 'Info' );"> Tarif:</td>
+        <td><div id="tarif">Kein Tarif</div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'tarif_id' );"></td>
+    </tr>
+    <tr>
+        <td><img src="/images/transparent.gif" class="information sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Wenn die Lohnzulagensperre aktiviert wird (Wert = JA), erhält der Mitarbeiter keine Lohnzulagen." onclick="myAlert( 'Wenn die Lohnzulagensperre aktiviert wird (Wert = JA), erhält der Mitarbeiter keine Lohnzulagen.', 'Info' );"> Lohnzulagensperre:</td>
+        <td>
+            <div id="lohnzulagen_sperre">Nein
+            </div>
+        </td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_lohnzulagen_sperre_aendern(4692, '0' );"></td>
+    </tr>
+<tr>
+    <td>Vertrag:</td>
+    <td><div id="vertrag"> GB - Minijob </div></td>
+    <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'vertrag_id' );"></td>
+</tr>
+<tr>
+    <td>Vertragsnummer:</td>
+    <td><div id="vertragsnummer">1</div></td>
+    <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'vertragsnummer', 'vertragsnummer' );"></td>
+</tr>
+<tr>
+    <td>Tage Fremdfirmen (70 Tage)</td>
+    <td><div id="tage_fremd">0</div></td>
+    <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'tage_fremd' );"></td>
+</tr>
+<tr>
+    <td style="width: 130px;"><img src="/images/transparent.gif" class="information sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Mitarbeiter Wochenstunden. Keine Auswirkungen auf das System." onclick="myAlert( 'Mitarbeiter Wochenstunden. Keine Auswirkungen auf das System.', 'Info' );"> Wochenstunden:</td>
+    <td style="width: 100px;"><div id="wochenstunden">0,00</div></td>
+    <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'wochenstunden', 'wochenstunden' );"></td>
+</tr>
+<tr>
+    <td style="white-space: nowrap;">[<a href="#" onclick="block_elements('urlaubsarten'); return false;"><span id="bu_urlaubsarten">+</span></a>] Jahresurlaubsanspruch:</td>
+    <td><div id="urlaub">0,00</div></td>
+    <td style="width: 30px;"></td>
+</tr>
+    <tr class="urlaubsarten" style="display:none;">
+        <td>Tariflicher Anspruch:</td>
+        <td><div id="urlaub_tarif">0,00</div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'urlaub_tarif' );"></td>
+    </tr>
+    <tr class="urlaubsarten" style="display:none">
+        <td>Anspruch wg. Behinderung:</td>
+        <td><div id="urlaub_behinderung">0,00</div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'urlaub_behinderung' );"></td>
+    </tr>
+    <tr class="urlaubsarten" style="display: none">
+        <td>Anspruch wg. Vereinbarung:</td>
+        <td><div id="urlaub_vereinbarung">0,00</div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_render_daten_historie(4692, 'urlaub_vereinbarung' );"></td>
+    </tr>
+<tr>
+    <td>Sonstiges:</td>
+    <td><div id="sonstiges">Meta</div></td>
+    <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'sonstiges', 'sonstiges' );"></td>
+</tr>
+<tr>
+    <td>Aktiv:</td>
+    <td><div id="aktiv">Ja</div></td>
+    <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_aktiv_aendern(4692, 'aktiv', 'aktiv' );"></td>
+</tr>
+    <tr>
+        <td>Arbeitnehmertyp:</td>
+        <td><div id="arbeitsnehmertyp"></div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_arbeitsnehmertyp_aendern(4692, 'arbeitsnehmertyp', 'arbeitsnehmertyp' );"></td>
+    </tr>
+    <tr>
+        <td>Arbeitnehmerstatus:</td>
+        <td><div id="arbeitnehmerstatus"></div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_arbeitnehmerstatus_aendern(4692, 'arbeitnehmerstatus', 'arbeitnehmerstatus' );"></td>
+    </tr>
+    <tr>
+        <td style="white-space:nowrap">Gemeindenschlüssel(IGGS):</td>
+        <td><div id="gemeindenschluessel"></div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'gemeindenschluessel', 'gemeindenschluessel' );"></td>
+    </tr>
+    <tr>
+        <td>Gemeinde:</td>
+        <td><div id="gemeinde"></div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'gemeinde', 'gemeinde' );"></td>
+    </tr>
+    <tr>
+        <td>Finanzamtnummer:</td>
+        <td><div id="finanzamtnr"></div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'finanzamtnr', 'finanzamtnr' );"></td>
+    </tr>
+    <tr>
+        <td>Finanzamtbezeichnung:</td>
+        <td><div id="finanzamtbezeichnung"></div></td>
+        <td style="width: 30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'finanzamtbezeichnung', 'finanzamtbezeichnung' );"></td>
+    </tr>
+                            </tbody></table>
+                        </td>
+                        <td>
+                            <table>
+<tbody><tr>
+    <td>Eintrittsdatum:<br>tt.mm.jjjj</td>
+    <td><div id="eintrittsdatum">01.01.2026</div></td>
+    <td style="width:30px;white-space:nowrap;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="openUiWindowReloaded({&quot;url&quot;:&quot;administration_mitarbeiter_eintritt_austritt_editor.php?secureid=2.nki74JG_XwrepYBLm85OcjIQahx_289AHLTQSsgPUJE&quot;,&quot;title&quot;:&quot;Ein-/Austrittsdatum ändern&quot;})"> <span style="position:relative;padding:0;"><img src="/images/transparent.gif" class="information sprite_16x16" alt="Info" style="cursor:pointer;vertical-align: middle" title="Login-Info" onclick="$(this).next('.tooltip_info').toggle().delay(3000).fadeOut();"><span class="tooltip_info" style="
+        display:none;
+        position:absolute;
+        z-index:999999;
+        top:auto;
+        padding:6px;
+        box-shadow:1px 1px 8px 1px grey;
+        background-color:lightyellow;
+        border:1px solid grey;
+        border-radius: 3px;
+        height:auto;
+        white-space:normal !important;
+        text-align:center !important;
+        color:black;
+        font-weight:normal;
+    min-width:400px;left:calc(100% - 400px);text-align:left !important" onclick="$(this).hide();">Mitarbeiter, deren Eintrittsdatum in der Zukunft liegt, können sich schon vor dem Eintrittsdatum einloggen!</span></span></td>
+</tr>
+<tr>
+    <td>Austrittsdatum:<br>tt.mm.jjjj</td>
+    <td><div id="austritt">unbefristet</div></td>
+    <td style="width:30px; white-space:nowrap;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="openUiWindowReloaded({&quot;url&quot;:&quot;administration_mitarbeiter_eintritt_austritt_editor.php?secureid=2.nki74JG_XwrepYBLm85OcmwpsfJfamXJI_YHWe7fi_s&quot;,&quot;title&quot;:&quot;Ein-/Austrittsdatum ändern&quot;});"> <span style="position:relative;padding:0;"><img src="/images/transparent.gif" class="information sprite_16x16" alt="Info" style="cursor:pointer;vertical-align: middle" title="Login-Info" onclick="$(this).next('.tooltip_info').toggle().delay(3000).fadeOut();"><span class="tooltip_info" style="
+        display:none;
+        position:absolute;
+        z-index:999999;
+        top:auto;
+        padding:6px;
+        box-shadow:1px 1px 8px 1px grey;
+        background-color:lightyellow;
+        border:1px solid grey;
+        border-radius: 3px;
+        height:auto;
+        white-space:normal !important;
+        text-align:center !important;
+        color:black;
+        font-weight:normal;
+    min-width:400px;left:calc(100% - 400px);text-align:left !important" onclick="$(this).hide();">Mitarbeiter, deren Austrittsdatum in der Vergangenheit liegt, können sich nicht mehr einloggen!</span></span></td>
+</tr>
+<tr>
+    <td>Konzerneintritt:<br>tt.mm.jjjj</td>
+    <td>
+        <input class="datepicker hasDatepicker" id="konzerneintritt" name="konzerneintritt" type="text" size="10" value="" disabled="" style="background-color: inherit; border: none;"><img class="ui-datepicker-trigger" src="/images/system/realvista_general_calendar_24.png" alt="Kalender öffnen" title="Kalender öffnen" style="opacity: 0.5; cursor: default;">
+<script>
+    $(function() {
+        disableDatepicker('konzerneintritt');
+    });
+</script>
+    </td>
+    <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_konzerneintritt_aendern(4692, 'konzerneintritt' );"></td>
+</tr>
+<tr>
+    <td>Ende Probezeit:<br>tt.mm.jjjj</td>
+    <td>
+        <input class="datepicker hasDatepicker" id="ende_probezeit" name="ende_probezeit" type="text" size="10" value="" disabled="" style="background-color: inherit; border: none;"><img class="ui-datepicker-trigger" src="/images/system/realvista_general_calendar_24.png" alt="Kalender öffnen" title="Kalender öffnen" style="opacity: 0.5; cursor: default;">
+<script>
+    $(function() {
+        disableDatepicker('ende_probezeit');
+    });
+</script>
+    </td>
+    <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_probezeit_aendern(4692, 'ende_probezeit' );"></td>
+</tr>
+<tr>
+    <td>Änderungsdatum:<br>tt.mm.jjjj</td>
+    <td>
+        <input class="datepicker hasDatepicker" id="aenderungsdatum" name="aenderungsdatum" type="text" size="10" value="" disabled="" style="background-color: inherit; border: none;"><img class="ui-datepicker-trigger" src="/images/system/realvista_general_calendar_24.png" alt="Kalender öffnen" title="Kalender öffnen" style="opacity: 0.5; cursor: default;">
+<script>
+    $(function() {
+        disableDatepicker('aenderungsdatum');
+    });
+</script>
+    </td>
+    <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_datumsfeld_aendern(4692, 'aenderungsdatum', 'aenderungsdatum' );"></td>
+</tr>
+<tr>
+    <td>Arbeitserlaubnis gültig bis:<br>tt.mm.jjjj</td>
+    <td>
+        <input class="datepicker hasDatepicker" id="arbeitserlaubnis_bis" name="arbeitserlaubnis_bis" type="text" size="10" value="" disabled="" style="background-color: inherit; border: none;"><img class="ui-datepicker-trigger" src="/images/system/realvista_general_calendar_24.png" alt="Kalender öffnen" title="Kalender öffnen" style="opacity: 0.5; cursor: default;">
+<script>
+    $(function() {
+        disableDatepicker('arbeitserlaubnis_bis');
+    });
+</script>
+    </td>
+    <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_arbeitserlaubnis_aendern(4692, 'arbeitserlaubnis_bis' );"></td>
+</tr>
+<tr>
+    <td>Aufenthaltserlaubnis gültig bis:<br>tt.mm.jjjj</td>
+    <td>
+        <input class="datepicker hasDatepicker" id="aufenthaltserlaubnis_bis" name="aufenthaltserlaubnis_bis" type="text" size="10" value="" disabled="" style="background-color: inherit; border: none;"><img class="ui-datepicker-trigger" src="/images/system/realvista_general_calendar_24.png" alt="Kalender öffnen" title="Kalender öffnen" style="opacity: 0.5; cursor: default;">
+<script>
+    $(function() {
+        disableDatepicker('aufenthaltserlaubnis_bis');
+    });
+</script>
+    </td>
+    <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_aufenthalt_aendern(4692, 'aufenthaltserlaubnis_bis' );"></td>
+</tr>
+<tr>
+    <td>Studienbescheinigung gültig bis:<br>tt.mm.jjjj</td>
+    <td>
+        <input class="datepicker hasDatepicker" id="studienbescheinigung_bis" name="studienbescheinigung_bis" type="text" size="10" value="" disabled="" style="background-color: inherit; border: none;"><img class="ui-datepicker-trigger" src="/images/system/realvista_general_calendar_24.png" alt="Kalender öffnen" title="Kalender öffnen" style="opacity: 0.5; cursor: default;">
+<script>
+    $(function() {
+        disableDatepicker('studienbescheinigung_bis');
+    });
+</script>
+    </td>
+    <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_studienbescheinigung_aendern(4692, 'studienbescheinigung_bis' );"></td>
+</tr>
+    <tr>
+        <td colspan="3"><hr></td>
+    </tr>
+    <tr>
+        <td>Berufsstand:</td>
+        <td><div id="berufsstand"></div></td>
+        <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'berufsstand', 'berufsstand' );"></td>
+    </tr>
+    <tr>
+        <td>Ausgeübter Beruf:</td>
+        <td><div id="ausgeuebter_beruf"></div></td>
+        <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'ausgeuebter_beruf', 'ausgeuebter_beruf' );"></td>
+    </tr>
+    <tr>
+        <td>Name des Arbeitgebers:</td>
+        <td><div id="name_des_arbeitgebers"></div></td>
+        <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'name_des_arbeitgebers', 'name_des_arbeitgebers' );"></td>
+    </tr>
+    <tr>
+        <td>Hauptbeschäftigung:</td>
+        <td><div id="hauptbeschaeftigung">Nein</div></td>
+        <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_hauptbeschaeftigung_aendern(4692);"></td>
+    </tr>
+        <tr>
+            <td>weitere Nebenbeschäftigungen:
+            </td>
+            <td>
+                <div id="weitere_nebenbeschaeftigungen">Nein
+                </div>
+            </td>
+            <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_weitere_nebenbeschaeftigungen_aendern(4692);"></td>
+        </tr>
+    <tr>
+        <td>Verdienst ca.:
+         </td>
+        <td><div id="verdienst_ca"></div></td>
+        <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'verdienst_ca', 'verdienst_caverdienst_ca' );"></td>
+    </tr>
+<tr>
+     <td colspan="3"><hr></td>
+</tr>
+<tr>
+    <td>Vertragsnotizen:</td>
+    <td><div id="vertragsnotizen"></div></td>
+    <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'vertragsnotizen', 'vertragsnotizen' );"></td>
+</tr>
+<tr>
+    <td>Lohnvereinbarung:</td>
+    <td><div id="lohnvereinbarung"></div></td>
+    <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'lohnvereinbarung', 'lohnvereinbarung' );"></td>
+</tr>
+<tr>
+    <td colspan="3"><hr></td>
+</tr>
+<tr>
+    <td>Stunden pro Urlaubstag</td>
+    <td>
+        <span id="urlaubstag_stunden">0,00</span>
+    </td>
+    <td><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'urlaubstag_stunden', 'urlaubstag_stunden');"></td>
+</tr>
+<tr>
+    <td>Stunden pro Kranktag</td>
+    <td>
+        <span id="kranktag_stunden">0,00</span>
+    </td>
+    <td><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'kranktag_stunden', 'kranktag_stunden');"></td>
+</tr>
+        <tr>
+            <td colspan="3"><hr></td>
+        </tr>
+        <tr>
+            <td>Lohnfortzahlung Durchschnittswert Monate:</td>
+            <td><div class="nowrap" id="lohnfortzahlung_durchschnitt_monate"></div></td>
+            <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'lohnfortzahlung_durchschnitt_monate', 'lohnfortzahlung_durchschnitt_monate' );"></td>
+        </tr>
+        <tr>
+            <td>Lohnfortzahlung Durchschnittswert Tage:</td>
+            <td><div class="nowrap" id="lohnfortzahlung_durchschnitt_tage"></div></td>
+            <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'lohnfortzahlung_durchschnitt_tage', 'lohnfortzahlung_durchschnitt_tage' );"></td>
+        </tr>
+        <tr>
+            <td>Lohnfortzahlung Durchschnittswert Tage Berechnungsart:</td>
+            <td><div class="nowrap" id="lohnfortzahlung_durchschnitt_tage_berechnungsart"></div></td>
+            <td style="width:30px;"><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="xajax_feld_aendern(4692, 'lohnfortzahlung_durchschnitt_tage_berechnungsart', 'lohnfortzahlung_durchschnitt_tage_berechnungsart' );"></td>
+        </tr>                            </tbody></table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody></table>
+            </fieldset>
+        </td>
+    </tr>
+</tbody></table>

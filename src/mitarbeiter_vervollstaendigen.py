@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import time
 from pathlib import Path
@@ -37,7 +38,7 @@ def _wait_for_inhalt_frame(page: Page, timeout_seconds: int = 5) -> Frame | None
 
 
 def _load_personalbogen_json() -> dict:
-    input_dir = Path("perso-input")
+    input_dir = Path(os.environ.get("PERSO_INPUT_DIR", "perso-input"))
     candidates = list(input_dir.glob("*.json"))
     if not candidates:
         raise FileNotFoundError("[FEHLER] Keine JSON-Datei in 'perso-input' gefunden.")
@@ -49,7 +50,29 @@ def _load_personalbogen_json() -> dict:
         payload = json.load(handle)
     if not isinstance(payload, dict):
         raise ValueError("[FEHLER] JSON-Datei muss ein Objekt sein.")
+    if isinstance(payload.get("fragebogen"), dict):
+        normalized = dict(payload["fragebogen"])
+        if isinstance(payload.get("vertrag"), dict):
+            normalized["vertrag"] = payload["vertrag"]
+        return normalized
     return payload
+
+
+def _pick_payload_value(payload: dict, keys: list[str]) -> str:
+    for key in keys:
+        value = payload.get(key)
+        if value is None:
+            continue
+        if isinstance(value, (list, tuple)):
+            for entry in value:
+                text = str(entry).strip()
+                if text:
+                    return text
+            continue
+        text = str(value).strip()
+        if text:
+            return text
+    return ""
 
 
 def _open_user_overview(page: Page) -> Union[Frame, Page]:
@@ -75,6 +98,16 @@ def _open_user_overview(page: Page) -> Union[Frame, Page]:
         ".scn_datatable_outer_table_user_tbl table#user_tbl tbody tr, table#user_tbl tbody tr",
         timeout=20000,
     )
+    # ensure filter is set to "Alle"
+    try:
+        filter_all = target.locator("#filter_anzeige_0").first
+        if filter_all.count() > 0 and not filter_all.is_checked():
+            filter_all.click()
+            print("[OK] Filter auf 'Alle' gesetzt.")
+            # allow table to refresh
+            time.sleep(0.8)
+    except Exception:
+        pass
     return target
 
 
@@ -210,11 +243,748 @@ def _open_lohnabrechnung_and_edit(page: Page) -> bool:
         return False
 
 
+def _open_sedcard(page: Page) -> bool:
+    deadline = time.time() + 10
+    last_frames: list[Frame] = []
+    while time.time() < deadline:
+        candidates: list[Union[Frame, Page]] = [page]
+        inhalt = page.frame(name="inhalt")
+        if inhalt:
+            candidates.append(inhalt)
+        last_frames = page.frames
+        candidates.extend(last_frames)
+
+        for target in candidates:
+            link = target.locator("#tableOfSubmenue a:has-text('Sedcard')").first
+            if link.count() == 0:
+                link = target.locator("a:has-text('Sedcard')").first
+            if link.count() == 0:
+                continue
+            try:
+                link.scroll_into_view_if_needed()
+            except Exception:
+                pass
+            try:
+                link.click()
+                print("[OK] Submenü 'Sedcard' geklickt.")
+                time.sleep(0.5)
+                return True
+            except Exception as exc:
+                print(f"[WARNUNG] Submenü 'Sedcard' Klick fehlgeschlagen: {exc}")
+                return False
+        time.sleep(0.25)
+
+    print("[WARNUNG] Submenü-Link 'Sedcard' nicht gefunden.")
+    for idx, frame in enumerate(last_frames):
+        try:
+            count = frame.locator("a:has-text('Sedcard')").count()
+        except Exception:
+            count = -1
+        print(f"[DEBUG] Frame {idx}: name={frame.name!r} url={frame.url!r} sedcard_links={count}")
+    return False
+
+
+def _open_vertragsdaten(page: Page) -> bool:
+    deadline = time.time() + 10
+    last_frames: list[Frame] = []
+    while time.time() < deadline:
+        candidates: list[Union[Frame, Page]] = [page]
+        inhalt = page.frame(name="inhalt")
+        if inhalt:
+            candidates.append(inhalt)
+        last_frames = page.frames
+        candidates.extend(last_frames)
+
+        for target in candidates:
+            link = target.locator("#tableOfSubmenue a:has-text('Vertragsdaten')").first
+            if link.count() == 0:
+                link = target.locator("a:has-text('Vertragsdaten')").first
+            if link.count() == 0:
+                continue
+            try:
+                link.scroll_into_view_if_needed()
+            except Exception:
+                pass
+            try:
+                link.click()
+                print("[OK] Submenü 'Vertragsdaten' geklickt.")
+                time.sleep(0.5)
+                return True
+            except Exception as exc:
+                print(f"[WARNUNG] Submenü 'Vertragsdaten' Klick fehlgeschlagen: {exc}")
+                return False
+        time.sleep(0.25)
+
+    print("[WARNUNG] Submenü-Link 'Vertragsdaten' nicht gefunden.")
+    for idx, frame in enumerate(last_frames):
+        try:
+            count = frame.locator("a:has-text('Vertragsdaten')").count()
+        except Exception:
+            count = -1
+        print(f"[DEBUG] Frame {idx}: name={frame.name!r} url={frame.url!r} vertragsdaten_links={count}")
+    return False
+
+
+def _open_mitarbeiterinformationen(page: Page) -> bool:
+    deadline = time.time() + 10
+    last_frames: list[Frame] = []
+    while time.time() < deadline:
+        candidates: list[Union[Frame, Page]] = [page]
+        inhalt = page.frame(name="inhalt")
+        if inhalt:
+            candidates.append(inhalt)
+        last_frames = page.frames
+        candidates.extend(last_frames)
+
+        for target in candidates:
+            link = target.locator("#tableOfSubmenue a:has-text('Mitarbeiterinformationen')").first
+            if link.count() == 0:
+                link = target.locator("a:has-text('Mitarbeiterinformationen')").first
+            if link.count() == 0:
+                continue
+            try:
+                link.scroll_into_view_if_needed()
+            except Exception:
+                pass
+            try:
+                link.click()
+                print("[OK] Submenü 'Mitarbeiterinformationen' geklickt.")
+                time.sleep(0.5)
+                return True
+            except Exception as exc:
+                print(f"[WARNUNG] Submenü 'Mitarbeiterinformationen' Klick fehlgeschlagen: {exc}")
+                return False
+        time.sleep(0.25)
+
+    print("[WARNUNG] Submenü-Link 'Mitarbeiterinformationen' nicht gefunden.")
+    for idx, frame in enumerate(last_frames):
+        try:
+            count = frame.locator("a:has-text('Mitarbeiterinformationen')").count()
+        except Exception:
+            count = -1
+        print(f"[DEBUG] Frame {idx}: name={frame.name!r} url={frame.url!r} mitarbeiterinformationen_links={count}")
+    return False
+
+
+def _enter_sedcard_edit_mode(page: Page) -> bool:
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+
+    edit_icon = target.locator("img.edit[onclick*='makeEdited'], img[title='Bearbeiten']").first
+    if edit_icon.count() == 0:
+        print("[WARNUNG] Sedcard-Edit-Stift nicht gefunden.")
+        return False
+    try:
+        edit_icon.scroll_into_view_if_needed()
+    except Exception:
+        pass
+    try:
+        edit_icon.click(force=True)
+        print("[OK] Sedcard-Edit-Stift geklickt.")
+    except Exception as exc:
+        print(f"[WARNUNG] Sedcard-Edit-Stift Klick fehlgeschlagen: {exc}")
+        return False
+
+    probe = target.locator("#groesse, [name='groesse']").first
+    deadline = time.time() + 5
+    while time.time() < deadline:
+        try:
+            if probe.count() == 0:
+                break
+            disabled = probe.evaluate("el => el.disabled")
+            if not disabled:
+                break
+        except Exception:
+            pass
+        time.sleep(0.2)
+    return True
+
+
+def _set_yes_no_select(locator, value: str) -> bool:
+    if locator.count() == 0:
+        return False
+    normalized = str(value).strip().lower()
+    if normalized in ["ja", "yes", "true", "1", "wahr"]:
+        val = "1"
+    elif normalized in ["nein", "no", "false", "0", "falsch"]:
+        val = "0"
+    else:
+        return False
+    try:
+        locator.first.select_option(value=val)
+        return True
+    except Exception:
+        return False
+
+
+def _fill_sedcard_fields(page: Page, payload: dict) -> None:
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+
+    if not _enter_sedcard_edit_mode(page):
+        return
+
+    input_mappings = {
+        "groesse": _pick_payload_value(payload, ["koerpergroesse"]),
+        "konfektion": _pick_payload_value(payload, ["konfektionsgroesse"]),
+        "schuhgroesse": _pick_payload_value(payload, ["schuhgroesse"]),
+        "schulausbildung": _pick_payload_value(payload, ["schulabschluss"]),
+        "fuehrerscheinart": _pick_payload_value(payload, ["fuehrerscheinklasse"]),
+        "sprache01a": _pick_payload_value(payload, ["fremdsprachen"]),
+    }
+
+    for field, value in input_mappings.items():
+        if not value:
+            continue
+        locator = target.locator(f"[name='{field}'], #{field}")
+        if _set_input_value(locator, value):
+            print(f"[OK] sedcard {field} → {value}")
+        else:
+            print(f"[WARNUNG] sedcard {field} nicht gesetzt.")
+
+    fuehrerschein_value = _pick_payload_value(payload, ["fuehrerschein"])
+    if fuehrerschein_value:
+        locator = target.locator("[name='fuehrerschein']")
+        if _set_yes_no_select(locator, fuehrerschein_value):
+            print(f"[OK] sedcard fuehrerschein → {fuehrerschein_value}")
+        else:
+            print("[WARNUNG] sedcard fuehrerschein nicht gesetzt.")
+
+    pkw_value = _pick_payload_value(payload, ["pkw"])
+    if pkw_value:
+        locator = target.locator("[name='pkw']")
+        if _set_yes_no_select(locator, pkw_value):
+            print(f"[OK] sedcard pkw → {pkw_value}")
+        else:
+            print("[WARNUNG] sedcard pkw nicht gesetzt.")
+
+    save_button = target.locator("button:has-text('Daten speichern')").first
+    if save_button.count() > 0:
+        try:
+            save_button.scroll_into_view_if_needed()
+        except Exception:
+            pass
+        try:
+            save_button.click()
+            print("[OK] Sedcard gespeichert (Daten speichern).")
+        except Exception as exc:
+            print(f"[WARNUNG] Sedcard speichern fehlgeschlagen: {exc}")
+    else:
+        print("[WARNUNG] Sedcard-Speichern-Button nicht gefunden.")
+
+
+def _fill_grundlohn_history(page: Page) -> None:
+    entries = [
+        ("01.01.2026", "14,96"),
+        ("01.09.2026", "15,33"),
+        ("01.04.2027", "15,87"),
+    ]
+
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+
+    edit_icon = target.locator(
+        "img.edit[onclick*=\"daten_historie\"][onclick*=\"'lohn'\"], "
+        "img.edit[onclick*='daten_historie'][onclick*='lohn']"
+    ).first
+    if edit_icon.count() == 0:
+        print("[WARNUNG] Grundlohn-Edit-Icon nicht gefunden.")
+        return
+    try:
+        edit_icon.scroll_into_view_if_needed()
+    except Exception:
+        pass
+    edit_icon.click(force=True)
+    print("[OK] Grundlohn-Historie geöffnet.")
+
+    dialog = page.locator("div.ui-dialog:has-text('Grundlohn-Historie')").first
+    try:
+        dialog.wait_for(state="visible", timeout=8000)
+    except Exception:
+        print("[WARNUNG] Grundlohn-Historie-Dialog nicht sichtbar.")
+        return
+
+    try:
+        dialog_text = dialog.inner_text()
+    except Exception:
+        dialog_text = ""
+    if all(date in dialog_text and amount in dialog_text for date, amount in entries):
+        print("[INFO] Grundlohn-Historie bereits vorhanden – schließe Dialog.")
+        close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
+        if close_button.count() > 0:
+            try:
+                close_button.click()
+                print("[OK] Grundlohn-Dialog geschlossen.")
+            except Exception as exc:
+                print(f"[WARNUNG] Grundlohn-Dialog schließen fehlgeschlagen: {exc}")
+        else:
+            print("[WARNUNG] 'schließen' Button im Grundlohn-Dialog nicht gefunden.")
+        return
+
+    for date_value, amount_value in entries:
+        value_input = dialog.locator("#daten_eintragen_wert").first
+        date_input = dialog.locator("#daten_eintragen_gueltig_ab").first
+        if value_input.count() == 0 or date_input.count() == 0:
+            print("[WARNUNG] Eingabefelder im Grundlohn-Dialog nicht gefunden.")
+            return
+        value_input.fill(amount_value)
+        date_input.fill(date_value)
+        submit_button = dialog.locator("button:has-text('eintragen')").first
+        if submit_button.count() == 0:
+            print("[WARNUNG] 'eintragen'-Button im Grundlohn-Dialog nicht gefunden.")
+            return
+        submit_button.click()
+        print(f"[OK] Grundlohn eingetragen → {date_value} = {amount_value}")
+        time.sleep(0.5)
+
+    close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
+    if close_button.count() > 0:
+        try:
+            close_button.click()
+            print("[OK] Grundlohn-Dialog geschlossen.")
+        except Exception as exc:
+            print(f"[WARNUNG] Grundlohn-Dialog schließen fehlgeschlagen: {exc}")
+    else:
+        print("[WARNUNG] 'schließen' Button im Grundlohn-Dialog nicht gefunden.")
+
+
+def _fill_vertrag_history(page: Page, payload: dict) -> None:
+    vertrag = payload.get("vertrag") or {}
+    if not isinstance(vertrag, dict):
+        vertrag = {}
+    contract_type = str(vertrag.get("contract_type", "")).strip().lower()
+    hire_date = str(vertrag.get("hire_date", "")).strip()
+    if not contract_type or not hire_date:
+        print("[HINWEIS] Vertrag/Eintrittsdatum fehlt – überspringe Vertragshistorie.")
+        return
+
+    type_map = {
+        "kb": "kurzf. Beschäftigte",
+        "tz": "Teilzeit 80h",
+        "gb": "GB - Minijob",
+    }
+    label = type_map.get(contract_type)
+    if not label:
+        print(f"[WARNUNG] Unbekannter contract_type: {contract_type!r}")
+        return
+
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+
+    edit_icon = target.locator(
+        "img.edit[onclick*=\"daten_historie\"][onclick*=\"'vertrag_id'\"], "
+        "img.edit[onclick*='daten_historie'][onclick*='vertrag_id']"
+    ).first
+    if edit_icon.count() == 0:
+        print("[WARNUNG] Vertrag-Edit-Icon nicht gefunden.")
+        return
+    try:
+        edit_icon.scroll_into_view_if_needed()
+    except Exception:
+        pass
+    edit_icon.click(force=True)
+    print("[OK] Vertragshistorie geöffnet.")
+
+    dialog = page.locator("div.ui-dialog:has-text('Vertragshistorie')").first
+    try:
+        dialog.wait_for(state="visible", timeout=8000)
+    except Exception:
+        print("[WARNUNG] Vertragshistorie-Dialog nicht sichtbar.")
+        return
+
+    try:
+        dialog_text = dialog.inner_text()
+    except Exception:
+        dialog_text = ""
+    if label in dialog_text and hire_date in dialog_text:
+        print("[INFO] Vertragshistorie bereits vorhanden – schließe Dialog.")
+        close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
+        if close_button.count() > 0:
+            try:
+                close_button.click()
+                print("[OK] Vertrag-Dialog geschlossen.")
+            except Exception as exc:
+                print(f"[WARNUNG] Vertrag-Dialog schließen fehlgeschlagen: {exc}")
+        else:
+            print("[WARNUNG] 'schließen' Button im Vertrag-Dialog nicht gefunden.")
+        return
+
+    select = dialog.locator("#daten_eintragen_wert").first
+    date_input = dialog.locator("#daten_eintragen_gueltig_ab").first
+    if select.count() == 0 or date_input.count() == 0:
+        print("[WARNUNG] Eingabefelder im Vertrag-Dialog nicht gefunden.")
+        return
+    select.select_option(label=label)
+    date_input.fill(hire_date)
+    submit_button = dialog.locator("button:has-text('eintragen')").first
+    if submit_button.count() == 0:
+        print("[WARNUNG] 'eintragen'-Button im Vertrag-Dialog nicht gefunden.")
+        return
+    submit_button.click()
+    print(f"[OK] Vertrag eingetragen → {label} ab {hire_date}")
+    time.sleep(0.5)
+
+    close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
+    if close_button.count() > 0:
+        try:
+            close_button.click()
+            print("[OK] Vertrag-Dialog geschlossen.")
+        except Exception as exc:
+            print(f"[WARNUNG] Vertrag-Dialog schließen fehlgeschlagen: {exc}")
+    else:
+        print("[WARNUNG] 'schließen' Button im Vertrag-Dialog nicht gefunden.")
+
+
+def _fill_tage_fremd(page: Page, payload: dict) -> None:
+    tage = _pick_payload_value(payload, ["tage_gearbeitet"])
+    if not tage:
+        print("[HINWEIS] Keine tage_gearbeitet im JSON – überspringe Tage Fremdfirmen.")
+        return
+
+    vertrag = payload.get("vertrag") or {}
+    if not isinstance(vertrag, dict):
+        vertrag = {}
+    hire_date = str(vertrag.get("hire_date", "")).strip()
+    if not hire_date:
+        print("[HINWEIS] Kein hire_date im JSON – überspringe Tage Fremdfirmen.")
+        return
+
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+
+    edit_icon = target.locator(
+        "img.edit[onclick*=\"daten_historie\"][onclick*=\"'tage_fremd'\"], "
+        "img.edit[onclick*='daten_historie'][onclick*='tage_fremd']"
+    ).first
+    if edit_icon.count() == 0:
+        print("[WARNUNG] Tage Fremdfirmen-Edit-Icon nicht gefunden.")
+        return
+    try:
+        edit_icon.scroll_into_view_if_needed()
+    except Exception:
+        pass
+    edit_icon.click(force=True)
+    print("[OK] Tage Fremdfirmen-Historie geöffnet.")
+
+    dialog = page.locator("div.ui-dialog").filter(has_text="gültig ab").first
+    try:
+        dialog.wait_for(state="visible", timeout=8000)
+    except Exception:
+        print("[WARNUNG] Tage Fremdfirmen-Dialog nicht sichtbar.")
+        return
+
+    try:
+        dialog_text = dialog.inner_text()
+    except Exception:
+        dialog_text = ""
+    if tage in dialog_text and hire_date in dialog_text:
+        print("[INFO] Tage Fremdfirmen bereits vorhanden – schließe Dialog.")
+        close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
+        if close_button.count() > 0:
+            try:
+                close_button.click()
+                print("[OK] Tage Fremdfirmen-Dialog geschlossen.")
+            except Exception as exc:
+                print(f"[WARNUNG] Tage Fremdfirmen-Dialog schließen fehlgeschlagen: {exc}")
+        else:
+            print("[WARNUNG] 'schließen' Button im Tage Fremdfirmen-Dialog nicht gefunden.")
+        return
+
+    value_input = dialog.locator("#daten_eintragen_wert").first
+    date_input = dialog.locator("#daten_eintragen_gueltig_ab").first
+    if value_input.count() == 0 or date_input.count() == 0:
+        print("[WARNUNG] Eingabefelder im Tage Fremdfirmen-Dialog nicht gefunden.")
+        return
+    value_input.fill(tage)
+    date_input.fill(hire_date)
+    submit_button = dialog.locator("button:has-text('eintragen')").first
+    if submit_button.count() == 0:
+        print("[WARNUNG] 'eintragen'-Button im Tage Fremdfirmen-Dialog nicht gefunden.")
+        return
+    submit_button.click()
+    print(f"[OK] Tage Fremdfirmen eingetragen → {tage} ab {hire_date}")
+    time.sleep(0.5)
+
+    close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
+    if close_button.count() > 0:
+        try:
+            close_button.click()
+            print("[OK] Tage Fremdfirmen-Dialog geschlossen.")
+        except Exception as exc:
+            print(f"[WARNUNG] Tage Fremdfirmen-Dialog schließen fehlgeschlagen: {exc}")
+    else:
+        print("[WARNUNG] 'schließen' Button im Tage Fremdfirmen-Dialog nicht gefunden.")
+
+
+def _fill_sonstiges(page: Page, payload: dict) -> None:
+    value = _pick_payload_value(payload, ["aufmerksam_geworden_durch"])
+    if not value:
+        print("[HINWEIS] Kein aufmerksam_geworden_durch im JSON – überspringe Sonstiges.")
+        return
+
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+
+    edit_icon = target.locator(
+        "img.edit[onclick*=\"feld_aendern\"][onclick*=\"'sonstiges'\"], "
+        "img.edit[onclick*='feld_aendern'][onclick*='sonstiges']"
+    ).first
+    if edit_icon.count() == 0:
+        print("[WARNUNG] Sonstiges-Edit-Icon nicht gefunden.")
+        return
+    try:
+        edit_icon.scroll_into_view_if_needed()
+    except Exception:
+        pass
+    edit_icon.click(force=True)
+    print("[OK] Sonstiges-Dialog geöffnet.")
+
+    dialog = page.locator("div.ui-dialog").first
+    try:
+        dialog.wait_for(state="visible", timeout=8000)
+    except Exception:
+        print("[WARNUNG] Sonstiges-Dialog nicht sichtbar.")
+        return
+
+    input_field = dialog.locator("input[type='text'], textarea").first
+    if input_field.count() == 0:
+        print("[WARNUNG] Sonstiges-Eingabefeld nicht gefunden.")
+        return
+    input_field.fill(value)
+
+    save_button = dialog.locator(
+        "button:has-text('speichern'), button:has-text('Speichern'), "
+        "button:has-text('OK'), button:has-text('Ok'), button:has-text('Übernehmen')"
+    ).first
+    if save_button.count() > 0:
+        try:
+            save_button.click()
+            print(f"[OK] Sonstiges gesetzt → {value}")
+        except Exception as exc:
+            print(f"[WARNUNG] Sonstiges speichern fehlgeschlagen: {exc}")
+    else:
+        print("[WARNUNG] Sonstiges-Speichern-Button nicht gefunden.")
+
+
+def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
+    vertrag = payload.get("vertrag") or {}
+    if not isinstance(vertrag, dict):
+        vertrag = {}
+    hire_date = str(vertrag.get("hire_date", "")).strip()
+    befristung_bis = str(vertrag.get("befristung_bis", "")).strip()
+    contract_type = str(vertrag.get("contract_type", "")).strip()
+    if not hire_date:
+        print("[HINWEIS] Kein hire_date im JSON – überspringe Ein-/Austritt.")
+        return
+
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+
+    edit_icon = target.locator(
+        "img.edit[onclick*='eintritt_austritt_editor'], "
+        "img.edit[onclick*='eintritt_austritt']"
+    ).first
+    if edit_icon.count() == 0:
+        print("[WARNUNG] Eintritt/Austritt-Edit-Icon nicht gefunden.")
+        return
+    try:
+        edit_icon.scroll_into_view_if_needed()
+    except Exception:
+        pass
+    edit_icon.click(force=True)
+    print("[OK] Ein-/Austrittsdatum-Dialog geöffnet.")
+
+    dialog = page.locator("div.ui-dialog:has-text('Ein-/Austrittsdatum ändern')").first
+    try:
+        dialog.wait_for(state="visible", timeout=8000)
+    except Exception:
+        print("[WARNUNG] Ein-/Austrittsdatum-Dialog nicht sichtbar.")
+        return
+
+    try:
+        dialog_text = dialog.inner_text()
+    except Exception:
+        dialog_text = ""
+    expected_end = befristung_bis if befristung_bis else "unbefristet"
+    if hire_date in dialog_text and expected_end in dialog_text and contract_type in dialog_text:
+        print("[INFO] Ein-/Austritt bereits vorhanden – schließe Dialog.")
+        close_button = dialog.locator("button:has-text('Schließen'), button:has-text('schließen')").first
+        if close_button.count() > 0:
+            try:
+                close_button.click()
+                print("[OK] Ein-/Austrittsdatum-Dialog geschlossen.")
+            except Exception as exc:
+                print(f"[WARNUNG] Ein-/Austrittsdatum-Dialog schließen fehlgeschlagen: {exc}")
+        return
+
+    eintritt_input = dialog.locator("#eintrittsdatum_neu").first
+    austritt_input = dialog.locator("#austrittsdatum_neu").first
+    bemerkung_input = dialog.locator("#bemerkung").first
+    if eintritt_input.count() == 0 or austritt_input.count() == 0 or bemerkung_input.count() == 0:
+        print("[WARNUNG] Ein-/Austrittsdatum-Felder nicht gefunden.")
+        return
+    eintritt_input.fill(hire_date)
+    austritt_input.fill(befristung_bis)
+    bemerkung_input.fill(contract_type)
+
+    save_button = dialog.locator("button:has-text('Speichern')").first
+    if save_button.count() == 0:
+        print("[WARNUNG] Ein-/Austrittsdatum-Speichern-Button nicht gefunden.")
+        return
+    save_button.click()
+    print(f"[OK] Ein-/Austritt gesetzt → {hire_date} bis {befristung_bis or 'unbefristet'} ({contract_type})")
+    time.sleep(0.5)
+
+    warn_dialog = page.locator("div.ui-dialog:has-text('Warnung')").first
+    try:
+        warn_dialog.wait_for(state="visible", timeout=4000)
+        fortfahren = warn_dialog.locator("button:has-text('Fortfahren')").first
+        if fortfahren.count() > 0:
+            fortfahren.click()
+            print("[OK] Warnung bestätigt (Fortfahren).")
+    except Exception:
+        pass
+
+    close_button = dialog.locator("button:has-text('Schließen'), button:has-text('schließen')").first
+    if close_button.count() > 0:
+        try:
+            close_button.click()
+            print("[OK] Ein-/Austrittsdatum-Dialog geschlossen.")
+        except Exception as exc:
+            print(f"[WARNUNG] Ein-/Austrittsdatum-Dialog schließen fehlgeschlagen: {exc}")
+    else:
+        print("[WARNUNG] 'Schließen' Button im Ein-/Austrittsdatum-Dialog nicht gefunden.")
+
+
+def _find_angebot_file() -> str:
+    input_dir = Path(os.environ.get("PERSO_INPUT_DIR", "perso-input"))
+    pdfs = list(input_dir.glob("*.pdf"))
+    if not pdfs:
+        return ""
+    # Prefer files containing "angebot" (case-insensitive).
+    for path in pdfs:
+        if "angebot" in path.name.lower():
+            return str(path)
+    return str(pdfs[0])
+
+
+def _upload_arbeitsvertrag(page: Page) -> None:
+    pdf_path = _find_angebot_file()
+    if not pdf_path:
+        print("[HINWEIS] Kein Angebots-PDF in perso-input gefunden – überspringe Dokument-Upload.")
+        return
+
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+
+    add_button = target.locator("button:has-text('Dokument hinzufügen')").first
+    if add_button.count() == 0:
+        print("[WARNUNG] 'Dokument hinzufügen' Button nicht gefunden.")
+        return
+    try:
+        add_button.scroll_into_view_if_needed()
+    except Exception:
+        pass
+    add_button.click()
+    print("[OK] Dokument hinzufügen geöffnet.")
+
+    dialog = page.locator("div.ui-dialog:has-text('Dokument hinzufügen')").first
+    try:
+        dialog.wait_for(state="visible", timeout=8000)
+    except Exception:
+        print("[WARNUNG] Dokument-Dialog nicht sichtbar.")
+        return
+
+    # Dropzone creates a hidden file input on click; use file chooser fallback.
+    try:
+        dropzone = dialog.locator("#maDokDropzone").first
+        if dropzone.count() == 0:
+            raise RuntimeError("Dropzone not found")
+        with page.expect_file_chooser(timeout=5000) as fc_info:
+            dropzone.click()
+        file_chooser = fc_info.value
+        file_chooser.set_files(pdf_path)
+        print(f"[OK] Datei ausgewählt → {Path(pdf_path).name}")
+    except Exception:
+        file_input = dialog.locator("input[type='file']").first
+        if file_input.count() == 0:
+            print("[WARNUNG] Datei-Input im Dokument-Dialog nicht gefunden.")
+            return
+        file_input.set_input_files(pdf_path)
+        print(f"[OK] Datei ausgewählt → {Path(pdf_path).name}")
+
+    table_body = dialog.locator("#tableAuflistungDateien tbody").first
+    try:
+        table_body.wait_for(state="visible", timeout=8000)
+    except Exception:
+        pass
+
+    row = table_body.locator("tr").first
+    deadline = time.time() + 10
+    while time.time() < deadline and row.count() == 0:
+        time.sleep(0.2)
+        row = table_body.locator("tr").first
+    if row.count() == 0:
+        print("[WARNUNG] Upload-Row nicht erschienen.")
+        return
+
+    folder_select = row.locator("select").first
+    if folder_select.count() > 0:
+        try:
+            folder_select.select_option(label="- Arbeitsvertrag")
+        except Exception:
+            try:
+                folder_select.select_option(value="3")
+            except Exception:
+                pass
+        print("[OK] Ordner auf 'Arbeitsvertrag' gesetzt.")
+    else:
+        print("[WARNUNG] Ordner-Auswahl nicht gefunden.")
+
+    save_button = dialog.locator("button:has-text('Speichern')").first
+    if save_button.count() == 0:
+        print("[WARNUNG] Dokument-Speichern-Button nicht gefunden.")
+        return
+    save_button.click()
+    print("[OK] Dokument gespeichert.")
 def _set_input_value(locator, value: str) -> bool:
     if locator.count() == 0:
         return False
     locator.first.evaluate(
         """(node, val) => {
+            node.value = val;
+            node.dispatchEvent(new Event('input', { bubbles: true }));
+            node.dispatchEvent(new Event('change', { bubbles: true }));
+            node.dispatchEvent(new Event('blur', { bubbles: true }));
+        }""",
+        value,
+    )
+    return True
+
+
+def _set_input_value_force(locator, value: str) -> bool:
+    if locator.count() == 0:
+        return False
+    locator.first.evaluate(
+        """(node, val) => {
+            node.removeAttribute('readonly');
+            node.removeAttribute('disabled');
             node.value = val;
             node.dispatchEvent(new Event('input', { bubbles: true }));
             node.dispatchEvent(new Event('change', { bubbles: true }));
@@ -256,6 +1026,79 @@ def _select_autocomplete_by_bn(target: Union[Frame, Page], input_locator, bn: st
     if fallback_text:
         _set_input_value(input_locator, fallback_text)
     return False
+
+
+def _fill_notfallkontakt(page: Page, payload: dict) -> None:
+    name = _pick_payload_value(payload, ["notfall_name"])
+    relation = _pick_payload_value(payload, ["verwandschaftsgrad"])
+    phone = _pick_payload_value(payload, ["notfall_tel"])
+    if not any([name, relation, phone]):
+        print("[HINWEIS] Kein Notfallkontakt im JSON – überspringe.")
+        return
+    print("[INFO] Öffne Notfallkontakt und trage Werte ein …")
+
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+
+    tab = target.locator(
+        "li[aria-controls='administration_user_stammdaten_tabs_notfallkontakt'] a"
+    ).first
+    if tab.count() == 0:
+        tab = target.locator("a:has-text('Notfallkontakt')").first
+    if tab.count() == 0:
+        print("[WARNUNG] Tab 'Notfallkontakt' nicht gefunden.")
+        return
+    try:
+        tab.scroll_into_view_if_needed()
+    except Exception:
+        pass
+    tab.click()
+
+    panel = target.locator("#administration_user_stammdaten_tabs_notfallkontakt").first
+    try:
+        panel.wait_for(state="visible", timeout=8000)
+    except Exception:
+        pass
+
+    edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
+    if edit_icon.count() > 0:
+        try:
+            edit_icon.scroll_into_view_if_needed()
+        except Exception:
+            pass
+        edit_icon.click(force=True)
+        print("[OK] Notfallkontakt Edit-Stift geklickt.")
+    else:
+        print("[WARNUNG] Notfallkontakt Edit-Stift nicht gefunden.")
+
+    if name:
+        loc = panel.locator("#notfallkontakt_name, [name='notfallkontakt_name']")
+        if _set_input_value_force(loc, name):
+            print(f"[OK] notfallkontakt_name → {name}")
+    if phone:
+        loc = panel.locator("#notfallkontakt_telefon, [name='notfallkontakt_telefon']")
+        if _set_input_value_force(loc, phone):
+            print(f"[OK] notfallkontakt_telefon → {phone}")
+    if relation:
+        loc = panel.locator("#notfallkontakt_relation, [name='notfallkontakt_relation']")
+        if _set_input_value_force(loc, relation):
+            print(f"[OK] notfallkontakt_relation → {relation}")
+
+    save_button = panel.locator("input[type='submit'].speichern, input[type='submit'][value*='Daten speichern']").first
+    if save_button.count() > 0:
+        try:
+            save_button.scroll_into_view_if_needed()
+        except Exception:
+            pass
+        try:
+            save_button.click()
+            print("[OK] Notfallkontakt gespeichert.")
+        except Exception as exc:
+            print(f"[WARNUNG] Notfallkontakt speichern fehlgeschlagen: {exc}")
+    else:
+        print("[WARNUNG] Notfallkontakt Speichern-Button nicht gefunden.")
 
 
 def _resolve_lohnabrechnung_values(payload: dict) -> dict:
@@ -537,6 +1380,20 @@ def run_mitarbeiter_vervollstaendigen(
                     _wait_for_dialog_closed(target_page, timeout_seconds=6.0)
                 if not _click_daten_speichern(target_page, timeout_seconds=8.0):
                     print("[WARNUNG] 'Daten speichern' nicht gefunden/geklickt.")
+            _fill_notfallkontakt(target_page, payload)
+            if _open_sedcard(target_page):
+                print("[INFO] Sedcard geöffnet.")
+                _fill_sedcard_fields(target_page, payload)
+            if _open_vertragsdaten(target_page):
+                print("[INFO] Vertragsdaten geöffnet.")
+                _fill_grundlohn_history(target_page)
+                _fill_vertrag_history(target_page, payload)
+                _fill_tage_fremd(target_page, payload)
+                _fill_sonstiges(target_page, payload)
+                _fill_eintritt_austritt(target_page, payload)
+            if _open_mitarbeiterinformationen(target_page):
+                print("[INFO] Mitarbeiterinformationen geöffnet.")
+                _upload_arbeitsvertrag(target_page)
             print(f"[INFO] Pause für manuelle Schritte ({wait_seconds}s) …")
             deadline = time.time() + max(1, wait_seconds)
             while time.time() < deadline:

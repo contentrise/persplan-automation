@@ -46,6 +46,12 @@ def _pick_value(payload: dict, keys: list[str]) -> str:
         value = payload.get(key)
         if value is None:
             continue
+        if isinstance(value, (list, tuple)):
+            for entry in value:
+                text = str(entry).strip()
+                if text:
+                    return text
+            continue
         text = str(value).strip()
         if text:
             return text
@@ -93,7 +99,7 @@ def _normalize_date_ddmmyyyy(value: str) -> str:
 
 
 def load_mitarbeiteranlage_record() -> dict:
-    input_dir = "perso-input"
+    input_dir = os.environ.get("PERSO_INPUT_DIR", "perso-input")
     json_candidates = glob.glob(os.path.join(input_dir, "*.json"))
     if not json_candidates:
         raise Exception("[FEHLER] Keine JSON-Datei im Ordner 'perso-input' gefunden.")
@@ -293,9 +299,9 @@ def open_mitarbeiteranlage(page: Page):
 
     anrede = str(row.get("Anrede", "")).strip().lower()
     geschlecht_value = ""
-    if "frau" in anrede:
+    if "weiblich" in anrede or "frau" in anrede:
         geschlecht_value = "W"
-    elif "mann" in anrede:
+    elif "maennlich" in anrede or "männlich" in anrede or "herr" in anrede or "mann" in anrede:
         geschlecht_value = "M"
     if geschlecht_value:
         try:
@@ -324,6 +330,24 @@ def open_mitarbeiteranlage(page: Page):
 
     print("[INFO] Versuche auf 'Hinzufügen' zu klicken …")
     add_clicked = False
+    def _click_add_button() -> bool:
+        for selector in [
+            "button:has-text('Hinzufügen')",
+            "button:has-text('hinzufügen')",
+            "button#iban",
+        ]:
+            locator = form_frame.locator(selector)
+            if locator.count() > 0:
+                try:
+                    locator.first.scroll_into_view_if_needed()
+                    locator.first.click()
+                    print(f"[OK] Hinzufügen geklickt ({selector})")
+                    return True
+                except Exception as e:
+                    print(f"[WARNUNG] Klick fehlgeschlagen ({selector}): {e}")
+                    continue
+        return False
+
     for selector in [
         "button:has-text('Hinzufügen')",
         "button:has-text('hinzufügen')",
@@ -344,27 +368,70 @@ def open_mitarbeiteranlage(page: Page):
     if not add_clicked:
         print("[HINWEIS] Kein Hinzufügen-Button gefunden.")
 
-    print("[INFO] Prüfe auf Hinweis-Modal und bestätige …")
+    def _confirm_hinweis_modal() -> bool:
+        print("[INFO] Prüfe auf Hinweis-Modal und bestätige …")
+        try:
+            found_any = False
+            # akzeptiere auch mehrere Hinweis-Dialoge hintereinander
+            for _ in range(40):
+                clicked = False
+                for frame in page.frames:
+                    confirm_button = frame.locator(
+                        "div.ui-dialog button:has-text('fortfahren'), button:has-text('fortfahren')"
+                    )
+                    if confirm_button.count() > 0 and confirm_button.first.is_visible():
+                        confirm_button.first.scroll_into_view_if_needed()
+                        confirm_button.first.click(force=True)
+                        print("[OK] Hinweis-Modal bestätigt (fortfahren).")
+                        found_any = True
+                        clicked = True
+                        break
+                if clicked:
+                    time.sleep(0.25)
+                    continue
+                time.sleep(0.25)
+            if not found_any:
+                print("[HINWEIS] Hinweis-Modal/fortfahren nicht gefunden.")
+            return found_any
+        except Exception as e:
+            print(f"[WARNUNG] Hinweis-Modal prüfen fehlgeschlagen: {e}")
+            return False
+
+    _confirm_hinweis_modal()
+
+    print("[INFO] Prüfe auf Fehler-Modal (SVNR) …")
     try:
-        found = False
+        svnr_error_found = False
         for _ in range(40):
             for frame in page.frames:
-                confirm_button = frame.locator(
-                    "div.ui-dialog button:has-text('fortfahren'), button:has-text('fortfahren')"
-                )
-                if confirm_button.count() > 0 and confirm_button.first.is_visible():
-                    confirm_button.first.scroll_into_view_if_needed()
-                    confirm_button.first.click(force=True)
-                    print("[OK] Hinweis-Modal bestätigt (fortfahren).")
-                    found = True
+                dialog = frame.locator("div.ui-dialog:has-text('Fehler')").first
+                if dialog.count() == 0 or not dialog.is_visible():
+                    continue
+                text = dialog.inner_text().lower()
+                if "sozialversicherungsnummer" in text and "geburtsdatum" in text:
+                    print("[FEHLER] SVNR passt nicht zu Geburtsdatum/Geschlecht. Lösche SVNR und versuche erneut.")
+                    svnr_error_found = True
+                    ok_button = dialog.locator("button:has-text('Ok'), button:has-text('OK')").first
+                    if ok_button.count() > 0 and ok_button.is_visible():
+                        ok_button.click(force=True)
                     break
-            if found:
+            if svnr_error_found:
                 break
             time.sleep(0.25)
-        if not found:
-            print("[HINWEIS] Hinweis-Modal/fortfahren nicht gefunden.")
+
+        if svnr_error_found:
+            try:
+                form_frame.locator("[name='sozialversicherungsnummer'], [id='sozialversicherungsnummer']").first.fill("")
+                print("[OK] sozialversicherungsnummer → (leer)")
+            except Exception as e:
+                print(f"[FEHLER] sozialversicherungsnummer leeren: {e}")
+            add_clicked = _click_add_button()
+            if not add_clicked:
+                print("[HINWEIS] Kein Hinzufügen-Button gefunden (Retry nach SVNR-Fehler).")
+            else:
+                _confirm_hinweis_modal()
     except Exception as e:
-        print(f"[WARNUNG] Hinweis-Modal prüfen fehlgeschlagen: {e}")
+        print(f"[WARNUNG] Fehler-Modal prüfen fehlgeschlagen: {e}")
 
     print("[INFO] Warte 45 Sekunden für manuelle Auslese …")
     time.sleep(45)
@@ -374,12 +441,18 @@ def open_mitarbeiteranlage(page: Page):
         found = False
         for _ in range(40):
             for frame in page.frames:
-                email_button = frame.locator(
-                    "div.ui-dialog:has-text('Logindaten') button:has-text('E-Mail'), button:has-text('E-Mail')"
-                )
-                if email_button.count() > 0 and email_button.first.is_visible():
-                    email_button.first.scroll_into_view_if_needed()
-                    email_button.first.click(force=True)
+                dialog = frame.locator(
+                    "div.ui-dialog:has-text('Logindaten'), "
+                    "div.ui-dialog:has-text('Wollen Sie die Logindaten'), "
+                    "div.ui-dialog:has-text('Wollen Sie die Logindaten drucken'), "
+                    "div.ui-dialog:has-text('E-Mail wurde versendet')"
+                ).first
+                if dialog.count() == 0 or not dialog.is_visible():
+                    continue
+                email_button = dialog.locator("button:has-text('E-Mail')").first
+                if email_button.count() > 0 and email_button.is_visible():
+                    email_button.scroll_into_view_if_needed()
+                    email_button.click(force=True)
                     print("[OK] Logindaten-Modal bestätigt (E-Mail).")
                     found = True
                     break
@@ -390,6 +463,32 @@ def open_mitarbeiteranlage(page: Page):
             print("[HINWEIS] Logindaten-Modal/E-Mail nicht gefunden.")
     except Exception as e:
         print(f"[WARNUNG] Logindaten-Modal prüfen fehlgeschlagen: {e}")
+
+    print("[INFO] Warte auf E-Mail-Erfolgsmeldung und schließe Modal …")
+    try:
+        closed = False
+        for _ in range(40):
+            for frame in page.frames:
+                dialog = frame.locator(
+                    "div.ui-dialog:has-text('E-Mail wurde versendet')"
+                ).first
+                if dialog.count() == 0 or not dialog.is_visible():
+                    continue
+                close_button = dialog.locator("button:has-text('Schließen')").first
+                if close_button.count() > 0 and close_button.is_visible():
+                    close_button.scroll_into_view_if_needed()
+                    close_button.click(force=True)
+                    print("[OK] E-Mail-Erfolgsmeldung geschlossen.")
+                    closed = True
+                    break
+            if closed:
+                break
+            time.sleep(0.25)
+        if not closed:
+            print("[TIMEOUT] Keine Erfolgsmeldung gefunden oder geschlossen (E-Mail wurde versendet).")
+    except Exception as e:
+        print(f"[WARNUNG] Erfolgsmeldung prüfen fehlgeschlagen: {e}")
+        print("[TIMEOUT] Erfolgsmeldung-Prüfung abgebrochen.")
 
     print("[FERTIG] Formularbefüllung abgeschlossen.")
     print("[INFO] Fenster bleibt 10 Sekunden offen …")

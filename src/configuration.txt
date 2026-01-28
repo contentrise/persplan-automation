@@ -1,13 +1,13 @@
 # Allgemeine Einstellungen für PersPlan-Schichtcrawler
-month=12
-year=2025
+month=02
+year=2026
 vertragstyp=2
 export_dir=exports
 max_ma_loop=
 
 # Einstellungen für Urlaubsplanung
-urlaub_month=12
-urlaub_year=2025
+urlaub_month=02
+urlaub_year=2026
 save_uu=true
 
 # Tagesplan (alt)

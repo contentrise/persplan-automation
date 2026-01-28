@@ -1,0 +1,578 @@
+<tbody><tr>
+    <td><img src="/images/transparent.gif" class="edit sprite_16x16 pointer" alt="" style="vertical-align: middle" title="Bearbeiten" onclick="makeEdited();"></td>
+    <td style="text-align: right;"><input type="hidden" name="DataEdited" value="1"><button class="pointer hideElement editSubcontractor" onclick="" title=""><img src="/images/transparent.gif" style="vertical-align:middle" class="sprite_16x16 save"><span class="abstand_links_8">Daten speichern</span></button></td>
+</tr>
+<tr>
+<td style="width: 50%;">
+    <table border="0">
+                    <tbody><tr>
+                        <td style="white-space:nowrap;"><b>Zweitanschrift:</b></td>
+                        <td><input type="text" id="strasse02" name="strasse02" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Zweitanschrift Nr.:</b></td>
+                        <td><input type="text" id="hausnr02" name="hausnr02" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Zweitanschrift PLZ:</b></td>
+                        <td><input type="text" id="plz02" name="plz02" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Zweitanschrift Ort:</b></td>
+                        <td><input type="text" id="ort02" name="ort02" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Nächstgrößere Stadt / Städte:</b></td>
+                        <td><input type="text" id="ort02_next" name="ort02_next" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Hauttyp:</b></td>
+                        <td><input type="text" id="hauttyp" name="hauttyp" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Haarfarbe:</b></td>
+                        <td><input type="text" id="haarfarbe" name="haarfarbe" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Groesse:</b></td>
+                        <td><input type="text" id="groesse" name="groesse" value="0" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Konfektion:</b></td>
+                        <td><input type="text" id="konfektion" name="konfektion" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Konfektion_2:</b></td>
+                        <td><input type="text" id="konfektion_2" name="konfektion_2" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Jeansgroesse:</b></td>
+                        <td><input type="text" id="jeansgroesse" name="jeansgroesse" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Schuhgroesse:</b></td>
+                        <td><input type="text" id="schuhgroesse" name="schuhgroesse" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Piercing:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="piercing">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Pkw:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="pkw">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>MR:</b></td>
+                        <td><input type="text" id="motorrad" name="motorrad" value="Nein" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Roller:</b></td>
+                        <td><input type="text" id="roller" name="roller" value="Nein" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Fuehrerschein:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="fuehrerschein">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Fuehrerscheinart:</b></td>
+                        <td><input type="text" id="fuehrerscheinart" name="fuehrerscheinart" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Abo:</b></td>
+                        <td><input type="text" id="abo" name="abo" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Gewerbeschein:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="gewerbeschein">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Gesundheitszeugnis:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="gesundheitszeugnis">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Bfabefreiung:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="bfabefreiung">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Ustberechtigt:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="ustberechtigt">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Schulausbildung:</b></td>
+                        <td><input type="text" id="schulausbildung" name="schulausbildung" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Studium:</b></td>
+                        <td><input type="text" id="studium" name="studium" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Berufsausbildung:</b></td>
+                        <td><input type="text" id="berufsausbildung" name="berufsausbildung" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Beruf:</b></td>
+                        <td><input type="text" id="beruf" name="beruf" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Besfaehigkeiten:</b></td>
+                        <td><input type="text" id="besfaehigkeiten" name="besfaehigkeiten" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sprache:</b></td>
+                        <td><input type="text" id="sprache01a" name="sprache01a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sprachausprägung:</b></td>
+                        <td><input type="text" id="sprache01b" name="sprache01b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sprache:</b></td>
+                        <td><input type="text" id="sprache02a" name="sprache02a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sprachausprägung:</b></td>
+                        <td><input type="text" id="sprache02b" name="sprache02b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sprache:</b></td>
+                        <td><input type="text" id="sprache03a" name="sprache03a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sprachausprägung:</b></td>
+                        <td><input type="text" id="sprache03b" name="sprache03b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sprache04a:</b></td>
+                        <td><input type="text" id="sprache04a" name="sprache04a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sprache04b:</b></td>
+                        <td><input type="text" id="sprache04b" name="sprache04b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sonstige Sprachen:</b></td>
+                        <td><input type="text" id="sprache04" name="sprache04" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Konfektionsgröße: Bluse / Hemd:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="taetigkeit01a">
+                            <option value="0">---</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option><option value="42">42</option><option value="44">44</option><option value="46">46</option><option value="48">48</option><option value="50">50</option><option value="52">52</option><option value="54">54</option><option value="56">56</option><option value="58">58</option><option value="60">60</option><option value="62">62</option><option value="64">64</option>
+                        </select></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Konfektionsgröße: Hose:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="taetigkeit01b">
+                            <option value="0">---</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option><option value="42">42</option><option value="44">44</option><option value="46">46</option><option value="48">48</option><option value="50">50</option><option value="52">52</option><option value="54">54</option><option value="56">56</option><option value="58">58</option>
+                        </select></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Konfektionsgröße: Rock:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="taetigkeit01c">
+                            <option value="0">---</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option><option value="42">42</option><option value="44">44</option><option value="46">46</option><option value="48">48</option><option value="50">50</option><option value="52">52</option><option value="54">54</option><option value="56">56</option><option value="58">58</option>
+                        </select></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Konfektionsgröße: Jacket / Sakko:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="taetigkeit01d">
+                            <option value="0">---</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option><option value="38">38</option><option value="40">40</option><option value="42">42</option><option value="44">44</option><option value="46">46</option><option value="48">48</option><option value="50">50</option><option value="52">52</option><option value="54">54</option><option value="56">56</option><option value="58">58</option>
+                        </select></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Produkt:</b></td>
+                        <td><input type="text" id="taetigkeit02a" name="taetigkeit02a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Agentur:</b></td>
+                        <td><input type="text" id="taetigkeit02b" name="taetigkeit02b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Zeitraum:</b></td>
+                        <td><input type="text" id="taetigkeit02c" name="taetigkeit02c" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Art der Tätigkeit:</b></td>
+                        <td><input type="text" id="taetigkeit02d" name="taetigkeit02d" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Produkt:</b></td>
+                        <td><input type="text" id="taetigkeit03a" name="taetigkeit03a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Agentur:</b></td>
+                        <td><input type="text" id="taetigkeit03b" name="taetigkeit03b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Zeitraum:</b></td>
+                        <td><input type="text" id="taetigkeit03c" name="taetigkeit03c" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Art der Tätigkeit:</b></td>
+                        <td><input type="text" id="taetigkeit03d" name="taetigkeit03d" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Produkt:</b></td>
+                        <td><input type="text" id="taetigkeit04a" name="taetigkeit04a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Agentur:</b></td>
+                        <td><input type="text" id="taetigkeit04b" name="taetigkeit04b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Zeitraum:</b></td>
+                        <td><input type="text" id="taetigkeit04c" name="taetigkeit04c" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Art der Tätigkeit:</b></td>
+                        <td><input type="text" id="taetigkeit04d" name="taetigkeit04d" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Produkt:</b></td>
+                        <td><input type="text" id="taetigkeit05a" name="taetigkeit05a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Agentur:</b></td>
+                        <td><input type="text" id="taetigkeit05b" name="taetigkeit05b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Zeitraum:</b></td>
+                        <td><input type="text" id="taetigkeit05c" name="taetigkeit05c" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Art der Tätigkeit:</b></td>
+                        <td><input type="text" id="taetigkeit05d" name="taetigkeit05d" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Produkt:</b></td>
+                        <td><input type="text" id="taetigkeit06a" name="taetigkeit06a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Agentur:</b></td>
+                        <td><input type="text" id="taetigkeit06b" name="taetigkeit06b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Zeitraum:</b></td>
+                        <td><input type="text" id="taetigkeit06c" name="taetigkeit06c" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Art der Tätigkeit:</b></td>
+                        <td><input type="text" id="taetigkeit06d" name="taetigkeit06d" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Produkt:</b></td>
+                        <td><input type="text" id="taetigkeit07a" name="taetigkeit07a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Agentur:</b></td>
+                        <td><input type="text" id="taetigkeit07b" name="taetigkeit07b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Zeitraum:</b></td>
+                        <td><input type="text" id="taetigkeit07c" name="taetigkeit07c" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Art der Tätigkeit:</b></td>
+                        <td><input type="text" id="taetigkeit07d" name="taetigkeit07d" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Produkt:</b></td>
+                        <td><input type="text" id="taetigkeit08a" name="taetigkeit08a" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Agentur:</b></td>
+                        <td><input type="text" id="taetigkeit08b" name="taetigkeit08b" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Zeitraum:</b></td>
+                        <td><input type="text" id="taetigkeit08c" name="taetigkeit08c" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Art der Tätigkeit:</b></td>
+                        <td><input type="text" id="taetigkeit08d" name="taetigkeit08d" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sonstige Tätigkeiten:</b></td>
+                        <td><input type="text" id="taetigkeit09" name="taetigkeit09" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Sampling:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit01">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Verkostung:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit02">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Teamleiter:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit03">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Moderator:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit04">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Fachberatung, Sales-Prom.:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit05">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Dekorateur:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit06">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Merchandiser:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit07">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Messehost (ess):</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit08">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Mystery-Shopper:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit09">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Leasing-AD:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit10">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Freitext:</b></td>
+                        <td><input type="text" id="wtaetigkeit11" name="wtaetigkeit11" value="" class="readOnlyInput" disabled="disabled"></td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>VIP-Host (ess):</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit12">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Gastronomie (Service):</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit13">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>CallCenter-Agent:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit14">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Interviewer(in):</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit15">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Flyerverteiler (in):</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wtaetigkeit16">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Tagsüber:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wzeit01">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Abends:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wzeit02">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Am Wochenende:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wzeit03">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Immer:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wzeit04">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Ersteinsatz:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wort01">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Regionaleinsatz ohne Übernachtung:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wort02">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Regionaleinsatz mit Übernachtung:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wort03">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Übernachtungsmöglichkeiten:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="wort04">
+                            <option value="0">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Waffentragbewilligung für PR24/ MES:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="waffentragbewilligung_pr24">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Waffentragbewilligung für Revolver/ Pistole:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="waffentragbewilligung_revolver">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="white-space:nowrap;"><b>Waffentragbewilligung für Langwaffen:</b></td>
+                        <td>
+                        <select class="readOnlySelect full_form_field" disabled="disabled" name="waffentragbewilligung_langwaffen">
+                            <option value="0" selected="">Nein</option>
+                            <option value="1">Ja</option>
+                        </select>
+                    </td>
+                    </tr>
+    </tbody></table>
+</td>
+<td>
+</td>
+</tr>
+</tbody>
