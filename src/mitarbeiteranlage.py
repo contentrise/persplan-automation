@@ -441,13 +441,13 @@ def open_mitarbeiteranlage(page: Page):
         found = False
         for _ in range(40):
             for frame in page.frames:
-                dialog = frame.locator(
-                    "div.ui-dialog:has-text('Logindaten'), "
-                    "div.ui-dialog:has-text('Wollen Sie die Logindaten'), "
-                    "div.ui-dialog:has-text('Wollen Sie die Logindaten drucken'), "
-                    "div.ui-dialog:has-text('E-Mail wurde versendet')"
+                dialog = frame.locator("div.ui-dialog:visible").filter(
+                    has_text=re.compile(
+                        r"(Logindaten|Wollen Sie die Logindaten|Wollen Sie die Logindaten drucken|E-Mail wurde versendet)",
+                        re.IGNORECASE,
+                    )
                 ).first
-                if dialog.count() == 0 or not dialog.is_visible():
+                if dialog.count() == 0:
                     continue
                 email_button = dialog.locator("button:has-text('E-Mail')").first
                 if email_button.count() > 0 and email_button.is_visible():
@@ -469,10 +469,10 @@ def open_mitarbeiteranlage(page: Page):
         closed = False
         for _ in range(40):
             for frame in page.frames:
-                dialog = frame.locator(
-                    "div.ui-dialog:has-text('E-Mail wurde versendet')"
+                dialog = frame.locator("div.ui-dialog:visible").filter(
+                    has_text=re.compile(r"E-Mail wurde versendet", re.IGNORECASE)
                 ).first
-                if dialog.count() == 0 or not dialog.is_visible():
+                if dialog.count() == 0:
                     continue
                 close_button = dialog.locator("button:has-text('Schließen')").first
                 if close_button.count() > 0 and close_button.is_visible():
