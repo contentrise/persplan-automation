@@ -225,6 +225,16 @@ def _open_user_overview(page: Page) -> Union[Frame, Page]:
         ".scn_datatable_outer_table_user_tbl table#user_tbl tbody tr, table#user_tbl tbody tr",
         timeout=20000,
     )
+    # ensure filter is set to "Alle" (like mitarbeiter_vervollstaendigen)
+    try:
+        filter_all = target.locator("#filter_anzeige_0").first
+        if filter_all.count() > 0 and not filter_all.is_checked():
+            filter_all.click()
+            print("[OK] Filter auf 'Alle' gesetzt.")
+            # allow table to refresh
+            time.sleep(0.8)
+    except Exception:
+        pass
     return target
 
 
