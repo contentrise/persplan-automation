@@ -608,7 +608,9 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
         dialog_text = dialog.inner_text()
     except Exception:
         dialog_text = ""
-    if label in dialog_text and hire_date in dialog_text:
+    hire_date_ui = _format_date_for_ui(hire_date)
+    hire_date_modal = _first_of_month(hire_date_ui)
+    if label in dialog_text and hire_date_modal in dialog_text:
         print("[INFO] Vertragshistorie bereits vorhanden – schließe Dialog.")
         close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
         if close_button.count() > 0:
@@ -627,13 +629,13 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
         print("[WARNUNG] Eingabefelder im Vertrag-Dialog nicht gefunden.")
         return
     select.select_option(label=label)
-    date_input.fill(hire_date)
+    date_input.fill(hire_date_modal)
     submit_button = dialog.locator("button:has-text('eintragen')").first
     if submit_button.count() == 0:
         print("[WARNUNG] 'eintragen'-Button im Vertrag-Dialog nicht gefunden.")
         return
     submit_button.click()
-    print(f"[OK] Vertrag eingetragen → {label} ab {hire_date}")
+    print(f"[OK] Vertrag eingetragen → {label} ab {hire_date_modal}")
     time.sleep(0.5)
 
     close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
@@ -886,7 +888,42 @@ def _find_angebot_file() -> str:
     return str(pdfs[0])
 
 
-def _upload_arbeitsvertrag(page: Page) -> None:
+def _format_date_for_ui(date_str: str) -> str:
+    if not date_str:
+        return ""
+    match = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", date_str)
+    if match:
+        year, month, day = match.groups()
+        return f"{day}.{month}.{year}"
+    if re.match(r"^\d{2}\.\d{2}\.\d{4}$", date_str):
+        return date_str
+    return date_str
+
+
+def _first_of_month(date_str: str) -> str:
+    ui = _format_date_for_ui(date_str)
+    match = re.match(r"^(\d{2})\.(\d{2})\.(\d{4})$", ui)
+    if not match:
+        return ui
+    _day, month, year = match.groups()
+    return f"01.{month}.{year}"
+
+
+def _build_vertrag_bemerkung(payload: dict) -> str:
+    vertrag = payload.get("vertrag") or {}
+    if not isinstance(vertrag, dict):
+        return ""
+    contract_type = str(vertrag.get("contract_type", "")).strip().lower()
+    hire_date = str(vertrag.get("hire_date", "")).strip()
+    if not contract_type or not hire_date:
+        return ""
+    type_map = {"kb": "KB", "tz": "TZ", "gb": "GB"}
+    type_label = type_map.get(contract_type, contract_type.upper())
+    hire_date_ui = _format_date_for_ui(hire_date)
+    return f"Arbeitsvertrag {type_label} zum {hire_date_ui}"
+
+
+def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
     pdf_path = _find_angebot_file()
     if not pdf_path:
         print("[HINWEIS] Kein Angebots-PDF in perso-input gefunden – überspringe Dokument-Upload.")
@@ -947,6 +984,17 @@ def _upload_arbeitsvertrag(page: Page) -> None:
     if row.count() == 0:
         print("[WARNUNG] Upload-Row nicht erschienen.")
         return
+
+    bemerkung_text = _build_vertrag_bemerkung(payload)
+    if bemerkung_text:
+        bemerkung_input = row.locator(
+            "textarea[name*='bemerkung'], textarea[id^='fileExtras_'], textarea"
+        ).first
+        if bemerkung_input.count() > 0:
+            bemerkung_input.fill(bemerkung_text)
+            print(f"[OK] Bemerkung gesetzt → {bemerkung_text}")
+        else:
+            print("[WARNUNG] Bemerkung-Feld im Upload-Row nicht gefunden.")
 
     folder_select = row.locator("select").first
     if folder_select.count() > 0:
@@ -1582,7 +1630,7 @@ def run_mitarbeiter_vervollstaendigen(
                 _fill_eintritt_austritt(target_page, payload)
             if _open_mitarbeiterinformationen(target_page):
                 print("[INFO] Mitarbeiterinformationen geöffnet.")
-                _upload_arbeitsvertrag(target_page)
+                _upload_arbeitsvertrag(target_page, payload)
             print(f"[INFO] Pause für manuelle Schritte ({wait_seconds}s) …")
             deadline = time.time() + max(1, wait_seconds)
             while time.time() < deadline:
