@@ -826,7 +826,8 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     except Exception:
         dialog_text = ""
     expected_end = befristung_bis if befristung_bis else "unbefristet"
-    if hire_date in dialog_text and expected_end in dialog_text and contract_type in dialog_text:
+    remark = contract_type.upper()
+    if hire_date in dialog_text and expected_end in dialog_text and (contract_type in dialog_text or remark in dialog_text):
         print("[INFO] Ein-/Austritt bereits vorhanden – schließe Dialog.")
         close_button = dialog.locator("button:has-text('Schließen'), button:has-text('schließen')").first
         if close_button.count() > 0:
@@ -845,14 +846,15 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
         return
     eintritt_input.fill(hire_date)
     austritt_input.fill(befristung_bis)
-    bemerkung_input.fill(contract_type)
+    remark = contract_type.upper()
+    bemerkung_input.fill(remark)
 
     save_button = dialog.locator("button:has-text('Speichern')").first
     if save_button.count() == 0:
         print("[WARNUNG] Ein-/Austrittsdatum-Speichern-Button nicht gefunden.")
         return
     save_button.click()
-    print(f"[OK] Ein-/Austritt gesetzt → {hire_date} bis {befristung_bis or 'unbefristet'} ({contract_type})")
+    print(f"[OK] Ein-/Austritt gesetzt → {hire_date} bis {befristung_bis or 'unbefristet'} ({remark})")
     time.sleep(0.5)
 
     warn_dialog = page.locator("div.ui-dialog:has-text('Warnung')").first
@@ -1057,6 +1059,24 @@ def _set_select_value(locator, value: str) -> bool:
         return False
 
 
+def _set_select_value_with_fallback(locator, value: str, label: str | None = None) -> bool:
+    if locator.count() == 0:
+        return False
+    try:
+        locator.first.evaluate("(node) => { node.removeAttribute('disabled'); }")
+    except Exception:
+        pass
+    if value and _set_select_value(locator, value):
+        return True
+    if label:
+        try:
+            locator.first.select_option(label=label)
+            return True
+        except Exception:
+            return False
+    return False
+
+
 def _parse_language_entries(value) -> list[dict]:
     if not value:
         return []
@@ -1185,7 +1205,12 @@ def _fill_stammdaten_fields(page: Page, payload: dict) -> None:
     value = _map_schulabschluss_to_value(schulabschluss_raw)
     if value:
         loc = panel.locator("#schulabschluss_taetigkeitschluessel, [name='schulabschluss_taetigkeitschluessel']")
-        if _set_select_value(loc, value):
+        label = None
+        try:
+            label = loc.locator(f"option[value='{value}']").first.inner_text()
+        except Exception:
+            label = None
+        if _set_select_value_with_fallback(loc, value, label=label):
             print(f"[OK] Stammdaten schulabschluss → {schulabschluss_raw}")
         else:
             print("[WARNUNG] Stammdaten schulabschluss nicht gesetzt.")
@@ -1349,7 +1374,26 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
     if not krankenkasse_bn:
         krankenkasse_bn = _extract_bn(krankenkasse_pf)
 
-    if variant == "kb":
+    vertrag = payload.get("vertrag") or {}
+    if not isinstance(vertrag, dict):
+        vertrag = {}
+    contract_type = str(vertrag.get("contract_type", "")).strip().lower()
+
+    if contract_type in ["kb", "gb"]:
+        krankenkasse = "Knappschaft Hauptverwaltung [Bn: 98000006]"
+        tatsaechliche = ""
+        tatsaechliche_bn = ""
+        personengruppe = "110"
+        vertragsform = "4"
+        steuerklasse = "1"
+    elif contract_type == "tz":
+        krankenkasse = krankenkasse_pf
+        tatsaechliche = ""
+        tatsaechliche_bn = ""
+        personengruppe = "101"
+        vertragsform = "2"
+        steuerklasse = "1"
+    elif variant == "kb":
         krankenkasse = "Knappschaft Hauptverwaltung [Bn: 98000006]"
         tatsaechliche = krankenkasse_pf
         tatsaechliche_bn = krankenkasse_bn
@@ -1374,7 +1418,7 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
     return {
         "variant": variant,
         "krankenkasse": krankenkasse,
-        "krankenkasse_bn": "98000006" if variant == "kb" else krankenkasse_bn,
+        "krankenkasse_bn": "98000006" if contract_type in ["kb", "gb"] else ("98000006" if variant == "kb" else krankenkasse_bn),
         "tatsaechliche_krankenkasse": tatsaechliche,
         "tatsaechliche_bn": tatsaechliche_bn,
         "personengruppe": personengruppe,
