@@ -121,3 +121,9 @@ Steuerklasse GB = M
 
 Bei Vertragsdaten bitte 01.01.2026 = 14,96
 01.09.2026=15,33 und 01.04.2027=15,87
+
+
+
+
+
+Arbeitsvertrag KB zum 01.02.2026

@@ -58,6 +58,30 @@ def _pick_value(payload: dict, keys: list[str]) -> str:
     return ""
 
 
+def _frame_label(frame) -> str:
+    name = frame.name or ""
+    url = frame.url or ""
+    if name and url:
+        return f"{name} ({url})"
+    return name or url or "<unbekannter Frame>"
+
+
+def _log_dialog_state(dialog, frame_label: str, label: str) -> None:
+    try:
+        text = dialog.inner_text().strip()
+    except Exception as e:
+        text = f"<Fehler beim Lesen: {e}>"
+    if len(text) > 400:
+        text = text[:400] + "…"
+    print(f"[DEBUG] {label} in {frame_label}: {text}")
+    try:
+        buttons = [t.strip() for t in dialog.locator("button").all_inner_texts() if t.strip()]
+    except Exception as e:
+        buttons = [f"<Fehler beim Lesen: {e}>"]
+    if buttons:
+        print(f"[DEBUG] Dialog-Buttons: {buttons}")
+
+
 def _row_from_json(payload: dict) -> dict:
     return {
         "Anrede": _pick_value(payload, ["anrede"]),
@@ -449,8 +473,17 @@ def open_mitarbeiteranlage(page: Page):
                 ).first
                 if dialog.count() == 0:
                     continue
+                _log_dialog_state(dialog, _frame_label(frame), "Logindaten-Modal")
                 email_button = dialog.locator("button:has-text('E-Mail')").first
-                if email_button.count() > 0 and email_button.is_visible():
+                email_count = email_button.count()
+                email_visible = False
+                if email_count > 0:
+                    try:
+                        email_visible = email_button.is_visible()
+                    except Exception:
+                        email_visible = False
+                print(f"[DEBUG] E-Mail-Button gefunden: {email_count} sichtbar={email_visible}")
+                if email_count > 0 and email_visible:
                     email_button.scroll_into_view_if_needed()
                     email_button.click(force=True)
                     print("[OK] Logindaten-Modal bestätigt (E-Mail).")
@@ -474,8 +507,17 @@ def open_mitarbeiteranlage(page: Page):
                 ).first
                 if dialog.count() == 0:
                     continue
+                _log_dialog_state(dialog, _frame_label(frame), "E-Mail-Erfolgsmeldung")
                 close_button = dialog.locator("button:has-text('Schließen')").first
-                if close_button.count() > 0 and close_button.is_visible():
+                close_count = close_button.count()
+                close_visible = False
+                if close_count > 0:
+                    try:
+                        close_visible = close_button.is_visible()
+                    except Exception:
+                        close_visible = False
+                print(f"[DEBUG] Schließen-Button gefunden: {close_count} sichtbar={close_visible}")
+                if close_count > 0 and close_visible:
                     close_button.scroll_into_view_if_needed()
                     close_button.click(force=True)
                     print("[OK] E-Mail-Erfolgsmeldung geschlossen.")

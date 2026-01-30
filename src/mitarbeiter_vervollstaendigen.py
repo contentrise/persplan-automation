@@ -1029,9 +1029,15 @@ def _select_autocomplete_by_bn(target: Union[Frame, Page], input_locator, bn: st
 
 
 def _fill_notfallkontakt(page: Page, payload: dict) -> None:
-    name = _pick_payload_value(payload, ["notfall_name"])
-    relation = _pick_payload_value(payload, ["verwandschaftsgrad"])
-    phone = _pick_payload_value(payload, ["notfall_tel"])
+    name = _pick_payload_value(payload, ["notfall_name", "notfallkontakt_name"])
+    relation = _pick_payload_value(payload, ["verwandschaftsgrad", "notfallkontakt_relation"])
+    phone = _pick_payload_value(payload, ["notfall_tel", "notfallkontakt_tel", "notfallkontakt_telefon"])
+    nested = payload.get("notfallkontakt")
+    if isinstance(nested, dict):
+        name = name or _pick_payload_value(nested, ["name", "notfall_name", "notfallkontakt_name"])
+        relation = relation or _pick_payload_value(nested, ["relation", "verwandschaftsgrad", "notfallkontakt_relation"])
+        phone = phone or _pick_payload_value(nested, ["telefon", "phone", "notfall_tel", "notfallkontakt_tel"])
+    print(f"[DEBUG] Notfallkontakt Werte: name='{name}' relation='{relation}' phone='{phone}'")
     if not any([name, relation, phone]):
         print("[HINWEIS] Kein Notfallkontakt im JSON – überspringe.")
         return
@@ -1060,7 +1066,7 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
     try:
         panel.wait_for(state="visible", timeout=8000)
     except Exception:
-        pass
+        print("[WARNUNG] Notfallkontakt-Panel nicht sichtbar (Timeout).")
 
     edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
     if edit_icon.count() > 0:
@@ -1075,18 +1081,22 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
 
     if name:
         loc = panel.locator("#notfallkontakt_name, [name='notfallkontakt_name']")
+        print(f"[DEBUG] notfallkontakt_name Locator count={loc.count()}")
         if _set_input_value_force(loc, name):
             print(f"[OK] notfallkontakt_name → {name}")
     if phone:
         loc = panel.locator("#notfallkontakt_telefon, [name='notfallkontakt_telefon']")
+        print(f"[DEBUG] notfallkontakt_telefon Locator count={loc.count()}")
         if _set_input_value_force(loc, phone):
             print(f"[OK] notfallkontakt_telefon → {phone}")
     if relation:
         loc = panel.locator("#notfallkontakt_relation, [name='notfallkontakt_relation']")
+        print(f"[DEBUG] notfallkontakt_relation Locator count={loc.count()}")
         if _set_input_value_force(loc, relation):
             print(f"[OK] notfallkontakt_relation → {relation}")
 
     save_button = panel.locator("input[type='submit'].speichern, input[type='submit'][value*='Daten speichern']").first
+    print(f"[DEBUG] Notfallkontakt Speichern-Button count={save_button.count()}")
     if save_button.count() > 0:
         try:
             save_button.scroll_into_view_if_needed()
