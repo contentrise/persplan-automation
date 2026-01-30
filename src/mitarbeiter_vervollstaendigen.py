@@ -347,6 +347,7 @@ def _open_mitarbeiterinformationen(page: Page) -> bool:
             except Exception:
                 pass
             try:
+                _dismiss_ui_overlay(page)
                 link.click()
                 print("[OK] Submenü 'Mitarbeiterinformationen' geklickt.")
                 time.sleep(0.5)
@@ -432,9 +433,8 @@ def _fill_sedcard_fields(page: Page, payload: dict) -> None:
         "groesse": _pick_payload_value(payload, ["koerpergroesse"]),
         "konfektion": _pick_payload_value(payload, ["konfektionsgroesse"]),
         "schuhgroesse": _pick_payload_value(payload, ["schuhgroesse"]),
-        "schulausbildung": _pick_payload_value(payload, ["schulabschluss"]),
+        "schulausbildung": _pick_payload_value(payload, ["schulausbildung"]),
         "fuehrerscheinart": _pick_payload_value(payload, ["fuehrerscheinklasse"]),
-        "sprache01a": _pick_payload_value(payload, ["fremdsprachen"]),
     }
 
     for field, value in input_mappings.items():
@@ -445,6 +445,10 @@ def _fill_sedcard_fields(page: Page, payload: dict) -> None:
             print(f"[OK] sedcard {field} → {value}")
         else:
             print(f"[WARNUNG] sedcard {field} nicht gesetzt.")
+
+    language_entries = _parse_language_entries(_pick_payload_value(payload, ["fremdsprachen"]))
+    if language_entries:
+        _fill_language_fields(target, language_entries)
 
     fuehrerschein_value = _pick_payload_value(payload, ["fuehrerschein"])
     if fuehrerschein_value:
@@ -1005,6 +1009,180 @@ def _set_select_value(locator, value: str) -> bool:
         return False
 
 
+def _parse_language_entries(value) -> list[dict]:
+    if not value:
+        return []
+    if isinstance(value, list):
+        parts = [str(item).strip() for item in value if str(item).strip()]
+        raw = ", ".join(parts)
+    else:
+        raw = str(value).strip()
+    if not raw:
+        return []
+    items = [part.strip() for part in re.split(r"[,\n;/]+", raw) if part.strip()]
+    entries: list[dict] = []
+    for item in items:
+        match = re.match(r"^(.*?)\s*\((.*?)\)\s*$", item)
+        if match:
+            language = match.group(1).strip()
+            level = match.group(2).strip()
+        else:
+            language = item.strip()
+            level = ""
+        if language:
+            entries.append({"language": language, "level": level})
+    return entries
+
+
+def _fill_language_fields(target: Union[Frame, Page], entries: list[dict]) -> None:
+    pairs = [
+        ("sprache01a", "sprache01b"),
+        ("sprache02a", "sprache02b"),
+        ("sprache03a", "sprache03b"),
+        ("sprache04a", "sprache04b"),
+    ]
+    for idx, (lang_field, level_field) in enumerate(pairs):
+        if idx >= len(entries):
+            break
+        entry = entries[idx]
+        language = entry.get("language", "")
+        level = entry.get("level", "")
+        if language:
+            loc = target.locator(f"[name='{lang_field}'], #{lang_field}")
+            if _set_input_value(loc, language):
+                print(f"[OK] sedcard {lang_field} → {language}")
+            else:
+                print(f"[WARNUNG] sedcard {lang_field} nicht gesetzt.")
+        if level:
+            loc = target.locator(f"[name='{level_field}'], #{level_field}")
+            if _set_input_value(loc, level):
+                print(f"[OK] sedcard {level_field} → {level}")
+            else:
+                print(f"[WARNUNG] sedcard {level_field} nicht gesetzt.")
+    if len(entries) > len(pairs):
+        extras = ", ".join([e.get("language", "") for e in entries[len(pairs):] if e.get("language")])
+        if extras:
+            loc = target.locator("[name='sprache04'], #sprache04")
+            if _set_input_value(loc, extras):
+                print(f"[OK] sedcard sprache04 → {extras}")
+            else:
+                print("[WARNUNG] sedcard sprache04 nicht gesetzt.")
+
+
+def _map_schulabschluss_to_value(value) -> str | None:
+    if not value:
+        return None
+    normalized = str(value).strip().lower()
+    if not normalized:
+        return None
+    if "ohne" in normalized:
+        return "1"
+    if "haupt" in normalized or "volks" in normalized:
+        return "2"
+    if "mittlere" in normalized or "reife" in normalized or "realschule" in normalized or "gleichwertig" in normalized:
+        return "3"
+    if "abitur" in normalized:
+        return "4"
+    if "unbekannt" in normalized:
+        return "9"
+    return None
+
+
+def _fill_stammdaten_fields(page: Page, payload: dict) -> None:
+    schulabschluss_raw = _pick_payload_value(payload, ["schulabschluss"])
+    if not schulabschluss_raw:
+        print("[HINWEIS] Kein Schulabschluss im JSON – überspringe Stammdaten.")
+        return
+
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+
+    tab = target.locator("li[aria-controls='administration_user_stammdaten_tabs_stammdaten'] a").first
+    if tab.count() == 0:
+        tab = target.locator("a:has-text('Stammdaten')").first
+    if tab.count() == 0:
+        print("[WARNUNG] Tab 'Stammdaten' nicht gefunden.")
+        return
+
+    try:
+        tab.scroll_into_view_if_needed()
+    except Exception:
+        pass
+    tab.click()
+
+    panel = target.locator("#administration_user_stammdaten_tabs_stammdaten").first
+    try:
+        panel.wait_for(state="visible", timeout=8000)
+    except Exception:
+        pass
+
+    edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
+    if edit_icon.count() == 0:
+        edit_icon = target.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
+    if edit_icon.count() > 0:
+        try:
+            edit_icon.scroll_into_view_if_needed()
+        except Exception:
+            pass
+        try:
+            edit_icon.click(force=True)
+            print("[OK] Stammdaten Edit-Stift geklickt.")
+        except Exception as exc:
+            print(f"[WARNUNG] Stammdaten Edit-Stift nicht klickbar: {exc}")
+    else:
+        print("[WARNUNG] Stammdaten Edit-Stift nicht gefunden.")
+
+    value = _map_schulabschluss_to_value(schulabschluss_raw)
+    if value:
+        loc = panel.locator("#schulabschluss_taetigkeitschluessel, [name='schulabschluss_taetigkeitschluessel']")
+        if _set_select_value(loc, value):
+            print(f"[OK] Stammdaten schulabschluss → {schulabschluss_raw}")
+        else:
+            print("[WARNUNG] Stammdaten schulabschluss nicht gesetzt.")
+    else:
+        print(f"[WARNUNG] Schulabschluss nicht gemappt: {schulabschluss_raw}")
+
+    save_button = panel.locator(
+        "input[type='submit'].speichern, input[type='submit'][value*='Daten speichern'], button:has-text('Daten speichern')"
+    ).first
+    if save_button.count() > 0:
+        try:
+            save_button.scroll_into_view_if_needed()
+        except Exception:
+            pass
+        try:
+            save_button.click()
+            print("[OK] Stammdaten gespeichert.")
+        except Exception as exc:
+            print(f"[WARNUNG] Stammdaten speichern fehlgeschlagen: {exc}")
+    else:
+        print("[WARNUNG] Stammdaten Speichern-Button nicht gefunden.")
+
+
+def _dismiss_ui_overlay(page: Page) -> None:
+    overlay = page.locator("div.ui-widget-overlay.ui-front").first
+    try:
+        if overlay.count() > 0 and overlay.is_visible():
+            page.keyboard.press("Escape")
+            time.sleep(0.2)
+    except Exception:
+        pass
+    try:
+        if overlay.count() > 0 and overlay.is_visible():
+            close_button = page.locator(
+                "div.ui-dialog:visible button:has-text('Schließen'), "
+                "div.ui-dialog:visible button:has-text('Fertig'), "
+                "div.ui-dialog:visible button.ui-dialog-titlebar-close"
+            ).first
+            if close_button.count() > 0:
+                close_button.click()
+                time.sleep(0.2)
+    except Exception:
+        pass
+
+
 def _select_autocomplete_by_bn(target: Union[Frame, Page], input_locator, bn: str, fallback_text: str) -> bool:
     if input_locator.count() == 0 or not bn:
         return False
@@ -1390,6 +1568,7 @@ def run_mitarbeiter_vervollstaendigen(
                     _wait_for_dialog_closed(target_page, timeout_seconds=6.0)
                 if not _click_daten_speichern(target_page, timeout_seconds=8.0):
                     print("[WARNUNG] 'Daten speichern' nicht gefunden/geklickt.")
+            _fill_stammdaten_fields(target_page, payload)
             _fill_notfallkontakt(target_page, payload)
             if _open_sedcard(target_page):
                 print("[INFO] Sedcard geöffnet.")
