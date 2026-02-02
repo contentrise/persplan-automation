@@ -1256,9 +1256,23 @@ def _dismiss_ui_overlay(page: Page) -> None:
         pass
 
 
-def _select_autocomplete_by_bn(target: Union[Frame, Page], input_locator, bn: str, fallback_text: str) -> bool:
-    if input_locator.count() == 0 or not bn:
+def _select_autocomplete_by_bn(
+    target: Union[Frame, Page],
+    input_locator,
+    bn: str,
+    fallback_text: str,
+    field_label: str = "krankenkasse",
+) -> bool:
+    locator_count = input_locator.count()
+    if locator_count == 0:
+        print(f"[WARNUNG] {field_label}: Eingabefeld nicht gefunden – übersprungen.")
         return False
+    if not bn:
+        if fallback_text:
+            print(f"[WARNUNG] {field_label}: BN fehlt, versuche Fallback-Text → {fallback_text}")
+        else:
+            print(f"[WARNUNG] {field_label}: BN fehlt und kein Fallback-Text – übersprungen.")
+            return False
     try:
         input_locator.first.click()
     except Exception:
@@ -1271,11 +1285,13 @@ def _select_autocomplete_by_bn(target: Union[Frame, Page], input_locator, bn: st
         item = list_locator.filter(has_text=f"[Bn: {bn}]").first
         if item.count() > 0 and item.is_visible():
             item.click()
+            print(f"[OK] {field_label}: Autocomplete Treffer → [Bn: {bn}]")
             return True
         time.sleep(0.2)
 
     if fallback_text:
         _set_input_value(input_locator, fallback_text)
+        print(f"[WARNUNG] {field_label}: Kein Autocomplete Treffer für BN {bn} – Fallback gesetzt → {fallback_text}")
     return False
 
 
@@ -1448,6 +1464,7 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
         krankenkasse_input,
         values["krankenkasse_bn"],
         values["krankenkasse"],
+        "krankenkasse",
     )
     if values["tatsaechliche_krankenkasse"]:
         tatsaechliche_input = panel.locator("#tatsaechliche_krankenkasse")
@@ -1456,6 +1473,7 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
             tatsaechliche_input,
             values["tatsaechliche_bn"],
             values["tatsaechliche_krankenkasse"],
+            "tatsaechliche_krankenkasse",
         )
     _set_select_value(panel.locator("#personengruppe"), values["personengruppe"])
     _set_input_value(panel.locator("#taetigkeitsbezeichnung"), values["taetigkeitsbezeichnung"])

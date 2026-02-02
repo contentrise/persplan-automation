@@ -215,10 +215,12 @@ def open_mitarbeiteranlage(page: Page):
             print(f"[HINWEIS] Kein Wert für '{csv_field}', überspringe.")
             continue
 
+        field_handled = False
+        missing_candidates = []
         for html_name in html_names:
             locator = form_frame.locator(f"[name='{html_name}'], [id='{html_name}']")
             if locator.count() == 0:
-                print(f"[WARNUNG] Feld '{html_name}' nicht gefunden – übersprungen.")
+                missing_candidates.append(html_name)
                 continue
 
             el = locator.first
@@ -241,13 +243,16 @@ def open_mitarbeiteranlage(page: Page):
                     if match:
                         el.select_option(label=match)
                         print(f"[OK] {html_name} (select) → {match}")
+                        field_handled = True
                     else:
                         if "deutsch" in norm_val:
                             el.select_option(label="Deutschland")
                             print(f"[OK] {html_name} (select fallback) → Deutschland")
+                            field_handled = True
                         else:
                             el.select_option(index=1)
                             print(f"[OK] {html_name} (select fallback index 1) → {value}")
+                            field_handled = True
                 elif tag in ["input", "textarea"]:
                     if html_name.lower() in ["geburtsdatum", "geburts_datum", "birthday"]:
                         formatted = _normalize_date_ddmmyyyy(value)
@@ -261,13 +266,24 @@ def open_mitarbeiteranlage(page: Page):
                             formatted,
                         )
                         print(f"[OK] {html_name} (format dd.mm.yyyy) → {formatted}")
+                        field_handled = True
                     else:
                         el.fill(value)
                         print(f"[OK] {html_name} → {value}")
+                        field_handled = True
             except Exception as e:
                 print(f"[FEHLER] {html_name}: {e}")
                 continue
             time.sleep(0.2)
+            if field_handled:
+                break
+
+        if not field_handled and missing_candidates:
+            if len(missing_candidates) == 1:
+                print(f"[WARNUNG] Feld '{missing_candidates[0]}' nicht gefunden – übersprungen.")
+            else:
+                joined = ", ".join(missing_candidates)
+                print(f"[WARNUNG] Keines der Felder für '{csv_field}' gefunden ({joined}) – übersprungen.")
 
     phone_raw = str(row.get("Mobil", "")).strip()
     if phone_raw:
