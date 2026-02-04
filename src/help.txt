@@ -95,6 +95,9 @@ python3 -m src.main mitarbeiter-vervollstaendigen --headless=false --slowmo=150
 Wenn alle Daten in Lohnabrechnung durch sind und nach "Daten speichern" ein Modal kommt, auf "Fertig" bestätigen:
 <div class="ui-dialog-buttonset"><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-focus" role="button"><span class="ui-button-text">Fertig</span></button><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button"><span class="ui-button-text">Abbrechen</span></button></div>
 
+Mitarbeiter Informationen (Studienbescheinigung etc.)
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.main mitarbeiterinformationen --headless false --slowmo 200 --wait-seconds 45
 
 
 
@@ -127,3 +130,6 @@ Bei Vertragsdaten bitte 01.01.2026 = 14,96
 
 
 Arbeitsvertrag KB zum 01.02.2026
+
+
+

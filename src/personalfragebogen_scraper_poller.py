@@ -2,7 +2,7 @@
 Personalfragebogen Scraper Poller
 ---------------------------------
 
-Pollt die Hub-API für neue Scraper-Runs (Mitarbeiteranlage / Vervollständigen),
+Pollt die Hub-API für neue Scraper-Runs (Mitarbeiteranlage / Vervollständigen / Mitarbeiterinformationen),
 lädt die Daten und den Vertrag herunter, startet die Playwright-Skripte und
 meldet den Status inkl. Logs zurück.
 """
@@ -64,6 +64,11 @@ STEP_COMMANDS = {
         os.environ.get("PERSONAL_SCRAPER_COMMAND_VOLL")
         or os.environ.get("STAFFING_SCRAPER_COMMAND_VOLL")
         or "-m src.main mitarbeiter-vervollstaendigen --headless true"
+    ).strip(),
+    "mitarbeiterinformationen": (
+        os.environ.get("PERSONAL_SCRAPER_COMMAND_INFO")
+        or os.environ.get("STAFFING_SCRAPER_COMMAND_INFO")
+        or "-m src.main mitarbeiterinformationen --headless true"
     ).strip(),
 }
 LOGIN_COMMAND = (

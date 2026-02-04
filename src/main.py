@@ -17,6 +17,7 @@ from src.tagesplan_vortag import run_tagesplan_vortag
 from src.planung_zeitraum import run_planung_zeitraum
 from src.kunden_scraper import run_kunden_scraper
 from src.mitarbeiter_vervollstaendigen import run_mitarbeiter_vervollstaendigen
+from src.mitarbeiterinformationen import run_mitarbeiterinformationen
 
 
 def run_login(save_state: str | None, headless: bool | None, slowmo_ms: int | None):
@@ -262,6 +263,19 @@ def main():
         help="Pause nach dem Klick (Sek.)",
     )
 
+    p_mitarbeiterinfos = sub.add_parser(
+        "mitarbeiterinformationen",
+        help="Öffnet user.php, sucht per E-Mail und öffnet den Bereich Mitarbeiterinformationen",
+    )
+    p_mitarbeiterinfos.add_argument("--headless", choices=["true", "false"], default=None)
+    p_mitarbeiterinfos.add_argument("--slowmo", type=int, default=None)
+    p_mitarbeiterinfos.add_argument(
+        "--wait-seconds",
+        type=int,
+        default=45,
+        help="Pause nach dem Öffnen (Sek.)",
+    )
+
     args = parser.parse_args()
 
     headless = None if args.headless is None else (args.headless.lower() == "true")
@@ -299,6 +313,12 @@ def main():
         )
     elif args.cmd == "mitarbeiter-vervollstaendigen":
         run_mitarbeiter_vervollstaendigen(
+            headless=headless,
+            slowmo_ms=args.slowmo,
+            wait_seconds=args.wait_seconds,
+        )
+    elif args.cmd == "mitarbeiterinformationen":
+        run_mitarbeiterinformationen(
             headless=headless,
             slowmo_ms=args.slowmo,
             wait_seconds=args.wait_seconds,
