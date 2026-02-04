@@ -148,7 +148,7 @@ def _click_unterlage_hinzufuegen(page) -> bool:
 
 
 def _fill_unterlage_modal_and_save(page, entry: dict) -> bool:
-    bezeichnung = str(entry.get("bezeichnung") or "Unterlage").strip()
+    bezeichnung_text = str(entry.get("bezeichnung") or "Unterlage").strip()
     gueltig_bis = str(entry.get("gueltig_bis") or "").strip()
     vorhanden = bool(entry.get("vorhanden"))
 
@@ -160,8 +160,8 @@ def _fill_unterlage_modal_and_save(page, entry: dict) -> bool:
 
     target = None
     for candidate in candidates:
-        bezeichnung = candidate.locator("#bezeichnung").first
-        if bezeichnung.count() > 0:
+        bezeichnung_input = candidate.locator("#bezeichnung").first
+        if bezeichnung_input.count() > 0:
             target = candidate
             break
 
@@ -170,7 +170,7 @@ def _fill_unterlage_modal_and_save(page, entry: dict) -> bool:
         return False
 
     try:
-        target.locator("#bezeichnung").first.fill(bezeichnung)
+        target.locator("#bezeichnung").first.fill(bezeichnung_text)
         if gueltig_bis:
             target.locator("#gueltigBis").first.evaluate(
                 """(el, val) => {
@@ -211,7 +211,7 @@ def _fill_unterlage_modal_and_save(page, entry: dict) -> bool:
                 }"""
             )
         print(
-            f"[OK] Modal gespeichert: bezeichnung={bezeichnung}, "
+            f"[OK] Modal gespeichert: bezeichnung={bezeichnung_text}, "
             f"gueltigBis={gueltig_bis or '—'}, vorhanden={'Ja' if vorhanden else 'Nein'}"
         )
         return True
