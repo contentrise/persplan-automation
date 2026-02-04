@@ -256,8 +256,11 @@ def process_run(job: dict) -> None:
                         if isinstance(meta, dict):
                             optional_sources.append((stem, str(meta.get("url") or "")))
 
+                if not optional_sources:
+                    LOGGER.info("Keine optionalen Dokument-Quellen im Payload gefunden.")
                 for stem, source_url in optional_sources:
                     if not source_url:
+                        LOGGER.info("Optionale Quelle '%s' fehlt (keine URL).", stem)
                         continue
                     try:
                         downloaded = download_optional_file(source_url, stem, input_dir)

@@ -1075,18 +1075,22 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
         ),
     ]
 
+    print("[INFO] Starte Upload zusätzlicher Dokumente …")
     for stem, bemerkung, folder_label, folder_value in jobs:
         file_path = _find_input_file_by_stem(stem)
         if not file_path:
+            print(f"[HINWEIS] Zusatzdokument nicht gefunden: {stem}.* (in PERSO_INPUT_DIR)")
             continue
         print(f"[INFO] Lade zusätzliches Dokument hoch: {Path(file_path).name}")
-        _upload_document_with_modal(
+        uploaded = _upload_document_with_modal(
             page=page,
             file_path=file_path,
             folder_label=folder_label,
             folder_value=folder_value,
             bemerkung_text=bemerkung,
         )
+        if not uploaded:
+            print(f"[WARNUNG] Upload fehlgeschlagen: {Path(file_path).name}")
 
 
 def _set_input_value(locator, value: str) -> bool:
