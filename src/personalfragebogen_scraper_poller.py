@@ -19,6 +19,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlparse
 
 import requests
 
@@ -126,6 +127,33 @@ def download_contract(contract_url: str, target_path: Path) -> None:
     target_path.write_bytes(response.content)
 
 
+def _guess_extension(url: str, content_type: str, fallback: str = ".bin") -> str:
+    ct = (content_type or "").lower()
+    if "pdf" in ct:
+        return ".pdf"
+    if "png" in ct:
+        return ".png"
+    if "jpeg" in ct or "jpg" in ct:
+        return ".jpg"
+
+    parsed = urlparse(url or "")
+    suffix = Path(parsed.path).suffix
+    if suffix:
+        return suffix
+    return fallback
+
+
+def download_optional_file(file_url: str, target_stem: str, target_dir: Path) -> Optional[Path]:
+    if not file_url:
+        return None
+    response = session.get(file_url, timeout=60)
+    response.raise_for_status()
+    ext = _guess_extension(file_url, response.headers.get("Content-Type", ""))
+    target_path = target_dir / f"{target_stem}{ext}"
+    target_path.write_bytes(response.content)
+    return target_path
+
+
 def build_input_payload(entry_data: dict, contract_data: dict | None) -> dict:
     if contract_data is None:
         return entry_data
@@ -190,6 +218,8 @@ def process_run(job: dict) -> None:
         run_login()
         entry = fetch_entry(entry_id)
         payload = entry.get("data") or {}
+        if isinstance(entry.get("pdfUrls"), dict):
+            payload["pdfUrls"] = entry.get("pdfUrls")
         contract_data = payload.get("contract_transfer") or {}
         contract_file = contract_data.get("file") if isinstance(contract_data, dict) else None
 
@@ -206,6 +236,35 @@ def process_run(job: dict) -> None:
                     raise RuntimeError("Vertrag fehlt oder URL nicht vorhanden")
                 contract_path = input_dir / "vertrag.pdf"
                 download_contract(contract_file["url"], contract_path)
+                LOGGER.info("Datei heruntergeladen: %s", contract_path.name)
+
+                pdf_urls = payload.get("pdfUrls") if isinstance(payload, dict) else {}
+                optional_sources = []
+                if isinstance(pdf_urls, dict):
+                    optional_sources.extend(
+                        [
+                            ("personalbogen", str(pdf_urls.get("personal") or "")),
+                            ("zusatzvereinbarung", str(pdf_urls.get("zusatzvereinbarung") or "")),
+                            ("sicherheitsbelehrung", str(pdf_urls.get("sicherheitsbelehrung") or "")),
+                        ]
+                    )
+
+                uploads = payload.get("uploads") if isinstance(payload, dict) else {}
+                if isinstance(uploads, dict):
+                    for key, stem in [("immatrikulation", "immatrikulation"), ("infektionsschutz", "infektionsschutz")]:
+                        meta = uploads.get(key)
+                        if isinstance(meta, dict):
+                            optional_sources.append((stem, str(meta.get("url") or "")))
+
+                for stem, source_url in optional_sources:
+                    if not source_url:
+                        continue
+                    try:
+                        downloaded = download_optional_file(source_url, stem, input_dir)
+                        if downloaded:
+                            LOGGER.info("Datei heruntergeladen: %s", downloaded.name)
+                    except Exception as exc:
+                        LOGGER.warning("Optionale Datei '%s' konnte nicht geladen werden: %s", stem, exc)
 
             env = os.environ.copy()
             env["PERSO_INPUT_DIR"] = str(input_dir)

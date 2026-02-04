@@ -883,6 +883,10 @@ def _find_angebot_file() -> str:
     pdfs = list(input_dir.glob("*.pdf"))
     if not pdfs:
         return ""
+    # Poller speichert den Vertrag standardmäßig unter vertrag.pdf.
+    for path in pdfs:
+        if path.name.lower() == "vertrag.pdf":
+            return str(path)
     # Prefer files containing "angebot" (case-insensitive).
     for path in pdfs:
         if "angebot" in path.name.lower():
@@ -925,12 +929,7 @@ def _build_vertrag_bemerkung(payload: dict) -> str:
     return f"Arbeitsvertrag {type_label} zum {hire_date_ui}"
 
 
-def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
-    pdf_path = _find_angebot_file()
-    if not pdf_path:
-        print("[HINWEIS] Kein Angebots-PDF in perso-input gefunden – überspringe Dokument-Upload.")
-        return
-
+def _open_document_upload_dialog(page: Page):
     target: Union[Frame, Page] = page
     frame = page.frame(name="inhalt")
     if frame:
@@ -952,7 +951,20 @@ def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
         dialog.wait_for(state="visible", timeout=8000)
     except Exception:
         print("[WARNUNG] Dokument-Dialog nicht sichtbar.")
-        return
+        return None
+    return dialog
+
+
+def _upload_document_with_modal(
+    page: Page,
+    file_path: str,
+    folder_label: str,
+    folder_value: str,
+    bemerkung_text: str = "",
+) -> bool:
+    dialog = _open_document_upload_dialog(page)
+    if dialog is None:
+        return False
 
     # Dropzone creates a hidden file input on click; use file chooser fallback.
     try:
@@ -962,15 +974,15 @@ def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
         with page.expect_file_chooser(timeout=5000) as fc_info:
             dropzone.click()
         file_chooser = fc_info.value
-        file_chooser.set_files(pdf_path)
-        print(f"[OK] Datei ausgewählt → {Path(pdf_path).name}")
+        file_chooser.set_files(file_path)
+        print(f"[OK] Datei ausgewählt → {Path(file_path).name}")
     except Exception:
         file_input = dialog.locator("input[type='file']").first
         if file_input.count() == 0:
             print("[WARNUNG] Datei-Input im Dokument-Dialog nicht gefunden.")
-            return
-        file_input.set_input_files(pdf_path)
-        print(f"[OK] Datei ausgewählt → {Path(pdf_path).name}")
+            return False
+        file_input.set_input_files(file_path)
+        print(f"[OK] Datei ausgewählt → {Path(file_path).name}")
 
     table_body = dialog.locator("#tableAuflistungDateien tbody").first
     try:
@@ -985,9 +997,8 @@ def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
         row = table_body.locator("tr").first
     if row.count() == 0:
         print("[WARNUNG] Upload-Row nicht erschienen.")
-        return
+        return False
 
-    bemerkung_text = _build_vertrag_bemerkung(payload)
     if bemerkung_text:
         bemerkung_input = row.locator(
             "textarea[name*='bemerkung'], textarea[id^='fileExtras_'], textarea"
@@ -1001,22 +1012,83 @@ def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
     folder_select = row.locator("select").first
     if folder_select.count() > 0:
         try:
-            folder_select.select_option(label="- Arbeitsvertrag")
+            folder_select.select_option(label=folder_label)
         except Exception:
             try:
-                folder_select.select_option(value="3")
+                folder_select.select_option(value=folder_value)
             except Exception:
                 pass
-        print("[OK] Ordner auf 'Arbeitsvertrag' gesetzt.")
+        print(f"[OK] Ordner gesetzt → {folder_label}")
     else:
         print("[WARNUNG] Ordner-Auswahl nicht gefunden.")
 
     save_button = dialog.locator("button:has-text('Speichern')").first
     if save_button.count() == 0:
         print("[WARNUNG] Dokument-Speichern-Button nicht gefunden.")
-        return
+        return False
     save_button.click()
     print("[OK] Dokument gespeichert.")
+    return True
+
+
+def _find_input_file_by_stem(stem: str) -> str:
+    input_dir = Path(os.environ.get("PERSO_INPUT_DIR", "perso-input"))
+    candidates = sorted(input_dir.glob(f"{stem}.*"))
+    if not candidates:
+        return ""
+    return str(candidates[0])
+
+
+def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
+    pdf_path = _find_angebot_file()
+    if not pdf_path:
+        print("[HINWEIS] Kein Angebots-/Vertrags-PDF in perso-input gefunden – überspringe Dokument-Upload.")
+        return
+    _upload_document_with_modal(
+        page=page,
+        file_path=pdf_path,
+        folder_label="- Arbeitsvertrag",
+        folder_value="3",
+        bemerkung_text=_build_vertrag_bemerkung(payload),
+    )
+
+
+def _upload_additional_documents(page: Page, payload: dict) -> None:
+    uploads = payload.get("uploads") if isinstance(payload, dict) else {}
+    if not isinstance(uploads, dict):
+        uploads = {}
+
+    valid_until_infektionsschutz = ""
+    if isinstance(uploads.get("infektionsschutz"), dict):
+        valid_until_infektionsschutz = _format_date_for_ui(str(uploads["infektionsschutz"].get("validUntil", "")).strip())
+
+    jobs = [
+        ("personalbogen", "Personalbogen", "- Personalbogen, Rentenbefreiung & Agenda", "5"),
+        ("zusatzvereinbarung", "Zusatzvereinbarung", "Dokumente", "1"),
+        ("sicherheitsbelehrung", "Sicherheitsbelehrung", "Dokumente", "1"),
+        ("immatrikulation", "Immatrikulations-/Schulbescheinigung", "- Imma/Schul", "2"),
+        (
+            "infektionsschutz",
+            f"Infektionsschutzbelehrung{f' vom {valid_until_infektionsschutz}' if valid_until_infektionsschutz else ''}",
+            "- Infektionsschutzbelehrung",
+            "9",
+        ),
+    ]
+
+    for stem, bemerkung, folder_label, folder_value in jobs:
+        file_path = _find_input_file_by_stem(stem)
+        if not file_path:
+            continue
+        print(f"[INFO] Lade zusätzliches Dokument hoch: {Path(file_path).name}")
+        _upload_document_with_modal(
+            page=page,
+            file_path=file_path,
+            folder_label=folder_label,
+            folder_value=folder_value,
+            bemerkung_text=bemerkung,
+        )
+
+
 def _set_input_value(locator, value: str) -> bool:
     if locator.count() == 0:
         return False
@@ -1693,6 +1765,7 @@ def run_mitarbeiter_vervollstaendigen(
             if _open_mitarbeiterinformationen(target_page):
                 print("[INFO] Mitarbeiterinformationen geöffnet.")
                 _upload_arbeitsvertrag(target_page, payload)
+                _upload_additional_documents(target_page, payload)
             print(f"[INFO] Pause für manuelle Schritte ({wait_seconds}s) …")
             deadline = time.time() + max(1, wait_seconds)
             while time.time() < deadline:
