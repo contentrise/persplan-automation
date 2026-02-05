@@ -273,15 +273,20 @@ def _click_unterlage_hinzufuegen(page) -> bool:
     ]
 
     candidates = [page]
-    inhalt = page.frame(name="inhalt")
+    try:
+        inhalt = page.frame(name="inhalt")
+    except Exception:
+        inhalt = None
     if inhalt:
         candidates.append(inhalt)
-    candidates.extend(page.frames)
 
     for target in candidates:
         for selector in selectors:
             button = target.locator(selector).first
-            if button.count() == 0:
+            try:
+                if button.count() == 0:
+                    continue
+            except Exception:
                 continue
             try:
                 button.scroll_into_view_if_needed()
@@ -304,17 +309,22 @@ def _fill_unterlage_modal_and_save(page, entry: dict) -> bool:
     vorhanden = bool(entry.get("vorhanden"))
 
     candidates = [page]
-    inhalt = page.frame(name="inhalt")
+    try:
+        inhalt = page.frame(name="inhalt")
+    except Exception:
+        inhalt = None
     if inhalt:
         candidates.append(inhalt)
-    candidates.extend(page.frames)
 
     target = None
     for candidate in candidates:
         bezeichnung_input = candidate.locator("#bezeichnung").first
-        if bezeichnung_input.count() > 0:
-            target = candidate
-            break
+        try:
+            if bezeichnung_input.count() > 0:
+                target = candidate
+                break
+        except Exception:
+            continue
 
     if target is None:
         print("[WARNUNG] Modal für 'Einzureichende Unterlage' nicht gefunden.")

@@ -1399,17 +1399,30 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
         return
     print("[INFO] Öffne Notfallkontakt und trage Werte ein …")
 
-    target: Union[Frame, Page] = page
+    candidates: list[Union[Frame, Page]] = [page]
     frame = page.frame(name="inhalt")
     if frame:
-        target = frame
+        candidates.append(frame)
+    candidates.extend(page.frames)
 
-    tab = target.locator(
-        "li[aria-controls='administration_user_stammdaten_tabs_notfallkontakt'] a"
-    ).first
-    if tab.count() == 0:
-        tab = target.locator("a:has-text('Notfallkontakt')").first
-    if tab.count() == 0:
+    target: Union[Frame, Page] | None = None
+    tab = None
+    tab_selectors = [
+        "#administration_user_stammdaten_tabs a[href='#administration_user_stammdaten_tabs_notfallkontakt']",
+        "li[aria-controls='administration_user_stammdaten_tabs_notfallkontakt'] a",
+        "a:has-text('Notfallkontakt')",
+    ]
+    for candidate in candidates:
+        for selector in tab_selectors:
+            candidate_tab = candidate.locator(selector).first
+            if candidate_tab.count() > 0:
+                target = candidate
+                tab = candidate_tab
+                break
+        if tab is not None:
+            break
+
+    if not tab or not target:
         print("[WARNUNG] Tab 'Notfallkontakt' nicht gefunden.")
         return
     try:
