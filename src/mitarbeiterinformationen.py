@@ -18,12 +18,88 @@ from src.mitarbeiter_vervollstaendigen import (
 )
 
 UPLOAD_LABELS = {
-    "immatrikulation": "Immatrikulations-/Schulbescheinigung",
-    "infektionsschutz": "Gesundheitszeugnis (Infektionsschutz)",
+    "sicherheitsbelehrung": "Sicherheitsbelehrung",
+    "immatrikulation": "Imma/ Schulbescheinigung",
+    "infektionsschutz": "Infektionsschutzbelehrung",
     "aufenthaltserlaubnis": "Arbeits-/Aufenthaltserlaubnis",
+    "arbeitserlaubnis": "Arbeits-/Aufenthaltserlaubnis",
     "rentenbefreiung": "Rentenbefreiung",
     "profilbild": "Profilbild",
 }
+
+PERSONAL_FORM_VARIANTS = {
+    "kb": {
+        "aliases": {"default", "standard", "kb"},
+        "upload_fields": [
+            ("immatrikulation", True),
+            ("infektionsschutz", True),
+            ("profilbild", False),
+            ("aufenthaltserlaubnis", False),
+        ],
+    },
+    "geringfuegig": {
+        "aliases": {"geringfügig", "geringfuegig", "minijob", "mini", "gmj", "gb"},
+        "upload_fields": [
+            ("infektionsschutz", True),
+            ("profilbild", False),
+            ("rentenbefreiung", False),
+            ("aufenthaltserlaubnis", False),
+        ],
+    },
+    "teilzeit": {
+        "aliases": {"tz", "teilzeit", "pt"},
+        "upload_fields": [
+            ("infektionsschutz", True),
+            ("profilbild", False),
+            ("aufenthaltserlaubnis", False),
+        ],
+    },
+}
+
+
+def _resolve_form_variant(payload: dict) -> str:
+    raw_value = (
+        payload.get("form_variant")
+        or payload.get("formVariant")
+        or payload.get("variant")
+        or payload.get("contract_type")
+        or payload.get("vertragstyp")
+        or (payload.get("vertrag") or {}).get("contract_type")
+        or ""
+    )
+    normalized = str(raw_value).strip().lower()
+    if not normalized:
+        return "kb"
+    for key, variant in PERSONAL_FORM_VARIANTS.items():
+        if normalized == key:
+            return key
+        if normalized in variant.get("aliases", set()):
+            return key
+    return "kb"
+
+
+def _should_require_immatrikulation(payload: dict) -> bool:
+    employment_mode = payload.get("beschaeftigung_modus")
+    if employment_mode != "kein":
+        return False
+    status = str(payload.get("kein_beschaeftigungsverhaeltnis") or "").strip().lower()
+    return status in {"studentin", "schuelerin"}
+
+
+def _build_required_upload_keys(payload: dict) -> list[str]:
+    variant_key = _resolve_form_variant(payload)
+    variant = PERSONAL_FORM_VARIANTS.get(variant_key, PERSONAL_FORM_VARIANTS["kb"])
+    required = []
+    for key, required_flag in variant.get("upload_fields", []):
+        if not required_flag:
+            continue
+        if key == "immatrikulation" and not _should_require_immatrikulation(payload):
+            continue
+        required.append(key)
+    # Sicherheitsbelehrung immer als Einzureichende Unterlage anlegen.
+    if "sicherheitsbelehrung" not in required:
+        required.insert(0, "sicherheitsbelehrung")
+    return required
 
 
 def _iso_to_de_date(value: str) -> str:
@@ -45,8 +121,20 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
     if not isinstance(uploads, dict):
         return []
 
+    required_keys = _build_required_upload_keys(payload)
+    required_set = set(required_keys)
+
     # Feste Reihenfolge, damit die Einträge in der Akte reproduzierbar sind.
-    ordered_keys = [key for key in UPLOAD_LABELS.keys() if key in uploads]
+    preferred_order = [
+        "sicherheitsbelehrung",
+        "immatrikulation",
+        "infektionsschutz",
+        "aufenthaltserlaubnis",
+        "arbeitserlaubnis",
+        "rentenbefreiung",
+    ]
+    ordered_keys = [key for key in preferred_order if key in required_set or key in uploads]
+    ordered_keys.extend([key for key in required_keys if key not in ordered_keys])
     ordered_keys.extend([key for key in uploads.keys() if key not in ordered_keys])
 
     unterlagen = []
@@ -54,16 +142,22 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
         if key == "profilbild":
             continue
         meta = uploads.get(key)
-        if not isinstance(meta, dict):
-            continue
-        has_source = bool((meta.get("key") or "").strip() or (meta.get("url") or "").strip() or (meta.get("name") or "").strip())
-        if not has_source:
+        has_source = False
+        if isinstance(meta, dict):
+            has_source = bool(
+                (meta.get("key") or "").strip()
+                or (meta.get("url") or "").strip()
+                or (meta.get("name") or "").strip()
+            )
+        if not has_source and key not in required_set:
             continue
         label = UPLOAD_LABELS.get(key, key)
-        valid_until = _iso_to_de_date(meta.get("validUntil"))
+        valid_until = ""
+        if has_source and isinstance(meta, dict):
+            valid_until = _iso_to_de_date(meta.get("validUntil"))
         if key not in {"infektionsschutz", "aufenthaltserlaubnis", "arbeitserlaubnis"}:
             valid_until = ""
-        vorhanden = True
+        vorhanden = has_source
         unterlagen.append(
             {
                 "key": key,
@@ -73,6 +167,61 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
             }
         )
     return unterlagen
+
+
+def _clear_einzureichende_unterlagen(page) -> None:
+    candidates = [page]
+    inhalt = page.frame(name="inhalt")
+    if inhalt:
+        candidates.append(inhalt)
+    candidates.extend(page.frames)
+
+    target = None
+    for candidate in candidates:
+        if candidate.locator("#einzureichendes").count() > 0:
+            target = candidate
+            break
+
+    if target is None:
+        print("[WARNUNG] Tabelle 'Einzureichende Unterlagen' nicht gefunden.")
+        return
+
+    try:
+        filter_all = target.locator("#alleUnterlagen").first
+        if filter_all.count() > 0 and not filter_all.is_checked():
+            filter_all.click()
+            time.sleep(0.8)
+    except Exception:
+        pass
+
+    try:
+        target.wait_for_selector("#einzureichendes tbody tr", timeout=8000)
+    except Exception:
+        pass
+
+    removed = 0
+    while True:
+        buttons = target.locator("button[title*='deaktivieren'], button[onclick*='maEinzureichendesLoeschen']")
+        if buttons.count() == 0:
+            break
+        button = buttons.first
+        try:
+            page.once("dialog", lambda dialog: dialog.accept())
+        except Exception:
+            pass
+        try:
+            button.scroll_into_view_if_needed()
+        except Exception:
+            pass
+        try:
+            button.click()
+            removed += 1
+            time.sleep(0.4)
+        except Exception as exc:
+            print(f"[WARNUNG] Unterlage konnte nicht gelöscht/deaktiviert werden: {exc}")
+            break
+
+    print(f"[INFO] Einzureichende Unterlagen entfernt/deaktiviert: {removed}")
 
 
 def _resolve_profile_image(payload: dict, temp_dir: Path) -> Path | None:
@@ -410,6 +559,7 @@ def run_mitarbeiterinformationen(
 
         if _open_mitarbeiterinformationen(target_page):
             print("[OK] Mitarbeiterinformationen geöffnet.")
+            _clear_einzureichende_unterlagen(target_page)
             for unterlage in unterlagen:
                 if _click_unterlage_hinzufuegen(target_page):
                     time.sleep(0.4)
