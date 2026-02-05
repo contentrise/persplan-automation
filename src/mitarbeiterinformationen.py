@@ -61,6 +61,8 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
             continue
         label = UPLOAD_LABELS.get(key, key)
         valid_until = _iso_to_de_date(meta.get("validUntil"))
+        if key not in {"infektionsschutz", "aufenthaltserlaubnis", "arbeitserlaubnis"}:
+            valid_until = ""
         vorhanden = True
         unterlagen.append(
             {

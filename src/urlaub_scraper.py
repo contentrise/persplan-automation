@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
 from src import config
@@ -46,6 +47,51 @@ def log_warnung(name, eintritt, austritt):
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(warn_log, "a", encoding="utf-8") as f:
         f.write(f"[{ts}] {name} → Eintritt {eintritt}, Austritt {austritt} (Eintrittsänderung übersprungen)\n")
+
+
+def close_blocking_dialogs(page):
+    """Schließt sichtbare jQuery-Dialoge, die Klicks auf die Tabelle blockieren."""
+    dialogs = page.locator("div.ui-dialog:visible")
+    count = dialogs.count()
+    if count == 0:
+        return
+
+    for i in range(count):
+        dialog = dialogs.nth(i)
+        # Urlaub-Formular bewusst offen lassen.
+        if dialog.locator("#form_edit_krank_urlaub").count() > 0:
+            continue
+
+        close_btn = dialog.locator(
+            ".ui-dialog-titlebar-close, button:has-text('Schließen'), "
+            "button:has-text('Abbrechen'), button:has-text('OK'), "
+            "span.ui-button-text:has-text('Fortfahren')"
+        ).first
+        if close_btn.count() > 0:
+            try:
+                close_btn.click(force=True, timeout=1500)
+            except Exception:
+                pass
+
+    time.sleep(0.2)
+
+
+def click_urlaub_cell(page, td, onclick):
+    close_blocking_dialogs(page)
+    try:
+        td.click(timeout=5000)
+        return
+    except PlaywrightTimeoutError:
+        print("[WARNUNG] Klick blockiert – schließe Dialog und versuche erneut …")
+        close_blocking_dialogs(page)
+        try:
+            td.click(force=True, timeout=5000)
+            return
+        except Exception:
+            pass
+
+    # Letzter Fallback: onclick direkt ausführen.
+    page.evaluate("code => window.eval(code)", onclick)
 
 
 def run_urlaub_scraper(headless=None, slowmo_ms=None):
@@ -106,7 +152,7 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                 if "xajax_krank_urlaub_edit" in onclick:
                     target_td = td
                     print(f"[AKTION] Klicke auf Urlaubseintrag-Feld ({onclick})")
-                    td.click()
+                    click_urlaub_cell(page, td, onclick)
                     break
             if not target_td:
                 print("⚠ Keine klickbare Zelle gefunden – überspringe.")
@@ -244,7 +290,7 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                                         for td in row.locator("td").all():
                                             onclick = td.get_attribute("onclick") or ""
                                             if "xajax_krank_urlaub_edit" in onclick:
-                                                td.click()
+                                                click_urlaub_cell(page, td, onclick)
                                                 break
 
                                         page.wait_for_selector("#form_edit_krank_urlaub", timeout=10000)

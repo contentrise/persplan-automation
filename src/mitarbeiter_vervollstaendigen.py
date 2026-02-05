@@ -961,6 +961,7 @@ def _upload_document_with_modal(
     folder_label: str,
     folder_value: str,
     bemerkung_text: str = "",
+    gueltig_bis: str = "",
 ) -> bool:
     dialog = _open_document_upload_dialog(page)
     if dialog is None:
@@ -1008,6 +1009,16 @@ def _upload_document_with_modal(
             print(f"[OK] Bemerkung gesetzt → {bemerkung_text}")
         else:
             print("[WARNUNG] Bemerkung-Feld im Upload-Row nicht gefunden.")
+
+    if gueltig_bis:
+        gueltig_input = row.locator(
+            "input[name*='gueltig_bis'], input[id^='fileExtrasGueltigBis'], input.datepicker"
+        ).first
+        if gueltig_input.count() > 0:
+            _set_input_value_force(gueltig_input, gueltig_bis)
+            print(f"[OK] Gültig bis gesetzt → {gueltig_bis}")
+        else:
+            print("[WARNUNG] Gültig-bis-Feld im Upload-Row nicht gefunden.")
 
     folder_select = row.locator("select").first
     if folder_select.count() > 0:
@@ -1063,20 +1074,21 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
         valid_until_infektionsschutz = _format_date_for_ui(str(uploads["infektionsschutz"].get("validUntil", "")).strip())
 
     jobs = [
-        ("personalbogen", "Personalbogen", "- Personalbogen, Rentenbefreiung & Agenda", "5"),
-        ("zusatzvereinbarung", "Zusatzvereinbarung", "Dokumente", "1"),
-        ("sicherheitsbelehrung", "Sicherheitsbelehrung", "Dokumente", "1"),
-        ("immatrikulation", "Immatrikulations-/Schulbescheinigung", "- Imma/Schul", "2"),
+        ("personalbogen", "Personalbogen", "- Personalbogen, Rentenbefreiung & Agenda", "5", ""),
+        ("zusatzvereinbarung", "Zusatzvereinbarung", "Dokumente", "1", ""),
+        ("sicherheitsbelehrung", "Sicherheitsbelehrung", "Dokumente", "1", ""),
+        ("immatrikulation", "Immatrikulations-/Schulbescheinigung", "- Imma/Schul", "2", ""),
         (
             "infektionsschutz",
             f"Infektionsschutzbelehrung{f' vom {valid_until_infektionsschutz}' if valid_until_infektionsschutz else ''}",
             "- Infektionsschutzbelehrung",
             "9",
+            valid_until_infektionsschutz,
         ),
     ]
 
     print("[INFO] Starte Upload zusätzlicher Dokumente …")
-    for stem, bemerkung, folder_label, folder_value in jobs:
+    for stem, bemerkung, folder_label, folder_value, gueltig_bis in jobs:
         file_path = _find_input_file_by_stem(stem)
         if not file_path:
             print(f"[HINWEIS] Zusatzdokument nicht gefunden: {stem}.* (in PERSO_INPUT_DIR)")
@@ -1088,6 +1100,7 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
             folder_label=folder_label,
             folder_value=folder_value,
             bemerkung_text=bemerkung,
+            gueltig_bis=gueltig_bis,
         )
         if not uploaded:
             print(f"[WARNUNG] Upload fehlgeschlagen: {Path(file_path).name}")
@@ -1471,13 +1484,20 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
         vertrag = {}
     contract_type = str(vertrag.get("contract_type", "")).strip().lower()
 
-    if contract_type in ["kb", "gb"]:
+    if contract_type == "kb":
         krankenkasse = "Knappschaft Hauptverwaltung [Bn: 98000006]"
-        tatsaechliche = ""
-        tatsaechliche_bn = ""
+        tatsaechliche = krankenkasse_pf
+        tatsaechliche_bn = krankenkasse_bn
         personengruppe = "110"
         vertragsform = "4"
         steuerklasse = "1"
+    elif contract_type == "gb":
+        krankenkasse = krankenkasse_pf
+        tatsaechliche = ""
+        tatsaechliche_bn = ""
+        personengruppe = "109"
+        vertragsform = "2"
+        steuerklasse = "M"
     elif contract_type == "tz":
         krankenkasse = krankenkasse_pf
         tatsaechliche = ""
@@ -1510,7 +1530,7 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
     return {
         "variant": variant,
         "krankenkasse": krankenkasse,
-        "krankenkasse_bn": "98000006" if contract_type in ["kb", "gb"] else ("98000006" if variant == "kb" else krankenkasse_bn),
+        "krankenkasse_bn": "98000006" if contract_type == "kb" else ("98000006" if variant == "kb" else krankenkasse_bn),
         "tatsaechliche_krankenkasse": tatsaechliche,
         "tatsaechliche_bn": tatsaechliche_bn,
         "personengruppe": personengruppe,
