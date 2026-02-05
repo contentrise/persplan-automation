@@ -1163,6 +1163,56 @@ def _set_select_value_with_fallback(locator, value: str, label: str | None = Non
             return True
         except Exception:
             return False
+
+
+def _get_select_value(locator) -> str:
+    if locator.count() == 0:
+        return ""
+    try:
+        return str(locator.first.evaluate("(node) => node.value") or "").strip()
+    except Exception:
+        return ""
+
+
+def _force_set_select_value(locator, value: str) -> bool:
+    if locator.count() == 0:
+        return False
+    try:
+        locator.first.evaluate(
+            """(node, val) => {
+                node.removeAttribute('disabled');
+                node.value = val;
+                node.dispatchEvent(new Event('input', { bubbles: true }));
+                node.dispatchEvent(new Event('change', { bubbles: true }));
+                node.dispatchEvent(new Event('blur', { bubbles: true }));
+            }""",
+            value,
+        )
+        return True
+    except Exception:
+        return False
+
+
+def _set_select_value_logged(locator, value: str, field_label: str) -> None:
+    if locator.count() == 0:
+        print(f"[WARNUNG] Feld nicht gefunden: {field_label}")
+        return
+    try:
+        locator.first.evaluate("(node) => { node.removeAttribute('disabled'); }")
+    except Exception:
+        pass
+    ok = _set_select_value(locator, value)
+    actual = _get_select_value(locator)
+    if ok and actual == value:
+        print(f"[OK] {field_label} gesetzt → {value}")
+        return
+    if not ok or actual != value:
+        forced = _force_set_select_value(locator, value)
+        actual = _get_select_value(locator)
+        if forced and actual == value:
+            print(f"[OK] {field_label} per Fallback gesetzt → {value}")
+            return
+    print(f"[WARNUNG] {field_label} nicht gesetzt (soll={value}, ist={actual or '—'})")
     return False
 
 
@@ -1584,11 +1634,21 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
             values["tatsaechliche_krankenkasse"],
             "tatsaechliche_krankenkasse",
         )
-    _set_select_value(panel.locator("#personengruppe"), values["personengruppe"])
+    print(
+        "[INFO] Lohnabrechnung Zielwerte: "
+        f"personengruppe={values['personengruppe']}, "
+        f"vertragsform={values['vertragsform']}, "
+        f"steuerklasse={values['steuerklasse']}"
+    )
+    _set_select_value_logged(panel.locator("#personengruppe"), values["personengruppe"], "Personengruppe")
     _set_input_value(panel.locator("#taetigkeitsbezeichnung"), values["taetigkeitsbezeichnung"])
-    _set_select_value(panel.locator("#vertragsform_taetigkeitschluessel"), values["vertragsform"])
-    _set_select_value(panel.locator("#arbeitnehmerueberlassung_taetigkeitschluessel"), "2")
-    _set_select_value(panel.locator("#steuerklasse"), values["steuerklasse"])
+    _set_select_value_logged(panel.locator("#vertragsform_taetigkeitschluessel"), values["vertragsform"], "Vertragsform")
+    _set_select_value_logged(
+        panel.locator("#arbeitnehmerueberlassung_taetigkeitschluessel"),
+        "2",
+        "Arbeitnehmerüberlassung",
+    )
+    _set_select_value_logged(panel.locator("#steuerklasse"), values["steuerklasse"], "Steuerklasse")
 
     try:
         target.evaluate(

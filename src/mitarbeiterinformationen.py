@@ -2,6 +2,7 @@ import time
 import tempfile
 import requests
 import base64
+import re
 from pathlib import Path
 from datetime import datetime
 
@@ -96,9 +97,6 @@ def _build_required_upload_keys(payload: dict) -> list[str]:
         if key == "immatrikulation" and not _should_require_immatrikulation(payload):
             continue
         required.append(key)
-    # Sicherheitsbelehrung immer als Einzureichende Unterlage anlegen.
-    if "sicherheitsbelehrung" not in required:
-        required.insert(0, "sicherheitsbelehrung")
     return required
 
 
@@ -123,6 +121,7 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
 
     required_keys = _build_required_upload_keys(payload)
     required_set = set(required_keys)
+    skip_keys = {"personalbogen", "vertrag", "arbeitsvertrag", "zusatzvereinbarung", "sicherheitsbelehrung"}
 
     # Feste Reihenfolge, damit die Einträge in der Akte reproduzierbar sind.
     preferred_order = [
@@ -139,6 +138,8 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
 
     unterlagen = []
     for key in ordered_keys:
+        if key in skip_keys:
+            continue
         if key == "profilbild":
             continue
         meta = uploads.get(key)
@@ -222,6 +223,108 @@ def _clear_einzureichende_unterlagen(page) -> None:
             break
 
     print(f"[INFO] Einzureichende Unterlagen entfernt/deaktiviert: {removed}")
+
+
+def _normalize_doc_text(value: str) -> str:
+    text = str(value or "").strip().lower()
+    text = text.replace("ä", "ae").replace("ö", "oe").replace("ü", "ue").replace("ß", "ss")
+    return re.sub(r"[^a-z0-9]+", "", text)
+
+
+def _extract_documents_table(page) -> list[dict]:
+    candidates = [page]
+    try:
+        inhalt = page.frame(name="inhalt")
+    except Exception:
+        inhalt = None
+    if inhalt:
+        candidates.append(inhalt)
+
+    target = None
+    for candidate in candidates:
+        try:
+            if candidate.locator("#dokumenten_tabelle").count() > 0:
+                target = candidate
+                break
+        except Exception:
+            continue
+
+    if target is None:
+        return []
+
+    rows = target.locator("#dokumenten_tabelle tbody tr")
+    entries = []
+    for idx in range(rows.count()):
+        row = rows.nth(idx)
+        try:
+            cells = row.locator("td")
+            if cells.count() < 5:
+                continue
+            file_text = cells.nth(1).inner_text().strip()
+            desc_text = cells.nth(2).inner_text().strip()
+            valid_text = cells.nth(4).inner_text().strip()
+            if not file_text and not desc_text:
+                continue
+            entries.append(
+                {
+                    "file": file_text,
+                    "description": desc_text,
+                    "valid_until": valid_text,
+                }
+            )
+        except Exception:
+            continue
+    return entries
+
+
+def _enrich_unterlagen_from_documents(unterlagen: list[dict], dokumente: list[dict]) -> list[dict]:
+    if not dokumente:
+        return unterlagen
+
+    keyword_map = {
+        "sicherheitsbelehrung": ["sicherheitsbelehrung"],
+        "immatrikulation": ["immatrikulation", "schulbescheinigung", "imma"],
+        "infektionsschutz": ["infektionsschutz"],
+        "aufenthaltserlaubnis": ["aufenthaltserlaubnis", "arbeitserlaubnis"],
+        "arbeitserlaubnis": ["aufenthaltserlaubnis", "arbeitserlaubnis"],
+        "rentenbefreiung": ["rentenbefreiung"],
+    }
+
+    normalized_docs = []
+    for entry in dokumente:
+        normalized_docs.append(
+            {
+                "file": _normalize_doc_text(entry.get("file", "")),
+                "description": _normalize_doc_text(entry.get("description", "")),
+                "valid_until": str(entry.get("valid_until") or "").strip(),
+            }
+        )
+
+    for unterlage in unterlagen:
+        key = str(unterlage.get("key") or "").strip().lower()
+        label = str(unterlage.get("bezeichnung") or "").strip()
+        if not key:
+            continue
+        keywords = keyword_map.get(key)
+        if not keywords and label:
+            keywords = [_normalize_doc_text(label)]
+        if not keywords:
+            continue
+
+        found = None
+        for doc in normalized_docs:
+            if any(k in doc["description"] or k in doc["file"] for k in keywords):
+                found = doc
+                break
+        if found:
+            unterlage["vorhanden"] = True
+            if (
+                not unterlage.get("gueltig_bis")
+                and found.get("valid_until")
+                and key in {"infektionsschutz", "aufenthaltserlaubnis", "arbeitserlaubnis"}
+            ):
+                unterlage["gueltig_bis"] = found["valid_until"]
+    return unterlagen
 
 
 def _resolve_profile_image(payload: dict, temp_dir: Path) -> Path | None:
@@ -570,6 +673,8 @@ def run_mitarbeiterinformationen(
         if _open_mitarbeiterinformationen(target_page):
             print("[OK] Mitarbeiterinformationen geöffnet.")
             _clear_einzureichende_unterlagen(target_page)
+            dokumente = _extract_documents_table(target_page)
+            unterlagen = _enrich_unterlagen_from_documents(unterlagen, dokumente)
             for unterlage in unterlagen:
                 if _click_unterlage_hinzufuegen(target_page):
                     time.sleep(0.4)
