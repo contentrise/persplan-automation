@@ -157,7 +157,7 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
             valid_until = _iso_to_de_date(meta.get("validUntil"))
         if key not in {"infektionsschutz", "aufenthaltserlaubnis", "arbeitserlaubnis"}:
             valid_until = ""
-        vorhanden = has_source
+        vorhanden = has_source or key == "sicherheitsbelehrung"
         unterlagen.append(
             {
                 "key": key,
