@@ -734,9 +734,11 @@ def _fill_tage_fremd(page: Page, payload: dict) -> None:
 
 def _fill_sonstiges(page: Page, payload: dict) -> None:
     value = _pick_payload_value(payload, ["aufmerksam_geworden_durch"])
-    if not value:
+    if value is None or str(value).strip() == "":
         print("[HINWEIS] Kein aufmerksam_geworden_durch im JSON – überspringe Sonstiges.")
         return
+    value = str(value).strip()
+    print(f"[INFO] Sonstiges-Value aus JSON: {value}")
 
     target: Union[Frame, Page] = page
     frame = page.frame(name="inhalt")
@@ -754,8 +756,12 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
         edit_icon.scroll_into_view_if_needed()
     except Exception:
         pass
-    edit_icon.click(force=True)
-    print("[OK] Sonstiges-Dialog geöffnet.")
+    try:
+        edit_icon.click(force=True)
+        print("[OK] Sonstiges-Dialog geöffnet.")
+    except Exception as exc:
+        print(f"[WARNUNG] Sonstiges-Dialog konnte nicht geöffnet werden: {exc}")
+        return
 
     dialog = page.locator("div.ui-dialog").first
     try:
@@ -768,7 +774,29 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
     if input_field.count() == 0:
         print("[WARNUNG] Sonstiges-Eingabefeld nicht gefunden.")
         return
-    input_field.fill(value)
+    try:
+        input_field.fill(value)
+    except Exception:
+        try:
+            input_field.evaluate(
+                """(node, val) => {
+                    node.value = val;
+                    node.dispatchEvent(new Event('input', { bubbles: true }));
+                    node.dispatchEvent(new Event('change', { bubbles: true }));
+                    node.dispatchEvent(new Event('blur', { bubbles: true }));
+                }""",
+                value,
+            )
+        except Exception as exc:
+            print(f"[WARNUNG] Sonstiges-Feld konnte nicht gesetzt werden: {exc}")
+            return
+
+    try:
+        current_value = input_field.input_value().strip()
+        if current_value != value:
+            print(f"[WARNUNG] Sonstiges-Wert weicht ab (gesetzt='{value}', gelesen='{current_value}').")
+    except Exception:
+        pass
 
     save_button = dialog.locator(
         "button:has-text('speichern'), button:has-text('Speichern'), "
@@ -780,6 +808,10 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
             print(f"[OK] Sonstiges gesetzt → {value}")
         except Exception as exc:
             print(f"[WARNUNG] Sonstiges speichern fehlgeschlagen: {exc}")
+            try:
+                dialog.press("Enter")
+            except Exception:
+                pass
     else:
         print("[WARNUNG] Sonstiges-Speichern-Button nicht gefunden.")
 
@@ -904,6 +936,61 @@ def _format_date_for_ui(date_str: str) -> str:
     if re.match(r"^\d{2}\.\d{2}\.\d{4}$", date_str):
         return date_str
     return date_str
+
+
+def _parse_month_from_date(date_str: str) -> int | None:
+    if not date_str:
+        return None
+    match = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", date_str)
+    if match:
+        return int(match.group(2))
+    match = re.match(r"^(\d{2})\.(\d{2})\.(\d{4})$", date_str)
+    if match:
+        return int(match.group(2))
+    return None
+
+
+def _derive_semester_from_date(date_str: str) -> tuple[str, str]:
+    month = _parse_month_from_date(date_str)
+    if month is None:
+        return "", ""
+    if 4 <= month <= 9:
+        return "SS", "Sommersemester"
+    return "WS", "Wintersemester"
+
+
+def _resolve_immatrikulation_bemerkung(payload: dict) -> tuple[str, str]:
+    employment_mode = payload.get("beschaeftigung_modus")
+    status = str(payload.get("kein_beschaeftigungsverhaeltnis") or "").strip().lower()
+    is_student = employment_mode == "kein" and status == "studentin"
+    is_school = employment_mode == "kein" and status == "schuelerin"
+    uploads = payload.get("uploads") if isinstance(payload, dict) else {}
+    meta = uploads.get("immatrikulation") if isinstance(uploads, dict) else {}
+    valid_until_raw = ""
+    semester_raw = ""
+    if isinstance(meta, dict):
+        valid_until_raw = str(meta.get("validUntil") or "").strip()
+        semester_raw = str(meta.get("semesterOption") or "").strip().lower()
+
+    if is_school:
+        return "Schulbescheinigung", valid_until_raw
+
+    semester_label = ""
+    semester_code = ""
+    if semester_raw in {"sommersemester", "sommer", "summer", "ss"}:
+        semester_code, semester_label = "SS", "Sommersemester"
+    elif semester_raw in {"wintersemester", "winter", "ws"}:
+        semester_code, semester_label = "WS", "Wintersemester"
+    elif semester_raw and re.match(r"^(\d{4})-(\d{2})-(\d{2})$", semester_raw):
+        semester_code, semester_label = _derive_semester_from_date(semester_raw)
+    elif valid_until_raw:
+        semester_code, semester_label = _derive_semester_from_date(valid_until_raw)
+
+    if semester_code:
+        return f"Immatrikulationsbescheinigung {semester_code}", valid_until_raw
+    if is_student:
+        return "Immatrikulationsbescheinigung", valid_until_raw
+    return "Immatrikulations-/Schulbescheinigung", valid_until_raw
 
 
 def _first_of_month(date_str: str) -> str:
@@ -1073,11 +1160,14 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
     if isinstance(uploads.get("infektionsschutz"), dict):
         valid_until_infektionsschutz = _format_date_for_ui(str(uploads["infektionsschutz"].get("validUntil", "")).strip())
 
+    immatrikulation_bemerkung, immatrikulation_valid_until_raw = _resolve_immatrikulation_bemerkung(payload)
+    immatrikulation_valid_until = _format_date_for_ui(str(immatrikulation_valid_until_raw or "").strip())
+
     jobs = [
         ("personalbogen", "Personalbogen", "- Personalbogen, Rentenbefreiung & Agenda", "5", ""),
         ("zusatzvereinbarung", "Zusatzvereinbarung", "Dokumente", "1", ""),
         ("sicherheitsbelehrung", "Sicherheitsbelehrung", "Dokumente", "1", ""),
-        ("immatrikulation", "Immatrikulations-/Schulbescheinigung", "- Imma/Schul", "2", ""),
+        ("immatrikulation", immatrikulation_bemerkung, "- Imma/Schul", "2", immatrikulation_valid_until),
         (
             "infektionsschutz",
             f"Infektionsschutzbelehrung{f' vom {valid_until_infektionsschutz}' if valid_until_infektionsschutz else ''}",

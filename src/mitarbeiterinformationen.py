@@ -156,7 +156,7 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
         valid_until = ""
         if has_source and isinstance(meta, dict):
             valid_until = _iso_to_de_date(meta.get("validUntil"))
-        if key not in {"infektionsschutz", "aufenthaltserlaubnis", "arbeitserlaubnis"}:
+        if key not in {"infektionsschutz", "aufenthaltserlaubnis", "arbeitserlaubnis", "immatrikulation"}:
             valid_until = ""
         vorhanden = has_source or key == "sicherheitsbelehrung"
         unterlagen.append(
@@ -321,7 +321,7 @@ def _enrich_unterlagen_from_documents(unterlagen: list[dict], dokumente: list[di
             if (
                 not unterlage.get("gueltig_bis")
                 and found.get("valid_until")
-                and key in {"infektionsschutz", "aufenthaltserlaubnis", "arbeitserlaubnis"}
+                and key in {"infektionsschutz", "aufenthaltserlaubnis", "arbeitserlaubnis", "immatrikulation"}
             ):
                 unterlage["gueltig_bis"] = found["valid_until"]
     return unterlagen
