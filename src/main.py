@@ -249,6 +249,16 @@ def main():
         default=5,
         help="Wie lange nach dem Anwenden des Filters gewartet werden soll",
     )
+    p_planung_zeitraum.add_argument(
+        "--upload-s3",
+        action="store_true",
+        help="CSV nach S3 hochladen",
+    )
+    p_planung_zeitraum.add_argument(
+        "--delta",
+        action="store_true",
+        help="Delta-CSV für neue Anfragen (verglichen mit letztem Snapshot) erzeugen",
+    )
 
     p_vervoll = sub.add_parser(
         "mitarbeiter-vervollstaendigen",
@@ -310,6 +320,8 @@ def main():
             slowmo_ms=args.slowmo,
             days_forward=args.days_forward,
             hold_seconds=args.wait_seconds,
+            upload_s3=args.upload_s3,
+            compute_delta=args.delta,
         )
     elif args.cmd == "mitarbeiter-vervollstaendigen":
         run_mitarbeiter_vervollstaendigen(

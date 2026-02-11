@@ -5,15 +5,23 @@
 from __future__ import annotations
 
 import csv
+import os
+import re
 from datetime import datetime, timedelta
 from pathlib import Path
 import time
 from typing import Any, Dict, List
+
+import boto3
 from urllib.parse import urljoin
 
 from playwright.sync_api import Frame, Page, sync_playwright
 
 from src import config
+
+S3_BUCKET = os.getenv("PLANUNG_BUCKET", "greatstaff-data-storage").strip()
+S3_PREFIX = os.getenv("PLANUNG_PREFIX", "planung/offene").strip().strip("/")
+S3_DELTA_PREFIX = os.getenv("PLANUNG_DELTA_PREFIX", "planung/anfragen-delta").strip().strip("/")
 
 
 def _require_login_state() -> Path:
@@ -161,8 +169,8 @@ def _extract_event_rows(frame: Frame) -> List[Dict[str, Any]]:
     )
 
 
-def _prepare_open_events(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    open_events: List[Dict[str, Any]] = []
+def _prepare_event_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    events: List[Dict[str, Any]] = []
     for row in rows:
         try:
             filled = int(row.get("filled") or 0)
@@ -170,25 +178,7 @@ def _prepare_open_events(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             requests = int(row.get("requests") or 0)
         except (TypeError, ValueError):
             filled = total = requests = 0
-        open_count = max(total - filled, 0)
-        if open_count <= 0:
-            continue
-        offen = open_count
-        anfragen_clean = max(requests, 0)
-
-        if offen <= 0:
-            match_status = "voll besetzt"
-            fehlend = 0
-        elif anfragen_clean <= 0:
-            match_status = "keine anfragen"
-            fehlend = offen
-        elif anfragen_clean >= offen:
-            match_status = "kann komplett gedeckt werden"
-            fehlend = 0
-        else:
-            match_status = "teilweise deckbar"
-            fehlend = offen - anfragen_clean
-
+        offen = max(total - filled, 0)
         cleaned = {
             "event_id": (row.get("eventId") or "").strip(),
             "title": (row.get("title") or "").strip(),
@@ -197,13 +187,11 @@ def _prepare_open_events(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             "address": (row.get("address") or "").strip(),
             "besetzt": max(filled, 0),
             "gesamt": max(total, 0),
-            "anfragen": anfragen_clean,
+            "anfragen": max(requests, 0),
             "offen": offen,
-            "status": match_status,
-            "fehlend_nach_anfragen": fehlend,
         }
-        open_events.append(cleaned)
-    return open_events
+        events.append(cleaned)
+    return events
 
 
 def _write_open_events_csv(events: List[Dict[str, Any]]) -> Path:
@@ -220,8 +208,6 @@ def _write_open_events_csv(events: List[Dict[str, Any]]) -> Path:
         "gesamt",
         "anfragen",
         "offen",
-        "status",
-        "fehlend_nach_anfragen",
     ]
     with open(csv_path, "w", newline="", encoding="utf-8") as fh:
         writer = csv.DictWriter(fh, fieldnames=fieldnames)
@@ -231,11 +217,120 @@ def _write_open_events_csv(events: List[Dict[str, Any]]) -> Path:
     return csv_path
 
 
+def _parse_snapshot_timestamp(path: Path) -> datetime | None:
+    match = re.search(r"planung_offene_(\d{4}-\d{2}-\d{2})_(\d{2}-\d{2}-\d{2})\.csv$", path.name)
+    if not match:
+        return None
+    try:
+        return datetime.strptime(f"{match.group(1)} {match.group(2)}", "%Y-%m-%d %H-%M-%S")
+    except ValueError:
+        return None
+
+
+def _find_previous_snapshot(current_path: Path) -> Path | None:
+    export_dir = Path(config.EXPORT_DIR)
+    current_ts = _parse_snapshot_timestamp(current_path)
+    if current_ts is None:
+        return None
+
+    candidates: list[tuple[datetime, Path]] = []
+    for path in export_dir.glob("planung_offene_*.csv"):
+        ts = _parse_snapshot_timestamp(path)
+        if ts and ts < current_ts:
+            candidates.append((ts, path))
+
+    if not candidates:
+        return None
+
+    candidates.sort(key=lambda item: item[0])
+    return candidates[-1][1]
+
+
+def _event_key(row: Dict[str, Any]) -> str:
+    event_id = (row.get("event_id") or "").strip()
+    if event_id:
+        return f"id:{event_id}"
+    parts = [
+        (row.get("title") or "").strip(),
+        (row.get("timeframe") or "").strip(),
+        (row.get("customer") or "").strip(),
+        (row.get("address") or "").strip(),
+    ]
+    return "|".join(parts)
+
+
+def _read_snapshot(path: Path) -> Dict[str, Dict[str, Any]]:
+    rows: Dict[str, Dict[str, Any]] = {}
+    with open(path, "r", encoding="utf-8", newline="") as fh:
+        reader = csv.DictReader(fh)
+        for row in reader:
+            cleaned = {
+                "event_id": (row.get("event_id") or "").strip(),
+                "title": (row.get("title") or "").strip(),
+                "timeframe": (row.get("timeframe") or "").strip(),
+                "customer": (row.get("customer") or "").strip(),
+                "address": (row.get("address") or "").strip(),
+                "besetzt": int(row.get("besetzt") or 0),
+                "gesamt": int(row.get("gesamt") or 0),
+                "anfragen": int(row.get("anfragen") or 0),
+                "offen": int(row.get("offen") or 0),
+            }
+            rows[_event_key(cleaned)] = cleaned
+    return rows
+
+
+def _write_anfragen_delta_csv(rows: List[Dict[str, Any]]) -> Path:
+    export_dir = Path(config.EXPORT_DIR)
+    export_dir.mkdir(parents=True, exist_ok=True)
+    csv_path = export_dir / f"planung_anfragen_delta_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+    fieldnames = [
+        "event_id",
+        "title",
+        "timeframe",
+        "customer",
+        "address",
+        "anfragen_alt",
+        "anfragen_neu",
+        "delta",
+        "besetzt",
+        "gesamt",
+        "offen",
+    ]
+    with open(csv_path, "w", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(fh, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(row)
+    return csv_path
+
+
+def _upload_csv_to_s3(csv_path: Path, prefix: str) -> str | None:
+    if not S3_BUCKET:
+        print("[INFO] PLANUNG_BUCKET nicht gesetzt – S3-Upload übersprungen.")
+        return None
+
+    date_folder = datetime.now().strftime("%Y-%m-%d")
+    key_parts = [part for part in (prefix, date_folder, csv_path.name) if part]
+    key = "/".join(key_parts)
+
+    s3 = boto3.client("s3")
+    try:
+        s3.upload_file(str(csv_path), S3_BUCKET, key)
+    except Exception as exc:
+        print(f"[WARNUNG] Upload nach S3 fehlgeschlagen: {exc}")
+        return None
+
+    print(f"[OK] CSV in S3 gespeichert: s3://{S3_BUCKET}/{key}")
+    return key
+
+
 def run_planung_zeitraum(
     headless: bool | None = None,
     slowmo_ms: int | None = None,
     days_forward: int = 21,
     hold_seconds: int = 5,
+    upload_s3: bool = False,
+    compute_delta: bool = False,
 ) -> Path | None:
     headless = config.HEADLESS if headless is None else headless
     slowmo_ms = config.SLOWMO_MS if slowmo_ms is None else slowmo_ms
@@ -263,15 +358,53 @@ def run_planung_zeitraum(
             _submit_zeitraum(frame)
             _load_event_table(frame)
             rows = _extract_event_rows(frame)
-            open_events = _prepare_open_events(rows)
-            if open_events:
-                csv_path = _write_open_events_csv(open_events)
+            events = _prepare_event_rows(rows)
+            if events:
+                csv_path = _write_open_events_csv(events)
                 print(
-                    f"[OK] {len(open_events)} Veranstaltungen mit offenen Schichten exportiert: {csv_path}"
+                    f"[OK] {len(events)} Veranstaltungen exportiert: {csv_path}"
                 )
             else:
                 csv_path = _write_open_events_csv([])
-                print("[INFO] Keine offenen Schichten gefunden – CSV enthält nur Kopfzeile.")
+                print("[INFO] Keine Veranstaltungen gefunden – CSV enthält nur Kopfzeile.")
+
+            if csv_path and compute_delta:
+                previous = _find_previous_snapshot(csv_path)
+                if previous:
+                    current_rows = _read_snapshot(csv_path)
+                    prev_rows = _read_snapshot(previous)
+                    delta_rows: List[Dict[str, Any]] = []
+                    for key, current in current_rows.items():
+                        prev = prev_rows.get(key)
+                        prev_anfragen = prev.get("anfragen", 0) if prev else 0
+                        delta = int(current.get("anfragen", 0)) - int(prev_anfragen)
+                        if delta > 0:
+                            delta_rows.append(
+                                {
+                                    "event_id": current.get("event_id", ""),
+                                    "title": current.get("title", ""),
+                                    "timeframe": current.get("timeframe", ""),
+                                    "customer": current.get("customer", ""),
+                                    "address": current.get("address", ""),
+                                    "anfragen_alt": prev_anfragen,
+                                    "anfragen_neu": current.get("anfragen", 0),
+                                    "delta": delta,
+                                    "besetzt": current.get("besetzt", 0),
+                                    "gesamt": current.get("gesamt", 0),
+                                    "offen": current.get("offen", 0),
+                                }
+                            )
+                    delta_path = _write_anfragen_delta_csv(delta_rows)
+                    print(
+                        f"[OK] Delta-CSV erstellt ({len(delta_rows)} neue Anfragen): {delta_path}"
+                    )
+                    if upload_s3:
+                        _upload_csv_to_s3(delta_path, S3_DELTA_PREFIX)
+                else:
+                    print("[INFO] Kein vorheriger Snapshot gefunden – Delta-CSV übersprungen.")
+
+            if csv_path and upload_s3:
+                _upload_csv_to_s3(csv_path, S3_PREFIX)
             if hold_seconds > 0:
                 print(f"[INFO] Halte Browser für {hold_seconds} Sekunden offen …")
                 time.sleep(hold_seconds)
