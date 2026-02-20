@@ -250,33 +250,88 @@ def _clear_einzureichende_unterlagen(page) -> None:
     except Exception:
         pass
 
+    def _row_count() -> int:
+        try:
+            return target.locator("#einzureichendes tbody tr").count()
+        except Exception:
+            return 0
+
+    def _log_state(prefix: str) -> None:
+        try:
+            info = target.evaluate(
+                """() => {
+                    const rows = Array.from(document.querySelectorAll('#einzureichendes tbody tr'));
+                    const sample = rows.slice(0, 3).map((row) => {
+                        const cells = row.querySelectorAll('td');
+                        const label = cells[1]?.textContent?.trim() || '';
+                        const id = row.getAttribute('id') || '';
+                        return `${id}:${label}`;
+                    });
+                    return { count: rows.length, sample };
+                }"""
+            )
+            print(f"[DEBUG] {prefix} Einzureichende: count={info.get('count')}, sample={info.get('sample')}")
+        except Exception as exc:
+            print(f"[DEBUG] {prefix} Einzureichende: Konnte Zustand nicht lesen: {exc}")
+
     removed = 0
-    while True:
+    _log_state("Vor dem Löschen")
+    max_loops = 200
+    loops = 0
+    while loops < max_loops:
+        loops += 1
         buttons = target.locator("button[onclick*='maEinzureichendesLoeschen']")
-        count = 0
         try:
             count = buttons.count()
         except Exception:
             count = 0
         if count == 0:
             break
-        button = buttons.first
+
+        before_count = _row_count()
+        try:
+            info = buttons.first.evaluate(
+                """(btn) => {
+                    const row = btn.closest('tr');
+                    const id = row?.getAttribute('id') || '';
+                    const cells = row?.querySelectorAll('td') || [];
+                    const label = cells[1]?.textContent?.trim() || '';
+                    return { id, label };
+                }"""
+            )
+            print(f"[DEBUG] Lösche Unterlage: {info.get('id')} | {info.get('label')}")
+        except Exception as exc:
+            print(f"[DEBUG] Lösche Unterlage: Konnte Row-Info nicht lesen: {exc}")
+
         try:
             page.once("dialog", lambda dialog: dialog.accept())
+        except Exception as exc:
+            print(f"[DEBUG] Dialog-Handler konnte nicht gesetzt werden: {exc}")
+        try:
+            buttons.first.scroll_into_view_if_needed()
         except Exception:
             pass
         try:
-            button.scroll_into_view_if_needed()
-        except Exception:
-            pass
-        try:
-            button.click()
+            buttons.first.click()
             removed += 1
-            time.sleep(0.4)
         except Exception as exc:
             print(f"[WARNUNG] Unterlage konnte nicht gelöscht/deaktiviert werden: {exc}")
             break
 
+        try:
+            target.wait_for_function(
+                """(prev) => {
+                    const rows = document.querySelectorAll('#einzureichendes tbody tr');
+                    return rows.length < prev;
+                }""",
+                before_count,
+                timeout=3000,
+            )
+        except Exception as exc:
+            print(f"[DEBUG] Nach Löschung keine Zeilenänderung erkannt: {exc}")
+        time.sleep(0.2)
+
+    _log_state("Nach dem Löschen")
     print(f"[INFO] Einzureichende Unterlagen entfernt/deaktiviert: {removed}")
     try:
         target.wait_for_selector("#einzureichendes", timeout=6000)

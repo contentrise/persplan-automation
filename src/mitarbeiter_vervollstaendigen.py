@@ -1554,31 +1554,85 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
         candidates.append(frame)
     candidates.extend(page.frames)
 
-    target: Union[Frame, Page] | None = None
-    tab = None
-    tab_selectors = [
-        "#administration_user_stammdaten_tabs a[href='#administration_user_stammdaten_tabs_notfallkontakt']",
-        "li[aria-controls='administration_user_stammdaten_tabs_notfallkontakt'] a",
-        "a:has-text('Notfallkontakt')",
-    ]
-    for candidate in candidates:
+    def _debug_tab_state(candidate: Union[Frame, Page]) -> None:
+        try:
+            info = candidate.evaluate(
+                """() => {
+                    const tabs = Array.from(document.querySelectorAll('ul.ui-tabs-nav li[role="tab"]'))
+                        .map((li) => {
+                            const anchor = li.querySelector('a');
+                            const text = (anchor?.textContent || '').trim();
+                            const aria = li.getAttribute('aria-controls') || '';
+                            return `${text}|${aria}`;
+                        });
+                    const navExists = document.querySelector('ul.ui-tabs-nav') !== null;
+                    return { navExists, tabs, location: window.location.href };
+                }"""
+            )
+            print(f"[DEBUG] Notfallkontakt Tabs: nav={info.get('navExists')}, tabs={info.get('tabs')}")
+            print(f"[DEBUG] Notfallkontakt Tabs URL: {info.get('location')}")
+        except Exception as exc:
+            print(f"[DEBUG] Notfallkontakt Tabs: JS-Check fehlgeschlagen: {exc}")
+
+    def _click_tab_by_text(candidate: Union[Frame, Page], label: str) -> bool:
+        tab_selectors = [
+            "#administration_user_stammdaten_tabs a[href='#administration_user_stammdaten_tabs_notfallkontakt']",
+            "ul.ui-tabs-nav li[aria-controls='administration_user_stammdaten_tabs_notfallkontakt'] a",
+            "li[role='tab'][aria-controls='administration_user_stammdaten_tabs_notfallkontakt'] a",
+            "li[role='tab']:has-text('Notfallkontakt') a",
+            "li[role='tab'] a:has-text('Notfallkontakt')",
+            "ul.ui-tabs-nav a:has-text('Notfallkontakt')",
+            "a.ui-tabs-anchor:has-text('Notfallkontakt')",
+            "a:has-text('Notfallkontakt')",
+        ]
         for selector in tab_selectors:
             candidate_tab = candidate.locator(selector).first
-            if candidate_tab.count() > 0:
-                target = candidate
-                tab = candidate_tab
-                break
-        if tab is not None:
+            if candidate_tab.count() == 0:
+                continue
+            try:
+                candidate_tab.scroll_into_view_if_needed()
+            except Exception:
+                pass
+            try:
+                candidate_tab.click()
+                return True
+            except Exception as exc:
+                print(f"[DEBUG] Notfallkontakt Tab-Klick fehlgeschlagen ({selector}): {exc}")
+                continue
+        try:
+            clicked = candidate.evaluate(
+                """(label) => {
+                    const selectors = [
+                        'ul.ui-tabs-nav a',
+                        '.ui-tabs-nav a',
+                        'li[role="tab"] a',
+                        'a.ui-tabs-anchor',
+                        'a'
+                    ];
+                    const anchors = selectors.flatMap((sel) => Array.from(document.querySelectorAll(sel)));
+                    const match = anchors.find((a) => (a.textContent || '').trim().includes(label));
+                    if (!match) return false;
+                    match.scrollIntoView({ block: 'center' });
+                    match.click();
+                    return true;
+                }""",
+                label,
+            )
+            return bool(clicked)
+        except Exception as exc:
+            print(f"[DEBUG] Notfallkontakt Tab-Klick JS fehlgeschlagen: {exc}")
+            return False
+
+    target: Union[Frame, Page] | None = None
+    for candidate in candidates:
+        _debug_tab_state(candidate)
+        if _click_tab_by_text(candidate, "Notfallkontakt"):
+            target = candidate
             break
 
-    if not tab or not target:
+    if not target:
         print("[WARNUNG] Tab 'Notfallkontakt' nicht gefunden.")
         return
-    try:
-        tab.scroll_into_view_if_needed()
-    except Exception:
-        pass
-    tab.click()
 
     panel = target.locator("#administration_user_stammdaten_tabs_notfallkontakt").first
     try:
