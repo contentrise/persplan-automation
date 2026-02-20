@@ -15,6 +15,7 @@ from src.schicht_bestaetigen import run_schicht_bestaetigen
 from src.kleidungsrueckgabe import run_kleidungsrueckgabe
 from src.tagesplan_vortag import run_tagesplan_vortag
 from src.planung_zeitraum import run_planung_zeitraum
+from src.planung_zeitraum_advanced import run_planung_zeitraum as run_planung_zeitraum_advanced
 from src.kunden_scraper import run_kunden_scraper
 from src.mitarbeiter_vervollstaendigen import run_mitarbeiter_vervollstaendigen
 from src.mitarbeiterinformationen import run_mitarbeiterinformationen
@@ -260,6 +261,35 @@ def main():
         help="Delta-CSV für neue Anfragen (verglichen mit letztem Snapshot) erzeugen",
     )
 
+    p_planung_zeitraum_advanced = sub.add_parser(
+        "planung-zeitraum-advanced",
+        help="Wie planung-zeitraum, zusätzlich Anfragen je Veranstaltung sammeln",
+    )
+    p_planung_zeitraum_advanced.add_argument("--headless", choices=["true", "false"], default=None)
+    p_planung_zeitraum_advanced.add_argument("--slowmo", type=int, default=None)
+    p_planung_zeitraum_advanced.add_argument(
+        "--days-forward",
+        type=int,
+        default=21,
+        help="Wie viele Tage ab heute als 'bis'-Datum gesetzt werden sollen (Default: 21)",
+    )
+    p_planung_zeitraum_advanced.add_argument(
+        "--wait-seconds",
+        type=int,
+        default=5,
+        help="Wie lange nach dem Anwenden des Filters gewartet werden soll",
+    )
+    p_planung_zeitraum_advanced.add_argument(
+        "--upload-s3",
+        action="store_true",
+        help="CSV nach S3 hochladen",
+    )
+    p_planung_zeitraum_advanced.add_argument(
+        "--delta",
+        action="store_true",
+        help="Delta-CSV für neue Anfragen (verglichen mit letztem Snapshot) erzeugen",
+    )
+
     p_vervoll = sub.add_parser(
         "mitarbeiter-vervollstaendigen",
         help="Öffnet user.php, sucht per E-Mail und klickt den Nachnamen",
@@ -316,6 +346,15 @@ def main():
         )
     elif args.cmd == "planung-zeitraum":
         run_planung_zeitraum(
+            headless=headless,
+            slowmo_ms=args.slowmo,
+            days_forward=args.days_forward,
+            hold_seconds=args.wait_seconds,
+            upload_s3=args.upload_s3,
+            compute_delta=args.delta,
+        )
+    elif args.cmd == "planung-zeitraum-advanced":
+        run_planung_zeitraum_advanced(
             headless=headless,
             slowmo_ms=args.slowmo,
             days_forward=args.days_forward,

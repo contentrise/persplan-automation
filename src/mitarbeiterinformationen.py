@@ -20,10 +20,11 @@ from src.mitarbeiter_vervollstaendigen import (
 
 UPLOAD_LABELS = {
     "sicherheitsbelehrung": "Sicherheitsbelehrung",
-    "immatrikulation": "Imma/ Schulbescheinigung",
+    "immatrikulation": "Immatrikulationsbescheinigung",
     "infektionsschutz": "Infektionsschutzbelehrung",
-    "aufenthaltserlaubnis": "Arbeits-/Aufenthaltserlaubnis",
-    "arbeitserlaubnis": "Arbeits-/Aufenthaltserlaubnis",
+    "aufenthaltserlaubnis": "Arbeitsaufenthaltserlaubnis",
+    "arbeitserlaubnis": "Arbeitsaufenthaltserlaubnis",
+    "inventionsschutz": "Inventionsschutzbelehrung",
     "rentenbefreiung": "Rentenbefreiung",
     "profilbild": "Profilbild",
 }
@@ -104,18 +105,60 @@ def _iso_to_de_date(value: str) -> str:
     text = str(value or "").strip()
     if not text:
         return ""
+    lowered = text.lower()
+    if lowered in {"none", "null", "undefined", "nan"}:
+        return ""
     try:
         if len(text) >= 10 and text[4] == "-" and text[7] == "-":
             dt = datetime.strptime(text[:10], "%Y-%m-%d")
+            if dt.year < 2005:
+                return ""
             return dt.strftime("%d.%m.%Y")
         dt = datetime.fromisoformat(text.replace("Z", "+00:00"))
+        if dt.year < 2005:
+            return ""
         return dt.strftime("%d.%m.%Y")
     except Exception:
         return ""
 
 
+def _sanitize_valid_until(value: str) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    lowered = text.lower()
+    if lowered in {"none", "null", "undefined", "nan", "-", "—"}:
+        return ""
+    match = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", text)
+    if match and int(match.group(1)) < 2005:
+        return ""
+    match = re.match(r"^(\d{2})\.(\d{2})\.(\d{4})$", text)
+    if match and int(match.group(3)) < 2005:
+        return ""
+    return text
+
+
+def _normalize_uploads(uploads: dict) -> dict:
+    if not isinstance(uploads, dict):
+        return {}
+    normalized = dict(uploads)
+    aliases = {
+        "arbeitsaufenthaltserlaubnis": "aufenthaltserlaubnis",
+        "arbeits-aufenthaltserlaubnis": "aufenthaltserlaubnis",
+        "aufenthaltserlaubnisarbeit": "aufenthaltserlaubnis",
+        "inventionsschutzbelehrung": "inventionsschutz",
+        "inventionsschutz": "inventionsschutz",
+        "immatrikulationsbescheinigung": "immatrikulation",
+    }
+    for raw_key, target_key in aliases.items():
+        if raw_key in normalized and target_key not in normalized:
+            normalized[target_key] = normalized[raw_key]
+    return normalized
+
+
 def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
     uploads = payload.get("uploads") if isinstance(payload, dict) else {}
+    uploads = _normalize_uploads(uploads)
     if not isinstance(uploads, dict):
         return []
 
@@ -126,6 +169,7 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
     # Feste Reihenfolge, damit die Einträge in der Akte reproduzierbar sind.
     preferred_order = [
         "sicherheitsbelehrung",
+        "inventionsschutz",
         "immatrikulation",
         "infektionsschutz",
         "aufenthaltserlaubnis",
@@ -156,7 +200,13 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
         valid_until = ""
         if has_source and isinstance(meta, dict):
             valid_until = _iso_to_de_date(meta.get("validUntil"))
-        if key not in {"infektionsschutz", "aufenthaltserlaubnis", "arbeitserlaubnis", "immatrikulation"}:
+        if key not in {
+            "infektionsschutz",
+            "aufenthaltserlaubnis",
+            "arbeitserlaubnis",
+            "immatrikulation",
+            "inventionsschutz",
+        }:
             valid_until = ""
         vorhanden = has_source or key == "sicherheitsbelehrung"
         unterlagen.append(
@@ -285,8 +335,9 @@ def _enrich_unterlagen_from_documents(unterlagen: list[dict], dokumente: list[di
         "sicherheitsbelehrung": ["sicherheitsbelehrung"],
         "immatrikulation": ["immatrikulation", "schulbescheinigung", "imma"],
         "infektionsschutz": ["infektionsschutz"],
-        "aufenthaltserlaubnis": ["aufenthaltserlaubnis", "arbeitserlaubnis"],
-        "arbeitserlaubnis": ["aufenthaltserlaubnis", "arbeitserlaubnis"],
+        "aufenthaltserlaubnis": ["aufenthaltserlaubnis", "arbeitsaufenthaltserlaubnis", "arbeitserlaubnis"],
+        "arbeitserlaubnis": ["aufenthaltserlaubnis", "arbeitsaufenthaltserlaubnis", "arbeitserlaubnis"],
+        "inventionsschutz": ["inventionsschutz", "inventionsschutzbelehrung"],
         "rentenbefreiung": ["rentenbefreiung"],
     }
 
@@ -296,7 +347,7 @@ def _enrich_unterlagen_from_documents(unterlagen: list[dict], dokumente: list[di
             {
                 "file": _normalize_doc_text(entry.get("file", "")),
                 "description": _normalize_doc_text(entry.get("description", "")),
-                "valid_until": str(entry.get("valid_until") or "").strip(),
+                "valid_until": _sanitize_valid_until(entry.get("valid_until")),
             }
         )
 
@@ -318,12 +369,16 @@ def _enrich_unterlagen_from_documents(unterlagen: list[dict], dokumente: list[di
                 break
         if found:
             unterlage["vorhanden"] = True
-            if (
-                not unterlage.get("gueltig_bis")
-                and found.get("valid_until")
-                and key in {"infektionsschutz", "aufenthaltserlaubnis", "arbeitserlaubnis", "immatrikulation"}
-            ):
-                unterlage["gueltig_bis"] = found["valid_until"]
+            if not unterlage.get("gueltig_bis") and found.get("valid_until"):
+                valid_text = _sanitize_valid_until(found["valid_until"])
+                if key in {
+                    "infektionsschutz",
+                    "aufenthaltserlaubnis",
+                    "arbeitserlaubnis",
+                    "immatrikulation",
+                    "inventionsschutz",
+                }:
+                    unterlage["gueltig_bis"] = valid_text
     return unterlagen
 
 

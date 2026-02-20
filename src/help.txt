@@ -21,6 +21,12 @@ python3 -m src.main planung-zeitraum --headless=true --slowmo=0 --days-forward=1
 # Snapshot CSV: ./exports/planung_offene_<timestamp>.csv
 # Delta CSV (neue Anfragen): ./exports/planung_anfragen_delta_<timestamp>.csv
 
+Planung Zeitraum Advanced (mit Anfragen-Listen je Veranstaltung)
+
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.main planung-zeitraum-advanced --headless=false --slowmo=0 --days-forward=3 --wait-seconds=0
+# CSV enthält zusätzlich Spalte: anfragen_json
+
 
 Schicht bestätigen / Tagesplan (alt)
 
@@ -137,5 +143,4 @@ Bei Vertragsdaten bitte 01.01.2026 = 14,96
 
 
 Arbeitsvertrag KB zum 01.02.2026
-
 

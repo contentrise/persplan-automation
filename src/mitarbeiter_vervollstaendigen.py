@@ -929,13 +929,22 @@ def _find_angebot_file() -> str:
 def _format_date_for_ui(date_str: str) -> str:
     if not date_str:
         return ""
-    match = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", date_str)
+    lowered = str(date_str).strip().lower()
+    if lowered in {"none", "null", "undefined", "nan"}:
+        return ""
+    match = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", str(date_str).strip())
     if match:
         year, month, day = match.groups()
+        if int(year) < 2005:
+            return ""
         return f"{day}.{month}.{year}"
-    if re.match(r"^\d{2}\.\d{2}\.\d{4}$", date_str):
-        return date_str
-    return date_str
+    match = re.match(r"^(\d{2})\.(\d{2})\.(\d{4})$", str(date_str).strip())
+    if match:
+        year = int(match.group(3))
+        if year < 2005:
+            return ""
+        return str(date_str).strip()
+    return str(date_str).strip()
 
 
 def _parse_month_from_date(date_str: str) -> int | None:
@@ -1706,6 +1715,18 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
         panel.wait_for(state="visible", timeout=8000)
     except Exception:
         pass
+
+    schulabschluss_raw = _pick_payload_value(payload, ["schulabschluss"])
+    if schulabschluss_raw:
+        schulabschluss_value = _map_schulabschluss_to_value(schulabschluss_raw)
+        if schulabschluss_value:
+            _set_select_value_logged(
+                panel.locator("#schulabschluss_taetigkeitschluessel, [name='schulabschluss_taetigkeitschluessel']"),
+                schulabschluss_value,
+                "Schulabschluss",
+            )
+        else:
+            print(f"[WARNUNG] Schulabschluss nicht gemappt: {schulabschluss_raw}")
 
     krankenkasse_input = panel.locator("#krankenkasse")
     _select_autocomplete_by_bn(
