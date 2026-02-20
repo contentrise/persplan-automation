@@ -1734,9 +1734,9 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
         vertragsform = "4"
         steuerklasse = "1"
     elif contract_type == "gb":
-        krankenkasse = krankenkasse_pf
-        tatsaechliche = ""
-        tatsaechliche_bn = ""
+        krankenkasse = "Knappschaft Hauptverwaltung [Bn: 98000006]"
+        tatsaechliche = krankenkasse_pf
+        tatsaechliche_bn = krankenkasse_bn
         personengruppe = "109"
         vertragsform = "2"
         steuerklasse = "M"
@@ -1755,9 +1755,9 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
         vertragsform = "4"
         steuerklasse = "1"
     elif variant == "gb":
-        krankenkasse = krankenkasse_pf
-        tatsaechliche = ""
-        tatsaechliche_bn = ""
+        krankenkasse = "Knappschaft Hauptverwaltung [Bn: 98000006]"
+        tatsaechliche = krankenkasse_pf
+        tatsaechliche_bn = krankenkasse_bn
         personengruppe = "109"
         vertragsform = "2"
         steuerklasse = "M"
