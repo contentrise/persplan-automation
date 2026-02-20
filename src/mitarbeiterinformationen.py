@@ -20,7 +20,7 @@ from src.mitarbeiter_vervollstaendigen import (
 
 UPLOAD_LABELS = {
     "sicherheitsbelehrung": "Sicherheitsbelehrung",
-    "immatrikulation": "Immatrikulationsbescheinigung",
+    "immatrikulation": "Imma/ Schulbescheinigung",
     "infektionsschutz": "Infektionsschutzbelehrung",
     "aufenthaltserlaubnis": "Arbeitsaufenthaltserlaubnis",
     "arbeitserlaubnis": "Arbeitsaufenthaltserlaubnis",
@@ -252,8 +252,13 @@ def _clear_einzureichende_unterlagen(page) -> None:
 
     removed = 0
     while True:
-        buttons = target.locator("button[title*='deaktivieren'], button[onclick*='maEinzureichendesLoeschen']")
-        if buttons.count() == 0:
+        buttons = target.locator("button[onclick*='maEinzureichendesLoeschen']")
+        count = 0
+        try:
+            count = buttons.count()
+        except Exception:
+            count = 0
+        if count == 0:
             break
         button = buttons.first
         try:
