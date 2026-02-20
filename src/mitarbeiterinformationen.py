@@ -259,7 +259,22 @@ def _clear_einzureichende_unterlagen(page) -> None:
         except Exception as exc:
             print(f"[DEBUG] {prefix} Einzureichende: Konnte Zustand nicht lesen: {exc}")
 
-    target = _find_target()
+    def _find_target_with_retry(timeout_seconds: float = 6.0):
+        deadline = time.time() + timeout_seconds
+        last_error = None
+        while time.time() < deadline:
+            try:
+                target = _find_target()
+                if target is not None:
+                    return target
+            except Exception as exc:
+                last_error = exc
+            time.sleep(0.3)
+        if last_error:
+            print(f"[WARNUNG] Tabelle 'Einzureichende Unterlagen' nicht gefunden (Retry-Fehler: {last_error})")
+        return None
+
+    target = _find_target_with_retry()
     if target is None:
         print("[WARNUNG] Tabelle 'Einzureichende Unterlagen' nicht gefunden.")
         return
@@ -284,15 +299,24 @@ def _clear_einzureichende_unterlagen(page) -> None:
     no_change_rounds = 0
     while loops < max_loops:
         loops += 1
-        target = _find_target()
+        target = _find_target_with_retry()
         if target is None:
             print("[WARNUNG] Tabelle 'Einzureichende Unterlagen' nicht gefunden (nach Refresh).")
             break
 
-        buttons = target.locator(
-            "#einzureichendes tbody tr button[onclick*='maEinzureichendesLoeschen'], "
-            "#einzureichendes tbody tr button[title*='deaktivieren'], "
-            "#einzureichendes tbody tr img.sprite_16x16.inaktiv"
+        rows = target.locator("#einzureichendes tbody tr")
+        try:
+            row_count = rows.count()
+        except Exception:
+            row_count = 0
+        if row_count == 0:
+            break
+
+        row = rows.first
+        buttons = row.locator(
+            "button[onclick*='maEinzureichendesLoeschen'], "
+            "button[title*='deaktivieren'], "
+            "img.sprite_16x16.inaktiv"
         )
         try:
             count = buttons.count()
@@ -303,9 +327,9 @@ def _clear_einzureichende_unterlagen(page) -> None:
 
         before_count = _row_count(target)
         try:
-            info = buttons.first.evaluate(
+            info = row.evaluate(
                 """(btn) => {
-                    const row = btn.closest('tr');
+                    const row = btn;
                     const id = row?.getAttribute('id') || '';
                     const cells = row?.querySelectorAll('td') || [];
                     const label = cells[1]?.textContent?.trim() || '';
@@ -345,7 +369,7 @@ def _clear_einzureichende_unterlagen(page) -> None:
             pass
         time.sleep(0.4)
 
-        target = _find_target()
+        target = _find_target_with_retry()
         if info and info.get("id"):
             try:
                 if target:

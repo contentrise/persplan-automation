@@ -1169,6 +1169,8 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
     if isinstance(uploads.get("infektionsschutz"), dict):
         valid_until_infektionsschutz = _format_date_for_ui(str(uploads["infektionsschutz"].get("validUntil", "")).strip())
 
+    upload_date = time.strftime("%d.%m.%Y")
+
     immatrikulation_bemerkung, immatrikulation_valid_until_raw = _resolve_immatrikulation_bemerkung(payload)
     immatrikulation_valid_until = _format_date_for_ui(str(immatrikulation_valid_until_raw or "").strip())
 
@@ -1179,7 +1181,7 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
         ("immatrikulation", immatrikulation_bemerkung, "- Imma/Schul", "2", immatrikulation_valid_until),
         (
             "infektionsschutz",
-            f"Infektionsschutzbelehrung{f' vom {valid_until_infektionsschutz}' if valid_until_infektionsschutz else ''}",
+            f"Infektionsschutzbelehrung vom {upload_date}",
             "- Infektionsschutzbelehrung",
             "9",
             valid_until_infektionsschutz,
