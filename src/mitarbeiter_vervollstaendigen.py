@@ -947,6 +947,18 @@ def _format_date_for_ui(date_str: str) -> str:
     return str(date_str).strip()
 
 
+def _subtract_years(date_str: str, years: int) -> str:
+    ui = _format_date_for_ui(date_str)
+    match = re.match(r"^(\d{2})\.(\d{2})\.(\d{4})$", ui)
+    if not match:
+        return ""
+    day, month, year = match.groups()
+    try:
+        return f"{day}.{month}.{int(year) - years}"
+    except Exception:
+        return ""
+
+
 def _parse_month_from_date(date_str: str) -> int | None:
     if not date_str:
         return None
@@ -1169,7 +1181,7 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
     if isinstance(uploads.get("infektionsschutz"), dict):
         valid_until_infektionsschutz = _format_date_for_ui(str(uploads["infektionsschutz"].get("validUntil", "")).strip())
 
-    upload_date = time.strftime("%d.%m.%Y")
+    infektionsschutz_from_date = _subtract_years(valid_until_infektionsschutz, 2) or time.strftime("%d.%m.%Y")
 
     immatrikulation_bemerkung, immatrikulation_valid_until_raw = _resolve_immatrikulation_bemerkung(payload)
     immatrikulation_valid_until = _format_date_for_ui(str(immatrikulation_valid_until_raw or "").strip())
@@ -1181,7 +1193,7 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
         ("immatrikulation", immatrikulation_bemerkung, "- Imma/Schul", "2", immatrikulation_valid_until),
         (
             "infektionsschutz",
-            f"Infektionsschutzbelehrung vom {upload_date}",
+            f"Infektionsschutzbelehrung vom {infektionsschutz_from_date}",
             "- Infektionsschutzbelehrung",
             "9",
             valid_until_infektionsschutz,
