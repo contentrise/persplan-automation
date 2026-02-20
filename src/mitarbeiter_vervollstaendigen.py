@@ -1467,7 +1467,12 @@ def _fill_stammdaten_fields(page: Page, payload: dict) -> None:
             save_button.click()
             print("[OK] Stammdaten gespeichert.")
         except Exception as exc:
-            print(f"[WARNUNG] Stammdaten speichern fehlgeschlagen: {exc}")
+            try:
+                # Fallback: Click via JS even if hidden.
+                save_button.evaluate("el => el.click()")
+                print("[OK] Stammdaten gespeichert (JS-Fallback).")
+            except Exception:
+                print(f"[WARNUNG] Stammdaten speichern fehlgeschlagen: {exc}")
     else:
         print("[WARNUNG] Stammdaten Speichern-Button nicht gefunden.")
 
@@ -1553,6 +1558,10 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
     if frame:
         candidates.append(frame)
     candidates.extend(page.frames)
+    try:
+        page.wait_for_load_state("domcontentloaded", timeout=6000)
+    except Exception:
+        pass
 
     def _debug_tab_state(candidate: Union[Frame, Page]) -> None:
         try:
@@ -1623,12 +1632,27 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
             print(f"[DEBUG] Notfallkontakt Tab-Klick JS fehlgeschlagen: {exc}")
             return False
 
+    def _find_notfall_panel() -> tuple[Union[Frame, Page] | None, bool]:
+        for candidate in candidates:
+            try:
+                panel = candidate.locator("#administration_user_stammdaten_tabs_notfallkontakt")
+                if panel.count() > 0:
+                    return candidate, True
+            except Exception:
+                continue
+        return None, False
+
     target: Union[Frame, Page] | None = None
-    for candidate in candidates:
-        _debug_tab_state(candidate)
-        if _click_tab_by_text(candidate, "Notfallkontakt"):
-            target = candidate
-            break
+    panel_target, panel_found = _find_notfall_panel()
+    if panel_found and panel_target:
+        target = panel_target
+        print("[DEBUG] Notfallkontakt Panel bereits sichtbar – Tab-Klick übersprungen.")
+    else:
+        for candidate in candidates:
+            _debug_tab_state(candidate)
+            if _click_tab_by_text(candidate, "Notfallkontakt"):
+                target = candidate
+                break
 
     if not target:
         print("[WARNUNG] Tab 'Notfallkontakt' nicht gefunden.")

@@ -265,9 +265,9 @@ def _clear_einzureichende_unterlagen(page) -> None:
         return
 
     try:
-        filter_all = target.locator("#alleUnterlagen").first
-        if filter_all.count() > 0 and not filter_all.is_checked():
-            filter_all.click()
+        filter_active = target.locator("#aktiveUnterlagen").first
+        if filter_active.count() > 0 and not filter_active.is_checked():
+            filter_active.click()
             time.sleep(0.8)
     except Exception:
         pass
@@ -289,8 +289,11 @@ def _clear_einzureichende_unterlagen(page) -> None:
             print("[WARNUNG] Tabelle 'Einzureichende Unterlagen' nicht gefunden (nach Refresh).")
             break
 
-        buttons = target.locator("#einzureichendes tbody tr button[onclick*='maEinzureichendesLoeschen'], "
-                                 "#einzureichendes tbody tr img.sprite_16x16.inaktiv")
+        buttons = target.locator(
+            "#einzureichendes tbody tr button[onclick*='maEinzureichendesLoeschen'], "
+            "#einzureichendes tbody tr button[title*='deaktivieren'], "
+            "#einzureichendes tbody tr img.sprite_16x16.inaktiv"
+        )
         try:
             count = buttons.count()
         except Exception:
@@ -320,7 +323,9 @@ def _clear_einzureichende_unterlagen(page) -> None:
         try:
             clicked = target.evaluate(
                 """() => {
-                    const btn = document.querySelector("#einzureichendes tbody tr button[onclick*='maEinzureichendesLoeschen']");
+                    const btn =
+                        document.querySelector("#einzureichendes tbody tr button[onclick*='maEinzureichendesLoeschen']") ||
+                        document.querySelector("#einzureichendes tbody tr button[title*='deaktivieren']");
                     if (btn) { btn.click(); return true; }
                     const img = document.querySelector("#einzureichendes tbody tr img.sprite_16x16.inaktiv");
                     if (img && img.closest('button')) { img.closest('button').click(); return true; }
@@ -329,7 +334,7 @@ def _clear_einzureichende_unterlagen(page) -> None:
             )
             if not clicked:
                 buttons.first.scroll_into_view_if_needed()
-                buttons.first.click()
+                buttons.first.click(force=True)
         except Exception as exc:
             print(f"[WARNUNG] Unterlage konnte nicht gelöscht/deaktiviert werden: {exc}")
             break
@@ -341,6 +346,12 @@ def _clear_einzureichende_unterlagen(page) -> None:
         time.sleep(0.4)
 
         target = _find_target()
+        if info and info.get("id"):
+            try:
+                if target:
+                    target.wait_for_selector(f"#{info.get('id')}", state="detached", timeout=8000)
+            except Exception:
+                pass
         after_count = _row_count(target) if target else 0
         if after_count < before_count:
             removed += 1
