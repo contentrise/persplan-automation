@@ -273,6 +273,10 @@ def _clear_einzureichende_unterlagen(page) -> None:
             break
 
     print(f"[INFO] Einzureichende Unterlagen entfernt/deaktiviert: {removed}")
+    try:
+        target.wait_for_selector("#einzureichendes", timeout=6000)
+    except Exception:
+        pass
 
 
 def _normalize_doc_text(value: str) -> str:
@@ -396,6 +400,10 @@ def _resolve_profile_image(payload: dict, temp_dir: Path) -> Path | None:
         ext = ".jpg"
         if "png" in header:
             ext = ".png"
+        elif "webp" in header:
+            ext = ".webp"
+        elif "heic" in header or "heif" in header:
+            ext = ".heic"
         target_path = temp_dir / f"profilbild{ext}"
         try:
             target_path.write_bytes(base64.b64decode(b64_data))
@@ -419,6 +427,14 @@ def _resolve_profile_image(payload: dict, temp_dir: Path) -> Path | None:
         ext = ".png"
     elif "jpeg" in content_type or "jpg" in content_type:
         ext = ".jpg"
+    elif "webp" in content_type:
+        ext = ".webp"
+    elif "heic" in content_type or "heif" in content_type:
+        ext = ".heic"
+    else:
+        url_ext = Path(image_url.split("?", 1)[0]).suffix.lower()
+        if url_ext in {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}:
+            ext = url_ext
     target_path = temp_dir / f"profilbild{ext}"
     target_path.write_bytes(response.content)
     return target_path
@@ -428,6 +444,8 @@ def _click_unterlage_hinzufuegen(page) -> bool:
     selectors = [
         "button:has-text('Unterlage hinzufügen')",
         "button:has-text('Unterlage hinzufuegen')",
+        "button[onclick*='openUiWindowReloaded'][title*='Unterlage']",
+        "button[onclick*='einzureichendes_editor']",
     ]
 
     candidates = [page]
@@ -437,6 +455,7 @@ def _click_unterlage_hinzufuegen(page) -> bool:
         inhalt = None
     if inhalt:
         candidates.append(inhalt)
+    candidates.extend(page.frames)
 
     for target in candidates:
         for selector in selectors:
@@ -453,10 +472,39 @@ def _click_unterlage_hinzufuegen(page) -> bool:
             try:
                 button.click()
                 print("[OK] 'Unterlage hinzufügen' geklickt.")
+                try:
+                    page.wait_for_selector("#bezeichnung", timeout=6000)
+                except Exception:
+                    pass
                 return True
             except Exception as exc:
                 print(f"[WARNUNG] Klick auf 'Unterlage hinzufügen' fehlgeschlagen: {exc}")
                 return False
+        try:
+            clicked = target.evaluate(
+                """() => {
+                    const buttons = Array.from(document.querySelectorAll('button'));
+                    const match = buttons.find((btn) =>
+                        (btn.textContent || '').toLowerCase().includes('unterlage hinzufügen') ||
+                        (btn.textContent || '').toLowerCase().includes('unterlage hinzufuegen') ||
+                        (btn.getAttribute('onclick') || '').includes('einzureichendes_editor') ||
+                        (btn.getAttribute('onclick') || '').includes('openUiWindowReloaded')
+                    );
+                    if (!match) return false;
+                    match.scrollIntoView({ block: 'center' });
+                    match.click();
+                    return true;
+                }"""
+            )
+            if clicked:
+                print("[OK] 'Unterlage hinzufügen' geklickt (JS fallback).")
+                try:
+                    page.wait_for_selector("#bezeichnung", timeout=6000)
+                except Exception:
+                    pass
+                return True
+        except Exception:
+            pass
     print("[WARNUNG] Button 'Unterlage hinzufügen' nicht gefunden.")
     return False
 
