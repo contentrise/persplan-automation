@@ -280,7 +280,7 @@ def _clear_einzureichende_unterlagen(page) -> None:
     loops = 0
     while loops < max_loops:
         loops += 1
-        buttons = target.locator("button[onclick*='maEinzureichendesLoeschen']")
+        buttons = target.locator("button[onclick*='maEinzureichendesLoeschen'], img.sprite_16x16.inaktiv")
         try:
             count = buttons.count()
         except Exception:
@@ -329,6 +329,20 @@ def _clear_einzureichende_unterlagen(page) -> None:
             )
         except Exception as exc:
             print(f"[DEBUG] Nach Löschung keine Zeilenänderung erkannt: {exc}")
+            try:
+                clicked = target.evaluate(
+                    """() => {
+                        const btn = document.querySelector("button[onclick*='maEinzureichendesLoeschen']");
+                        if (btn) { btn.click(); return true; }
+                        const img = document.querySelector("img.sprite_16x16.inaktiv");
+                        if (img && img.closest('button')) { img.closest('button').click(); return true; }
+                        return false;
+                    }"""
+                )
+                if clicked:
+                    print("[DEBUG] Lösch-Klick per JS-Fallback ausgeführt.")
+            except Exception as js_exc:
+                print(f"[DEBUG] JS-Fallback Lösch-Klick fehlgeschlagen: {js_exc}")
         time.sleep(0.2)
 
     _log_state("Nach dem Löschen")
