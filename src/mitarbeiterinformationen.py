@@ -221,42 +221,27 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
 
 
 def _clear_einzureichende_unterlagen(page) -> None:
-    candidates = [page]
-    inhalt = page.frame(name="inhalt")
-    if inhalt:
-        candidates.append(inhalt)
-    candidates.extend(page.frames)
+    def _find_target():
+        candidates = [page]
+        inhalt = page.frame(name="inhalt")
+        if inhalt:
+            candidates.append(inhalt)
+        candidates.extend(page.frames)
+        for candidate in candidates:
+            try:
+                if candidate.locator("#einzureichendes").count() > 0:
+                    return candidate
+            except Exception:
+                continue
+        return None
 
-    target = None
-    for candidate in candidates:
-        if candidate.locator("#einzureichendes").count() > 0:
-            target = candidate
-            break
-
-    if target is None:
-        print("[WARNUNG] Tabelle 'Einzureichende Unterlagen' nicht gefunden.")
-        return
-
-    try:
-        filter_all = target.locator("#alleUnterlagen").first
-        if filter_all.count() > 0 and not filter_all.is_checked():
-            filter_all.click()
-            time.sleep(0.8)
-    except Exception:
-        pass
-
-    try:
-        target.wait_for_selector("#einzureichendes tbody tr", timeout=8000)
-    except Exception:
-        pass
-
-    def _row_count() -> int:
+    def _row_count(target) -> int:
         try:
             return target.locator("#einzureichendes tbody tr").count()
         except Exception:
             return 0
 
-    def _log_state(prefix: str) -> None:
+    def _log_state(target, prefix: str) -> None:
         try:
             info = target.evaluate(
                 """() => {
@@ -274,13 +259,38 @@ def _clear_einzureichende_unterlagen(page) -> None:
         except Exception as exc:
             print(f"[DEBUG] {prefix} Einzureichende: Konnte Zustand nicht lesen: {exc}")
 
+    target = _find_target()
+    if target is None:
+        print("[WARNUNG] Tabelle 'Einzureichende Unterlagen' nicht gefunden.")
+        return
+
+    try:
+        filter_all = target.locator("#alleUnterlagen").first
+        if filter_all.count() > 0 and not filter_all.is_checked():
+            filter_all.click()
+            time.sleep(0.8)
+    except Exception:
+        pass
+
+    try:
+        target.wait_for_selector("#einzureichendes tbody tr", timeout=8000)
+    except Exception:
+        pass
+
     removed = 0
-    _log_state("Vor dem Löschen")
-    max_loops = 200
+    _log_state(target, "Vor dem Löschen")
+    max_loops = 100
     loops = 0
+    no_change_rounds = 0
     while loops < max_loops:
         loops += 1
-        buttons = target.locator("button[onclick*='maEinzureichendesLoeschen'], img.sprite_16x16.inaktiv")
+        target = _find_target()
+        if target is None:
+            print("[WARNUNG] Tabelle 'Einzureichende Unterlagen' nicht gefunden (nach Refresh).")
+            break
+
+        buttons = target.locator("#einzureichendes tbody tr button[onclick*='maEinzureichendesLoeschen'], "
+                                 "#einzureichendes tbody tr img.sprite_16x16.inaktiv")
         try:
             count = buttons.count()
         except Exception:
@@ -288,7 +298,7 @@ def _clear_einzureichende_unterlagen(page) -> None:
         if count == 0:
             break
 
-        before_count = _row_count()
+        before_count = _row_count(target)
         try:
             info = buttons.first.evaluate(
                 """(btn) => {
@@ -308,44 +318,43 @@ def _clear_einzureichende_unterlagen(page) -> None:
         except Exception as exc:
             print(f"[DEBUG] Dialog-Handler konnte nicht gesetzt werden: {exc}")
         try:
-            buttons.first.scroll_into_view_if_needed()
-        except Exception:
-            pass
-        try:
-            buttons.first.click()
-            removed += 1
+            clicked = target.evaluate(
+                """() => {
+                    const btn = document.querySelector("#einzureichendes tbody tr button[onclick*='maEinzureichendesLoeschen']");
+                    if (btn) { btn.click(); return true; }
+                    const img = document.querySelector("#einzureichendes tbody tr img.sprite_16x16.inaktiv");
+                    if (img && img.closest('button')) { img.closest('button').click(); return true; }
+                    return false;
+                }"""
+            )
+            if not clicked:
+                buttons.first.scroll_into_view_if_needed()
+                buttons.first.click()
         except Exception as exc:
             print(f"[WARNUNG] Unterlage konnte nicht gelöscht/deaktiviert werden: {exc}")
             break
 
         try:
-            target.wait_for_function(
-                """(prev) => {
-                    const rows = document.querySelectorAll('#einzureichendes tbody tr');
-                    return rows.length < prev;
-                }""",
-                before_count,
-                timeout=3000,
-            )
-        except Exception as exc:
-            print(f"[DEBUG] Nach Löschung keine Zeilenänderung erkannt: {exc}")
-            try:
-                clicked = target.evaluate(
-                    """() => {
-                        const btn = document.querySelector("button[onclick*='maEinzureichendesLoeschen']");
-                        if (btn) { btn.click(); return true; }
-                        const img = document.querySelector("img.sprite_16x16.inaktiv");
-                        if (img && img.closest('button')) { img.closest('button').click(); return true; }
-                        return false;
-                    }"""
-                )
-                if clicked:
-                    print("[DEBUG] Lösch-Klick per JS-Fallback ausgeführt.")
-            except Exception as js_exc:
-                print(f"[DEBUG] JS-Fallback Lösch-Klick fehlgeschlagen: {js_exc}")
-        time.sleep(0.2)
+            page.wait_for_load_state("domcontentloaded", timeout=5000)
+        except Exception:
+            pass
+        time.sleep(0.4)
 
-    _log_state("Nach dem Löschen")
+        target = _find_target()
+        after_count = _row_count(target) if target else 0
+        if after_count < before_count:
+            removed += 1
+            no_change_rounds = 0
+        else:
+            no_change_rounds += 1
+            print(f"[DEBUG] Nach Löschung keine Zeilenänderung erkannt (before={before_count}, after={after_count}).")
+            if no_change_rounds >= 3:
+                print("[WARNUNG] Löschen scheint nicht zu greifen – breche ab.")
+                break
+
+    target = _find_target()
+    if target:
+        _log_state(target, "Nach dem Löschen")
     print(f"[INFO] Einzureichende Unterlagen entfernt/deaktiviert: {removed}")
     try:
         target.wait_for_selector("#einzureichendes", timeout=6000)
