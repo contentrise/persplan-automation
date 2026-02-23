@@ -1649,16 +1649,21 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
     def _find_notfall_panel() -> tuple[Union[Frame, Page] | None, bool]:
         for candidate in candidates:
             try:
-                panel = candidate.locator("#administration_user_stammdaten_tabs_notfallkontakt")
-                if panel.count() > 0:
-                    return candidate, True
+                panel = candidate.locator("#administration_user_stammdaten_tabs_notfallkontakt").first
+                if panel.count() == 0:
+                    continue
+                try:
+                    visible = panel.is_visible()
+                except Exception:
+                    visible = False
+                return candidate, visible
             except Exception:
                 continue
         return None, False
 
     target: Union[Frame, Page] | None = None
-    panel_target, panel_found = _find_notfall_panel()
-    if panel_found and panel_target:
+    panel_target, panel_visible = _find_notfall_panel()
+    if panel_visible and panel_target:
         target = panel_target
         print("[DEBUG] Notfallkontakt Panel bereits sichtbar – Tab-Klick übersprungen.")
     else:
@@ -1677,6 +1682,7 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
         panel.wait_for(state="visible", timeout=8000)
     except Exception:
         print("[WARNUNG] Notfallkontakt-Panel nicht sichtbar (Timeout).")
+        return
 
     edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
     if edit_icon.count() > 0:
@@ -1684,8 +1690,20 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
             edit_icon.scroll_into_view_if_needed()
         except Exception:
             pass
-        edit_icon.click(force=True)
-        print("[OK] Notfallkontakt Edit-Stift geklickt.")
+        try:
+            if not edit_icon.is_visible():
+                print("[WARNUNG] Notfallkontakt Edit-Stift nicht sichtbar.")
+            edit_icon.click(timeout=3000)
+            print("[OK] Notfallkontakt Edit-Stift geklickt.")
+        except Exception as exc:
+            try:
+                clicked = edit_icon.evaluate("el => { el.click(); return true; }")
+                if clicked:
+                    print("[OK] Notfallkontakt Edit-Stift per JS geklickt.")
+                else:
+                    print(f"[WARNUNG] Notfallkontakt Edit-Stift Klick fehlgeschlagen: {exc}")
+            except Exception as js_exc:
+                print(f"[WARNUNG] Notfallkontakt Edit-Stift Klick fehlgeschlagen: {exc} / JS: {js_exc}")
     else:
         print("[WARNUNG] Notfallkontakt Edit-Stift nicht gefunden.")
 
