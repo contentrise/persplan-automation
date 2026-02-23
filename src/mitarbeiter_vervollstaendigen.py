@@ -121,11 +121,25 @@ def _locate_search_input(target: Union[Frame, Page]):
         "input[aria-controls='user_tbl']",
         "input[type='search']",
     ]
-    for sel in selectors:
-        locator = target.locator(sel).first
-        if locator.count() > 0:
-            return locator
-    return target.locator("input").first
+    candidates: list[Union[Frame, Page]] = [target]
+    if isinstance(target, Frame):
+        try:
+            candidates.append(target.page)
+            candidates.extend(target.page.frames)
+        except Exception:
+            pass
+    else:
+        try:
+            candidates.extend(target.frames)
+        except Exception:
+            pass
+
+    for candidate in candidates:
+        for sel in selectors:
+            locator = candidate.locator(sel).first
+            if locator.count() > 0:
+                return locator
+    return target.locator("input[type='search']").first
 
 
 def _click_lastname_link(target: Union[Frame, Page], email: str) -> Page | None:
@@ -2054,6 +2068,22 @@ def run_mitarbeiter_vervollstaendigen(
 
         search_input = _locate_search_input(target)
         if search_input.count() == 0:
+            try:
+                if isinstance(target, Frame):
+                    target.page.wait_for_selector("input[type='search']", timeout=6000)
+                else:
+                    target.wait_for_selector("input[type='search']", timeout=6000)
+            except Exception:
+                pass
+            search_input = _locate_search_input(target)
+        if search_input.count() == 0:
+            try:
+                if isinstance(target, Frame):
+                    print(f"[DEBUG] user.php Frames: {[f.name for f in target.page.frames]}")
+                else:
+                    print(f"[DEBUG] user.php Frames: {[f.name for f in target.frames]}")
+            except Exception:
+                pass
             raise RuntimeError("[FEHLER] Suchfeld in user.php nicht gefunden.")
 
         search_input.fill(email)
