@@ -580,7 +580,28 @@ def _normalize_profile_image(image_path: Path) -> Path | None:
 
     try:
         with Image.open(image_path) as img:
-            rgb = img.convert("RGB")
+            try:
+                w, h = img.size
+                mode = img.mode
+                print(f"[INFO] Profilbild geladen: {image_path.name} ({w}x{h}, mode={mode})")
+            except Exception:
+                pass
+            if img.mode in {"RGBA", "LA"} or (img.mode == "P" and "transparency" in img.info):
+                base = Image.new("RGB", img.size, (255, 255, 255))
+                base.paste(img.convert("RGBA"), mask=img.convert("RGBA").split()[-1])
+                rgb = base
+            else:
+                rgb = img.convert("RGB")
+            try:
+                # Detect near-black images (likely upload/convert issues).
+                small = rgb.resize((64, 64))
+                pixels = list(small.getdata())
+                dark = sum(1 for r, g, b in pixels if r <= 8 and g <= 8 and b <= 8)
+                ratio = dark / max(1, len(pixels))
+                if ratio >= 0.9:
+                    print(f"[WARNUNG] Profilbild wirkt schwarz (dark_ratio={ratio:.2f}).")
+            except Exception:
+                pass
             target_path = image_path.with_suffix(".jpg")
             rgb.save(target_path, format="JPEG", quality=92)
             print(f"[INFO] Profilbild konvertiert: {image_path.suffix} -> .jpg")
@@ -588,6 +609,29 @@ def _normalize_profile_image(image_path: Path) -> Path | None:
     except Exception as exc:
         print(f"[WARNUNG] Profilbild-Konvertierung fehlgeschlagen: {exc}")
         return image_path
+
+
+def _wait_for_profile_preview(target, timeout_seconds: float = 6.0) -> bool:
+    deadline = time.time() + timeout_seconds
+    while time.time() < deadline:
+        try:
+            ready = target.evaluate(
+                """() => {
+                    const input = document.querySelector('#fileupload');
+                    if (!input) return false;
+                    const root = input.closest('.ui-dialog, form, body') || document.body;
+                    const imgs = Array.from(root.querySelectorAll('img'))
+                        .filter(img => img.src && !img.src.includes('transparent.gif'));
+                    return imgs.some(img => img.naturalWidth > 10 && img.naturalHeight > 10);
+                }"""
+            )
+            if ready:
+                return True
+        except Exception:
+            pass
+        time.sleep(0.3)
+    print("[WARNUNG] Kein Bild-Preview erkannt (Upload evtl. noch nicht verarbeitet).")
+    return False
 
 
 def _click_unterlage_hinzufuegen(page) -> bool:
@@ -794,7 +838,8 @@ def _upload_image(page, image_path: Path) -> bool:
                     file_input.evaluate("el => el.files && el.files.length")
                 except Exception:
                     pass
-                time.sleep(0.6)
+                _wait_for_profile_preview(target, timeout_seconds=6.0)
+                time.sleep(0.4)
                 print(f"[OK] Bild hochgeladen: {image_path}")
                 return True
             except Exception:

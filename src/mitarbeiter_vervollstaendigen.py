@@ -669,8 +669,23 @@ def _fill_grundlohn_history(page: Page) -> None:
         if submit_button.count() == 0:
             print("[WARNUNG] 'eintragen'-Button im Grundlohn-Dialog nicht gefunden.")
             return
-        submit_button.click()
-        print(f"[OK] Grundlohn eingetragen → {date_value} = {amount_value}")
+        try:
+            submit_button.click()
+            print(f"[OK] Grundlohn eingetragen → {date_value} = {amount_value}")
+        except Exception as exc:
+            try:
+                dialog.evaluate(
+                    """() => {
+                        const btn = Array.from(document.querySelectorAll('button'))
+                            .find(b => (b.textContent || '').trim().toLowerCase() === 'eintragen');
+                        if (btn) { btn.click(); return true; }
+                        return false;
+                    }"""
+                )
+                print(f"[OK] Grundlohn eingetragen (JS-Fallback) → {date_value} = {amount_value}")
+            except Exception as js_exc:
+                print(f"[ERROR] Grundlohn 'eintragen' Klick fehlgeschlagen: {exc} / JS: {js_exc}")
+                return
         time.sleep(0.5)
 
     close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
@@ -1739,16 +1754,34 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
         print(f"[DEBUG] notfallkontakt_name Locator count={loc.count()}")
         if _set_input_value_force(loc, name):
             print(f"[OK] notfallkontakt_name → {name}")
+            try:
+                current = loc.first.input_value().strip()
+                if current != name:
+                    print(f"[ERROR] notfallkontakt_name nicht gesetzt (soll='{name}', ist='{current}')")
+            except Exception:
+                pass
     if phone:
         loc = panel.locator("#notfallkontakt_telefon, [name='notfallkontakt_telefon']")
         print(f"[DEBUG] notfallkontakt_telefon Locator count={loc.count()}")
         if _set_input_value_force(loc, phone):
             print(f"[OK] notfallkontakt_telefon → {phone}")
+            try:
+                current = loc.first.input_value().strip()
+                if current != phone:
+                    print(f"[ERROR] notfallkontakt_telefon nicht gesetzt (soll='{phone}', ist='{current}')")
+            except Exception:
+                pass
     if relation:
         loc = panel.locator("#notfallkontakt_relation, [name='notfallkontakt_relation']")
         print(f"[DEBUG] notfallkontakt_relation Locator count={loc.count()}")
         if _set_input_value_force(loc, relation):
             print(f"[OK] notfallkontakt_relation → {relation}")
+            try:
+                current = loc.first.input_value().strip()
+                if current != relation:
+                    print(f"[ERROR] notfallkontakt_relation nicht gesetzt (soll='{relation}', ist='{current}')")
+            except Exception:
+                pass
 
     save_button = panel.locator("input[type='submit'].speichern, input[type='submit'][value*='Daten speichern']").first
     print(f"[DEBUG] Notfallkontakt Speichern-Button count={save_button.count()}")
