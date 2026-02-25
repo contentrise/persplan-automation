@@ -524,7 +524,11 @@ def _resolve_profile_image(payload: dict, temp_dir: Path) -> Path | None:
             ext = ".heic"
         target_path = temp_dir / f"profilbild{ext}"
         try:
-            target_path.write_bytes(base64.b64decode(b64_data))
+            raw = base64.b64decode(b64_data)
+            if len(raw) < 16:
+                print("[WARNUNG] Profilbild dataUrl zu klein (vermutlich leer/kaputt).")
+                return None
+            target_path.write_bytes(raw)
             return target_path
         except Exception as exc:
             print(f"[WARNUNG] Konnte Profilbild aus dataUrl nicht dekodieren: {exc}")
@@ -540,6 +544,13 @@ def _resolve_profile_image(payload: dict, temp_dir: Path) -> Path | None:
         return None
 
     content_type = (response.headers.get("Content-Type") or "").lower()
+    content_len = response.headers.get("Content-Length") or ""
+    print(f"[INFO] Profilbild HTTP: status={response.status_code}, type={content_type or '—'}, len={content_len or '—'}")
+    if not content_type.startswith("image/"):
+        snippet = response.content[:200]
+        if snippet.strip().startswith(b"<"):
+            print("[WARNUNG] Profilbild-URL lieferte HTML/XML (vermutlich abgelaufen/denied).")
+            return None
     ext = ".jpg"
     if "png" in content_type:
         ext = ".png"
@@ -553,6 +564,22 @@ def _resolve_profile_image(payload: dict, temp_dir: Path) -> Path | None:
         url_ext = Path(image_url.split("?", 1)[0]).suffix.lower()
         if url_ext in {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}:
             ext = url_ext
+    if len(response.content) < 16:
+        print("[WARNUNG] Profilbild-Download zu klein (vermutlich leer/kaputt).")
+        return None
+
+    header = response.content[:16]
+    looks_like_image = (
+        header.startswith(b"\xFF\xD8\xFF")  # jpeg
+        or header.startswith(b"\x89PNG\r\n\x1a\n")  # png
+        or (header.startswith(b"RIFF") and b"WEBP" in header)  # webp
+        or b"ftypheic" in header
+        or b"ftypheif" in header
+    )
+    if not looks_like_image and content_type.startswith("image/"):
+        print("[WARNUNG] Profilbild-Header wirkt nicht wie Bild (evtl. Proxy/Fehlerseite).")
+        return None
+
     target_path = temp_dir / f"profilbild{ext}"
     target_path.write_bytes(response.content)
     return target_path

@@ -391,11 +391,32 @@ def _open_sedcard(page: Page) -> bool:
             except Exception:
                 pass
             try:
+                _dismiss_ui_overlay(page)
+                try:
+                    page.locator("#loaderContainer").first.wait_for(state="hidden", timeout=3000)
+                except Exception:
+                    pass
                 link.click()
                 print("[OK] Submenü 'Sedcard' geklickt.")
                 time.sleep(0.5)
                 return True
             except Exception as exc:
+                try:
+                    clicked = target.evaluate(
+                        """() => {
+                            const link = document.querySelector("#tableOfSubmenue a:contains('Sedcard')") ||
+                                         Array.from(document.querySelectorAll("#tableOfSubmenue a"))
+                                              .find(a => (a.textContent || '').trim() === 'Sedcard');
+                            if (link) { link.click(); return true; }
+                            return false;
+                        }"""
+                    )
+                except Exception:
+                    clicked = False
+                if clicked:
+                    print("[OK] Submenü 'Sedcard' geklickt (JS fallback).")
+                    time.sleep(0.5)
+                    return True
                 print(f"[WARNUNG] Submenü 'Sedcard' Klick fehlgeschlagen: {exc}")
                 return False
         time.sleep(0.25)
@@ -432,11 +453,32 @@ def _open_vertragsdaten(page: Page) -> bool:
             except Exception:
                 pass
             try:
+                _dismiss_ui_overlay(page)
+                try:
+                    page.locator("#loaderContainer").first.wait_for(state="hidden", timeout=3000)
+                except Exception:
+                    pass
                 link.click()
                 print("[OK] Submenü 'Vertragsdaten' geklickt.")
                 time.sleep(0.5)
                 return True
             except Exception as exc:
+                try:
+                    clicked = target.evaluate(
+                        """() => {
+                            const link = document.querySelector("#tableOfSubmenue a:contains('Vertragsdaten')") ||
+                                         Array.from(document.querySelectorAll("#tableOfSubmenue a"))
+                                              .find(a => (a.textContent || '').trim() === 'Vertragsdaten');
+                            if (link) { link.click(); return true; }
+                            return false;
+                        }"""
+                    )
+                except Exception:
+                    clicked = False
+                if clicked:
+                    print("[OK] Submenü 'Vertragsdaten' geklickt (JS fallback).")
+                    time.sleep(0.5)
+                    return True
                 print(f"[WARNUNG] Submenü 'Vertragsdaten' Klick fehlgeschlagen: {exc}")
                 return False
         time.sleep(0.25)
