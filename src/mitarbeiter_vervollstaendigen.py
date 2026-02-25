@@ -160,12 +160,16 @@ _KRANKENKASSE_OPTIONS = [
 ]
 
 _KRANKENKASSE_BN_MAP = {}
+_KRANKENKASSE_LABEL_BY_NORM = {}
+_KRANKENKASSE_LABEL_BY_BN = {}
 for _entry in _KRANKENKASSE_OPTIONS:
     _bn = _extract_bn(_entry)
     _name = _entry.split("[Bn:", 1)[0].strip()
     _norm = _normalize_kasse_name(_name)
     if _norm and _bn:
         _KRANKENKASSE_BN_MAP[_norm] = _bn
+        _KRANKENKASSE_LABEL_BY_NORM[_norm] = _entry
+        _KRANKENKASSE_LABEL_BY_BN[_bn] = _entry
 
 
 def _resolve_bn_from_name(value: str) -> str:
@@ -173,6 +177,18 @@ def _resolve_bn_from_name(value: str) -> str:
     if not normalized:
         return ""
     return _KRANKENKASSE_BN_MAP.get(normalized, "")
+
+
+def _resolve_kasse_label(value: str) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    if "[Bn:" in text or "[BN:" in text:
+        return text
+    normalized = _normalize_kasse_name(text)
+    if not normalized:
+        return text
+    return _KRANKENKASSE_LABEL_BY_NORM.get(normalized, text)
 
 
 def _wait_for_inhalt_frame(page: Page, timeout_seconds: int = 5) -> Frame | None:
@@ -544,7 +560,10 @@ def _open_sedcard(page: Page) -> bool:
                     page.locator("#loaderContainer").first.wait_for(state="hidden", timeout=3000)
                 except Exception:
                     pass
-                link.click()
+                try:
+                    link.click(force=True)
+                except Exception:
+                    link.evaluate("el => el.click()")
                 print("[OK] Submenü 'Sedcard' geklickt.")
                 time.sleep(0.5)
                 return True
@@ -1830,6 +1849,18 @@ def _dismiss_ui_overlay(page: Page) -> None:
                 time.sleep(0.2)
     except Exception:
         pass
+    try:
+        page.evaluate(
+            """() => {
+                document.querySelectorAll('div.ui-widget-overlay.ui-front').forEach((el) => {
+                    el.style.pointerEvents = 'none';
+                    el.style.display = 'none';
+                    el.style.visibility = 'hidden';
+                });
+            }"""
+        )
+    except Exception:
+        pass
 
 
 def _select_autocomplete_by_bn(
@@ -1879,8 +1910,22 @@ def _select_autocomplete_by_bn(
     while time.time() < deadline:
         item = list_locator.filter(has_text=f"[Bn: {bn}]").first
         if item.count() > 0 and item.is_visible():
-            item.click()
-            print(f"[OK] {field_label}: Autocomplete Treffer → [Bn: {bn}]")
+            try:
+                label_text = item.inner_text().strip()
+            except Exception:
+                label_text = ""
+            try:
+                item.click()
+            except Exception:
+                try:
+                    item.evaluate("el => el.click()")
+                except Exception:
+                    pass
+            if label_text:
+                _set_input_value(input_locator, label_text)
+                print(f"[OK] {field_label}: Autocomplete Treffer → {label_text}")
+            else:
+                print(f"[OK] {field_label}: Autocomplete Treffer → [Bn: {bn}]")
             return True
         time.sleep(0.2)
 
@@ -2013,6 +2058,7 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
     if variant == "geringfuegig":
         variant = "gb"
     krankenkasse_pf = str(payload.get("krankenkasse", "") or "").strip()
+    krankenkasse_pf = _resolve_kasse_label(krankenkasse_pf)
     krankenkasse_bn = (
         str(payload.get("krankenkasse_bn") or payload.get("krankenkasse_bn_nummer") or payload.get("krankenkasse_bn_nr") or "")
         .strip()
@@ -2023,6 +2069,7 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
         krankenkasse_bn = _resolve_bn_from_name(krankenkasse_pf)
         if krankenkasse_bn:
             print(f"[INFO] krankenkasse: BN via Name-Mapping → {krankenkasse_bn}")
+            krankenkasse_pf = _KRANKENKASSE_LABEL_BY_BN.get(krankenkasse_bn, krankenkasse_pf)
 
     vertrag = payload.get("vertrag") or {}
     if not isinstance(vertrag, dict):
