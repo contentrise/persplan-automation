@@ -1697,10 +1697,29 @@ def _select_autocomplete_by_bn(
         return False
     if not bn:
         if fallback_text:
-            print(f"[WARNUNG] {field_label}: BN fehlt, versuche Fallback-Text → {fallback_text}")
-        else:
-            print(f"[WARNUNG] {field_label}: BN fehlt und kein Fallback-Text – übersprungen.")
+            print(f"[WARNUNG] {field_label}: BN fehlt, versuche Textsuche → {fallback_text}")
+            try:
+                input_locator.first.click()
+            except Exception:
+                pass
+            input_locator.first.fill(fallback_text)
+            list_locator = target.locator("ul.ui-autocomplete li.ui-menu-item")
+            deadline = time.time() + 6
+            while time.time() < deadline:
+                item = list_locator.filter(has_text=fallback_text).first
+                if item.count() > 0 and item.is_visible():
+                    try:
+                        item.click()
+                        print(f"[OK] {field_label}: Autocomplete Treffer → {fallback_text}")
+                        return True
+                    except Exception:
+                        break
+                time.sleep(0.2)
+            _set_input_value(input_locator, fallback_text)
+            print(f"[WARNUNG] {field_label}: Kein Autocomplete Treffer – Fallback gesetzt → {fallback_text}")
             return False
+        print(f"[WARNUNG] {field_label}: BN fehlt und kein Fallback-Text – übersprungen.")
+        return False
     try:
         input_locator.first.click()
     except Exception:
