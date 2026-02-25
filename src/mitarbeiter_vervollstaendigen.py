@@ -625,7 +625,10 @@ def _open_vertragsdaten(page: Page) -> bool:
                     page.locator("#loaderContainer").first.wait_for(state="hidden", timeout=3000)
                 except Exception:
                     pass
-                link.click()
+                try:
+                    link.click(force=True)
+                except Exception:
+                    link.evaluate("el => el.click()")
                 print("[OK] Submenü 'Vertragsdaten' geklickt.")
                 time.sleep(0.5)
                 return True
@@ -683,7 +686,10 @@ def _open_mitarbeiterinformationen(page: Page) -> bool:
                 pass
             try:
                 _dismiss_ui_overlay(page)
-                link.click()
+                try:
+                    link.click(force=True)
+                except Exception:
+                    link.evaluate("el => el.click()")
                 print("[OK] Submenü 'Mitarbeiterinformationen' geklickt.")
                 time.sleep(0.5)
                 return True
@@ -1601,6 +1607,82 @@ def _set_input_value_force(locator, value: str) -> bool:
     return True
 
 
+def _force_autocomplete_hidden_fields(input_locator, label_text: str, bn: str) -> None:
+    if input_locator.count() == 0:
+        return
+    try:
+        input_locator.first.evaluate(
+            """(el, args) => {
+                const { label, bn } = args || {};
+                const form = el.closest('form') || document;
+                const id = (el.getAttribute('id') || '').toLowerCase();
+                const name = (el.getAttribute('name') || '').toLowerCase();
+                const scopeKey = id || name || '';
+                if (label) {
+                    el.value = label;
+                }
+                const hiddenInputs = Array.from(form.querySelectorAll('input[type="hidden"]'));
+                hiddenInputs.forEach((node) => {
+                    const key = `${node.id || ''} ${node.name || ''}`.toLowerCase();
+                    if (!key) return;
+                    const isSameField = scopeKey && key.includes(scopeKey);
+                    const isKasseField = key.includes('krankenkasse');
+                    if (!isSameField && !isKasseField) return;
+                    if (bn && (key.includes('bn') || key.includes('id') || key.includes('key'))) {
+                        node.value = bn;
+                        node.dispatchEvent(new Event('input', { bubbles: true }));
+                        node.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                });
+                el.dispatchEvent(new Event('input', { bubbles: true }));
+                el.dispatchEvent(new Event('change', { bubbles: true }));
+                el.dispatchEvent(new Event('blur', { bubbles: true }));
+            }""",
+            {"label": label_text, "bn": bn},
+        )
+    except Exception:
+        return
+
+
+def _verify_input_value(locator, expected: str, field_label: str) -> bool:
+    if locator.count() == 0:
+        return False
+    try:
+        current = locator.first.input_value().strip()
+    except Exception:
+        current = ""
+    if expected and current != expected:
+        print(f"[WARNUNG] {field_label}: Wert weicht ab (soll='{expected}', ist='{current or '—'}').")
+        return False
+    return True
+
+
+def _select_autocomplete_by_typing(
+    input_locator,
+    label_text: str,
+    field_label: str,
+) -> bool:
+    if input_locator.count() == 0 or not label_text:
+        return False
+    try:
+        input_locator.first.click()
+    except Exception:
+        pass
+    try:
+        input_locator.first.fill(label_text)
+    except Exception:
+        return False
+    time.sleep(0.2)
+    try:
+        input_locator.first.press("ArrowDown")
+        input_locator.first.press("Enter")
+    except Exception:
+        pass
+    time.sleep(0.2)
+    _set_input_value(input_locator, label_text)
+    return _verify_input_value(input_locator, label_text, field_label)
+
+
 def _set_select_value(locator, value: str) -> bool:
     if locator.count() == 0:
         return False
@@ -1923,7 +2005,10 @@ def _select_autocomplete_by_bn(
                     pass
             if label_text:
                 _set_input_value(input_locator, label_text)
+                _force_autocomplete_hidden_fields(input_locator, label_text, bn)
                 print(f"[OK] {field_label}: Autocomplete Treffer → {label_text}")
+                if not _verify_input_value(input_locator, label_text, field_label):
+                    _select_autocomplete_by_typing(input_locator, label_text, field_label)
             else:
                 print(f"[OK] {field_label}: Autocomplete Treffer → [Bn: {bn}]")
             return True
@@ -1931,6 +2016,8 @@ def _select_autocomplete_by_bn(
 
     if fallback_text:
         _set_input_value(input_locator, fallback_text)
+        _force_autocomplete_hidden_fields(input_locator, fallback_text, bn)
+        _select_autocomplete_by_typing(input_locator, fallback_text, field_label)
         print(f"[WARNUNG] {field_label}: Kein Autocomplete Treffer für BN {bn} – Fallback gesetzt → {fallback_text}")
     return False
 
@@ -2166,6 +2253,7 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
         values["krankenkasse"],
         "krankenkasse",
     )
+    _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
     if values["tatsaechliche_krankenkasse"]:
         tatsaechliche_input = panel.locator("#tatsaechliche_krankenkasse")
         _select_autocomplete_by_bn(
@@ -2175,6 +2263,7 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
             values["tatsaechliche_krankenkasse"],
             "tatsaechliche_krankenkasse",
         )
+        _verify_input_value(tatsaechliche_input, values["tatsaechliche_krankenkasse"], "tatsaechliche_krankenkasse")
     print(
         "[INFO] Lohnabrechnung Zielwerte: "
         f"personengruppe={values['personengruppe']}, "
