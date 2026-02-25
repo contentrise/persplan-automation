@@ -396,6 +396,28 @@ def _open_lohnabrechnung_and_edit(page: Page) -> bool:
             pass
         edit_icon.click(force=True)
         print("[OK] Lohnabrechnung geöffnet und Edit-Stift geklickt.")
+        try:
+            target.evaluate(
+                """() => {
+                    if (typeof makeEdited === 'function') {
+                        try { makeEdited(); } catch (e) {}
+                    }
+                    const panel = document.querySelector('#administration_user_stammdaten_tabs_lohnabrechnung');
+                    if (!panel) return;
+                    panel.querySelectorAll('input, select, textarea').forEach((el) => {
+                        el.removeAttribute('readonly');
+                        el.removeAttribute('disabled');
+                    });
+                    const save = panel.querySelector("input.speichern, input[type='submit'][value*='Daten speichern']");
+                    if (save) {
+                        save.classList.remove('hideElement');
+                        save.style.display = 'inline-block';
+                        save.removeAttribute('disabled');
+                    }
+                }"""
+            )
+        except Exception:
+            pass
         return True
     except Exception as exc:
         print(f"[WARNUNG] Lohnabrechnung/Edit fehlgeschlagen: {exc}")
@@ -1644,6 +1666,84 @@ def _force_autocomplete_hidden_fields(input_locator, label_text: str, bn: str) -
         return
 
 
+def _commit_autocomplete_value(input_locator, label_text: str, bn: str) -> None:
+    if input_locator.count() == 0 or not label_text:
+        return
+    try:
+        input_locator.first.evaluate(
+            """(el, args) => {
+                const { label, bn } = args || {};
+                if (!label) return;
+                el.value = label;
+                el.setAttribute('value', label);
+                el.setAttribute('data-value', label);
+                const events = ['input', 'change', 'blur', 'focusout', 'keyup', 'keydown'];
+                events.forEach((name) => el.dispatchEvent(new Event(name, { bubbles: true })));
+                try {
+                    if (window.jQuery && typeof window.jQuery === 'function') {
+                        const $el = window.jQuery(el);
+                        if ($el.autocomplete) {
+                            try { $el.autocomplete('search', label); } catch (e) {}
+                            const data = $el.data('ui-autocomplete') || $el.data('autocomplete');
+                            if (data && typeof data._trigger === 'function') {
+                                data._trigger('select', null, { item: { label, value: label } });
+                            }
+                        }
+                    }
+                } catch (e) {}
+                // As last resort, update nearby hidden inputs (bn/id).
+                const form = el.closest('form') || document;
+                const hiddenInputs = Array.from(form.querySelectorAll('input[type="hidden"]'));
+                hiddenInputs.forEach((node) => {
+                    const key = `${node.id || ''} ${node.name || ''}`.toLowerCase();
+                    if (!key) return;
+                    const isKasse = key.includes('krankenkasse');
+                    const wantsBn = key.includes('bn') || key.includes('id') || key.includes('key');
+                    if (bn && wantsBn) {
+                        node.value = bn;
+                    } else if (isKasse) {
+                        node.value = label;
+                    } else {
+                        return;
+                    }
+                    node.dispatchEvent(new Event('input', { bubbles: true }));
+                    node.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+            }""",
+            {"label": label_text, "bn": bn},
+        )
+    except Exception:
+        return
+
+
+def _debug_krankenkasse_state(target: Union[Frame, Page], input_locator, field_label: str) -> None:
+    if input_locator.count() == 0:
+        print(f"[DEBUG] {field_label}: locator nicht gefunden.")
+        return
+    try:
+        info = input_locator.first.evaluate(
+            """(el) => {
+                const form = el.closest('form') || document;
+                const value = el.value || '';
+                const hidden = Array.from(form.querySelectorAll('input[type="hidden"]'))
+                    .filter((node) => {
+                        const key = `${node.id || ''} ${node.name || ''}`.toLowerCase();
+                        return key.includes('krankenkasse');
+                    })
+                    .map((node) => ({
+                        id: node.id || '',
+                        name: node.name || '',
+                        value: node.value || ''
+                    }));
+                return { value, hidden };
+            }"""
+        )
+        hidden = info.get("hidden") if isinstance(info, dict) else []
+        print(f"[DEBUG] {field_label}: value='{info.get('value') if isinstance(info, dict) else ''}' hidden={hidden}")
+    except Exception as exc:
+        print(f"[DEBUG] {field_label}: Status-Check fehlgeschlagen: {exc}")
+
+
 def _verify_input_value(locator, expected: str, field_label: str) -> bool:
     if locator.count() == 0:
         return False
@@ -1680,6 +1780,7 @@ def _select_autocomplete_by_typing(
         pass
     time.sleep(0.2)
     _set_input_value(input_locator, label_text)
+    _commit_autocomplete_value(input_locator, label_text, _extract_bn(label_text))
     return _verify_input_value(input_locator, label_text, field_label)
 
 
@@ -1964,17 +2065,33 @@ def _select_autocomplete_by_bn(
             except Exception:
                 pass
             input_locator.first.fill(fallback_text)
-            list_locator = target.locator("ul.ui-autocomplete li.ui-menu-item")
+            list_locators: list[Locator] = []
+            try:
+                list_locators.append(target.locator("ul.ui-autocomplete li.ui-menu-item"))
+            except Exception:
+                pass
+            if isinstance(target, Frame):
+                try:
+                    list_locators.append(target.page.locator("ul.ui-autocomplete li.ui-menu-item"))
+                except Exception:
+                    pass
+            else:
+                try:
+                    for frame in target.frames:
+                        list_locators.append(frame.locator("ul.ui-autocomplete li.ui-menu-item"))
+                except Exception:
+                    pass
             deadline = time.time() + 6
             while time.time() < deadline:
-                item = list_locator.filter(has_text=fallback_text).first
-                if item.count() > 0 and item.is_visible():
-                    try:
-                        item.click()
-                        print(f"[OK] {field_label}: Autocomplete Treffer → {fallback_text}")
-                        return True
-                    except Exception:
-                        break
+                for list_locator in list_locators:
+                    item = list_locator.filter(has_text=fallback_text).first
+                    if item.count() > 0 and item.is_visible():
+                        try:
+                            item.click()
+                            print(f"[OK] {field_label}: Autocomplete Treffer → {fallback_text}")
+                            return True
+                        except Exception:
+                            break
                 time.sleep(0.2)
             _set_input_value(input_locator, fallback_text)
             print(f"[WARNUNG] {field_label}: Kein Autocomplete Treffer – Fallback gesetzt → {fallback_text}")
@@ -1987,11 +2104,28 @@ def _select_autocomplete_by_bn(
         pass
     input_locator.first.fill(bn)
 
-    list_locator = target.locator("ul.ui-autocomplete li.ui-menu-item")
+    list_locators: list[Locator] = []
+    try:
+        list_locators.append(target.locator("ul.ui-autocomplete li.ui-menu-item"))
+    except Exception:
+        pass
+    if isinstance(target, Frame):
+        try:
+            list_locators.append(target.page.locator("ul.ui-autocomplete li.ui-menu-item"))
+        except Exception:
+            pass
+    else:
+        try:
+            for frame in target.frames:
+                list_locators.append(frame.locator("ul.ui-autocomplete li.ui-menu-item"))
+        except Exception:
+            pass
     deadline = time.time() + 6
     while time.time() < deadline:
-        item = list_locator.filter(has_text=f"[Bn: {bn}]").first
-        if item.count() > 0 and item.is_visible():
+        for list_locator in list_locators:
+            item = list_locator.filter(has_text=f"[Bn: {bn}]").first
+            if item.count() == 0 or not item.is_visible():
+                continue
             try:
                 label_text = item.inner_text().strip()
             except Exception:
@@ -2006,6 +2140,7 @@ def _select_autocomplete_by_bn(
             if label_text:
                 _set_input_value(input_locator, label_text)
                 _force_autocomplete_hidden_fields(input_locator, label_text, bn)
+                _commit_autocomplete_value(input_locator, label_text, bn)
                 print(f"[OK] {field_label}: Autocomplete Treffer → {label_text}")
                 if not _verify_input_value(input_locator, label_text, field_label):
                     _select_autocomplete_by_typing(input_locator, label_text, field_label)
@@ -2017,6 +2152,7 @@ def _select_autocomplete_by_bn(
     if fallback_text:
         _set_input_value(input_locator, fallback_text)
         _force_autocomplete_hidden_fields(input_locator, fallback_text, bn)
+        _commit_autocomplete_value(input_locator, fallback_text, bn)
         _select_autocomplete_by_typing(input_locator, fallback_text, field_label)
         print(f"[WARNUNG] {field_label}: Kein Autocomplete Treffer für BN {bn} – Fallback gesetzt → {fallback_text}")
     return False
@@ -2232,6 +2368,28 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
         panel.wait_for(state="visible", timeout=8000)
     except Exception:
         pass
+    try:
+        target.evaluate(
+            """() => {
+                if (typeof makeEdited === 'function') {
+                    try { makeEdited(); } catch (e) {}
+                }
+                const panel = document.querySelector('#administration_user_stammdaten_tabs_lohnabrechnung');
+                if (!panel) return;
+                panel.querySelectorAll('input, select, textarea').forEach((el) => {
+                    el.removeAttribute('readonly');
+                    el.removeAttribute('disabled');
+                });
+                const save = panel.querySelector("input.speichern, input[type='submit'][value*='Daten speichern']");
+                if (save) {
+                    save.classList.remove('hideElement');
+                    save.style.display = 'inline-block';
+                    save.removeAttribute('disabled');
+                }
+            }"""
+        )
+    except Exception:
+        pass
 
     schulabschluss_raw = _pick_payload_value(payload, ["schulabschluss"])
     if schulabschluss_raw:
@@ -2254,6 +2412,8 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
         "krankenkasse",
     )
     _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
+    _commit_autocomplete_value(krankenkasse_input, values["krankenkasse"], values["krankenkasse_bn"])
+    _debug_krankenkasse_state(target, krankenkasse_input, "krankenkasse")
     if values["tatsaechliche_krankenkasse"]:
         tatsaechliche_input = panel.locator("#tatsaechliche_krankenkasse")
         _select_autocomplete_by_bn(
@@ -2264,6 +2424,12 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
             "tatsaechliche_krankenkasse",
         )
         _verify_input_value(tatsaechliche_input, values["tatsaechliche_krankenkasse"], "tatsaechliche_krankenkasse")
+        _commit_autocomplete_value(
+            tatsaechliche_input,
+            values["tatsaechliche_krankenkasse"],
+            values["tatsaechliche_bn"],
+        )
+        _debug_krankenkasse_state(target, tatsaechliche_input, "tatsaechliche_krankenkasse")
     print(
         "[INFO] Lohnabrechnung Zielwerte: "
         f"personengruppe={values['personengruppe']}, "
@@ -2283,6 +2449,12 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
     try:
         target.evaluate(
             "typeof taetigkeitsschluessel_generieren === 'function' && taetigkeitsschluessel_generieren()"
+        )
+    except Exception:
+        pass
+    try:
+        target.evaluate(
+            "typeof beitragsgruppenschluessel_generieren === 'function' && beitragsgruppenschluessel_generieren()"
         )
     except Exception:
         pass
