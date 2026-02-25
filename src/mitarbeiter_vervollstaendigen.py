@@ -520,7 +520,11 @@ def _open_stammdaten_tab(
             try:
                 before_url = candidate.url if hasattr(candidate, "url") else ""
                 before_user_id = _get_user_id_from_url(before_url)
-                candidate_tab.click()
+                try:
+                    candidate_tab.evaluate("el => el.click()")
+                except Exception:
+                    pass
+                candidate_tab.click(force=True, timeout=3000)
                 after_url = candidate.url if hasattr(candidate, "url") else ""
                 after_user_id = _get_user_id_from_url(after_url)
                 if before_user_id and after_user_id and before_user_id != after_user_id:
