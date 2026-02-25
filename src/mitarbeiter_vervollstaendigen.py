@@ -797,6 +797,21 @@ def _enter_sedcard_edit_mode(page: Page) -> bool:
             _log_locator_state(edit_icon, "sedcard edit icon (fehler)")
             return False
 
+    try:
+        target.evaluate(
+            """() => {
+                if (typeof makeEdited === 'function') {
+                    try { makeEdited(); } catch (e) {}
+                }
+                document.querySelectorAll('input, select, textarea').forEach((el) => {
+                    el.removeAttribute('readonly');
+                    el.removeAttribute('disabled');
+                });
+            }"""
+        )
+    except Exception:
+        pass
+
     probe = target.locator("#groesse, [name='groesse']").first
     deadline = time.time() + 5
     while time.time() < deadline:
@@ -850,7 +865,7 @@ def _fill_sedcard_fields(page: Page, payload: dict) -> None:
         if not value:
             continue
         locator = target.locator(f"[name='{field}'], #{field}")
-        if _set_input_value(locator, value):
+        if _set_input_value_force(locator, value):
             print(f"[OK] sedcard {field} → {value}")
         else:
             print(f"[WARNUNG] sedcard {field} nicht gesetzt.")
@@ -875,7 +890,11 @@ def _fill_sedcard_fields(page: Page, payload: dict) -> None:
         else:
             print("[WARNUNG] sedcard pkw nicht gesetzt.")
 
-    save_button = target.locator("button:has-text('Daten speichern')").first
+    save_button = target.locator(
+        "button:has-text('Daten speichern'), "
+        "input[type='submit'][value*='Daten speichern'], "
+        "input.speichern, button:has-text('Speichern')"
+    ).first
     if save_button.count() > 0:
         try:
             save_button.scroll_into_view_if_needed()
@@ -1675,6 +1694,24 @@ def _set_input_value_force(locator, value: str) -> bool:
     return True
 
 
+def _type_text(locator, text: str, delay_ms: int = 20) -> bool:
+    if locator.count() == 0:
+        return False
+    try:
+        locator.first.click()
+    except Exception:
+        pass
+    try:
+        locator.first.fill("")
+    except Exception:
+        pass
+    try:
+        locator.first.type(text, delay=delay_ms)
+        return True
+    except Exception:
+        return False
+
+
 def _log_locator_state(locator, label: str) -> None:
     if locator.count() == 0:
         print(f"[DEBUG] {label}: locator=0")
@@ -1737,12 +1774,12 @@ def _force_autocomplete_hidden_fields(input_locator, label_text: str, bn: str) -
                 if (label) {
                     el.value = label;
                 }
+                if (label) {
+                    el.setAttribute('data-value', label);
+                }
                 if (bn) {
-                    el.setAttribute('data-value', bn);
                     el.setAttribute('data-id', bn);
                     el.setAttribute('data-bn', bn);
-                } else if (label) {
-                    el.setAttribute('data-value', label);
                 }
                 const pools = [
                     form.querySelectorAll('input[type="hidden"]'),
@@ -1788,12 +1825,10 @@ def _commit_autocomplete_value(input_locator, label_text: str, bn: str) -> None:
                 if (!label) return;
                 el.value = label;
                 el.setAttribute('value', label);
+                el.setAttribute('data-value', label);
                 if (bn) {
-                    el.setAttribute('data-value', bn);
                     el.setAttribute('data-id', bn);
                     el.setAttribute('data-bn', bn);
-                } else {
-                    el.setAttribute('data-value', label);
                 }
                 const events = ['input', 'change', 'blur', 'focusout', 'keyup', 'keydown'];
                 events.forEach((name) => el.dispatchEvent(new Event(name, { bubbles: true })));
@@ -1804,13 +1839,13 @@ def _commit_autocomplete_value(input_locator, label_text: str, bn: str) -> None:
                             try { $el.autocomplete('search', label); } catch (e) {}
                             const data = $el.data('ui-autocomplete') || $el.data('autocomplete');
                             if (data && typeof data._trigger === 'function') {
-                                const item = { label, value: bn || label, id: bn || label, bn: bn || '' };
+                                const item = { label, value: label, id: bn || label, bn: bn || '' };
                                 data._trigger('select', null, { item });
                                 data._trigger('change', null, { item });
                             }
                         }
-                        try { $el.trigger('autocompleteselect', { item: { label, value: bn || label } }); } catch (e) {}
-                        try { $el.trigger('autocompletechange', { item: { label, value: bn || label } }); } catch (e) {}
+                        try { $el.trigger('autocompleteselect', { item: { label, value: label } }); } catch (e) {}
+                        try { $el.trigger('autocompletechange', { item: { label, value: label } }); } catch (e) {}
                     }
                 } catch (e) {}
                 // As last resort, update nearby hidden inputs, but only for the same field.
@@ -1912,13 +1947,7 @@ def _select_autocomplete_by_typing(
 ) -> bool:
     if input_locator.count() == 0 or not label_text:
         return False
-    try:
-        input_locator.first.click()
-    except Exception:
-        pass
-    try:
-        input_locator.first.fill(label_text)
-    except Exception:
+    if not _type_text(input_locator, label_text):
         return False
     time.sleep(0.2)
     try:
@@ -2050,13 +2079,13 @@ def _fill_language_fields(target: Union[Frame, Page], entries: list[dict]) -> No
         level = entry.get("level", "")
         if language:
             loc = target.locator(f"[name='{lang_field}'], #{lang_field}")
-            if _set_input_value(loc, language):
+            if _set_input_value_force(loc, language):
                 print(f"[OK] sedcard {lang_field} → {language}")
             else:
                 print(f"[WARNUNG] sedcard {lang_field} nicht gesetzt.")
         if level:
             loc = target.locator(f"[name='{level_field}'], #{level_field}")
-            if _set_input_value(loc, level):
+            if _set_input_value_force(loc, level):
                 print(f"[OK] sedcard {level_field} → {level}")
             else:
                 print(f"[WARNUNG] sedcard {level_field} nicht gesetzt.")
@@ -2064,7 +2093,7 @@ def _fill_language_fields(target: Union[Frame, Page], entries: list[dict]) -> No
         extras = ", ".join([e.get("language", "") for e in entries[len(pairs):] if e.get("language")])
         if extras:
             loc = target.locator("[name='sprache04'], #sprache04")
-            if _set_input_value(loc, extras):
+            if _set_input_value_force(loc, extras):
                 print(f"[OK] sedcard sprache04 → {extras}")
             else:
                 print("[WARNUNG] sedcard sprache04 nicht gesetzt.")
@@ -2294,24 +2323,18 @@ def _select_autocomplete_by_bn(
             time.sleep(0.2)
         return ""
 
-    try:
-        input_locator.first.click()
-    except Exception:
-        pass
-    input_locator.first.fill(bn)
-
-    list_locators = _collect_lists()
-    _debug_autocomplete_lists(list_locators, f"{field_label}")
-    label_text = _try_select_from_lists(list_locators, bn, fallback_text)
-
-    # If no list items appeared for BN, retry with label text (autocomplete often expects name, not BN).
-    if not label_text and fallback_text:
-        try:
-            input_locator.first.fill(fallback_text)
-        except Exception:
-            pass
+    # Try label first (most autocompletes search by name), then BN as fallback.
+    label_text = ""
+    if fallback_text:
+        _type_text(input_locator, fallback_text)
         list_locators = _collect_lists()
-        _debug_autocomplete_lists(list_locators, f"{field_label} (label retry)")
+        _debug_autocomplete_lists(list_locators, f"{field_label} (label search)")
+        label_text = _try_select_from_lists(list_locators, bn, fallback_text)
+
+    if not label_text:
+        _type_text(input_locator, bn)
+        list_locators = _collect_lists()
+        _debug_autocomplete_lists(list_locators, f"{field_label} (bn search)")
         label_text = _try_select_from_lists(list_locators, bn, fallback_text)
 
     if label_text:
@@ -2482,7 +2505,9 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
     variant = str(payload.get("form_variant", "")).strip().lower()
     if variant == "geringfuegig":
         variant = "gb"
-    krankenkasse_pf = str(payload.get("krankenkasse", "") or "").strip()
+    krankenkasse_value = str(payload.get("krankenkasse_value", "") or "").strip()
+    krankenkasse_label = str(payload.get("krankenkasse_label", "") or "").strip()
+    krankenkasse_pf = krankenkasse_value or str(payload.get("krankenkasse", "") or "").strip()
     krankenkasse_pf = _resolve_kasse_label(krankenkasse_pf)
     krankenkasse_bn = (
         str(payload.get("krankenkasse_bn") or payload.get("krankenkasse_bn_nummer") or payload.get("krankenkasse_bn_nr") or "")
@@ -2495,6 +2520,11 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
         if krankenkasse_bn:
             print(f"[INFO] krankenkasse: BN via Name-Mapping → {krankenkasse_bn}")
             krankenkasse_pf = _KRANKENKASSE_LABEL_BY_BN.get(krankenkasse_bn, krankenkasse_pf)
+    if krankenkasse_pf and krankenkasse_pf not in _KRANKENKASSE_LABEL_BY_BN.values():
+        if krankenkasse_label:
+            print(f"[INFO] krankenkasse: Fallback Label vorhanden → {krankenkasse_label}")
+        else:
+            print(f"[WARNUNG] krankenkasse: Kein exakter Treffer in Options → {krankenkasse_pf}")
 
     vertrag = payload.get("vertrag") or {}
     if not isinstance(vertrag, dict):
