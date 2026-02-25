@@ -2256,6 +2256,12 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
                     el.removeAttribute('readonly');
                     el.removeAttribute('disabled');
                 });
+                panel.querySelectorAll('.editWorker').forEach((el) => {
+                    el.classList.remove('hideElement');
+                    el.classList.add('showElement');
+                    el.style.display = 'inline-block';
+                    el.removeAttribute('disabled');
+                });
                 const save = panel.querySelector("input.speichern, input[type='submit'][value*='Daten speichern']");
                 if (save) {
                     save.classList.remove('hideElement');
@@ -2313,7 +2319,27 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
             save_button.click()
             print("[OK] Notfallkontakt gespeichert.")
         except Exception as exc:
-            print(f"[WARNUNG] Notfallkontakt speichern fehlgeschlagen: {exc}")
+            try:
+                target.evaluate(
+                    """(panelId) => {
+                        const panel = document.getElementById(panelId);
+                        const btn = panel?.querySelector("input[type='submit'][value*='Daten speichern'], input.speichern");
+                        if (!btn) return false;
+                        btn.classList.remove('hideElement');
+                        btn.style.display = 'inline-block';
+                        btn.removeAttribute('disabled');
+                        try { btn.click(); } catch (e) {}
+                        const form = panel.closest('form');
+                        if (form) {
+                            try { form.requestSubmit ? form.requestSubmit(btn) : form.submit(); } catch (e) {}
+                        }
+                        return true;
+                    }""",
+                    panel_id,
+                )
+                print("[OK] Notfallkontakt gespeichert (JS-Fallback).")
+            except Exception:
+                print(f"[WARNUNG] Notfallkontakt speichern fehlgeschlagen: {exc}")
     else:
         print("[WARNUNG] Notfallkontakt Speichern-Button nicht gefunden.")
 
