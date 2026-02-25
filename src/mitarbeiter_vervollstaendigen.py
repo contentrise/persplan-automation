@@ -27,6 +27,154 @@ def _extract_bn(value: str) -> str:
     return ""
 
 
+def _normalize_kasse_name(value: str) -> str:
+    text = str(value or "").strip().lower()
+    if not text:
+        return ""
+    text = (
+        text.replace("ä", "ae")
+        .replace("ö", "oe")
+        .replace("ü", "ue")
+        .replace("ß", "ss")
+        .replace("&", "und")
+    )
+    text = re.sub(r"\s+", " ", text)
+    text = re.sub(r"[^a-z0-9 ]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+_KRANKENKASSE_OPTIONS = [
+    "SVLFG, Landwirtschaftliche Krankenkasse Geschäftsstelle Kiel [Bn: 13199426]",
+    "IKK - Die Innovationskasse Rechtskreis West und Ost [Bn: 14228571]",
+    "Techniker Krankenkasse -Rechtskreis West und Ost- [Bn: 15027365]",
+    "HEK Hanseatische Krankenkasse [Bn: 15031806]",
+    "Mobil Krankenkasse [Bn: 15517302]",
+    "SECURVITA BKK [Bn: 15517482]",
+    "pronova BKK [Bn: 15872672]",
+    "AOK Bremen/Bremerhaven [Bn: 20012084]",
+    "hkk Handelskrankenkasse [Bn: 20013461]",
+    "BKK Salzgitter [Bn: 21203214]",
+    "KKH Kaufmännische Krankenkasse [Bn: 29137937]",
+    "SVLFG, Landwirtschaftliche Krankenkasse Geschäftsstelle Hannover [Bn: 29147110]",
+    "energie-BKK Hauptverwaltung [Bn: 29717581]",
+    "AOK Niedersachsen. Die Gesundheitskasse. [Bn: 29720865]",
+    "Heimat Krankenkasse [Bn: 31209131]",
+    "Bertelsmann BKK [Bn: 31323584]",
+    "BKK Diakonie [Bn: 31323686]",
+    "BKK DürkoppAdler [Bn: 31323799]",
+    "AOK NordWest [Bn: 33526082]",
+    "Continentale Betriebskrankenkasse [Bn: 33865367]",
+    "Augenoptiker Ausgleichskasse VVaG [Bn: 33868451]",
+    "AOK Rheinland/Hamburg Die Gesundheitskasse [Bn: 34364249]",
+    "BKK Deutsche Bank AG [Bn: 34401277]",
+    "NOVITAS Betriebskrankenkasse [Bn: 35134022]",
+    "bkk melitta hmr [Bn: 36916935]",
+    "SVLFG, Landwirtschaftliche Krankenkasse Geschäftsstelle Münster [Bn: 39873587]",
+    "VIACTIV Krankenkasse [Bn: 40180080]",
+    "BERGISCHE KRANKENKASSE [Bn: 42039708]",
+    "BARMER (vormals BARMER GEK) [Bn: 42938966]",
+    "BKK Werra-Meissner [Bn: 44037562]",
+    "Salus BKK [Bn: 44953697]",
+    "AOK Hessen Direktion [Bn: 45118687]",
+    "EY Betriebskrankenkasse [Bn: 46939789]",
+    "BKK Wirtschaft & Finanzen [Bn: 46967693]",
+    "BKK Herkules vorher BKK Wegmann bis 31.12.2000 [Bn: 47034953]",
+    "BKK B. Braun Aesculap [Bn: 47034975]",
+    "SVLFG, Landwirtschaftliche Krankenkasse Geschäftsstelle Darmstadt [Bn: 47068420]",
+    "SVLFG, Landwirtschaftliche Krankenkasse Geschäftsstelle Kassel [Bn: 47069693]",
+    "Betriebskrankenkasse PricewaterhouseCoopers [Bn: 47307817]",
+    "KARL MAYER Betriebskrankenkasse [Bn: 48063096]",
+    "DAK-Gesundheit [Bn: 48698890]",
+    "R+V Betriebskrankenkasse [Bn: 48944809]",
+    "BAHN-BKK [Bn: 49003443]",
+    "BKK PFAFF [Bn: 51588416]",
+    "AOK Rheinland-Pfalz/Saarland [Bn: 51605725]",
+    "Betriebskrankenkasse der Energieversorgung Mittelrhein [Bn: 51980490]",
+    "Debeka BKK [Bn: 52156763]",
+    "BKK Pfalz [Bn: 52598579]",
+    "Betriebskrankenkasse Groz-Beckert [Bn: 60393261]",
+    "mhplus Betriebskrankenkasse West [Bn: 63494759]",
+    "vivida bkk [Bn: 66458477]",
+    "BKK Schwarzwald-Baar-Heuberg [Bn: 66614249]",
+    "BKK Rieker.RICOSTA.Weisser [Bn: 66626976]",
+    "AOK Baden-Württemberg Hauptverwaltung [Bn: 67450665]",
+    "MAHLE BKK [Bn: 67572537]",
+    "SVLFG, Landwirtschaftliche Krankenkasse Geschäftsstelle Stuttgart [Bn: 67574619]",
+    "BKK Akzo Nobel Bayern [Bn: 71579930]",
+    "SVLFG, Landwirtschaftliche Krankenkasse Geschäftsstelle Bayreuth [Bn: 72360029]",
+    "Koenig & Bauer BKK [Bn: 75925585]",
+    "Audi BKK [Bn: 82889062]",
+    "BKK Faber-Castell & Partner [Bn: 86772584]",
+    "SVLFG, Landwirtschaftliche Krankenkasse Geschäftsstelle Landshut [Bn: 87119868]",
+    "BMW BKK Zentrale [Bn: 87271125]",
+    "AOK Bayern Die Gesundheitskasse [Bn: 87880235]",
+    "BKK ProVita [Bn: 88571250]",
+    "AOK Nordost - Die Gesundheitskasse [Bn: 90235319]",
+    "BKK mkk - meine krankenkasse [Bn: 92644250]",
+    "Knappschaft Hauptverwaltung [Bn: 98000006]",
+    "Knappschaft Hauptverwaltung [Bn: 98094032]",
+    "AOK PLUS Die Gesundheitskasse [Bn: 05174740]",
+    "AOK Sachsen-Anhalt [Bn: 01029141]",
+    "IKK Brandenburg und Berlin [Bn: 01020803]",
+    "IKK classic -Rechtskreis Ost und West- [Bn: 01049203]",
+    "IKK gesund plus (Ost) Hauptverwaltung [Bn: 01000455]",
+    "SVLFG, Landwirtschaftliche Krankenkasse Geschäftsstelle Kassel (ehemals Gartenbau) [Bn: 01000650]",
+    "SVLFG, Landwirtschaftliche Krankenkasse Geschäftsstelle Hoppegarten [Bn: 01000308]",
+    "Allianz Private Krankenversicherung [Bn: PRIVAT_1]",
+    "Alte Oldenburger Krankenversicherung [Bn: PRIVAT_2]",
+    "ARAG Krankenversicherung [Bn: PRIVAT_3]",
+    "AXA Krankenkversicherung [Bn: PRIVAT_4]",
+    "Barmenia Krankenversicherung [Bn: PRIVAT_5]",
+    "Versicherungskammer Bayern [Bn: PRIVAT_6]",
+    "Concordia Krankenversicherung [Bn: PRIVAT_7]",
+    "Continentale Krankenversicherung [Bn: PRIVAT_8]",
+    "DBV Deutsche Beamtenversicherung [Bn: PRIVAT_9]",
+    "Debeka Krankenversicherungsverein [Bn: PRIVAT_10]",
+    "Deutscher Ring Krankenversicherungsverein [Bn: PRIVAT_11]",
+    "DEVK Krankenversicherung [Bn: PRIVAT_12]",
+    "die Bayerische [Bn: PRIVAT_13]",
+    "DKV - Deutsche Krankenversicherung [Bn: PRIVAT_14]",
+    "Envivas Krankenversicherung [Bn: PRIVAT_15]",
+    "ERGO Krankenversicherung [Bn: PRIVAT_16]",
+    "Generali Krankenversicherung [Bn: PRIVAT_17]",
+    "Gothaer Krankenversicherung [Bn: PRIVAT_18]",
+    "HALLESCHE Krankenversicherung [Bn: PRIVAT_19]",
+    "HanseMerkur Krankenversicherung [Bn: PRIVAT_20]",
+    "HUK-Coburg Krankenversicherung [Bn: PRIVAT_21]",
+    "Inter Krankenversicherung [Bn: PRIVAT_22]",
+    "LKH Landeskrankenhilfe [Bn: PRIVAT_23]",
+    "LVM Krankenversicherung [Bn: PRIVAT_24]",
+    "Mecklenburgische Krankenversicherung [Bn: PRIVAT_25]",
+    "Münchener Verein Krankenversicherung [Bn: PRIVAT_26]",
+    "Nürnberger Krankenversicherung [Bn: PRIVAT_27]",
+    "ottonova Krankenversicherung [Bn: PRIVAT_28]",
+    "VGH Krankenversicherung [Bn: PRIVAT_29]",
+    "R+V Krankenversicherung [Bn: PRIVAT_30]",
+    "Signal Iduna Krankenversicherung [Bn: PRIVAT_31]",
+    "Süddeutsche Krankenversicherung [Bn: PRIVAT_32]",
+    "UKV Union Krankenversicherung [Bn: PRIVAT_33]",
+    "Universa Krankenversicherung [Bn: PRIVAT_34]",
+    "vigo Krankenversicherung [Bn: PRIVAT_35]",
+    "VRK Krankenversicherung AG [Bn: PRIVAT_36]",
+    "Württembergische Krankenversicherung [Bn: PRIVAT_37]",
+]
+
+_KRANKENKASSE_BN_MAP = {}
+for _entry in _KRANKENKASSE_OPTIONS:
+    _bn = _extract_bn(_entry)
+    _name = _entry.split("[Bn:", 1)[0].strip()
+    _norm = _normalize_kasse_name(_name)
+    if _norm and _bn:
+        _KRANKENKASSE_BN_MAP[_norm] = _bn
+
+
+def _resolve_bn_from_name(value: str) -> str:
+    normalized = _normalize_kasse_name(value)
+    if not normalized:
+        return ""
+    return _KRANKENKASSE_BN_MAP.get(normalized, "")
+
+
 def _wait_for_inhalt_frame(page: Page, timeout_seconds: int = 5) -> Frame | None:
     deadline = time.time() + timeout_seconds
     while time.time() < deadline:
@@ -1871,6 +2019,10 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
     )
     if not krankenkasse_bn:
         krankenkasse_bn = _extract_bn(krankenkasse_pf)
+    if not krankenkasse_bn and krankenkasse_pf:
+        krankenkasse_bn = _resolve_bn_from_name(krankenkasse_pf)
+        if krankenkasse_bn:
+            print(f"[INFO] krankenkasse: BN via Name-Mapping → {krankenkasse_bn}")
 
     vertrag = payload.get("vertrag") or {}
     if not isinstance(vertrag, dict):
