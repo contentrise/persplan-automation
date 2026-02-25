@@ -2568,11 +2568,14 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
 
     krankenkasse_input = _prefer_editable_input(panel, "#krankenkasse, [name='krankenkasse']")
     try:
+        sel_all = "#krankenkasse, [name='krankenkasse']"
+        sel_write = "#krankenkasse.writeInput, [name='krankenkasse'].writeInput"
+        sel_editable = "#krankenkasse:not([readonly]):not([disabled]), [name='krankenkasse']:not([readonly]):not([disabled])"
         print(
             "[DEBUG] krankenkasse locator counts: "
-            f"all={panel.locator('#krankenkasse, [name=\"krankenkasse\"]').count()} "
-            f"write={panel.locator('#krankenkasse.writeInput, [name=\"krankenkasse\"].writeInput').count()} "
-            f"editable={panel.locator('#krankenkasse:not([readonly]):not([disabled]), [name=\"krankenkasse\"]:not([readonly]):not([disabled])').count()}"
+            f"all={panel.locator(sel_all).count()} "
+            f"write={panel.locator(sel_write).count()} "
+            f"editable={panel.locator(sel_editable).count()}"
         )
     except Exception:
         pass
@@ -2591,11 +2594,17 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
             panel, "#tatsaechliche_krankenkasse, [name='tatsaechliche_krankenkasse']"
         )
         try:
+            sel_all = "#tatsaechliche_krankenkasse, [name='tatsaechliche_krankenkasse']"
+            sel_write = "#tatsaechliche_krankenkasse.writeInput, [name='tatsaechliche_krankenkasse'].writeInput"
+            sel_editable = (
+                "#tatsaechliche_krankenkasse:not([readonly]):not([disabled]), "
+                "[name='tatsaechliche_krankenkasse']:not([readonly]):not([disabled])"
+            )
             print(
                 "[DEBUG] tatsaechliche_krankenkasse locator counts: "
-                f"all={panel.locator('#tatsaechliche_krankenkasse, [name=\"tatsaechliche_krankenkasse\"]').count()} "
-                f"write={panel.locator('#tatsaechliche_krankenkasse.writeInput, [name=\"tatsaechliche_krankenkasse\"].writeInput').count()} "
-                f"editable={panel.locator('#tatsaechliche_krankenkasse:not([readonly]):not([disabled]), [name=\"tatsaechliche_krankenkasse\"]:not([readonly]):not([disabled])').count()}"
+                f"all={panel.locator(sel_all).count()} "
+                f"write={panel.locator(sel_write).count()} "
+                f"editable={panel.locator(sel_editable).count()}"
             )
         except Exception:
             pass
