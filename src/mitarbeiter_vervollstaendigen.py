@@ -320,7 +320,8 @@ def _open_stammdaten_tab(
                 continue
         try:
             clicked = candidate.evaluate(
-                """(label, panelId) => {
+                """(args) => {
+                    const { label, panelId } = args || {};
                     const selectors = [
                         'ul.ui-tabs-nav a',
                         '.ui-tabs-nav a',
@@ -332,15 +333,14 @@ def _open_stammdaten_tab(
                     const match = anchors.find((a) => {
                         const text = (a.textContent || '').trim();
                         const href = a.getAttribute('href') || '';
-                        return text.includes(label) || href.includes(`#${panelId}`);
+                        return (label && text.includes(label)) || (panelId && href.includes(`#${panelId}`));
                     });
                     if (!match) return false;
                     match.scrollIntoView({ block: 'center' });
                     match.click();
                     return true;
                 }""",
-                label,
-                panel_id,
+                {"label": label, "panelId": panel_id},
             )
             return bool(clicked)
         except Exception as exc:
@@ -1557,7 +1557,14 @@ def _fill_stammdaten_fields(page: Page, payload: dict) -> None:
             edit_icon.click(force=True)
             print("[OK] Stammdaten Edit-Stift geklickt.")
         except Exception as exc:
-            print(f"[WARNUNG] Stammdaten Edit-Stift nicht klickbar: {exc}")
+            try:
+                clicked = edit_icon.evaluate("el => { el.click(); return true; }")
+                if clicked:
+                    print("[OK] Stammdaten Edit-Stift per JS geklickt.")
+                else:
+                    print(f"[WARNUNG] Stammdaten Edit-Stift nicht klickbar: {exc}")
+            except Exception as js_exc:
+                print(f"[WARNUNG] Stammdaten Edit-Stift nicht klickbar: {exc} / JS: {js_exc}")
     else:
         print("[WARNUNG] Stammdaten Edit-Stift nicht gefunden.")
 
@@ -1674,6 +1681,7 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
         return
     print("[INFO] Öffne Notfallkontakt und trage Werte ein …")
 
+    panel_id = "administration_user_stammdaten_tabs_notfallkontakt"
     target, panel = _open_stammdaten_tab(page, "notfallkontakt", "Notfallkontakt")
     if not target or not panel:
         print("[WARNUNG] Tab 'Notfallkontakt' nicht gefunden.")
@@ -1701,6 +1709,30 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
                 print(f"[WARNUNG] Notfallkontakt Edit-Stift Klick fehlgeschlagen: {exc} / JS: {js_exc}")
     else:
         print("[WARNUNG] Notfallkontakt Edit-Stift nicht gefunden.")
+
+    try:
+        target.evaluate(
+            """(panelId) => {
+                if (typeof makeEdited === 'function') {
+                    try { makeEdited(); } catch (e) {}
+                }
+                const panel = document.getElementById(panelId);
+                if (!panel) return;
+                panel.querySelectorAll('input, select, textarea').forEach((el) => {
+                    el.removeAttribute('readonly');
+                    el.removeAttribute('disabled');
+                });
+                const save = panel.querySelector("input.speichern, input[type='submit'][value*='Daten speichern']");
+                if (save) {
+                    save.classList.remove('hideElement');
+                    save.style.display = 'inline-block';
+                    save.removeAttribute('disabled');
+                }
+            }""",
+            panel_id,
+        )
+    except Exception:
+        pass
 
     if name:
         loc = panel.locator("#notfallkontakt_name, [name='notfallkontakt_name']")
