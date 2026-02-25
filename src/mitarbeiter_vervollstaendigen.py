@@ -4,7 +4,7 @@ import re
 import time
 from pathlib import Path
 from typing import Union
-from urllib.parse import urljoin
+from urllib.parse import parse_qs, urljoin, urlparse
 
 from playwright.sync_api import Frame, Locator, Page, TimeoutError, sync_playwright
 
@@ -199,6 +199,17 @@ def _wait_for_inhalt_frame(page: Page, timeout_seconds: int = 5) -> Frame | None
             return frame
         time.sleep(0.2)
     return None
+
+
+def _get_user_id_from_url(url: str) -> str:
+    if not url:
+        return ""
+    try:
+        parsed = urlparse(url)
+        qs = parse_qs(parsed.query or "")
+        return str(qs.get("user_id", [""])[0] or "")
+    except Exception:
+        return ""
 
 
 def _load_personalbogen_json() -> dict:
@@ -495,11 +506,33 @@ def _open_stammdaten_tab(
             if candidate_tab.count() == 0:
                 continue
             try:
+                _dismiss_ui_overlay(page)
+                try:
+                    page.locator("#loaderContainer").first.wait_for(state="hidden", timeout=3000)
+                except Exception:
+                    pass
+            except Exception:
+                pass
+            try:
                 candidate_tab.scroll_into_view_if_needed()
             except Exception:
                 pass
             try:
+                before_url = candidate.url if hasattr(candidate, "url") else ""
+                before_user_id = _get_user_id_from_url(before_url)
                 candidate_tab.click()
+                after_url = candidate.url if hasattr(candidate, "url") else ""
+                after_user_id = _get_user_id_from_url(after_url)
+                if before_user_id and after_user_id and before_user_id != after_user_id:
+                    print(
+                        f"[WARNUNG] {label} Tab-Klick änderte user_id ({before_user_id} -> {after_user_id}); "
+                        "stelle ursprüngliche URL wieder her."
+                    )
+                    try:
+                        candidate.goto(before_url, wait_until="domcontentloaded", timeout=15000)
+                    except Exception:
+                        pass
+                    return False
                 return True
             except Exception as exc:
                 print(f"[DEBUG] {label} Tab-Klick fehlgeschlagen ({selector}): {exc}")
@@ -1691,17 +1724,22 @@ def _commit_autocomplete_value(input_locator, label_text: str, bn: str) -> None:
                         }
                     }
                 } catch (e) {}
-                // As last resort, update nearby hidden inputs (bn/id).
+                // As last resort, update nearby hidden inputs, but only for the same field.
                 const form = el.closest('form') || document;
+                const id = (el.getAttribute('id') || '').toLowerCase();
+                const name = (el.getAttribute('name') || '').toLowerCase();
+                const scopeKey = id || name || '';
                 const hiddenInputs = Array.from(form.querySelectorAll('input[type="hidden"]'));
                 hiddenInputs.forEach((node) => {
                     const key = `${node.id || ''} ${node.name || ''}`.toLowerCase();
                     if (!key) return;
-                    const isKasse = key.includes('krankenkasse');
+                    const isSameField = scopeKey && key.includes(scopeKey);
+                    const isKasseField = key.includes('krankenkasse');
+                    if (!isSameField && !isKasseField) return;
                     const wantsBn = key.includes('bn') || key.includes('id') || key.includes('key');
                     if (bn && wantsBn) {
                         node.value = bn;
-                    } else if (isKasse) {
+                    } else if (isKasseField) {
                         node.value = label;
                     } else {
                         return;
