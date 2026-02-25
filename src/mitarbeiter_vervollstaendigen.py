@@ -1680,7 +1680,18 @@ def _force_autocomplete_hidden_fields(input_locator, label_text: str, bn: str) -
                 if (label) {
                     el.value = label;
                 }
-                const hiddenInputs = Array.from(form.querySelectorAll('input[type="hidden"]'));
+                const pools = [
+                    form.querySelectorAll('input[type="hidden"]'),
+                    document.querySelectorAll('input[type="hidden"]')
+                ];
+                const hiddenInputs = Array.from(new Set(
+                    pools.flatMap((list) => Array.from(list))
+                ));
+                const setHiddenValue = (node, val) => {
+                    node.value = val;
+                    node.dispatchEvent(new Event('input', { bubbles: true }));
+                    node.dispatchEvent(new Event('change', { bubbles: true }));
+                };
                 hiddenInputs.forEach((node) => {
                     const key = `${node.id || ''} ${node.name || ''}`.toLowerCase();
                     if (!key) return;
@@ -1688,9 +1699,9 @@ def _force_autocomplete_hidden_fields(input_locator, label_text: str, bn: str) -
                     const isKasseField = key.includes('krankenkasse');
                     if (!isSameField && !isKasseField) return;
                     if (bn && (key.includes('bn') || key.includes('id') || key.includes('key'))) {
-                        node.value = bn;
-                        node.dispatchEvent(new Event('input', { bubbles: true }));
-                        node.dispatchEvent(new Event('change', { bubbles: true }));
+                        setHiddenValue(node, bn);
+                    } else if (label && isKasseField && !key.includes('bn')) {
+                        setHiddenValue(node, label);
                     }
                 });
                 el.dispatchEvent(new Event('input', { bubbles: true }));
@@ -1733,7 +1744,18 @@ def _commit_autocomplete_value(input_locator, label_text: str, bn: str) -> None:
                 const id = (el.getAttribute('id') || '').toLowerCase();
                 const name = (el.getAttribute('name') || '').toLowerCase();
                 const scopeKey = id || name || '';
-                const hiddenInputs = Array.from(form.querySelectorAll('input[type="hidden"]'));
+                const pools = [
+                    form.querySelectorAll('input[type="hidden"]'),
+                    document.querySelectorAll('input[type="hidden"]')
+                ];
+                const hiddenInputs = Array.from(new Set(
+                    pools.flatMap((list) => Array.from(list))
+                ));
+                const setHiddenValue = (node, val) => {
+                    node.value = val;
+                    node.dispatchEvent(new Event('input', { bubbles: true }));
+                    node.dispatchEvent(new Event('change', { bubbles: true }));
+                };
                 hiddenInputs.forEach((node) => {
                     const key = `${node.id || ''} ${node.name || ''}`.toLowerCase();
                     if (!key) return;
@@ -1742,14 +1764,10 @@ def _commit_autocomplete_value(input_locator, label_text: str, bn: str) -> None:
                     if (!isSameField && !isKasseField) return;
                     const wantsBn = key.includes('bn') || key.includes('id') || key.includes('key');
                     if (bn && wantsBn) {
-                        node.value = bn;
-                    } else if (isKasseField) {
-                        node.value = label;
-                    } else {
-                        return;
+                        setHiddenValue(node, bn);
+                    } else if (isKasseField && !key.includes('bn')) {
+                        setHiddenValue(node, label);
                     }
-                    node.dispatchEvent(new Event('input', { bubbles: true }));
-                    node.dispatchEvent(new Event('change', { bubbles: true }));
                 });
             }""",
             {"label": label_text, "bn": bn},
