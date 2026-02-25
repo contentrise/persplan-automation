@@ -31,7 +31,7 @@ python3 -m src.main planung-zeitraum-advanced --headless=false --slowmo=0 --days
 Schicht bestätigen / Tagesplan (alt)
 
 python3 -m src.main login --headless=false --slowmo=150
-python3 -m src.main schicht-bestaetigen --headless=true --slowmo=150
+python3 -m src.main schicht-bestaetigen --headless=false --slowmo=150
 
 Kleidungsrueckgabe (Ausgeschiedene)
 

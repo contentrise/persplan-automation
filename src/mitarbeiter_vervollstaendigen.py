@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Union
 from urllib.parse import urljoin
 
-from playwright.sync_api import Frame, Page, TimeoutError, sync_playwright
+from playwright.sync_api import Frame, Locator, Page, TimeoutError, sync_playwright
 
 from src import config
 from src.login import do_login
@@ -212,29 +212,10 @@ def _click_lastname_link(target: Union[Frame, Page], email: str) -> Page | None:
 
 def _open_lohnabrechnung_and_edit(page: Page) -> bool:
     try:
-        target: Union[Frame, Page] = page
-        frame = page.frame(name="inhalt")
-        if frame:
-            target = frame
-
-        tab = target.locator("li[aria-controls='administration_user_stammdaten_tabs_lohnabrechnung'] a")
-        if tab.count() == 0:
-            tab = target.locator("a:has-text('Lohnabrechnung')")
-        if tab.count() == 0:
+        target, panel = _open_stammdaten_tab(page, "lohnabrechnung", "Lohnabrechnung")
+        if not target or not panel:
             print("[WARNUNG] Tab 'Lohnabrechnung' nicht gefunden.")
             return False
-        tab.first.scroll_into_view_if_needed()
-        tab.first.click()
-
-        try:
-            target.wait_for_selector(
-                "#administration_user_stammdaten_tabs_lohnabrechnung",
-                timeout=8000,
-            )
-        except Exception:
-            pass
-
-        panel = target.locator("#administration_user_stammdaten_tabs_lohnabrechnung")
         edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited']").first
         if edit_icon.count() == 0:
             edit_icon = panel.locator("img[title='Bearbeiten']").first
@@ -255,6 +236,137 @@ def _open_lohnabrechnung_and_edit(page: Page) -> bool:
     except Exception as exc:
         print(f"[WARNUNG] Lohnabrechnung/Edit fehlgeschlagen: {exc}")
         return False
+
+
+def _open_stammdaten_tab(
+    page: Page,
+    tab_key: str,
+    label: str,
+) -> tuple[Union[Frame, Page] | None, Locator | None]:
+    panel_id = f"administration_user_stammdaten_tabs_{tab_key}"
+    panel_selector = f"#{panel_id}"
+
+    candidates: list[Union[Frame, Page]] = [page]
+    inhalt = page.frame(name="inhalt")
+    if inhalt:
+        candidates.append(inhalt)
+    candidates.extend(page.frames)
+
+    try:
+        page.wait_for_load_state("domcontentloaded", timeout=6000)
+    except Exception:
+        pass
+
+    def _debug_tab_state(candidate: Union[Frame, Page]) -> None:
+        try:
+            info = candidate.evaluate(
+                """() => {
+                    const tabs = Array.from(document.querySelectorAll('ul.ui-tabs-nav li[role="tab"]'))
+                        .map((li) => {
+                            const anchor = li.querySelector('a');
+                            const text = (anchor?.textContent || '').trim();
+                            const aria = li.getAttribute('aria-controls') || '';
+                            const href = anchor?.getAttribute('href') || '';
+                            return `${text}|${aria}|${href}`;
+                        });
+                    const navExists = document.querySelector('ul.ui-tabs-nav') !== null;
+                    return { navExists, tabs, location: window.location.href };
+                }"""
+            )
+            print(f"[DEBUG] {label} Tabs: nav={info.get('navExists')}, tabs={info.get('tabs')}")
+            print(f"[DEBUG] {label} Tabs URL: {info.get('location')}")
+        except Exception as exc:
+            print(f"[DEBUG] {label} Tabs: JS-Check fehlgeschlagen: {exc}")
+
+    def _find_panel() -> tuple[Union[Frame, Page] | None, Locator | None, bool]:
+        for candidate in candidates:
+            try:
+                panel = candidate.locator(panel_selector).first
+                if panel.count() == 0:
+                    continue
+                try:
+                    visible = panel.is_visible()
+                except Exception:
+                    visible = False
+                return candidate, panel, visible
+            except Exception:
+                continue
+        return None, None, False
+
+    def _click_tab(candidate: Union[Frame, Page]) -> bool:
+        tab_selectors = [
+            f"#administration_user_stammdaten_tabs a[href='#{panel_id}']",
+            f"ul.ui-tabs-nav li[aria-controls='{panel_id}'] a",
+            f"li[role='tab'][aria-controls='{panel_id}'] a",
+            f"li[role='tab']:has-text('{label}') a",
+            f"li[role='tab'] a:has-text('{label}')",
+            f"ul.ui-tabs-nav a:has-text('{label}')",
+            f"a.ui-tabs-anchor:has-text('{label}')",
+            f"a:has-text('{label}')",
+        ]
+        for selector in tab_selectors:
+            candidate_tab = candidate.locator(selector).first
+            if candidate_tab.count() == 0:
+                continue
+            try:
+                candidate_tab.scroll_into_view_if_needed()
+            except Exception:
+                pass
+            try:
+                candidate_tab.click()
+                return True
+            except Exception as exc:
+                print(f"[DEBUG] {label} Tab-Klick fehlgeschlagen ({selector}): {exc}")
+                continue
+        try:
+            clicked = candidate.evaluate(
+                """(label, panelId) => {
+                    const selectors = [
+                        'ul.ui-tabs-nav a',
+                        '.ui-tabs-nav a',
+                        'li[role="tab"] a',
+                        'a.ui-tabs-anchor',
+                        'a'
+                    ];
+                    const anchors = selectors.flatMap((sel) => Array.from(document.querySelectorAll(sel)));
+                    const match = anchors.find((a) => {
+                        const text = (a.textContent || '').trim();
+                        const href = a.getAttribute('href') || '';
+                        return text.includes(label) || href.includes(`#${panelId}`);
+                    });
+                    if (!match) return false;
+                    match.scrollIntoView({ block: 'center' });
+                    match.click();
+                    return true;
+                }""",
+                label,
+                panel_id,
+            )
+            return bool(clicked)
+        except Exception as exc:
+            print(f"[DEBUG] {label} Tab-Klick JS fehlgeschlagen: {exc}")
+            return False
+
+    target, panel, panel_visible = _find_panel()
+    if panel_visible and target and panel:
+        print(f"[DEBUG] {label} Panel bereits sichtbar – Tab-Klick übersprungen.")
+        return target, panel
+
+    for candidate in candidates:
+        _debug_tab_state(candidate)
+        if _click_tab(candidate):
+            target = candidate
+            break
+
+    if not target:
+        return None, None
+
+    panel = target.locator(panel_selector).first
+    try:
+        panel.wait_for(state="visible", timeout=8000)
+    except Exception:
+        return target, panel if panel.count() > 0 else None
+    return target, panel
 
 
 def _open_sedcard(page: Page) -> bool:
@@ -1428,29 +1540,10 @@ def _fill_stammdaten_fields(page: Page, payload: dict) -> None:
         print("[HINWEIS] Kein Schulabschluss im JSON – überspringe Stammdaten.")
         return
 
-    target: Union[Frame, Page] = page
-    frame = page.frame(name="inhalt")
-    if frame:
-        target = frame
-
-    tab = target.locator("li[aria-controls='administration_user_stammdaten_tabs_stammdaten'] a").first
-    if tab.count() == 0:
-        tab = target.locator("a:has-text('Stammdaten')").first
-    if tab.count() == 0:
+    target, panel = _open_stammdaten_tab(page, "stammdaten", "Stammdaten")
+    if not target or not panel:
         print("[WARNUNG] Tab 'Stammdaten' nicht gefunden.")
         return
-
-    try:
-        tab.scroll_into_view_if_needed()
-    except Exception:
-        pass
-    tab.click()
-
-    panel = target.locator("#administration_user_stammdaten_tabs_stammdaten").first
-    try:
-        panel.wait_for(state="visible", timeout=8000)
-    except Exception:
-        pass
 
     edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
     if edit_icon.count() == 0:
@@ -1581,121 +1674,9 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
         return
     print("[INFO] Öffne Notfallkontakt und trage Werte ein …")
 
-    candidates: list[Union[Frame, Page]] = [page]
-    frame = page.frame(name="inhalt")
-    if frame:
-        candidates.append(frame)
-    candidates.extend(page.frames)
-    try:
-        page.wait_for_load_state("domcontentloaded", timeout=6000)
-    except Exception:
-        pass
-
-    def _debug_tab_state(candidate: Union[Frame, Page]) -> None:
-        try:
-            info = candidate.evaluate(
-                """() => {
-                    const tabs = Array.from(document.querySelectorAll('ul.ui-tabs-nav li[role="tab"]'))
-                        .map((li) => {
-                            const anchor = li.querySelector('a');
-                            const text = (anchor?.textContent || '').trim();
-                            const aria = li.getAttribute('aria-controls') || '';
-                            return `${text}|${aria}`;
-                        });
-                    const navExists = document.querySelector('ul.ui-tabs-nav') !== null;
-                    return { navExists, tabs, location: window.location.href };
-                }"""
-            )
-            print(f"[DEBUG] Notfallkontakt Tabs: nav={info.get('navExists')}, tabs={info.get('tabs')}")
-            print(f"[DEBUG] Notfallkontakt Tabs URL: {info.get('location')}")
-        except Exception as exc:
-            print(f"[DEBUG] Notfallkontakt Tabs: JS-Check fehlgeschlagen: {exc}")
-
-    def _click_tab_by_text(candidate: Union[Frame, Page], label: str) -> bool:
-        tab_selectors = [
-            "#administration_user_stammdaten_tabs a[href='#administration_user_stammdaten_tabs_notfallkontakt']",
-            "ul.ui-tabs-nav li[aria-controls='administration_user_stammdaten_tabs_notfallkontakt'] a",
-            "li[role='tab'][aria-controls='administration_user_stammdaten_tabs_notfallkontakt'] a",
-            "li[role='tab']:has-text('Notfallkontakt') a",
-            "li[role='tab'] a:has-text('Notfallkontakt')",
-            "ul.ui-tabs-nav a:has-text('Notfallkontakt')",
-            "a.ui-tabs-anchor:has-text('Notfallkontakt')",
-            "a:has-text('Notfallkontakt')",
-        ]
-        for selector in tab_selectors:
-            candidate_tab = candidate.locator(selector).first
-            if candidate_tab.count() == 0:
-                continue
-            try:
-                candidate_tab.scroll_into_view_if_needed()
-            except Exception:
-                pass
-            try:
-                candidate_tab.click()
-                return True
-            except Exception as exc:
-                print(f"[DEBUG] Notfallkontakt Tab-Klick fehlgeschlagen ({selector}): {exc}")
-                continue
-        try:
-            clicked = candidate.evaluate(
-                """(label) => {
-                    const selectors = [
-                        'ul.ui-tabs-nav a',
-                        '.ui-tabs-nav a',
-                        'li[role="tab"] a',
-                        'a.ui-tabs-anchor',
-                        'a'
-                    ];
-                    const anchors = selectors.flatMap((sel) => Array.from(document.querySelectorAll(sel)));
-                    const match = anchors.find((a) => (a.textContent || '').trim().includes(label));
-                    if (!match) return false;
-                    match.scrollIntoView({ block: 'center' });
-                    match.click();
-                    return true;
-                }""",
-                label,
-            )
-            return bool(clicked)
-        except Exception as exc:
-            print(f"[DEBUG] Notfallkontakt Tab-Klick JS fehlgeschlagen: {exc}")
-            return False
-
-    def _find_notfall_panel() -> tuple[Union[Frame, Page] | None, bool]:
-        for candidate in candidates:
-            try:
-                panel = candidate.locator("#administration_user_stammdaten_tabs_notfallkontakt").first
-                if panel.count() == 0:
-                    continue
-                try:
-                    visible = panel.is_visible()
-                except Exception:
-                    visible = False
-                return candidate, visible
-            except Exception:
-                continue
-        return None, False
-
-    target: Union[Frame, Page] | None = None
-    panel_target, panel_visible = _find_notfall_panel()
-    if panel_visible and panel_target:
-        target = panel_target
-        print("[DEBUG] Notfallkontakt Panel bereits sichtbar – Tab-Klick übersprungen.")
-    else:
-        for candidate in candidates:
-            _debug_tab_state(candidate)
-            if _click_tab_by_text(candidate, "Notfallkontakt"):
-                target = candidate
-                break
-
-    if not target:
+    target, panel = _open_stammdaten_tab(page, "notfallkontakt", "Notfallkontakt")
+    if not target or not panel:
         print("[WARNUNG] Tab 'Notfallkontakt' nicht gefunden.")
-        return
-
-    panel = target.locator("#administration_user_stammdaten_tabs_notfallkontakt").first
-    try:
-        panel.wait_for(state="visible", timeout=8000)
-    except Exception:
-        print("[WARNUNG] Notfallkontakt-Panel nicht sichtbar (Timeout).")
         return
 
     edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first

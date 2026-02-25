@@ -558,6 +558,38 @@ def _resolve_profile_image(payload: dict, temp_dir: Path) -> Path | None:
     return target_path
 
 
+def _normalize_profile_image(image_path: Path) -> Path | None:
+    try:
+        size = image_path.stat().st_size
+    except Exception as exc:
+        print(f"[WARNUNG] Profilbild nicht lesbar: {exc}")
+        return None
+    if size <= 0:
+        print("[WARNUNG] Profilbild-Datei ist leer.")
+        return None
+
+    ext = image_path.suffix.lower()
+    if ext in {".jpg", ".jpeg"}:
+        return image_path
+
+    try:
+        from PIL import Image
+    except Exception as exc:
+        print(f"[WARNUNG] PIL nicht verfügbar – Profilbild bleibt unverändert: {exc}")
+        return image_path
+
+    try:
+        with Image.open(image_path) as img:
+            rgb = img.convert("RGB")
+            target_path = image_path.with_suffix(".jpg")
+            rgb.save(target_path, format="JPEG", quality=92)
+            print(f"[INFO] Profilbild konvertiert: {image_path.suffix} -> .jpg")
+            return target_path
+    except Exception as exc:
+        print(f"[WARNUNG] Profilbild-Konvertierung fehlgeschlagen: {exc}")
+        return image_path
+
+
 def _click_unterlage_hinzufuegen(page) -> bool:
     selectors = [
         "button:has-text('Unterlage hinzufügen')",
@@ -758,6 +790,11 @@ def _upload_image(page, image_path: Path) -> bool:
                 if file_input.count() == 0:
                     continue
                 file_input.set_input_files(str(image_path))
+                try:
+                    file_input.evaluate("el => el.files && el.files.length")
+                except Exception:
+                    pass
+                time.sleep(0.6)
                 print(f"[OK] Bild hochgeladen: {image_path}")
                 return True
             except Exception:
@@ -907,6 +944,7 @@ def run_mitarbeiterinformationen(
                 with tempfile.TemporaryDirectory(prefix="perso-profilbild-") as tmp:
                     image_path = _resolve_profile_image(payload, Path(tmp))
                     if image_path:
+                        image_path = _normalize_profile_image(image_path) or image_path
                         time.sleep(0.5)
                         if _upload_image(target_page, image_path):
                             time.sleep(0.3)
