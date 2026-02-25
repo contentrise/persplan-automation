@@ -1737,6 +1737,13 @@ def _force_autocomplete_hidden_fields(input_locator, label_text: str, bn: str) -
                 if (label) {
                     el.value = label;
                 }
+                if (bn) {
+                    el.setAttribute('data-value', bn);
+                    el.setAttribute('data-id', bn);
+                    el.setAttribute('data-bn', bn);
+                } else if (label) {
+                    el.setAttribute('data-value', label);
+                }
                 const pools = [
                     form.querySelectorAll('input[type="hidden"]'),
                     document.querySelectorAll('input[type="hidden"]')
@@ -1781,7 +1788,13 @@ def _commit_autocomplete_value(input_locator, label_text: str, bn: str) -> None:
                 if (!label) return;
                 el.value = label;
                 el.setAttribute('value', label);
-                el.setAttribute('data-value', label);
+                if (bn) {
+                    el.setAttribute('data-value', bn);
+                    el.setAttribute('data-id', bn);
+                    el.setAttribute('data-bn', bn);
+                } else {
+                    el.setAttribute('data-value', label);
+                }
                 const events = ['input', 'change', 'blur', 'focusout', 'keyup', 'keydown'];
                 events.forEach((name) => el.dispatchEvent(new Event(name, { bubbles: true })));
                 try {
@@ -1791,9 +1804,13 @@ def _commit_autocomplete_value(input_locator, label_text: str, bn: str) -> None:
                             try { $el.autocomplete('search', label); } catch (e) {}
                             const data = $el.data('ui-autocomplete') || $el.data('autocomplete');
                             if (data && typeof data._trigger === 'function') {
-                                data._trigger('select', null, { item: { label, value: label } });
+                                const item = { label, value: bn || label, id: bn || label, bn: bn || '' };
+                                data._trigger('select', null, { item });
+                                data._trigger('change', null, { item });
                             }
                         }
+                        try { $el.trigger('autocompleteselect', { item: { label, value: bn || label } }); } catch (e) {}
+                        try { $el.trigger('autocompletechange', { item: { label, value: bn || label } }); } catch (e) {}
                     }
                 } catch (e) {}
                 // As last resort, update nearby hidden inputs, but only for the same field.
@@ -2232,58 +2249,80 @@ def _select_autocomplete_by_bn(
             return False
         print(f"[WARNUNG] {field_label}: BN fehlt und kein Fallback-Text – übersprungen.")
         return False
+    def _collect_lists() -> list[Locator]:
+        lists: list[Locator] = []
+        try:
+            lists.append(target.locator("ul.ui-autocomplete li.ui-menu-item"))
+        except Exception:
+            pass
+        if isinstance(target, Frame):
+            try:
+                lists.append(target.page.locator("ul.ui-autocomplete li.ui-menu-item"))
+            except Exception:
+                pass
+        else:
+            try:
+                for frame in target.frames:
+                    lists.append(frame.locator("ul.ui-autocomplete li.ui-menu-item"))
+            except Exception:
+                pass
+        return lists
+
+    def _try_select_from_lists(list_locators: list[Locator], bn_value: str, label_hint: str) -> str:
+        deadline = time.time() + 4
+        while time.time() < deadline:
+            for list_locator in list_locators:
+                item = None
+                if bn_value:
+                    item = list_locator.filter(has_text=f"[Bn: {bn_value}]").first
+                if (item is None or item.count() == 0) and label_hint:
+                    item = list_locator.filter(has_text=label_hint).first
+                if item is None or item.count() == 0 or not item.is_visible():
+                    continue
+                try:
+                    label_text = item.inner_text().strip()
+                except Exception:
+                    label_text = ""
+                try:
+                    item.click()
+                except Exception:
+                    try:
+                        item.evaluate("el => el.click()")
+                    except Exception:
+                        pass
+                return label_text
+            time.sleep(0.2)
+        return ""
+
     try:
         input_locator.first.click()
     except Exception:
         pass
     input_locator.first.fill(bn)
 
-    list_locators: list[Locator] = []
-    try:
-        list_locators.append(target.locator("ul.ui-autocomplete li.ui-menu-item"))
-    except Exception:
-        pass
-    if isinstance(target, Frame):
-        try:
-            list_locators.append(target.page.locator("ul.ui-autocomplete li.ui-menu-item"))
-        except Exception:
-            pass
-    else:
-        try:
-            for frame in target.frames:
-                list_locators.append(frame.locator("ul.ui-autocomplete li.ui-menu-item"))
-        except Exception:
-            pass
+    list_locators = _collect_lists()
     _debug_autocomplete_lists(list_locators, f"{field_label}")
-    deadline = time.time() + 6
-    while time.time() < deadline:
-        for list_locator in list_locators:
-            item = list_locator.filter(has_text=f"[Bn: {bn}]").first
-            if item.count() == 0 or not item.is_visible():
-                continue
-            try:
-                label_text = item.inner_text().strip()
-            except Exception:
-                label_text = ""
-            try:
-                item.click()
-            except Exception:
-                try:
-                    item.evaluate("el => el.click()")
-                except Exception:
-                    pass
-            if label_text:
-                _set_input_value(input_locator, label_text)
-                _force_autocomplete_hidden_fields(input_locator, label_text, bn)
-                _commit_autocomplete_value(input_locator, label_text, bn)
-                print(f"[OK] {field_label}: Autocomplete Treffer → {label_text}")
-                _log_locator_state(input_locator, f"{field_label} input (nach)")
-                if not _verify_input_value(input_locator, label_text, field_label):
-                    _select_autocomplete_by_typing(input_locator, label_text, field_label)
-            else:
-                print(f"[OK] {field_label}: Autocomplete Treffer → [Bn: {bn}]")
-            return True
-        time.sleep(0.2)
+    label_text = _try_select_from_lists(list_locators, bn, fallback_text)
+
+    # If no list items appeared for BN, retry with label text (autocomplete often expects name, not BN).
+    if not label_text and fallback_text:
+        try:
+            input_locator.first.fill(fallback_text)
+        except Exception:
+            pass
+        list_locators = _collect_lists()
+        _debug_autocomplete_lists(list_locators, f"{field_label} (label retry)")
+        label_text = _try_select_from_lists(list_locators, bn, fallback_text)
+
+    if label_text:
+        _set_input_value(input_locator, label_text)
+        _force_autocomplete_hidden_fields(input_locator, label_text, bn)
+        _commit_autocomplete_value(input_locator, label_text, bn)
+        print(f"[OK] {field_label}: Autocomplete Treffer → {label_text}")
+        _log_locator_state(input_locator, f"{field_label} input (nach)")
+        if not _verify_input_value(input_locator, label_text, field_label):
+            _select_autocomplete_by_typing(input_locator, label_text, field_label)
+        return True
 
     if fallback_text:
         _set_input_value(input_locator, fallback_text)
