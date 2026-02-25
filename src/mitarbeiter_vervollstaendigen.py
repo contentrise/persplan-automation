@@ -777,16 +777,25 @@ def _enter_sedcard_edit_mode(page: Page) -> bool:
     if edit_icon.count() == 0:
         print("[WARNUNG] Sedcard-Edit-Stift nicht gefunden.")
         return False
+    _log_locator_state(edit_icon, "sedcard edit icon (vor)")
     try:
         edit_icon.scroll_into_view_if_needed()
     except Exception:
         pass
     try:
-        edit_icon.click(force=True)
+        edit_icon.click(force=True, timeout=3000)
         print("[OK] Sedcard-Edit-Stift geklickt.")
     except Exception as exc:
-        print(f"[WARNUNG] Sedcard-Edit-Stift Klick fehlgeschlagen: {exc}")
-        return False
+        try:
+            clicked = edit_icon.evaluate("el => { el.click(); return true; }")
+        except Exception:
+            clicked = False
+        if clicked:
+            print("[OK] Sedcard-Edit-Stift per JS geklickt.")
+        else:
+            print(f"[WARNUNG] Sedcard-Edit-Stift Klick fehlgeschlagen: {exc}")
+            _log_locator_state(edit_icon, "sedcard edit icon (fehler)")
+            return False
 
     probe = target.locator("#groesse, [name='groesse']").first
     deadline = time.time() + 5
@@ -1666,6 +1675,28 @@ def _set_input_value_force(locator, value: str) -> bool:
     return True
 
 
+def _log_locator_state(locator, label: str) -> None:
+    if locator.count() == 0:
+        print(f"[DEBUG] {label}: locator=0")
+        return
+    try:
+        info = locator.first.evaluate(
+            """(el) => ({
+                tag: el.tagName,
+                id: el.id || '',
+                name: el.name || '',
+                cls: el.className || '',
+                value: el.value || '',
+                readonly: !!el.readOnly,
+                disabled: !!el.disabled,
+                visible: !!(el.offsetParent),
+            })"""
+        )
+        print(f"[DEBUG] {label}: {info}")
+    except Exception as exc:
+        print(f"[DEBUG] {label}: state fehlgeschlagen: {exc}")
+
+
 def _prefer_editable_input(target: Union[Frame, Page], selector: str) -> Locator:
     candidates = [
         f"{selector}.writeInput",
@@ -1680,6 +1711,16 @@ def _prefer_editable_input(target: Union[Frame, Page], selector: str) -> Locator
         except Exception:
             continue
     return target.locator(selector).first
+
+
+def _debug_autocomplete_lists(list_locators: list[Locator], label: str) -> None:
+    try:
+        counts = []
+        for idx, loc in enumerate(list_locators):
+            counts.append(f"{idx}={loc.count()}")
+        print(f"[DEBUG] {label}: autocomplete list counts: {', '.join(counts) if counts else 'none'}")
+    except Exception as exc:
+        print(f"[DEBUG] {label}: autocomplete list count fehlgeschlagen: {exc}")
 
 
 def _force_autocomplete_hidden_fields(input_locator, label_text: str, bn: str) -> None:
@@ -1811,11 +1852,25 @@ def _debug_krankenkasse_state(target: Union[Frame, Page], input_locator, field_l
                         name: node.name || '',
                         value: node.value || ''
                     }));
-                return { value, hidden };
+                const allHidden = Array.from(document.querySelectorAll('input[type="hidden"]'))
+                    .filter((node) => {
+                        const key = `${node.id || ''} ${node.name || ''}`.toLowerCase();
+                        return key.includes('krankenkasse');
+                    })
+                    .map((node) => ({
+                        id: node.id || '',
+                        name: node.name || '',
+                        value: node.value || ''
+                    }));
+                return { value, hidden, allHidden };
             }"""
         )
         hidden = info.get("hidden") if isinstance(info, dict) else []
-        print(f"[DEBUG] {field_label}: value='{info.get('value') if isinstance(info, dict) else ''}' hidden={hidden}")
+        all_hidden = info.get("allHidden") if isinstance(info, dict) else []
+        print(
+            f"[DEBUG] {field_label}: value='{info.get('value') if isinstance(info, dict) else ''}' "
+            f"hidden={hidden} all_hidden={all_hidden}"
+        )
     except Exception as exc:
         print(f"[DEBUG] {field_label}: Status-Check fehlgeschlagen: {exc}")
 
@@ -2133,6 +2188,7 @@ def _select_autocomplete_by_bn(
     if locator_count == 0:
         print(f"[WARNUNG] {field_label}: Eingabefeld nicht gefunden – übersprungen.")
         return False
+    _log_locator_state(input_locator, f"{field_label} input (vor)")
     if not bn:
         if fallback_text:
             print(f"[WARNUNG] {field_label}: BN fehlt, versuche Textsuche → {fallback_text}")
@@ -2157,6 +2213,7 @@ def _select_autocomplete_by_bn(
                         list_locators.append(frame.locator("ul.ui-autocomplete li.ui-menu-item"))
                 except Exception:
                     pass
+            _debug_autocomplete_lists(list_locators, f"{field_label} (fallback)")
             deadline = time.time() + 6
             while time.time() < deadline:
                 for list_locator in list_locators:
@@ -2171,6 +2228,7 @@ def _select_autocomplete_by_bn(
                 time.sleep(0.2)
             _set_input_value(input_locator, fallback_text)
             print(f"[WARNUNG] {field_label}: Kein Autocomplete Treffer – Fallback gesetzt → {fallback_text}")
+            _log_locator_state(input_locator, f"{field_label} input (fallback)")
             return False
         print(f"[WARNUNG] {field_label}: BN fehlt und kein Fallback-Text – übersprungen.")
         return False
@@ -2196,6 +2254,7 @@ def _select_autocomplete_by_bn(
                 list_locators.append(frame.locator("ul.ui-autocomplete li.ui-menu-item"))
         except Exception:
             pass
+    _debug_autocomplete_lists(list_locators, f"{field_label}")
     deadline = time.time() + 6
     while time.time() < deadline:
         for list_locator in list_locators:
@@ -2218,6 +2277,7 @@ def _select_autocomplete_by_bn(
                 _force_autocomplete_hidden_fields(input_locator, label_text, bn)
                 _commit_autocomplete_value(input_locator, label_text, bn)
                 print(f"[OK] {field_label}: Autocomplete Treffer → {label_text}")
+                _log_locator_state(input_locator, f"{field_label} input (nach)")
                 if not _verify_input_value(input_locator, label_text, field_label):
                     _select_autocomplete_by_typing(input_locator, label_text, field_label)
             else:
@@ -2231,6 +2291,7 @@ def _select_autocomplete_by_bn(
         _commit_autocomplete_value(input_locator, fallback_text, bn)
         _select_autocomplete_by_typing(input_locator, fallback_text, field_label)
         print(f"[WARNUNG] {field_label}: Kein Autocomplete Treffer für BN {bn} – Fallback gesetzt → {fallback_text}")
+        _log_locator_state(input_locator, f"{field_label} input (bn fallback)")
     return False
 
 
@@ -2506,6 +2567,15 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
             print(f"[WARNUNG] Schulabschluss nicht gemappt: {schulabschluss_raw}")
 
     krankenkasse_input = _prefer_editable_input(panel, "#krankenkasse, [name='krankenkasse']")
+    try:
+        print(
+            "[DEBUG] krankenkasse locator counts: "
+            f"all={panel.locator('#krankenkasse, [name=\"krankenkasse\"]').count()} "
+            f"write={panel.locator('#krankenkasse.writeInput, [name=\"krankenkasse\"].writeInput').count()} "
+            f"editable={panel.locator('#krankenkasse:not([readonly]):not([disabled]), [name=\"krankenkasse\"]:not([readonly]):not([disabled])').count()}"
+        )
+    except Exception:
+        pass
     _select_autocomplete_by_bn(
         target,
         krankenkasse_input,
@@ -2520,6 +2590,15 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
         tatsaechliche_input = _prefer_editable_input(
             panel, "#tatsaechliche_krankenkasse, [name='tatsaechliche_krankenkasse']"
         )
+        try:
+            print(
+                "[DEBUG] tatsaechliche_krankenkasse locator counts: "
+                f"all={panel.locator('#tatsaechliche_krankenkasse, [name=\"tatsaechliche_krankenkasse\"]').count()} "
+                f"write={panel.locator('#tatsaechliche_krankenkasse.writeInput, [name=\"tatsaechliche_krankenkasse\"].writeInput').count()} "
+                f"editable={panel.locator('#tatsaechliche_krankenkasse:not([readonly]):not([disabled]), [name=\"tatsaechliche_krankenkasse\"]:not([readonly]):not([disabled])').count()}"
+            )
+        except Exception:
+            pass
         _select_autocomplete_by_bn(
             target,
             tatsaechliche_input,
