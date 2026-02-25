@@ -1666,6 +1666,22 @@ def _set_input_value_force(locator, value: str) -> bool:
     return True
 
 
+def _prefer_editable_input(target: Union[Frame, Page], selector: str) -> Locator:
+    candidates = [
+        f"{selector}.writeInput",
+        f"{selector}:not([readonly]):not([disabled])",
+        selector,
+    ]
+    for sel in candidates:
+        try:
+            loc = target.locator(sel).first
+            if loc.count() > 0:
+                return loc
+        except Exception:
+            continue
+    return target.locator(selector).first
+
+
 def _force_autocomplete_hidden_fields(input_locator, label_text: str, bn: str) -> None:
     if input_locator.count() == 0:
         return
@@ -2489,7 +2505,7 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
         else:
             print(f"[WARNUNG] Schulabschluss nicht gemappt: {schulabschluss_raw}")
 
-    krankenkasse_input = panel.locator("#krankenkasse")
+    krankenkasse_input = _prefer_editable_input(panel, "#krankenkasse, [name='krankenkasse']")
     _select_autocomplete_by_bn(
         target,
         krankenkasse_input,
@@ -2501,7 +2517,9 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
     _commit_autocomplete_value(krankenkasse_input, values["krankenkasse"], values["krankenkasse_bn"])
     _debug_krankenkasse_state(target, krankenkasse_input, "krankenkasse")
     if values["tatsaechliche_krankenkasse"]:
-        tatsaechliche_input = panel.locator("#tatsaechliche_krankenkasse")
+        tatsaechliche_input = _prefer_editable_input(
+            panel, "#tatsaechliche_krankenkasse, [name='tatsaechliche_krankenkasse']"
+        )
         _select_autocomplete_by_bn(
             target,
             tatsaechliche_input,
