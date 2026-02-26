@@ -669,64 +669,72 @@ def _click_unterlage_hinzufuegen(page) -> bool:
         "button[onclick*='einzureichendes_editor']",
     ]
 
-    candidates = [page]
-    try:
-        inhalt = page.frame(name="inhalt")
-    except Exception:
-        inhalt = None
-    if inhalt:
-        candidates.append(inhalt)
-    candidates.extend(page.frames)
-
-    for target in candidates:
-        for selector in selectors:
-            button = target.locator(selector).first
-            try:
-                if button.count() == 0:
-                    continue
-            except Exception:
-                continue
-            try:
-                button.scroll_into_view_if_needed()
-            except Exception:
-                pass
-            try:
-                button.click()
-                print("[OK] 'Unterlage hinzufügen' geklickt.")
-                try:
-                    page.wait_for_selector("#bezeichnung", timeout=6000)
-                except Exception:
-                    pass
-                return True
-            except Exception as exc:
-                print(f"[WARNUNG] Klick auf 'Unterlage hinzufügen' fehlgeschlagen: {exc}")
-                return False
+    deadline = time.time() + 10
+    last_error = None
+    while time.time() < deadline:
+        candidates = [page]
         try:
-            clicked = target.evaluate(
-                """() => {
-                    const buttons = Array.from(document.querySelectorAll('button'));
-                    const match = buttons.find((btn) =>
-                        (btn.textContent || '').toLowerCase().includes('unterlage hinzufügen') ||
-                        (btn.textContent || '').toLowerCase().includes('unterlage hinzufuegen') ||
-                        (btn.getAttribute('onclick') || '').includes('einzureichendes_editor') ||
-                        (btn.getAttribute('onclick') || '').includes('openUiWindowReloaded')
-                    );
-                    if (!match) return false;
-                    match.scrollIntoView({ block: 'center' });
-                    match.click();
-                    return true;
-                }"""
-            )
-            if clicked:
-                print("[OK] 'Unterlage hinzufügen' geklickt (JS fallback).")
+            inhalt = page.frame(name="inhalt")
+        except Exception:
+            inhalt = None
+        if inhalt:
+            candidates.append(inhalt)
+        candidates.extend(page.frames)
+
+        for target in candidates:
+            for selector in selectors:
+                button = target.locator(selector).first
                 try:
-                    page.wait_for_selector("#bezeichnung", timeout=6000)
+                    if button.count() == 0:
+                        continue
+                except Exception:
+                    continue
+                try:
+                    button.scroll_into_view_if_needed()
                 except Exception:
                     pass
-                return True
-        except Exception:
-            pass
-    print("[WARNUNG] Button 'Unterlage hinzufügen' nicht gefunden.")
+                try:
+                    button.click()
+                    print("[OK] 'Unterlage hinzufügen' geklickt.")
+                    try:
+                        page.wait_for_selector("#bezeichnung", timeout=6000)
+                    except Exception:
+                        pass
+                    return True
+                except Exception as exc:
+                    last_error = exc
+                    continue
+            try:
+                clicked = target.evaluate(
+                    """() => {
+                        const buttons = Array.from(document.querySelectorAll('button'));
+                        const match = buttons.find((btn) =>
+                            (btn.textContent || '').toLowerCase().includes('unterlage hinzufügen') ||
+                            (btn.textContent || '').toLowerCase().includes('unterlage hinzufuegen') ||
+                            (btn.getAttribute('onclick') || '').includes('einzureichendes_editor') ||
+                            (btn.getAttribute('onclick') || '').includes('openUiWindowReloaded')
+                        );
+                        if (!match) return false;
+                        match.scrollIntoView({ block: 'center' });
+                        match.click();
+                        return true;
+                    }"""
+                )
+                if clicked:
+                    print("[OK] 'Unterlage hinzufügen' geklickt (JS fallback).")
+                    try:
+                        page.wait_for_selector("#bezeichnung", timeout=6000)
+                    except Exception:
+                        pass
+                    return True
+            except Exception as exc:
+                last_error = exc
+        time.sleep(0.4)
+
+    if last_error:
+        print(f"[WARNUNG] Button 'Unterlage hinzufügen' nicht gefunden (letzter Fehler: {last_error}).")
+    else:
+        print("[WARNUNG] Button 'Unterlage hinzufügen' nicht gefunden.")
     return False
 
 

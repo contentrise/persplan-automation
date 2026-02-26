@@ -1829,7 +1829,9 @@ def _force_autocomplete_hidden_fields(input_locator, label_text: str, bn: str) -
                 }
                 const pools = [
                     form.querySelectorAll('input[type="hidden"]'),
-                    document.querySelectorAll('input[type="hidden"]')
+                    document.querySelectorAll('input[type="hidden"]'),
+                    form.querySelectorAll('input, select, textarea'),
+                    document.querySelectorAll('input, select, textarea')
                 ];
                 const hiddenInputs = Array.from(new Set(
                     pools.flatMap((list) => Array.from(list))
@@ -1901,7 +1903,9 @@ def _commit_autocomplete_value(input_locator, label_text: str, bn: str) -> None:
                 const scopeKey = id || name || '';
                 const pools = [
                     form.querySelectorAll('input[type="hidden"]'),
-                    document.querySelectorAll('input[type="hidden"]')
+                    document.querySelectorAll('input[type="hidden"]'),
+                    form.querySelectorAll('input, select, textarea'),
+                    document.querySelectorAll('input, select, textarea')
                 ];
                 const hiddenInputs = Array.from(new Set(
                     pools.flatMap((list) => Array.from(list))
