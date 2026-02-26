@@ -3,6 +3,7 @@ import os
 import re
 import time
 import tempfile
+import shutil
 from pathlib import Path
 from typing import Union
 from urllib.parse import parse_qs, urljoin, urlparse
@@ -1615,6 +1616,12 @@ def _upload_document_with_modal(
     except Exception:
         file_input = dialog.locator("input[type='file']").first
         if file_input.count() == 0:
+            file_input = page.locator("input[type='file']").first
+        if file_input.count() == 0:
+            frame = page.frame(name="inhalt")
+            if frame:
+                file_input = frame.locator("input[type='file']").first
+        if file_input.count() == 0:
             print("[WARNUNG] Datei-Input im Dokument-Dialog nicht gefunden.")
             return False
         file_input.set_input_files(file_path)
@@ -1708,6 +1715,23 @@ def _download_upload_to_temp(uploads: dict, stem: str) -> str:
         return ""
 
 
+def _ensure_upload_filename(file_path: str, desired_base: str) -> str:
+    if not file_path or not desired_base:
+        return file_path
+    src = Path(file_path)
+    suffix = src.suffix or ".pdf"
+    desired_name = f"{desired_base}{suffix}"
+    if src.name == desired_name:
+        return file_path
+    try:
+        temp_dir = Path(tempfile.mkdtemp(prefix="perso-rename-"))
+        target = temp_dir / desired_name
+        shutil.copyfile(src, target)
+        return str(target)
+    except Exception:
+        return file_path
+
+
 def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
     pdf_path = _find_angebot_file()
     if not pdf_path:
@@ -1738,7 +1762,7 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
 
     jobs = [
         ("personalbogen", "Personalbogen", "- Personalbogen, Rentenbefreiung & Agenda", "5", ""),
-        ("rentenbefreiung", "Rentenbefreiung", "Dokumente", "1", ""),
+        ("rentenbefreiung", "Rentenbefreiung", "- Personalbogen, Rentenbefreiung & Agenda", "5", ""),
         ("zusatzvereinbarung", "Zusatzvereinbarung", "Dokumente", "1", ""),
         ("sicherheitsbelehrung", "Sicherheitsbelehrung", "Dokumente", "1", ""),
         ("immatrikulation", immatrikulation_bemerkung, "- Imma/Schul", "2", immatrikulation_valid_until),
@@ -1755,12 +1779,22 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
     for stem, bemerkung, folder_label, folder_value, gueltig_bis in jobs:
         file_path = _find_input_file_by_stem(stem)
         temp_downloaded = False
+        temp_renamed = False
+        downloaded_path = ""
+        renamed_path = ""
         if not file_path:
             file_path = _download_upload_to_temp(uploads, stem)
             temp_downloaded = bool(file_path)
+            downloaded_path = file_path
         if not file_path:
             print(f"[HINWEIS] Zusatzdokument nicht gefunden: {stem}.* (in PERSO_INPUT_DIR)")
             continue
+        if stem == "rentenbefreiung":
+            renamed = _ensure_upload_filename(file_path, "rentenbefreiung")
+            if renamed != file_path:
+                file_path = renamed
+                renamed_path = renamed
+                temp_renamed = True
         print(f"[INFO] Lade zusätzliches Dokument hoch: {Path(file_path).name}")
         uploaded = _upload_document_with_modal(
             page=page,
@@ -1770,9 +1804,19 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
             bemerkung_text=bemerkung,
             gueltig_bis=gueltig_bis,
         )
-        if temp_downloaded:
+        if temp_downloaded and downloaded_path:
             try:
-                os.remove(file_path)
+                os.remove(downloaded_path)
+            except Exception:
+                pass
+        if temp_renamed:
+            try:
+                parent = None
+                if renamed_path:
+                    os.remove(renamed_path)
+                    parent = Path(renamed_path).parent
+                if parent and parent.name.startswith("perso-rename-"):
+                    parent.rmdir()
             except Exception:
                 pass
         if not uploaded:
