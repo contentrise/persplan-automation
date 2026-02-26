@@ -1529,6 +1529,19 @@ def _build_vertrag_bemerkung(payload: dict) -> str:
 
 
 def _open_document_upload_dialog(page: Page):
+    def _log_dialog_debug(step: str) -> None:
+        try:
+            print(f"[DEBUG] Upload-Dialog {step}: page_url={page.url!r}")
+        except Exception:
+            pass
+        try:
+            names = []
+            for idx, fr in enumerate(page.frames):
+                names.append(f"{idx}:{fr.name!r} url={fr.url!r}")
+            print(f"[DEBUG] Upload-Dialog {step}: frames={names}")
+        except Exception:
+            pass
+
     dialog = page.locator("div.ui-dialog:has-text('Dokument hinzufügen')").first
     if dialog.count() > 0:
         try:
@@ -1547,6 +1560,18 @@ def _open_document_upload_dialog(page: Page):
         add_button = page.locator("button:has-text('Dokument hinzufügen')").first
         if add_button.count() == 0:
             print("[WARNUNG] 'Dokument hinzufügen' Button nicht gefunden.")
+            try:
+                btn_sel = "button:has-text('Dokument hinzufügen')"
+                dlg_sel = "div.ui-dialog:has-text('Dokument hinzufügen')"
+                print(
+                    "[DEBUG] Upload-Dialog Button-Counts: "
+                    f"inhalt={target.locator(btn_sel).count()} "
+                    f"page={page.locator(btn_sel).count()} "
+                    f"dialog={page.locator(dlg_sel).count()}"
+                )
+            except Exception:
+                pass
+            _log_dialog_debug("not-found")
             return
     try:
         add_button.scroll_into_view_if_needed()
@@ -1560,6 +1585,7 @@ def _open_document_upload_dialog(page: Page):
         dialog.wait_for(state="visible", timeout=8000)
     except Exception:
         print("[WARNUNG] Dokument-Dialog nicht sichtbar.")
+        _log_dialog_debug("not-visible")
         return None
     return dialog
 
