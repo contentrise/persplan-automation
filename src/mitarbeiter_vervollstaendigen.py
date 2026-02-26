@@ -891,6 +891,7 @@ def _fill_sedcard_fields(page: Page, payload: dict) -> None:
             print("[WARNUNG] sedcard pkw nicht gesetzt.")
 
     save_button = target.locator(
+        "button.editSubcontractor, "
         "button:has-text('Daten speichern'), "
         "input[type='submit'][value*='Daten speichern'], "
         "input.speichern, button:has-text('Speichern')"
@@ -901,10 +902,55 @@ def _fill_sedcard_fields(page: Page, payload: dict) -> None:
         except Exception:
             pass
         try:
+            try:
+                save_button.wait_for(state="visible", timeout=1500)
+            except Exception:
+                pass
             save_button.click()
             print("[OK] Sedcard gespeichert (Daten speichern).")
-        except Exception as exc:
-            print(f"[WARNUNG] Sedcard speichern fehlgeschlagen: {exc}")
+            return
+        except Exception:
+            try:
+                save_button.click(force=True)
+                print("[OK] Sedcard gespeichert (force click).")
+                return
+            except Exception as exc:
+                try:
+                    clicked = target.evaluate(
+                        """() => {
+                            const candidates = [];
+                            const byClass = document.querySelector("button.editSubcontractor");
+                            if (byClass) candidates.push(byClass);
+                            document.querySelectorAll("input[type='submit'], button").forEach((el) => {
+                                const value = (el.getAttribute('value') || '').trim();
+                                const text = (el.textContent || '').trim();
+                                if (value.includes('Daten speichern') || text.includes('Daten speichern') || text === 'Speichern') {
+                                    candidates.push(el);
+                                }
+                            });
+                            for (const el of candidates) {
+                                try {
+                                    el.classList.remove('hideElement');
+                                    el.classList.add('showElement');
+                                    if (el.style) {
+                                        el.style.display = 'inline-block';
+                                        el.style.visibility = 'visible';
+                                    }
+                                    el.removeAttribute('disabled');
+                                    el.removeAttribute('readonly');
+                                    el.click();
+                                    return true;
+                                } catch (e) {}
+                            }
+                            return false;
+                        }"""
+                    )
+                except Exception:
+                    clicked = False
+                if clicked:
+                    print("[OK] Sedcard gespeichert (JS fallback).")
+                else:
+                    print(f"[WARNUNG] Sedcard speichern fehlgeschlagen: {exc}")
     else:
         print("[WARNUNG] Sedcard-Speichern-Button nicht gefunden.")
 
