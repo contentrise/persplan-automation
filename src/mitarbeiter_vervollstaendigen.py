@@ -2,11 +2,13 @@ import json
 import os
 import re
 import time
+import tempfile
 from pathlib import Path
 from typing import Union
 from urllib.parse import parse_qs, urljoin, urlparse
 
 from playwright.sync_api import Frame, Locator, Page, TimeoutError, sync_playwright
+import requests
 
 from src import config
 from src.login import do_login
@@ -1647,6 +1649,29 @@ def _find_input_file_by_stem(stem: str) -> str:
     return str(candidates[0])
 
 
+def _download_upload_to_temp(uploads: dict, stem: str) -> str:
+    if not isinstance(uploads, dict):
+        return ""
+    meta = uploads.get(stem)
+    if not isinstance(meta, dict):
+        return ""
+    url = str(meta.get("url") or "").strip()
+    if not url:
+        return ""
+    filename = str(meta.get("name") or f"{stem}.pdf").strip() or f"{stem}.pdf"
+    suffix = Path(filename).suffix or ".pdf"
+    try:
+        resp = requests.get(url, timeout=30)
+        if resp.status_code != 200 or not resp.content:
+            return ""
+        fd, path = tempfile.mkstemp(prefix=f"perso-{stem}-", suffix=suffix)
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(resp.content)
+        return path
+    except Exception:
+        return ""
+
+
 def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
     pdf_path = _find_angebot_file()
     if not pdf_path:
@@ -1677,7 +1702,7 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
 
     jobs = [
         ("personalbogen", "Personalbogen", "- Personalbogen, Rentenbefreiung & Agenda", "5", ""),
-        ("rentenbefreiung", "Rentenbefreiung", "- Personalbogen, Rentenbefreiung & Agenda", "5", ""),
+        ("rentenbefreiung", "Rentenbefreiung", "Dokumente", "1", ""),
         ("zusatzvereinbarung", "Zusatzvereinbarung", "Dokumente", "1", ""),
         ("sicherheitsbelehrung", "Sicherheitsbelehrung", "Dokumente", "1", ""),
         ("immatrikulation", immatrikulation_bemerkung, "- Imma/Schul", "2", immatrikulation_valid_until),
@@ -1693,6 +1718,10 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
     print("[INFO] Starte Upload zusätzlicher Dokumente …")
     for stem, bemerkung, folder_label, folder_value, gueltig_bis in jobs:
         file_path = _find_input_file_by_stem(stem)
+        temp_downloaded = False
+        if not file_path:
+            file_path = _download_upload_to_temp(uploads, stem)
+            temp_downloaded = bool(file_path)
         if not file_path:
             print(f"[HINWEIS] Zusatzdokument nicht gefunden: {stem}.* (in PERSO_INPUT_DIR)")
             continue
@@ -1705,6 +1734,11 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
             bemerkung_text=bemerkung,
             gueltig_bis=gueltig_bis,
         )
+        if temp_downloaded:
+            try:
+                os.remove(file_path)
+            except Exception:
+                pass
         if not uploaded:
             print(f"[WARNUNG] Upload fehlgeschlagen: {Path(file_path).name}")
 
@@ -1845,9 +1879,13 @@ def _force_autocomplete_hidden_fields(input_locator, label_text: str, bn: str) -
                 hiddenInputs.forEach((node) => {
                     const key = `${node.id || ''} ${node.name || ''}`.toLowerCase();
                     if (!key) return;
+                    const isActualField = key.includes('tatsaechliche_krankenkasse');
+                    const isMainField = key.includes('krankenkasse') && !isActualField;
+                    if (scopeKey === 'krankenkasse' && isActualField) return;
+                    if (scopeKey === 'tatsaechliche_krankenkasse' && isMainField) return;
                     const isSameField = scopeKey && key.includes(scopeKey);
                     const isKasseField = key.includes('krankenkasse');
-                    if (!isSameField && !isKasseField) return;
+                    if (!isSameField && !(isKasseField && !scopeKey)) return;
                     if (bn && (key.includes('bn') || key.includes('id') || key.includes('key'))) {
                         setHiddenValue(node, bn);
                     } else if (label && isKasseField && !key.includes('bn')) {
@@ -1919,9 +1957,13 @@ def _commit_autocomplete_value(input_locator, label_text: str, bn: str) -> None:
                 hiddenInputs.forEach((node) => {
                     const key = `${node.id || ''} ${node.name || ''}`.toLowerCase();
                     if (!key) return;
+                    const isActualField = key.includes('tatsaechliche_krankenkasse');
+                    const isMainField = key.includes('krankenkasse') && !isActualField;
+                    if (scopeKey === 'krankenkasse' && isActualField) return;
+                    if (scopeKey === 'tatsaechliche_krankenkasse' && isMainField) return;
                     const isSameField = scopeKey && key.includes(scopeKey);
                     const isKasseField = key.includes('krankenkasse');
-                    if (!isSameField && !isKasseField) return;
+                    if (!isSameField && !(isKasseField && !scopeKey)) return;
                     const wantsBn = key.includes('bn') || key.includes('id') || key.includes('key');
                     if (bn && wantsBn) {
                         setHiddenValue(node, bn);
