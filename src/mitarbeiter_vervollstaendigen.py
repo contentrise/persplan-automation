@@ -1677,6 +1677,7 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
 
     jobs = [
         ("personalbogen", "Personalbogen", "- Personalbogen, Rentenbefreiung & Agenda", "5", ""),
+        ("rentenbefreiung", "Rentenbefreiung", "- Personalbogen, Rentenbefreiung & Agenda", "5", ""),
         ("zusatzvereinbarung", "Zusatzvereinbarung", "Dokumente", "1", ""),
         ("sicherheitsbelehrung", "Sicherheitsbelehrung", "Dokumente", "1", ""),
         ("immatrikulation", immatrikulation_bemerkung, "- Imma/Schul", "2", immatrikulation_valid_until),
@@ -2741,6 +2742,17 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
             values["tatsaechliche_bn"],
         )
         _debug_krankenkasse_state(target, tatsaechliche_input, "tatsaechliche_krankenkasse")
+        if values["krankenkasse"] and values["krankenkasse"] != values["tatsaechliche_krankenkasse"]:
+            _select_autocomplete_by_bn(
+                target,
+                krankenkasse_input,
+                values["krankenkasse_bn"],
+                values["krankenkasse"],
+                "krankenkasse",
+            )
+            _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
+            _commit_autocomplete_value(krankenkasse_input, values["krankenkasse"], values["krankenkasse_bn"])
+            _debug_krankenkasse_state(target, krankenkasse_input, "krankenkasse (post)")
     print(
         "[INFO] Lohnabrechnung Zielwerte: "
         f"personengruppe={values['personengruppe']}, "
