@@ -1529,6 +1529,14 @@ def _build_vertrag_bemerkung(payload: dict) -> str:
 
 
 def _open_document_upload_dialog(page: Page):
+    dialog = page.locator("div.ui-dialog:has-text('Dokument hinzufügen')").first
+    if dialog.count() > 0:
+        try:
+            dialog.wait_for(state="visible", timeout=1500)
+            return dialog
+        except Exception:
+            pass
+
     target: Union[Frame, Page] = page
     frame = page.frame(name="inhalt")
     if frame:
@@ -1536,8 +1544,10 @@ def _open_document_upload_dialog(page: Page):
 
     add_button = target.locator("button:has-text('Dokument hinzufügen')").first
     if add_button.count() == 0:
-        print("[WARNUNG] 'Dokument hinzufügen' Button nicht gefunden.")
-        return
+        add_button = page.locator("button:has-text('Dokument hinzufügen')").first
+        if add_button.count() == 0:
+            print("[WARNUNG] 'Dokument hinzufügen' Button nicht gefunden.")
+            return
     try:
         add_button.scroll_into_view_if_needed()
     except Exception:
