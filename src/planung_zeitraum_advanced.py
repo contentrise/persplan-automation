@@ -24,6 +24,18 @@ S3_BUCKET = os.getenv("PLANUNG_BUCKET", "greatstaff-data-storage").strip()
 S3_PREFIX = os.getenv("PLANUNG_PREFIX", "planung/offene").strip().strip("/")
 S3_DELTA_PREFIX = os.getenv("PLANUNG_DELTA_PREFIX", "planung/anfragen-delta").strip().strip("/")
 
+DDB_TABLE = os.getenv("PLANUNG_ADV_TABLE", "").strip()
+DDB_PK_FIELD = (os.getenv("PLANUNG_ADV_PK_FIELD") or "pk").strip() or "pk"
+DDB_SK_FIELD = (os.getenv("PLANUNG_ADV_SK_FIELD") or "sk").strip() or "sk"
+DDB_RUN_PREFIX = (os.getenv("PLANUNG_ADV_RUN_PREFIX") or "RUN#").strip() or "RUN#"
+DDB_EVENT_PREFIX = (os.getenv("PLANUNG_ADV_EVENT_PREFIX") or "EVENT#").strip() or "EVENT#"
+DDB_META_PK = (os.getenv("PLANUNG_ADV_META_PK") or "META").strip() or "META"
+DDB_META_SK_LATEST = (os.getenv("PLANUNG_ADV_META_SK_LATEST") or "LATEST").strip() or "LATEST"
+DDB_RUN_META_SK = (os.getenv("PLANUNG_ADV_RUN_META_SK") or "META").strip() or "META"
+WINDOW_START = (os.getenv("PLANUNG_ADV_WINDOW_START") or "06:00").strip()
+WINDOW_END = (os.getenv("PLANUNG_ADV_WINDOW_END") or "18:00").strip()
+WINDOW_ENABLED = os.getenv("PLANUNG_ADV_WINDOW_ENABLED")
+
 
 def _require_login_state() -> Path:
     state_path = Path(config.STATE_PATH)
@@ -313,7 +325,7 @@ def _wait_for_anfragen_list(target, timeout_ms: int = 15000) -> None:
             () => {
                 const list = document.querySelector("#mitarbeiterListeNamen");
                 if (!list) return false;
-                return list.children && list.children.length > 0;
+                return list.children !== null;
             }
             """,
             timeout=timeout_ms,
@@ -384,8 +396,12 @@ def _collect_anfragen_for_event(page: Page, frame: Frame, event_id: str) -> List
             pass
         detail.wait_for_selector("#mitarbeiterListeFilter", timeout=15000)
         _ensure_anfragen_filter(detail)
-        _wait_for_anfragen_list(detail, timeout_ms=12000)
-        time.sleep(1.5)
+        sig = _get_list_signature(detail)
+        if sig and sig.get("count", 0) == 0:
+            print("[DEBUG] Keine Anfragen gefunden – überspringe Wartezeit.")
+        else:
+            _wait_for_anfragen_list(detail, timeout_ms=12000)
+            time.sleep(1.5)
         anfragen = _extract_anfragen_list(detail)
         schichten = _extract_schichten_table(detail)
         print(f"[DEBUG] Anfragen-Liste Größe: {len(anfragen)}")
@@ -527,6 +543,99 @@ def _upload_csv_to_s3(csv_path: Path, prefix: str) -> str | None:
     return key
 
 
+def _truthy_env(value: str | None) -> bool:
+    if value is None:
+        return False
+    return value.strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def _parse_hour_minute(value: str) -> tuple[int, int] | None:
+    match = re.match(r"^([01]?\\d|2[0-3]):([0-5]\\d)$", value.strip())
+    if not match:
+        return None
+    return int(match.group(1)), int(match.group(2))
+
+
+def _within_window(now: datetime) -> bool:
+    start = _parse_hour_minute(WINDOW_START or "06:00")
+    end = _parse_hour_minute(WINDOW_END or "18:00")
+    if not start or not end:
+        return True
+    start_minutes = start[0] * 60 + start[1]
+    end_minutes = end[0] * 60 + end[1]
+    now_minutes = now.hour * 60 + now.minute
+    if start_minutes <= end_minutes:
+        return start_minutes <= now_minutes <= end_minutes
+    return now_minutes >= start_minutes or now_minutes <= end_minutes
+
+
+def _write_events_to_dynamodb(events: List[Dict[str, Any]]) -> str | None:
+    if not DDB_TABLE:
+        print("[INFO] PLANUNG_ADV_TABLE nicht gesetzt – DynamoDB-Upload übersprungen.")
+        return None
+
+    snapshot_at = datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    run_id = snapshot_at.replace(":", "-")
+    run_pk = f"{DDB_RUN_PREFIX}{run_id}"
+
+    dynamodb = boto3.resource("dynamodb")
+    table = dynamodb.Table(DDB_TABLE)
+
+    def _clean_int(value: Any) -> int:
+        try:
+            return int(value or 0)
+        except (TypeError, ValueError):
+            return 0
+
+    with table.batch_writer() as batch:
+        for idx, event in enumerate(events, start=1):
+            event_id = (event.get("event_id") or "").strip() or f"event-{idx}"
+            item = {
+                DDB_PK_FIELD: run_pk,
+                DDB_SK_FIELD: f"{DDB_EVENT_PREFIX}{event_id}",
+                "run_id": run_id,
+                "snapshot_at": snapshot_at,
+                "snapshot_date": snapshot_at[:10],
+                "event_id": event_id,
+                "title": (event.get("title") or "").strip(),
+                "timeframe": (event.get("timeframe") or "").strip(),
+                "customer": (event.get("customer") or "").strip(),
+                "address": (event.get("address") or "").strip(),
+                "besetzt": _clean_int(event.get("besetzt")),
+                "gesamt": _clean_int(event.get("gesamt")),
+                "anfragen": _clean_int(event.get("anfragen")),
+                "offen": _clean_int(event.get("offen")),
+                "anfragen_json": event.get("anfragen_json") or "[]",
+                "schichten_json": event.get("schichten_json") or "[]",
+            }
+            batch.put_item(Item=item)
+
+        batch.put_item(
+            Item={
+                DDB_PK_FIELD: run_pk,
+                DDB_SK_FIELD: DDB_RUN_META_SK,
+                "run_id": run_id,
+                "snapshot_at": snapshot_at,
+                "snapshot_date": snapshot_at[:10],
+                "events": len(events),
+            }
+        )
+
+    table.put_item(
+        Item={
+            DDB_PK_FIELD: DDB_META_PK,
+            DDB_SK_FIELD: DDB_META_SK_LATEST,
+            "run_id": run_id,
+            "snapshot_at": snapshot_at,
+            "snapshot_date": snapshot_at[:10],
+            "events": len(events),
+        }
+    )
+
+    print(f"[OK] DynamoDB Snapshot gespeichert: {DDB_TABLE} ({len(events)} Events)")
+    return run_id
+
+
 def run_planung_zeitraum(
     headless: bool | None = None,
     slowmo_ms: int | None = None,
@@ -534,11 +643,24 @@ def run_planung_zeitraum(
     hold_seconds: int = 5,
     upload_s3: bool = False,
     compute_delta: bool = False,
+    write_ddb: bool = False,
+    ignore_window: bool = False,
 ) -> Path | None:
     headless = config.HEADLESS if headless is None else headless
     slowmo_ms = config.SLOWMO_MS if slowmo_ms is None else slowmo_ms
     state_path = _require_login_state()
     days_forward = max(days_forward, 0)
+    write_ddb = write_ddb or _truthy_env(os.getenv("PLANUNG_ADV_WRITE_DDB"))
+    enforce_window = _truthy_env(WINDOW_ENABLED) if WINDOW_ENABLED is not None else True
+
+    if enforce_window and not ignore_window:
+        now = datetime.now()
+        if not _within_window(now):
+            print(
+                f"[INFO] Aktuelle Zeit {now.strftime('%H:%M')} liegt außerhalb des Fensters "
+                f"{WINDOW_START} - {WINDOW_END}. Lauf übersprungen."
+            )
+            return None
 
     start_date = datetime.now()
     end_date = start_date + timedelta(days=days_forward)
@@ -624,6 +746,8 @@ def run_planung_zeitraum(
 
             if csv_path and upload_s3:
                 _upload_csv_to_s3(csv_path, S3_PREFIX)
+            if write_ddb:
+                _write_events_to_dynamodb(events or [])
             if hold_seconds > 0:
                 print(f"[INFO] Halte Browser für {hold_seconds} Sekunden offen …")
                 time.sleep(hold_seconds)

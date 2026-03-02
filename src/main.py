@@ -285,6 +285,16 @@ def main():
         help="CSV nach S3 hochladen",
     )
     p_planung_zeitraum_advanced.add_argument(
+        "--write-ddb",
+        action="store_true",
+        help="Snapshot in DynamoDB schreiben (PLANUNG_ADV_TABLE)",
+    )
+    p_planung_zeitraum_advanced.add_argument(
+        "--ignore-window",
+        action="store_true",
+        help="Zeitfenster für stündliche Läufe ignorieren",
+    )
+    p_planung_zeitraum_advanced.add_argument(
         "--delta",
         action="store_true",
         help="Delta-CSV für neue Anfragen (verglichen mit letztem Snapshot) erzeugen",
@@ -360,7 +370,9 @@ def main():
             days_forward=args.days_forward,
             hold_seconds=args.wait_seconds,
             upload_s3=args.upload_s3,
+            write_ddb=args.write_ddb,
             compute_delta=args.delta,
+            ignore_window=args.ignore_window,
         )
     elif args.cmd == "mitarbeiter-vervollstaendigen":
         run_mitarbeiter_vervollstaendigen(

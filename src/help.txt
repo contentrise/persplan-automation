@@ -144,3 +144,8 @@ Bei Vertragsdaten bitte 01.01.2026 = 14,96
 
 Arbeitsvertrag KB zum 01.02.2026
 
+
+cd ~/Desktop/persplan-schichten
+source .venv/bin/activate
+python3 -m src.main login --headless=false --slowmo=150
+python3 -m src.main planung-zeitraum-advanced --headless=false --slowmo=150 --days-forward=10 --wait-seconds=5
