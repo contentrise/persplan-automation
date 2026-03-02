@@ -35,6 +35,7 @@ DDB_RUN_META_SK = (os.getenv("PLANUNG_ADV_RUN_META_SK") or "META").strip() or "M
 WINDOW_START = (os.getenv("PLANUNG_ADV_WINDOW_START") or "06:00").strip()
 WINDOW_END = (os.getenv("PLANUNG_ADV_WINDOW_END") or "18:00").strip()
 WINDOW_ENABLED = os.getenv("PLANUNG_ADV_WINDOW_ENABLED")
+EVENT_TIMEOUT_SECONDS = float(os.getenv("PLANUNG_ADV_EVENT_TIMEOUT_SEC", "15") or 15)
 
 
 def _require_login_state() -> Path:
@@ -334,6 +335,24 @@ def _wait_for_anfragen_list(target, timeout_ms: int = 15000) -> None:
         pass
 
 
+def _dump_debug_state(page: Page, event_id: str, reason: str) -> None:
+    export_dir = Path(config.EXPORT_DIR) / "debug"
+    export_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    safe_event = re.sub(r"[^A-Za-z0-9_-]", "_", event_id or "event")
+    base = export_dir / f"planung_adv_{safe_event}_{timestamp}"
+    try:
+        page.screenshot(path=str(base.with_suffix(".png")), full_page=True)
+    except Exception as exc:
+        print(f"[WARNUNG] Screenshot fehlgeschlagen ({event_id}): {exc}")
+    try:
+        html = page.content()
+        base.with_suffix(".html").write_text(html, encoding="utf-8")
+    except Exception as exc:
+        print(f"[WARNUNG] HTML-Dump fehlgeschlagen ({event_id}): {exc}")
+    base.with_suffix(".txt").write_text(reason, encoding="utf-8")
+
+
 def _extract_schichten_table(target) -> List[Dict[str, Any]]:
     return target.evaluate(
         """
@@ -371,6 +390,7 @@ def _extract_schichten_table(target) -> List[Dict[str, Any]]:
 
 
 def _collect_anfragen_for_event(page: Page, frame: Frame, event_id: str) -> List[Dict[str, Any]]:
+    start_ts = time.monotonic()
     href = frame.evaluate(
         """
         (id) => {
@@ -389,24 +409,32 @@ def _collect_anfragen_for_event(page: Page, frame: Frame, event_id: str) -> List
     print(f"[DEBUG] Detail-URL für Event {event_id}: {url}")
     detail = page.context.new_page()
     try:
-        detail.goto(url, wait_until="domcontentloaded")
+        detail.goto(url, wait_until="domcontentloaded", timeout=int(EVENT_TIMEOUT_SECONDS * 1000))
         try:
-            detail.wait_for_load_state("networkidle", timeout=15000)
+            detail.wait_for_load_state("networkidle", timeout=int(EVENT_TIMEOUT_SECONDS * 1000))
         except Exception:
             pass
-        detail.wait_for_selector("#mitarbeiterListeFilter", timeout=15000)
+        remaining = max(EVENT_TIMEOUT_SECONDS - (time.monotonic() - start_ts), 1)
+        detail.wait_for_selector("#mitarbeiterListeFilter", timeout=int(remaining * 1000))
         _ensure_anfragen_filter(detail)
         sig = _get_list_signature(detail)
         if sig and sig.get("count", 0) == 0:
             print("[DEBUG] Keine Anfragen gefunden – überspringe Wartezeit.")
         else:
-            _wait_for_anfragen_list(detail, timeout_ms=12000)
-            time.sleep(1.5)
+            remaining = max(EVENT_TIMEOUT_SECONDS - (time.monotonic() - start_ts), 1)
+            _wait_for_anfragen_list(detail, timeout_ms=int(remaining * 1000))
+            time.sleep(0.8)
         anfragen = _extract_anfragen_list(detail)
         schichten = _extract_schichten_table(detail)
         print(f"[DEBUG] Anfragen-Liste Größe: {len(anfragen)}")
         print(f"[DEBUG] Schichten gelesen: {len(schichten)}")
         return anfragen, schichten
+    except Exception as exc:
+        duration = time.monotonic() - start_ts
+        reason = f"{type(exc).__name__}: {exc}"
+        print(f"[WARNUNG] Event {event_id} abgebrochen nach {duration:.1f}s: {reason}")
+        _dump_debug_state(detail, event_id, reason)
+        raise
     finally:
         detail.close()
 
@@ -690,15 +718,20 @@ def run_planung_zeitraum(
                     event_id = (event.get("event_id") or "").strip()
                     if not event_id:
                         continue
+                    event_start = time.monotonic()
+                    print(f"[INFO] Starte Event {idx}/{len(events)}: {event_id}")
                     try:
                         anfragen, schichten = _collect_anfragen_for_event(page, frame, event_id)
                         event["anfragen_json"] = json.dumps(anfragen)
                         event["schichten_json"] = json.dumps(schichten)
+                        duration = time.monotonic() - event_start
                         print(
-                            f"[OK] {idx}/{len(events)} Event {event_id}: {len(anfragen)} Anfragen"
+                            f"[OK] {idx}/{len(events)} Event {event_id}: {len(anfragen)} Anfragen ({duration:.1f}s)"
                         )
                     except Exception as exc:
+                        duration = time.monotonic() - event_start
                         print(f"[WARNUNG] Anfragen für Event {event_id} nicht lesbar: {exc}")
+                        print(f"[WARNUNG] Event {event_id} übersprungen ({duration:.1f}s)")
                         event["anfragen_json"] = "[]"
             if events:
                 csv_path = _write_open_events_csv(events)
