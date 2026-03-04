@@ -103,6 +103,34 @@ def log_step(msg):
     print(f"[STEP {ts}] {msg}")
 
 
+def read_dialog_message(page, dialog, timeout_ms: int = 4000, poll_ms: int = 200) -> str:
+    """Liest Statusmeldungen nach dem Speichern, ohne lange Pausen zu erzeugen."""
+    deadline = time.monotonic() + (timeout_ms / 1000.0)
+    while time.monotonic() < deadline:
+        try:
+            msg_out = page.locator("#msg_out p")
+            if msg_out.count() > 0:
+                msg = msg_out.inner_text(timeout=min(800, timeout_ms)).strip()
+                if msg:
+                    return msg
+        except Exception:
+            pass
+
+        try:
+            if dialog.count() > 0:
+                msg = dialog.locator(".ui-dialog-content").first.inner_text(
+                    timeout=min(800, timeout_ms)
+                ).strip()
+                if msg:
+                    return msg
+        except Exception:
+            pass
+
+        time.sleep(poll_ms / 1000.0)
+
+    return ""
+
+
 def ensure_dialog_closed(page, dialog, reason):
     try:
         dialog.wait_for(state="detached", timeout=3000)
@@ -203,6 +231,87 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
             print(f"\n✅ {name} hat keinen Einsatz und keinen Urlaub – Kandidat gefunden!")
             log_step("Starte Bearbeitung Mitarbeiter")
 
+            # Vorab: Eintrittsdatum prüfen. Falls Eintritt im Urlaubsmonat liegt,
+            # Eintritt auf den ersten Tag des Folgemonats setzen und KEINEN Urlaub eintragen.
+            try:
+                akte_link = row.locator("a[href*='mitarbeiter_akte.php']").first
+                with page.context.expect_page() as akte_event:
+                    akte_link.click()
+                akte_page = akte_event.value
+                akte_page.wait_for_load_state("domcontentloaded")
+
+                print("[INFO] Öffne Tab 'Vertragsdaten' …")
+                akte_page.locator("a:has-text('Vertragsdaten')").first.click()
+                akte_page.wait_for_load_state("domcontentloaded")
+                time.sleep(0.6)
+                print("[OK] Vertragsdaten-Tab geöffnet.")
+
+                eintritt_text = akte_page.locator("#eintrittsdatum").inner_text().strip()
+                eintritt_date = datetime.strptime(eintritt_text, "%d.%m.%Y")
+
+                if eintritt_date.month == config.URLAUB_MONTH and eintritt_date.year == config.URLAUB_YEAR:
+                    print("[INFO] Eintritt liegt im Urlaubsmonat – setze neuen Eintritt und überspringe Urlaub …")
+                    print("[AKTION] Suche korrektes Edit-Icon …")
+                    all_icons = akte_page.locator("img.edit.sprite_16x16.pointer")
+                    count = all_icons.count()
+                    print(f"[DEBUG] Gefundene Edit-Icons: {count}")
+
+                    target_icon = None
+                    for j in range(count):
+                        el = all_icons.nth(j)
+                        code = el.get_attribute("onclick") or ""
+                        if "openUiWindowReloaded" in code and "eintritt" in code:
+                            target_icon = el
+                            break
+
+                    if not target_icon:
+                        raise RuntimeError("Kein Edit-Icon für Eintritt gefunden")
+
+                    onclick_code = target_icon.get_attribute("onclick")
+                    akte_page.evaluate(f"window.eval(`{onclick_code}`)")
+
+                    akte_page.wait_for_selector("div.ui-dialog form#formEditEinAustrittsdatum", timeout=20000)
+                    print("[OK] Modal erkannt – ändere Eintrittsdaten …")
+
+                    neues_datum = get_first_day_of_next_month(config.URLAUB_YEAR, config.URLAUB_MONTH)
+                    bemerkung = f"keine Schicht im {month_name_de(config.URLAUB_MONTH)}"
+                    akte_page.fill("#eintrittsdatum_neu", neues_datum)
+                    akte_page.fill("#bemerkung", bemerkung)
+                    akte_page.click("span.abstand_links_8:has-text('Speichern')")
+                    time.sleep(0.8)
+
+                    for sec in range(10):
+                        if akte_page.locator("span.ui-button-text", has_text="Fortfahren").count() > 0:
+                            akte_page.locator("span.ui-button-text", has_text="Fortfahren").click()
+                            print(f"[OK] 'Fortfahren' bestätigt ({sec}s).")
+                            break
+                        time.sleep(1)
+
+                    close_btn = akte_page.locator("button:has-text('Schließen')").first
+                    if close_btn.count() > 0:
+                        close_btn.click()
+                        try:
+                            akte_page.locator("form#formEditEinAustrittsdatum").wait_for(
+                                state="detached",
+                                timeout=8000,
+                            )
+                        except PlaywrightTimeoutError:
+                            pass
+
+                    log_korrektur(name, f"Eintritt auf {neues_datum} geändert ({bemerkung})")
+                    akte_page.close()
+                    page.bring_to_front()
+                    processed += 1
+                    elapsed = time.monotonic() - start_ts
+                    log_step(f"Fertig in {elapsed:.1f}s")
+                    print(f"[OK] Eintritt angepasst – Urlaub übersprungen für {name}")
+                    continue
+
+                akte_page.close()
+                page.bring_to_front()
+            except Exception as e:
+                print(f"[WARNUNG] Eintrittsprüfung fehlgeschlagen ({name}): {e}")
+
             target_td = None
             for td in tds:
                 onclick = td.get_attribute("onclick") or ""
@@ -249,14 +358,7 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                 dialog.locator("button:has-text('Speichern')").click()
                 time.sleep(1.5)
 
-                msg = ""
-                if page.locator("#msg_out p").count() > 0:
-                    msg = page.locator("#msg_out p").inner_text().strip()
-                else:
-                    try:
-                        msg = dialog.locator(".ui-dialog-content").inner_text().strip()
-                    except Exception:
-                        msg = ""
+                msg = read_dialog_message(page, dialog)
                 msg_l = msg.lower()
                 not_entered = "nicht eingetreten" in msg_l
 
@@ -272,14 +374,7 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                     log_step("Speichere erneut nach Abgleich-Korrektur")
                     dialog.locator("button:has-text('Speichern')").click()
                     time.sleep(1.5)
-                    msg_retry = ""
-                    if page.locator("#msg_out p").count() > 0:
-                        msg_retry = page.locator("#msg_out p").inner_text().strip()
-                    else:
-                        try:
-                            msg_retry = dialog.locator(".ui-dialog-content").inner_text().strip()
-                        except Exception:
-                            msg_retry = ""
+                    msg_retry = read_dialog_message(page, dialog)
                     msg_retry_l = msg_retry.lower()
                     if "nicht eingetreten" in msg_retry_l:
                         log_step("Hinweis nach Retry: Mitarbeiter nicht eingetreten")
@@ -323,7 +418,8 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                         if austritt_text:
                             try:
                                 austritt_date = datetime.strptime(austritt_text, "%d.%m.%Y")
-                                if austritt_date <= datetime(config.URLAUB_YEAR, config.URLAUB_MONTH, 31):
+                                last_day = calendar.monthrange(config.URLAUB_YEAR, config.URLAUB_MONTH)[1]
+                                if austritt_date <= datetime(config.URLAUB_YEAR, config.URLAUB_MONTH, last_day):
                                     log_warnung(name, eintritt_text, austritt_text)
                                     print(f"[WARNUNG] {name}: Eintrittsänderung übersprungen – Austritt {austritt_text} im selben/älteren Monat.")
                                     print("[INFO] Setze Urlaub bis Austrittsdatum statt Eintritt zu ändern …")
@@ -360,14 +456,7 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                                     log_step("Speichere Urlaubseintrag (Austritt-Korrektur)")
                                     dialog.locator("button:has-text('Speichern')").click()
                                     time.sleep(1.5)
-                                    msg2 = ""
-                                    if page.locator("#msg_out p").count() > 0:
-                                        msg2 = page.locator("#msg_out p").inner_text().strip()
-                                    else:
-                                        try:
-                                            msg2 = dialog.locator(".ui-dialog-content").inner_text().strip()
-                                        except Exception:
-                                            msg2 = ""
+                                    msg2 = read_dialog_message(page, dialog)
                                     msg2_l = msg2.lower()
                                     if "abgeglichene schichten" in msg2_l:
                                         print("[WARNUNG] Abgeglichene Schichten – setze 'von' auf den 02. des Monats (im selben Modal) und speichere erneut …")
@@ -413,6 +502,7 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                         akte_page.fill("#eintrittsdatum_neu", neues_datum)
                         akte_page.fill("#bemerkung", bemerkung)
                         akte_page.click("span.abstand_links_8:has-text('Speichern')")
+                        time.sleep(0.8)
 
                         for sec in range(10):
                             if akte_page.locator("span.ui-button-text", has_text="Fortfahren").count() > 0:
@@ -420,6 +510,17 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                                 print(f"[OK] 'Fortfahren' bestätigt ({sec}s).")
                                 break
                             time.sleep(1)
+
+                        close_btn = akte_page.locator("button:has-text('Schließen')").first
+                        if close_btn.count() > 0:
+                            close_btn.click()
+                            try:
+                                akte_page.locator("form#formEditEinAustrittsdatum").wait_for(
+                                    state="detached",
+                                    timeout=8000,
+                                )
+                            except PlaywrightTimeoutError:
+                                pass
 
                         log_korrektur(name, f"Eintritt auf {neues_datum} geändert ({bemerkung})")
                         akte_page.close()
@@ -465,14 +566,7 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                                     )
                                     dialog.locator("button:has-text('Speichern')").click()
                                     time.sleep(1.5)
-                                    msg2 = ""
-                                    if page.locator("#msg_out p").count() > 0:
-                                        msg2 = page.locator("#msg_out p").inner_text().strip()
-                                    else:
-                                        try:
-                                            msg2 = dialog.locator(".ui-dialog-content").inner_text().strip()
-                                        except Exception:
-                                            msg2 = ""
+                                    msg2 = read_dialog_message(page, dialog)
                                     msg2_l = msg2.lower()
                                     if "abgeglichene schichten" in msg2_l:
                                         print("[WARNUNG] Abgeglichene Schichten – setze 'von' auf den 02. des Monats (im selben Modal) und speichere erneut …")
