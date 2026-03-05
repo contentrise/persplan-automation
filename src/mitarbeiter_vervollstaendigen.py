@@ -1575,30 +1575,44 @@ def _open_document_upload_dialog(page: Page) -> tuple[Locator | None, Union[Fram
     if frame:
         target = frame
 
-    add_button = target.locator("button:has-text('Dokument hinzufügen')").first
-    if add_button.count() == 0:
-        add_button = page.locator("button:has-text('Dokument hinzufügen')").first
-        if add_button.count() == 0:
-            print("[WARNUNG] 'Dokument hinzufügen' Button nicht gefunden.")
+    def _click_add_button() -> bool:
+        targets: list[Union[Frame, Page]] = [target, page]
+        for fr in page.frames:
+            targets.append(fr)
+        btn_sel = "button:has-text('Dokument hinzufügen')"
+        for candidate in targets:
             try:
-                btn_sel = "button:has-text('Dokument hinzufügen')"
-                dlg_sel = "div.ui-dialog:has-text('Dokument hinzufügen')"
-                print(
-                    "[DEBUG] Upload-Dialog Button-Counts: "
-                    f"inhalt={target.locator(btn_sel).count()} "
-                    f"page={page.locator(btn_sel).count()} "
-                    f"dialog={page.locator(dlg_sel).count()}"
-                )
+                add_btn = candidate.locator(btn_sel).first
+                if add_btn.count() == 0:
+                    continue
+                try:
+                    add_btn.scroll_into_view_if_needed()
+                except Exception:
+                    pass
+                try:
+                    add_btn.click()
+                except Exception:
+                    add_btn.click(force=True)
+                print("[OK] Dokument hinzufügen geöffnet.")
+                return True
             except Exception:
-                pass
-            _log_dialog_debug("not-found")
-            return None, None
-    try:
-        add_button.scroll_into_view_if_needed()
-    except Exception:
-        pass
-    add_button.click()
-    print("[OK] Dokument hinzufügen geöffnet.")
+                continue
+        try:
+            dlg_sel = "div.ui-dialog:has-text('Dokument hinzufügen')"
+            print(
+                "[DEBUG] Upload-Dialog Button-Counts: "
+                f"inhalt={target.locator(btn_sel).count()} "
+                f"page={page.locator(btn_sel).count()} "
+                f"dialog={page.locator(dlg_sel).count()}"
+            )
+        except Exception:
+            pass
+        return False
+
+    if not _click_add_button():
+        print("[WARNUNG] 'Dokument hinzufügen' Button nicht gefunden.")
+        _log_dialog_debug("not-found")
+        return None, None
 
     dialog = page.locator("div.ui-dialog:has-text('Dokument hinzufügen')").first
     try:
@@ -1649,19 +1663,43 @@ def _upload_document_with_modal(
             time.sleep(0.2)
         return None
 
+    def _try_click_upload_trigger() -> bool:
+        triggers = [
+            dialog.locator("#maDokDropzone").first,
+            dialog.locator("button:has-text('Datei')").first,
+            dialog.locator("button:has-text('Datei auswählen')").first,
+            dialog.locator("button:has-text('Durchsuchen')").first,
+            dialog.locator("label:has-text('Datei')").first,
+            dialog.locator("label:has-text('Durchsuchen')").first,
+        ]
+        for trigger in triggers:
+            try:
+                if trigger.count() == 0:
+                    continue
+                try:
+                    trigger.scroll_into_view_if_needed()
+                except Exception:
+                    pass
+                try:
+                    trigger.click()
+                except Exception:
+                    trigger.click(force=True)
+                return True
+            except Exception:
+                continue
+        return False
+
     # Dropzone creates a hidden file input on click; use file chooser fallback.
     try:
-        dropzone = dialog.locator("#maDokDropzone").first
-        if dropzone.count() == 0:
-            raise RuntimeError("Dropzone not found")
         with page.expect_file_chooser(timeout=5000) as fc_info:
-            dropzone.click()
+            if not _try_click_upload_trigger():
+                raise RuntimeError("Upload trigger not found")
         file_chooser = fc_info.value
         file_chooser.set_files(file_path)
         print(f"[OK] Datei ausgewählt → {Path(file_path).name}")
     except Exception as exc:
         print(f"[DEBUG] Upload-Dialog dropzone fallback: {exc}")
-        file_input = _find_file_input()
+        file_input = _find_file_input(timeout_s=6.0)
         if file_input is None:
             try:
                 target_url = dialog_target.url if hasattr(dialog_target, "url") else ""
