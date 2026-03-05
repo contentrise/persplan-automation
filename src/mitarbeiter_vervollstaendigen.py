@@ -1630,30 +1630,75 @@ def _open_document_upload_dialog(
         targets: list[Union[Frame, Page]] = [target, page]
         for fr in page.frames:
             targets.append(fr)
-        btn_sel = "button:has-text('Dokument hinzufügen')"
-        for candidate in targets:
+
+        btn_selectors = [
+            "button:has-text('Dokument hinzufügen')",
+            "button[title*='Dokument hinzufügen']",
+            "button[onclick*='mitarbeiter_info_dokumente_editor']",
+            "#dokumente button:has-text('Dokument hinzufügen')",
+        ]
+
+        deadline = time.time() + 10
+        while time.time() < deadline:
             try:
-                add_btn = candidate.locator(btn_sel).first
-                if add_btn.count() == 0:
-                    continue
+                _dismiss_ui_overlay(page)
                 try:
-                    add_btn.scroll_into_view_if_needed()
+                    page.locator("#loaderContainer").first.wait_for(state="hidden", timeout=1500)
                 except Exception:
                     pass
-                try:
-                    add_btn.click()
-                except Exception:
-                    add_btn.click(force=True)
-                print("[OK] Dokument hinzufügen geöffnet.")
-                return True
             except Exception:
-                continue
+                pass
+
+            for candidate in targets:
+                for btn_sel in btn_selectors:
+                    try:
+                        add_btn = candidate.locator(btn_sel).first
+                        if add_btn.count() == 0:
+                            continue
+                        try:
+                            add_btn.scroll_into_view_if_needed()
+                        except Exception:
+                            pass
+                        try:
+                            add_btn.click()
+                        except Exception:
+                            add_btn.click(force=True)
+                        print("[OK] Dokument hinzufügen geöffnet.")
+                        return True
+                    except Exception:
+                        continue
+
+            # JS fallback for dynamically rendered button.
+            try:
+                clicked = page.evaluate(
+                    """() => {
+                        const selectors = [
+                            "button[title*='Dokument hinzufügen']",
+                            "button[onclick*='mitarbeiter_info_dokumente_editor']",
+                            "#dokumente button"
+                        ];
+                        for (const sel of selectors) {
+                            const btns = Array.from(document.querySelectorAll(sel));
+                            const btn = btns.find(b => (b.textContent || '').includes('Dokument hinzufügen'));
+                            if (btn) { btn.scrollIntoView({ block: 'center' }); btn.click(); return true; }
+                        }
+                        return false;
+                    }"""
+                )
+                if clicked:
+                    print("[OK] Dokument hinzufügen geöffnet (JS fallback).")
+                    return True
+            except Exception:
+                pass
+
+            time.sleep(0.4)
+
         try:
             dlg_sel = "div.ui-dialog:has-text('Dokument hinzufügen')"
             print(
                 "[DEBUG] Upload-Dialog Button-Counts: "
-                f"inhalt={target.locator(btn_sel).count()} "
-                f"page={page.locator(btn_sel).count()} "
+                f"inhalt={target.locator(btn_selectors[0]).count()} "
+                f"page={page.locator(btn_selectors[0]).count()} "
                 f"dialog={page.locator(dlg_sel).count()}"
             )
         except Exception:
@@ -1693,7 +1738,7 @@ def _upload_document_with_modal(
     gueltig_bis: str = "",
 ) -> bool:
     _close_document_upload_dialog(page)
-    dialog, dialog_target = _open_document_upload_dialog(page, force_open=True)
+    dialog, dialog_target = _open_document_upload_dialog(page, force_open=False)
     if dialog is None or dialog_target is None:
         return False
 
