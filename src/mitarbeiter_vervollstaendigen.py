@@ -1669,11 +1669,12 @@ def _upload_document_with_modal(
                 target_url = ""
             print(f"[DEBUG] Upload-Dialog file input search failed: target_url={target_url!r}")
             try:
+                file_sel = "input[type='file']"
                 print(
                     "[DEBUG] Upload-Dialog file input counts: "
-                    f"dialog={dialog.locator('input[type=\"file\"]').count()} "
-                    f"target={dialog_target.locator('input[type=\"file\"]').count()} "
-                    f"page={page.locator('input[type=\"file\"]').count()}"
+                    f"dialog={dialog.locator(file_sel).count()} "
+                    f"target={dialog_target.locator(file_sel).count()} "
+                    f"page={page.locator(file_sel).count()}"
                 )
             except Exception:
                 pass
