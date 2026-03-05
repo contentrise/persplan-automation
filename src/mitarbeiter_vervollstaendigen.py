@@ -1603,6 +1603,25 @@ def _upload_document_with_modal(
     if dialog is None:
         return False
 
+    def _find_file_input(timeout_s: float = 3.5):
+        deadline = time.time() + timeout_s
+        while time.time() < deadline:
+            try:
+                file_input = dialog.locator("input[type='file']").first
+                if file_input.count() > 0:
+                    return file_input
+                file_input = page.locator("input[type='file']").first
+                if file_input.count() > 0:
+                    return file_input
+                for fr in page.frames:
+                    file_input = fr.locator("input[type='file']").first
+                    if file_input.count() > 0:
+                        return file_input
+            except Exception:
+                pass
+            time.sleep(0.2)
+        return None
+
     # Dropzone creates a hidden file input on click; use file chooser fallback.
     try:
         dropzone = dialog.locator("#maDokDropzone").first
@@ -1614,14 +1633,8 @@ def _upload_document_with_modal(
         file_chooser.set_files(file_path)
         print(f"[OK] Datei ausgewählt → {Path(file_path).name}")
     except Exception:
-        file_input = dialog.locator("input[type='file']").first
-        if file_input.count() == 0:
-            file_input = page.locator("input[type='file']").first
-        if file_input.count() == 0:
-            frame = page.frame(name="inhalt")
-            if frame:
-                file_input = frame.locator("input[type='file']").first
-        if file_input.count() == 0:
+        file_input = _find_file_input()
+        if file_input is None:
             print("[WARNUNG] Datei-Input im Dokument-Dialog nicht gefunden.")
             return False
         file_input.set_input_files(file_path)
