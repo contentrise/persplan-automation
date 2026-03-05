@@ -1529,7 +1529,44 @@ def _build_vertrag_bemerkung(payload: dict) -> str:
     return f"Arbeitsvertrag {type_label} zum {hire_date_ui}"
 
 
-def _open_document_upload_dialog(page: Page) -> tuple[Locator | None, Union[Frame, Page] | None]:
+def _close_document_upload_dialog(page: Page) -> None:
+    selectors = [
+        "div.ui-dialog:has-text('Dokument hinzufügen')",
+        "div.ui-dialog:has(.ui-dialog-title:has-text('Dokument hinzufügen'))",
+    ]
+    for sel in selectors:
+        dialog = page.locator(sel).first
+        try:
+            if dialog.count() == 0 or not dialog.is_visible():
+                continue
+        except Exception:
+            continue
+        close_btn = dialog.locator(
+            "button.ui-dialog-titlebar-close, button:has-text('Abbrechen'), button:has-text('Schließen')"
+        ).first
+        try:
+            if close_btn.count() > 0:
+                close_btn.click()
+            else:
+                page.evaluate(
+                    """() => {
+                        const win = document.getElementById('scnUiWindow');
+                        if (win) { win.dispatchEvent(new Event('trigger_close')); }
+                    }"""
+                )
+        except Exception:
+            pass
+        try:
+            dialog.wait_for(state="hidden", timeout=2000)
+        except Exception:
+            pass
+
+
+def _open_document_upload_dialog(
+    page: Page,
+    *,
+    force_open: bool = False,
+) -> tuple[Locator | None, Union[Frame, Page] | None]:
     def _log_dialog_debug(step: str) -> None:
         try:
             print(f"[DEBUG] Upload-Dialog {step}: page_url={page.url!r}")
@@ -1554,6 +1591,19 @@ def _open_document_upload_dialog(page: Page) -> tuple[Locator | None, Union[Fram
                 if dialog.count() == 0:
                     continue
                 dialog.wait_for(state="visible", timeout=1500)
+                # Ensure this dialog actually contains the dropzone or file input.
+                has_dropzone = False
+                try:
+                    has_dropzone = dialog.locator("#maDokDropzone").count() > 0
+                except Exception:
+                    has_dropzone = False
+                has_file_input = False
+                try:
+                    has_file_input = dialog.locator("input[type='file']").count() > 0
+                except Exception:
+                    has_file_input = False
+                if not (has_dropzone or has_file_input):
+                    continue
                 try:
                     target_url = target.url if hasattr(target, "url") else ""
                 except Exception:
@@ -1566,9 +1616,10 @@ def _open_document_upload_dialog(page: Page) -> tuple[Locator | None, Union[Fram
 
     candidates: list[Union[Frame, Page]] = [page]
     candidates.extend(page.frames)
-    dialog, dialog_target = _find_dialog_in_targets(candidates)
-    if dialog is not None:
-        return dialog, dialog_target
+    if not force_open:
+        dialog, dialog_target = _find_dialog_in_targets(candidates)
+        if dialog is not None:
+            return dialog, dialog_target
 
     target: Union[Frame, Page] = page
     frame = page.frame(name="inhalt")
@@ -1622,6 +1673,10 @@ def _open_document_upload_dialog(page: Page) -> tuple[Locator | None, Union[Fram
         _log_dialog_debug("not-visible")
         return None, None
     try:
+        dialog.wait_for(selector="#maDokDropzone, input[type='file']", timeout=3000)
+    except Exception:
+        pass
+    try:
         target_url = target.url if hasattr(target, "url") else ""
     except Exception:
         target_url = ""
@@ -1637,7 +1692,8 @@ def _upload_document_with_modal(
     bemerkung_text: str = "",
     gueltig_bis: str = "",
 ) -> bool:
-    dialog, dialog_target = _open_document_upload_dialog(page)
+    _close_document_upload_dialog(page)
+    dialog, dialog_target = _open_document_upload_dialog(page, force_open=True)
     if dialog is None or dialog_target is None:
         return False
 
