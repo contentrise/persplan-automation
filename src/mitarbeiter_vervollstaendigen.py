@@ -1529,7 +1529,7 @@ def _build_vertrag_bemerkung(payload: dict) -> str:
     return f"Arbeitsvertrag {type_label} zum {hire_date_ui}"
 
 
-def _open_document_upload_dialog(page: Page):
+def _open_document_upload_dialog(page: Page) -> tuple[Locator | None, Union[Frame, Page] | None]:
     def _log_dialog_debug(step: str) -> None:
         try:
             print(f"[DEBUG] Upload-Dialog {step}: page_url={page.url!r}")
@@ -1542,14 +1542,33 @@ def _open_document_upload_dialog(page: Page):
             print(f"[DEBUG] Upload-Dialog {step}: frames={names}")
         except Exception:
             pass
-
-    dialog = page.locator("div.ui-dialog:has-text('Dokument hinzufügen')").first
-    if dialog.count() > 0:
         try:
-            dialog.wait_for(state="visible", timeout=1500)
-            return dialog
+            print(f"[DEBUG] Upload-Dialog {step}: dialogs(page)={page.locator('div.ui-dialog').count()}")
         except Exception:
             pass
+
+    def _find_dialog_in_targets(targets: list[Union[Frame, Page]]):
+        for target in targets:
+            try:
+                dialog = target.locator("div.ui-dialog:has-text('Dokument hinzufügen')").first
+                if dialog.count() == 0:
+                    continue
+                dialog.wait_for(state="visible", timeout=1500)
+                try:
+                    target_url = target.url if hasattr(target, "url") else ""
+                except Exception:
+                    target_url = ""
+                print(f"[DEBUG] Upload-Dialog found in target url={target_url!r}")
+                return dialog, target
+            except Exception:
+                continue
+        return None, None
+
+    candidates: list[Union[Frame, Page]] = [page]
+    candidates.extend(page.frames)
+    dialog, dialog_target = _find_dialog_in_targets(candidates)
+    if dialog is not None:
+        return dialog, dialog_target
 
     target: Union[Frame, Page] = page
     frame = page.frame(name="inhalt")
@@ -1573,7 +1592,7 @@ def _open_document_upload_dialog(page: Page):
             except Exception:
                 pass
             _log_dialog_debug("not-found")
-            return
+            return None, None
     try:
         add_button.scroll_into_view_if_needed()
     except Exception:
@@ -1587,8 +1606,13 @@ def _open_document_upload_dialog(page: Page):
     except Exception:
         print("[WARNUNG] Dokument-Dialog nicht sichtbar.")
         _log_dialog_debug("not-visible")
-        return None
-    return dialog
+        return None, None
+    try:
+        target_url = target.url if hasattr(target, "url") else ""
+    except Exception:
+        target_url = ""
+    print(f"[DEBUG] Upload-Dialog visible after click: target_url={target_url!r}")
+    return dialog, target
 
 
 def _upload_document_with_modal(
@@ -1599,8 +1623,8 @@ def _upload_document_with_modal(
     bemerkung_text: str = "",
     gueltig_bis: str = "",
 ) -> bool:
-    dialog = _open_document_upload_dialog(page)
-    if dialog is None:
+    dialog, dialog_target = _open_document_upload_dialog(page)
+    if dialog is None or dialog_target is None:
         return False
 
     def _find_file_input(timeout_s: float = 3.5):
@@ -1608,6 +1632,9 @@ def _upload_document_with_modal(
         while time.time() < deadline:
             try:
                 file_input = dialog.locator("input[type='file']").first
+                if file_input.count() > 0:
+                    return file_input
+                file_input = dialog_target.locator("input[type='file']").first
                 if file_input.count() > 0:
                     return file_input
                 file_input = page.locator("input[type='file']").first
@@ -1632,9 +1659,24 @@ def _upload_document_with_modal(
         file_chooser = fc_info.value
         file_chooser.set_files(file_path)
         print(f"[OK] Datei ausgewählt → {Path(file_path).name}")
-    except Exception:
+    except Exception as exc:
+        print(f"[DEBUG] Upload-Dialog dropzone fallback: {exc}")
         file_input = _find_file_input()
         if file_input is None:
+            try:
+                target_url = dialog_target.url if hasattr(dialog_target, "url") else ""
+            except Exception:
+                target_url = ""
+            print(f"[DEBUG] Upload-Dialog file input search failed: target_url={target_url!r}")
+            try:
+                print(
+                    "[DEBUG] Upload-Dialog file input counts: "
+                    f"dialog={dialog.locator('input[type=\"file\"]').count()} "
+                    f"target={dialog_target.locator('input[type=\"file\"]').count()} "
+                    f"page={page.locator('input[type=\"file\"]').count()}"
+                )
+            except Exception:
+                pass
             print("[WARNUNG] Datei-Input im Dokument-Dialog nicht gefunden.")
             return False
         file_input.set_input_files(file_path)
