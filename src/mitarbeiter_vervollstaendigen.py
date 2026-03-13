@@ -1279,6 +1279,31 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
     if submit_button.count() == 0:
         print("[WARNUNG] 'eintragen'-Button im Vertrag-Dialog nicht gefunden.")
         return
+
+    # If a previous active contract ("X" row) exists, deactivate it first.
+    try:
+        deactivate = dialog.locator("a[onclick*='daten_historie_change_status'][onclick*='vertrag_id']").first
+        if deactivate.count() > 0:
+            print("[INFO] Deaktiviere bestehenden Vertrag (X) …")
+            before_rows = dialog.locator("tbody tr").count()
+            try:
+                deactivate.click()
+            except Exception:
+                try:
+                    deactivate.evaluate("el => el.click()")
+                except Exception:
+                    pass
+            try:
+                dialog.locator("tbody tr").first.wait_for(state="detached", timeout=3000)
+            except Exception:
+                pass
+            after_rows = dialog.locator("tbody tr").count()
+            if after_rows >= before_rows:
+                print("[WARNUNG] Deaktivieren des bestehenden Vertrags nicht bestätigt.")
+            else:
+                print("[OK] Bestehender Vertrag deaktiviert.")
+    except Exception as exc:
+        print(f"[WARNUNG] Deaktivieren des bestehenden Vertrags fehlgeschlagen: {exc}")
     submit_button.click()
     print(f"[OK] Vertrag eingetragen → {label} ab {hire_date_modal}")
     time.sleep(0.5)

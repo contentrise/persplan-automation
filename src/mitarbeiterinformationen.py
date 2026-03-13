@@ -251,7 +251,16 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
 
     required_keys = _build_required_upload_keys(payload)
     required_set = set(required_keys)
-    skip_keys = {"personalbogen", "vertrag", "arbeitsvertrag", "zusatzvereinbarung", "sicherheitsbelehrung"}
+    # Nicht in "Einzureichende Unterlagen" eintragen (nur bei Dokumenten ablegen).
+    non_einzureichende = {"rentenbefreiung"}
+    skip_keys = {
+        "personalbogen",
+        "vertrag",
+        "arbeitsvertrag",
+        "zusatzvereinbarung",
+        "sicherheitsbelehrung",
+    }
+    skip_keys.update(non_einzureichende)
 
     # Feste Reihenfolge, damit die Einträge in der Akte reproduzierbar sind.
     preferred_order = [
@@ -261,11 +270,12 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
         "infektionsschutz",
         "aufenthaltserlaubnis",
         "arbeitserlaubnis",
-        "rentenbefreiung",
     ]
+    preferred_order = [key for key in preferred_order if key not in non_einzureichende]
     ordered_keys = [key for key in preferred_order if key in required_set or key in uploads]
     ordered_keys.extend([key for key in required_keys if key not in ordered_keys])
     ordered_keys.extend([key for key in uploads.keys() if key not in ordered_keys])
+    ordered_keys = [key for key in ordered_keys if key not in non_einzureichende]
 
     unterlagen = []
     for key in ordered_keys:

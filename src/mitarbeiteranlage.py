@@ -82,6 +82,70 @@ def _log_dialog_state(dialog, frame_label: str, label: str) -> None:
         print(f"[DEBUG] Dialog-Buttons: {buttons}")
 
 
+def _log_visible_dialogs(page) -> None:
+    try:
+        for frame in page.frames:
+            dialogs = frame.locator("div.ui-dialog:visible")
+            count = dialogs.count()
+            if count == 0:
+                continue
+            print(f"[DEBUG] Sichtbare Dialoge in {_frame_label(frame)}: {count}")
+            for idx in range(min(count, 4)):
+                _log_dialog_state(dialogs.nth(idx), _frame_label(frame), f"Dialog[{idx}]")
+    except Exception as e:
+        print(f"[WARNUNG] Sichtbare Dialoge loggen fehlgeschlagen: {e}")
+
+
+def _dump_form_errors(form_frame) -> None:
+    try:
+        errors = form_frame.evaluate(
+            """() => {
+                const selectors = [
+                    '.error', '.errorText', '.errorMessage', '.ui-state-error',
+                    '.field-error', '.input-error', '[aria-invalid="true"]'
+                ];
+                const nodes = selectors.flatMap((sel) => Array.from(document.querySelectorAll(sel)));
+                const messages = [];
+                nodes.forEach((node) => {
+                    const text = (node.textContent || '').trim();
+                    if (text) messages.push(text);
+                    if (node.tagName === 'INPUT' || node.tagName === 'SELECT') {
+                        const name = node.getAttribute('name') || node.getAttribute('id') || node.tagName;
+                        messages.push(`Feld ${name} markiert als Fehler`);
+                    }
+                });
+                return Array.from(new Set(messages)).slice(0, 10);
+            }"""
+        )
+        if errors:
+            print(f"[WARNUNG] Formular-Fehler: {errors}")
+        else:
+            print("[DEBUG] Keine Formular-Fehler gefunden.")
+    except Exception as e:
+        print(f"[WARNUNG] Formular-Fehler auslesen fehlgeschlagen: {e}")
+
+
+def _wait_for_success_signal(page, timeout_seconds: float = 20.0) -> bool:
+    deadline = time.time() + max(2.0, timeout_seconds)
+    success_patterns = re.compile(
+        r"(Logindaten|E-Mail wurde versendet|E[- ]?Mail wurde versendet|Erfolgreich|angelegt)",
+        re.IGNORECASE,
+    )
+    while time.time() < deadline:
+        for frame in page.frames:
+            try:
+                dialog = frame.locator("div.ui-dialog:visible").filter(has_text=success_patterns).first
+                if dialog.count() > 0:
+                    print("[OK] Erfolgshinweis-Dialog erkannt.")
+                    _log_dialog_state(dialog, _frame_label(frame), "Erfolgshinweis")
+                    return True
+            except Exception:
+                continue
+        time.sleep(0.5)
+    print("[WARNUNG] Kein Erfolgshinweis erkannt.")
+    return False
+
+
 def _row_from_json(payload: dict) -> dict:
     return {
         "Anrede": _pick_value(payload, ["anrede"]),
@@ -455,16 +519,18 @@ def open_mitarbeiteranlage(page: Page):
                     if ok_button.count() > 0 and ok_button.is_visible():
                         ok_button.click(force=True)
                     break
+                print(f"[WARNUNG] Fehler-Dialog gefunden: {text[:300]}")
+                _log_dialog_state(dialog, _frame_label(frame), "Fehler-Dialog")
             if svnr_error_found:
                 break
             time.sleep(0.25)
 
-        if svnr_error_found:
-            try:
-                form_frame.locator("[name='sozialversicherungsnummer'], [id='sozialversicherungsnummer']").first.fill("")
-                print("[OK] sozialversicherungsnummer → (leer)")
-            except Exception as e:
-                print(f"[FEHLER] sozialversicherungsnummer leeren: {e}")
+            if svnr_error_found:
+                try:
+                    form_frame.locator("[name='sozialversicherungsnummer'], [id='sozialversicherungsnummer']").first.fill("")
+                    print("[OK] sozialversicherungsnummer → (leer)")
+                except Exception as e:
+                    print(f"[FEHLER] sozialversicherungsnummer leeren: {e}")
             add_clicked = _click_add_button()
             if not add_clicked:
                 print("[HINWEIS] Kein Hinzufügen-Button gefunden (Retry nach SVNR-Fehler).")
@@ -472,6 +538,17 @@ def open_mitarbeiteranlage(page: Page):
                 _confirm_hinweis_modal()
     except Exception as e:
         print(f"[WARNUNG] Fehler-Modal prüfen fehlgeschlagen: {e}")
+
+    if not _wait_for_success_signal(page, timeout_seconds=20.0):
+        print("[WARNUNG] Kein Erfolg erkannt – versuche Hinzufügen erneut.")
+        _log_visible_dialogs(page)
+        _dump_form_errors(form_frame)
+        add_clicked = _click_add_button()
+        if add_clicked:
+            _confirm_hinweis_modal()
+            _wait_for_success_signal(page, timeout_seconds=15.0)
+        else:
+            print("[WARNUNG] Zweiter Hinzufügen-Klick nicht möglich.")
 
     print("[INFO] Warte 45 Sekunden für manuelle Auslese …")
     time.sleep(45)
