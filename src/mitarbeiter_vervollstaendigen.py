@@ -15,6 +15,50 @@ from src import config
 from src.login import do_login
 
 
+class FieldTracker:
+    def __init__(self, attempt: int, max_retries: int):
+        self.attempt = attempt
+        self.max_retries = max_retries
+        self.entries: list[dict] = []
+
+    def _add(self, section: str, field_id: str, expected: str, actual: str, status: str) -> None:
+        self.entries.append(
+            {
+                "section": section,
+                "field_id": field_id,
+                "expected": expected,
+                "actual": actual,
+                "status": status,
+                "attempt": self.attempt,
+            }
+        )
+
+    def ok(self, section: str, field_id: str, expected: str, actual: str) -> None:
+        self._add(section, field_id, expected, actual, "ok")
+
+    def skip(self, section: str, field_id: str, expected: str, actual: str) -> None:
+        self._add(section, field_id, expected, actual, "skipped")
+
+    def missing(self, section: str, field_id: str, expected: str, actual: str) -> None:
+        self._add(section, field_id, expected, actual, "missing")
+
+    def error(self, section: str, field_id: str, actual: str) -> None:
+        self._add(section, field_id, "", actual, "error")
+
+    def missing_fields(self) -> list[dict]:
+        return [entry for entry in self.entries if entry.get("status") in {"missing", "error"}]
+
+    def log_summary(self) -> None:
+        missing = self.missing_fields()
+        print(
+            "=== MISSING_FIELDS ===\n"
+            + json.dumps(
+                {"attempt": self.attempt, "max_retries": self.max_retries, "missing": missing},
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+
 def _extract_bn(value: str) -> str:
     if not value:
         return ""
@@ -847,7 +891,7 @@ def _set_yes_no_select(locator, value: str) -> bool:
         return False
 
 
-def _fill_sedcard_fields(page: Page, payload: dict) -> None:
+def _fill_sedcard_fields(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
     target: Union[Frame, Page] = page
     frame = page.frame(name="inhalt")
     if frame:
@@ -868,30 +912,93 @@ def _fill_sedcard_fields(page: Page, payload: dict) -> None:
         if not value:
             continue
         locator = target.locator(f"[name='{field}'], #{field}")
+        current = _safe_input_value(locator)
+        if current == str(value):
+            print(f"[OK] sedcard {field} bereits korrekt → {value}")
+            if tracker:
+                tracker.skip("sedcard", field, str(value), current)
+            continue
         if _set_input_value_force(locator, value):
             print(f"[OK] sedcard {field} → {value}")
         else:
             print(f"[WARNUNG] sedcard {field} nicht gesetzt.")
+        if tracker:
+            actual = _safe_input_value(locator)
+            if actual == str(value):
+                tracker.ok("sedcard", field, str(value), actual)
+            else:
+                tracker.missing("sedcard", field, str(value), actual)
 
     language_entries = _parse_language_entries(_pick_payload_value(payload, ["fremdsprachen"]))
     if language_entries:
         _fill_language_fields(target, language_entries)
+        if tracker:
+            pairs = [
+                ("sprache01a", "sprache01b"),
+                ("sprache02a", "sprache02b"),
+                ("sprache03a", "sprache03b"),
+                ("sprache04a", "sprache04b"),
+            ]
+            for idx, (lang_field, level_field) in enumerate(pairs):
+                if idx >= len(language_entries):
+                    break
+                entry = language_entries[idx]
+                expected_lang = entry.get("language", "")
+                expected_level = entry.get("level", "")
+                if expected_lang:
+                    loc = target.locator(f"[name='{lang_field}'], #{lang_field}")
+                    actual = _safe_input_value(loc)
+                    if actual == expected_lang:
+                        tracker.ok("sedcard", lang_field, expected_lang, actual)
+                    else:
+                        tracker.missing("sedcard", lang_field, expected_lang, actual)
+                if expected_level:
+                    loc = target.locator(f"[name='{level_field}'], #{level_field}")
+                    actual = _safe_input_value(loc)
+                    if actual == expected_level:
+                        tracker.ok("sedcard", level_field, expected_level, actual)
+                    else:
+                        tracker.missing("sedcard", level_field, expected_level, actual)
 
     fuehrerschein_value = _pick_payload_value(payload, ["fuehrerschein"])
     if fuehrerschein_value:
         locator = target.locator("[name='fuehrerschein']")
-        if _set_yes_no_select(locator, fuehrerschein_value):
+        current = _safe_select_value(locator)
+        expected = "1" if str(fuehrerschein_value).strip().lower() in ["ja", "yes", "true", "1", "wahr"] else "0"
+        if current == expected:
+            print(f"[OK] sedcard fuehrerschein bereits korrekt → {fuehrerschein_value}")
+            if tracker:
+                tracker.skip("sedcard", "fuehrerschein", expected, current)
+        elif _set_yes_no_select(locator, fuehrerschein_value):
             print(f"[OK] sedcard fuehrerschein → {fuehrerschein_value}")
         else:
             print("[WARNUNG] sedcard fuehrerschein nicht gesetzt.")
+        if tracker:
+            actual = _safe_select_value(locator)
+            if actual == expected:
+                tracker.ok("sedcard", "fuehrerschein", expected, actual)
+            else:
+                tracker.missing("sedcard", "fuehrerschein", expected, actual)
 
     pkw_value = _pick_payload_value(payload, ["pkw"])
     if pkw_value:
         locator = target.locator("[name='pkw']")
-        if _set_yes_no_select(locator, pkw_value):
+        current = _safe_select_value(locator)
+        expected = "1" if str(pkw_value).strip().lower() in ["ja", "yes", "true", "1", "wahr"] else "0"
+        if current == expected:
+            print(f"[OK] sedcard pkw bereits korrekt → {pkw_value}")
+            if tracker:
+                tracker.skip("sedcard", "pkw", expected, current)
+        elif _set_yes_no_select(locator, pkw_value):
             print(f"[OK] sedcard pkw → {pkw_value}")
         else:
             print("[WARNUNG] sedcard pkw nicht gesetzt.")
+        if tracker:
+            actual = _safe_select_value(locator)
+            if actual == expected:
+                tracker.ok("sedcard", "pkw", expected, actual)
+            else:
+                tracker.missing("sedcard", "pkw", expected, actual)
 
     save_button = target.locator(
         "button.editSubcontractor, "
@@ -1927,10 +2034,18 @@ def _ensure_upload_filename(file_path: str, desired_base: str) -> str:
         return file_path
 
 
-def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
+def _upload_arbeitsvertrag(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
     pdf_path = _find_angebot_file()
     if not pdf_path:
         print("[HINWEIS] Kein Angebots-/Vertrags-PDF in perso-input gefunden – überspringe Dokument-Upload.")
+        if tracker:
+            tracker.skip("uploads", "arbeitsvertrag", "vorhanden", "fehlend")
+        return
+    docs_before = _extract_documents_table(page)
+    if _document_present(docs_before, ["arbeitsvertrag", "vertrag"]):
+        print("[INFO] Arbeitsvertrag bereits vorhanden – Upload übersprungen.")
+        if tracker:
+            tracker.skip("uploads", "arbeitsvertrag", "vorhanden", "vorhanden")
         return
     _upload_document_with_modal(
         page=page,
@@ -1939,9 +2054,15 @@ def _upload_arbeitsvertrag(page: Page, payload: dict) -> None:
         folder_value="3",
         bemerkung_text=_build_vertrag_bemerkung(payload),
     )
+    docs_after = _extract_documents_table(page)
+    if tracker:
+        if _document_present(docs_after, ["arbeitsvertrag", "vertrag"]):
+            tracker.ok("uploads", "arbeitsvertrag", "vorhanden", "vorhanden")
+        else:
+            tracker.missing("uploads", "arbeitsvertrag", "vorhanden", "fehlend")
 
 
-def _upload_additional_documents(page: Page, payload: dict) -> None:
+def _upload_additional_documents(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
     uploads = payload.get("uploads") if isinstance(payload, dict) else {}
     if not isinstance(uploads, dict):
         uploads = {}
@@ -1971,7 +2092,21 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
     ]
 
     print("[INFO] Starte Upload zusätzlicher Dokumente …")
+    docs_before = _extract_documents_table(page)
     for stem, bemerkung, folder_label, folder_value, gueltig_bis in jobs:
+        keywords = {
+            "personalbogen": ["personalbogen"],
+            "rentenbefreiung": ["rentenbefreiung"],
+            "zusatzvereinbarung": ["zusatzvereinbarung"],
+            "sicherheitsbelehrung": ["sicherheitsbelehrung"],
+            "immatrikulation": ["immatrikulation", "schulbescheinigung", "imma"],
+            "infektionsschutz": ["infektionsschutz"],
+        }.get(stem, [stem])
+        if _document_present(docs_before, keywords, valid_until=gueltig_bis):
+            print(f"[INFO] Dokument bereits vorhanden – überspringe: {stem}")
+            if tracker:
+                tracker.skip("uploads", stem, "vorhanden", "vorhanden")
+            continue
         file_path = _find_input_file_by_stem(stem)
         temp_downloaded = False
         temp_renamed = False
@@ -2016,6 +2151,13 @@ def _upload_additional_documents(page: Page, payload: dict) -> None:
                 pass
         if not uploaded:
             print(f"[WARNUNG] Upload fehlgeschlagen: {Path(file_path).name}")
+        docs_after = _extract_documents_table(page)
+        if tracker:
+            if _document_present(docs_after, keywords, valid_until=gueltig_bis):
+                tracker.ok("uploads", stem, "vorhanden", "vorhanden")
+            else:
+                tracker.missing("uploads", stem, "vorhanden", "fehlend")
+        docs_before = docs_after
 
 
 def _set_input_value(locator, value: str) -> bool:
@@ -2308,6 +2450,98 @@ def _verify_input_value(locator, expected: str, field_label: str) -> bool:
     return True
 
 
+def _safe_input_value(locator) -> str:
+    if locator.count() == 0:
+        return ""
+    try:
+        return str(locator.first.input_value() or "").strip()
+    except Exception:
+        return ""
+
+
+def _safe_select_value(locator) -> str:
+    if locator.count() == 0:
+        return ""
+    try:
+        return str(locator.first.evaluate("(node) => node.value") or "").strip()
+    except Exception:
+        return ""
+
+
+def _normalize_doc_text(value: str) -> str:
+    text = str(value or "").strip().lower()
+    text = text.replace("ä", "ae").replace("ö", "oe").replace("ü", "ue").replace("ß", "ss")
+    return re.sub(r"[^a-z0-9]+", "", text)
+
+
+def _extract_documents_table(page) -> list[dict]:
+    candidates = [page]
+    try:
+        inhalt = page.frame(name="inhalt")
+    except Exception:
+        inhalt = None
+    if inhalt:
+        candidates.append(inhalt)
+
+    target = None
+    for candidate in candidates:
+        try:
+            if candidate.locator("#dokumenten_tabelle").count() > 0:
+                target = candidate
+                break
+        except Exception:
+            continue
+
+    if target is None:
+        return []
+
+    rows = target.locator("#dokumenten_tabelle tbody tr")
+    entries = []
+    for idx in range(rows.count()):
+        row = rows.nth(idx)
+        try:
+            cells = row.locator("td")
+            if cells.count() < 5:
+                continue
+            file_text = cells.nth(1).inner_text().strip()
+            desc_text = cells.nth(2).inner_text().strip()
+            valid_text = cells.nth(4).inner_text().strip()
+            if not file_text and not desc_text:
+                continue
+            entries.append(
+                {
+                    "file": file_text,
+                    "description": desc_text,
+                    "valid_until": valid_text,
+                }
+            )
+        except Exception:
+            continue
+    return entries
+
+
+def _document_present(docs: list[dict], keywords: list[str], valid_until: str = "") -> bool:
+    if not docs:
+        return False
+    normalized_docs = []
+    for entry in docs:
+        normalized_docs.append(
+            {
+                "file": _normalize_doc_text(entry.get("file", "")),
+                "description": _normalize_doc_text(entry.get("description", "")),
+                "valid_until": str(entry.get("valid_until") or "").strip(),
+            }
+        )
+    normalized_keywords = [_normalize_doc_text(key) for key in keywords if key]
+    for doc in normalized_docs:
+        if any(k in doc["description"] or k in doc["file"] for k in normalized_keywords):
+            if valid_until:
+                if valid_until.strip() and valid_until.strip() != doc["valid_until"].strip():
+                    continue
+            return True
+    return False
+
+
 def _select_autocomplete_by_typing(
     input_locator,
     label_text: str,
@@ -2486,7 +2720,7 @@ def _map_schulabschluss_to_value(value) -> str | None:
     return None
 
 
-def _fill_stammdaten_fields(page: Page, payload: dict) -> None:
+def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
     schulabschluss_raw = _pick_payload_value(payload, ["schulabschluss"])
     if not schulabschluss_raw:
         print("[HINWEIS] Kein Schulabschluss im JSON – überspringe Stammdaten.")
@@ -2523,15 +2757,27 @@ def _fill_stammdaten_fields(page: Page, payload: dict) -> None:
     value = _map_schulabschluss_to_value(schulabschluss_raw)
     if value:
         loc = panel.locator("#schulabschluss_taetigkeitschluessel, [name='schulabschluss_taetigkeitschluessel']")
-        label = None
-        try:
-            label = loc.locator(f"option[value='{value}']").first.inner_text()
-        except Exception:
-            label = None
-        if _set_select_value_with_fallback(loc, value, label=label):
-            print(f"[OK] Stammdaten schulabschluss → {schulabschluss_raw}")
+        current = _safe_select_value(loc)
+        if current == value:
+            print(f"[OK] Stammdaten schulabschluss bereits korrekt → {schulabschluss_raw}")
+            if tracker:
+                tracker.skip("stammdaten", "schulabschluss", value, current)
         else:
-            print("[WARNUNG] Stammdaten schulabschluss nicht gesetzt.")
+            label = None
+            try:
+                label = loc.locator(f"option[value='{value}']").first.inner_text()
+            except Exception:
+                label = None
+            if _set_select_value_with_fallback(loc, value, label=label):
+                print(f"[OK] Stammdaten schulabschluss → {schulabschluss_raw}")
+            else:
+                print("[WARNUNG] Stammdaten schulabschluss nicht gesetzt.")
+        if tracker:
+            actual = _safe_select_value(loc)
+            if actual == value:
+                tracker.ok("stammdaten", "schulabschluss", value, actual)
+            else:
+                tracker.missing("stammdaten", "schulabschluss", value, actual)
     else:
         print(f"[WARNUNG] Schulabschluss nicht gemappt: {schulabschluss_raw}")
 
@@ -2725,7 +2971,7 @@ def _select_autocomplete_by_bn(
     return False
 
 
-def _fill_notfallkontakt(page: Page, payload: dict) -> None:
+def _fill_notfallkontakt(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
     name = _pick_payload_value(payload, ["notfall_name", "notfallkontakt_name"])
     relation = _pick_payload_value(payload, ["verwandschaftsgrad", "notfallkontakt_relation"])
     phone = _pick_payload_value(payload, ["notfall_tel", "notfallkontakt_tel", "notfallkontakt_telefon"])
@@ -2802,36 +3048,51 @@ def _fill_notfallkontakt(page: Page, payload: dict) -> None:
     if name:
         loc = panel.locator("#notfallkontakt_name, [name='notfallkontakt_name']")
         print(f"[DEBUG] notfallkontakt_name Locator count={loc.count()}")
-        if _set_input_value_force(loc, name):
+        current = _safe_input_value(loc)
+        if current == name:
+            print(f"[OK] notfallkontakt_name bereits korrekt → {name}")
+            if tracker:
+                tracker.skip("notfallkontakt", "name", name, current)
+        elif _set_input_value_force(loc, name):
             print(f"[OK] notfallkontakt_name → {name}")
-            try:
-                current = loc.first.input_value().strip()
-                if current != name:
-                    print(f"[ERROR] notfallkontakt_name nicht gesetzt (soll='{name}', ist='{current}')")
-            except Exception:
-                pass
+        if tracker:
+            actual = _safe_input_value(loc)
+            if actual == name:
+                tracker.ok("notfallkontakt", "name", name, actual)
+            else:
+                tracker.missing("notfallkontakt", "name", name, actual)
     if phone:
         loc = panel.locator("#notfallkontakt_telefon, [name='notfallkontakt_telefon']")
         print(f"[DEBUG] notfallkontakt_telefon Locator count={loc.count()}")
-        if _set_input_value_force(loc, phone):
+        current = _safe_input_value(loc)
+        if current == phone:
+            print(f"[OK] notfallkontakt_telefon bereits korrekt → {phone}")
+            if tracker:
+                tracker.skip("notfallkontakt", "telefon", phone, current)
+        elif _set_input_value_force(loc, phone):
             print(f"[OK] notfallkontakt_telefon → {phone}")
-            try:
-                current = loc.first.input_value().strip()
-                if current != phone:
-                    print(f"[ERROR] notfallkontakt_telefon nicht gesetzt (soll='{phone}', ist='{current}')")
-            except Exception:
-                pass
+        if tracker:
+            actual = _safe_input_value(loc)
+            if actual == phone:
+                tracker.ok("notfallkontakt", "telefon", phone, actual)
+            else:
+                tracker.missing("notfallkontakt", "telefon", phone, actual)
     if relation:
         loc = panel.locator("#notfallkontakt_relation, [name='notfallkontakt_relation']")
         print(f"[DEBUG] notfallkontakt_relation Locator count={loc.count()}")
-        if _set_input_value_force(loc, relation):
+        current = _safe_input_value(loc)
+        if current == relation:
+            print(f"[OK] notfallkontakt_relation bereits korrekt → {relation}")
+            if tracker:
+                tracker.skip("notfallkontakt", "relation", relation, current)
+        elif _set_input_value_force(loc, relation):
             print(f"[OK] notfallkontakt_relation → {relation}")
-            try:
-                current = loc.first.input_value().strip()
-                if current != relation:
-                    print(f"[ERROR] notfallkontakt_relation nicht gesetzt (soll='{relation}', ist='{current}')")
-            except Exception:
-                pass
+        if tracker:
+            actual = _safe_input_value(loc)
+            if actual == relation:
+                tracker.ok("notfallkontakt", "relation", relation, actual)
+            else:
+                tracker.missing("notfallkontakt", "relation", relation, actual)
 
     save_button = panel.locator("input[type='submit'].speichern, input[type='submit'][value*='Daten speichern']").first
     print(f"[DEBUG] Notfallkontakt Speichern-Button count={save_button.count()}")
@@ -2955,7 +3216,7 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
     }
 
 
-def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
+def _fill_lohnabrechnung_fields(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
     target: Union[Frame, Page] = page
     frame = page.frame(name="inhalt")
     if frame:
@@ -2995,11 +3256,20 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
     if schulabschluss_raw:
         schulabschluss_value = _map_schulabschluss_to_value(schulabschluss_raw)
         if schulabschluss_value:
-            _set_select_value_logged(
-                panel.locator("#schulabschluss_taetigkeitschluessel, [name='schulabschluss_taetigkeitschluessel']"),
-                schulabschluss_value,
-                "Schulabschluss",
-            )
+            loc = panel.locator("#schulabschluss_taetigkeitschluessel, [name='schulabschluss_taetigkeitschluessel']")
+            current = _safe_select_value(loc)
+            if current == schulabschluss_value:
+                print("[OK] Schulabschluss bereits korrekt – überspringe.")
+                if tracker:
+                    tracker.skip("lohnabrechnung", "schulabschluss", schulabschluss_value, current)
+            else:
+                _set_select_value_logged(loc, schulabschluss_value, "Schulabschluss")
+            if tracker:
+                actual = _safe_select_value(loc)
+                if actual == schulabschluss_value:
+                    tracker.ok("lohnabrechnung", "schulabschluss", schulabschluss_value, actual)
+                else:
+                    tracker.missing("lohnabrechnung", "schulabschluss", schulabschluss_value, actual)
         else:
             print(f"[WARNUNG] Schulabschluss nicht gemappt: {schulabschluss_raw}")
 
@@ -3016,16 +3286,28 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
         )
     except Exception:
         pass
-    _select_autocomplete_by_bn(
-        target,
-        krankenkasse_input,
-        values["krankenkasse_bn"],
-        values["krankenkasse"],
-        "krankenkasse",
-    )
-    _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
-    _commit_autocomplete_value(krankenkasse_input, values["krankenkasse"], values["krankenkasse_bn"])
-    _debug_krankenkasse_state(target, krankenkasse_input, "krankenkasse")
+    current_kasse = _safe_input_value(krankenkasse_input)
+    if current_kasse == values["krankenkasse"]:
+        print("[OK] krankenkasse bereits korrekt – überspringe.")
+        if tracker:
+            tracker.skip("lohnabrechnung", "krankenkasse", values["krankenkasse"], current_kasse)
+    else:
+        _select_autocomplete_by_bn(
+            target,
+            krankenkasse_input,
+            values["krankenkasse_bn"],
+            values["krankenkasse"],
+            "krankenkasse",
+        )
+        _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
+        _commit_autocomplete_value(krankenkasse_input, values["krankenkasse"], values["krankenkasse_bn"])
+        _debug_krankenkasse_state(target, krankenkasse_input, "krankenkasse")
+    if tracker:
+        actual = _safe_input_value(krankenkasse_input)
+        if actual == values["krankenkasse"]:
+            tracker.ok("lohnabrechnung", "krankenkasse", values["krankenkasse"], actual)
+        else:
+            tracker.missing("lohnabrechnung", "krankenkasse", values["krankenkasse"], actual)
     if values["tatsaechliche_krankenkasse"]:
         tatsaechliche_input = _prefer_editable_input(
             panel, "#tatsaechliche_krankenkasse, [name='tatsaechliche_krankenkasse']"
@@ -3045,20 +3327,49 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
             )
         except Exception:
             pass
-        _select_autocomplete_by_bn(
-            target,
-            tatsaechliche_input,
-            values["tatsaechliche_bn"],
-            values["tatsaechliche_krankenkasse"],
-            "tatsaechliche_krankenkasse",
-        )
-        _verify_input_value(tatsaechliche_input, values["tatsaechliche_krankenkasse"], "tatsaechliche_krankenkasse")
-        _commit_autocomplete_value(
-            tatsaechliche_input,
-            values["tatsaechliche_krankenkasse"],
-            values["tatsaechliche_bn"],
-        )
-        _debug_krankenkasse_state(target, tatsaechliche_input, "tatsaechliche_krankenkasse")
+        current_tk = _safe_input_value(tatsaechliche_input)
+        if current_tk == values["tatsaechliche_krankenkasse"]:
+            print("[OK] tatsaechliche_krankenkasse bereits korrekt – überspringe.")
+            if tracker:
+                tracker.skip(
+                    "lohnabrechnung",
+                    "tatsaechliche_krankenkasse",
+                    values["tatsaechliche_krankenkasse"],
+                    current_tk,
+                )
+        else:
+            _select_autocomplete_by_bn(
+                target,
+                tatsaechliche_input,
+                values["tatsaechliche_bn"],
+                values["tatsaechliche_krankenkasse"],
+                "tatsaechliche_krankenkasse",
+            )
+            _verify_input_value(
+                tatsaechliche_input, values["tatsaechliche_krankenkasse"], "tatsaechliche_krankenkasse"
+            )
+            _commit_autocomplete_value(
+                tatsaechliche_input,
+                values["tatsaechliche_krankenkasse"],
+                values["tatsaechliche_bn"],
+            )
+            _debug_krankenkasse_state(target, tatsaechliche_input, "tatsaechliche_krankenkasse")
+        if tracker:
+            actual = _safe_input_value(tatsaechliche_input)
+            if actual == values["tatsaechliche_krankenkasse"]:
+                tracker.ok(
+                    "lohnabrechnung",
+                    "tatsaechliche_krankenkasse",
+                    values["tatsaechliche_krankenkasse"],
+                    actual,
+                )
+            else:
+                tracker.missing(
+                    "lohnabrechnung",
+                    "tatsaechliche_krankenkasse",
+                    values["tatsaechliche_krankenkasse"],
+                    actual,
+                )
         if values["krankenkasse"] and values["krankenkasse"] != values["tatsaechliche_krankenkasse"]:
             _select_autocomplete_by_bn(
                 target,
@@ -3085,6 +3396,19 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict) -> None:
         "Arbeitnehmerüberlassung",
     )
     _set_select_value_logged(panel.locator("#steuerklasse"), values["steuerklasse"], "Steuerklasse")
+    if tracker:
+        for field_id, locator, expected in [
+            ("personengruppe", panel.locator("#personengruppe"), values["personengruppe"]),
+            ("taetigkeitsbezeichnung", panel.locator("#taetigkeitsbezeichnung"), values["taetigkeitsbezeichnung"]),
+            ("vertragsform", panel.locator("#vertragsform_taetigkeitschluessel"), values["vertragsform"]),
+            ("arbeitnehmerueberlassung", panel.locator("#arbeitnehmerueberlassung_taetigkeitschluessel"), "2"),
+            ("steuerklasse", panel.locator("#steuerklasse"), values["steuerklasse"]),
+        ]:
+            actual = _safe_select_value(locator) if field_id != "taetigkeitsbezeichnung" else _safe_input_value(locator)
+            if actual == expected:
+                tracker.ok("lohnabrechnung", field_id, expected, actual)
+            else:
+                tracker.missing("lohnabrechnung", field_id, expected, actual)
 
     try:
         target.evaluate(
@@ -3257,76 +3581,100 @@ def run_mitarbeiter_vervollstaendigen(
     if not email:
         raise RuntimeError("[FEHLER] Keine E-Mail im personalbogen-JSON gefunden.")
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
-        context = browser.new_context(storage_state=str(state_path))
-        page = context.new_page()
+    max_retries = int(os.environ.get("PERSONAL_SCRAPER_MAX_RETRIES", "2"))
+    attempts = max_retries + 1
 
-        print("[INFO] Lade Startseite mit gespeicherter Session …")
-        page.goto(config.BASE_URL, wait_until="domcontentloaded")
-
+    for attempt in range(1, attempts + 1):
+        tracker = FieldTracker(attempt=attempt, max_retries=max_retries)
+        print(f"[INFO] Versuch {attempt}/{attempts} gestartet.")
         try:
-            target = _open_user_overview(page)
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
+                context = browser.new_context(storage_state=str(state_path))
+                page = context.new_page()
+
+                print("[INFO] Lade Startseite mit gespeicherter Session …")
+                page.goto(config.BASE_URL, wait_until="domcontentloaded")
+
+                try:
+                    target = _open_user_overview(page)
+                except Exception as exc:
+                    print(f"[WARNUNG] Übersicht nicht geladen (Session evtl. abgelaufen): {exc} – versuche Login …")
+                    page = browser.new_page()
+                    do_login(page)
+                    target = _open_user_overview(page)
+
+                search_input = _locate_search_input(target)
+                if search_input.count() == 0:
+                    try:
+                        if isinstance(target, Frame):
+                            target.page.wait_for_selector("input[type='search']", timeout=6000)
+                        else:
+                            target.wait_for_selector("input[type='search']", timeout=6000)
+                    except Exception:
+                        pass
+                    search_input = _locate_search_input(target)
+                if search_input.count() == 0:
+                    try:
+                        if isinstance(target, Frame):
+                            print(f"[DEBUG] user.php Frames: {[f.name for f in target.page.frames]}")
+                        else:
+                            print(f"[DEBUG] user.php Frames: {[f.name for f in target.frames]}")
+                    except Exception:
+                        pass
+                    raise RuntimeError("[FEHLER] Suchfeld in user.php nicht gefunden.")
+
+                search_input.fill(email)
+                time.sleep(0.2)
+                print(f"[INFO] Suche nach E-Mail: {email}")
+
+                target_page = _click_lastname_link(target, email)
+                if target_page:
+                    if _open_lohnabrechnung_and_edit(target_page):
+                        _fill_lohnabrechnung_fields(target_page, payload, tracker=tracker)
+                        if _click_fertig_in_dialog(target_page, timeout_seconds=5.0):
+                            _wait_for_dialog_closed(target_page, timeout_seconds=6.0)
+                        if not _click_daten_speichern(target_page, timeout_seconds=8.0):
+                            print("[WARNUNG] 'Daten speichern' nicht gefunden/geklickt.")
+                    _fill_stammdaten_fields(target_page, payload, tracker=tracker)
+                    _fill_notfallkontakt(target_page, payload, tracker=tracker)
+                    if _open_sedcard(target_page):
+                        print("[INFO] Sedcard geöffnet.")
+                        _fill_sedcard_fields(target_page, payload, tracker=tracker)
+                    if _open_vertragsdaten(target_page):
+                        print("[INFO] Vertragsdaten geöffnet.")
+                        _fill_grundlohn_history(target_page)
+                        _fill_vertrag_history(target_page, payload)
+                        _fill_tage_fremd(target_page, payload)
+                        _fill_sonstiges(target_page, payload)
+                        _fill_eintritt_austritt(target_page, payload)
+                    if _open_mitarbeiterinformationen(target_page):
+                        print("[INFO] Mitarbeiterinformationen geöffnet.")
+                        _upload_arbeitsvertrag(target_page, payload, tracker=tracker)
+                        _upload_additional_documents(target_page, payload, tracker=tracker)
+                    print(f"[INFO] Pause für manuelle Schritte ({wait_seconds}s) …")
+                    deadline = time.time() + max(1, wait_seconds)
+                    while time.time() < deadline:
+                        _click_fertig_in_dialog(target_page, timeout_seconds=0.5)
+                        time.sleep(0.5)
+                else:
+                    print("[INFO] Kein Treffer geklickt – keine Pause.")
+
+                browser.close()
+
+            tracker.log_summary()
+            missing = tracker.missing_fields()
+            if not missing:
+                print("[INFO] Alle Felder gesetzt – Erfolg.")
+                return
+            if attempt <= max_retries:
+                print("[WARNUNG] Fehlende Felder gefunden – starte Retry …")
+                continue
+            raise RuntimeError(f"Fehlende Felder nach {attempts} Versuchen: {missing}")
         except Exception as exc:
-            print(f"[WARNUNG] Übersicht nicht geladen (Session evtl. abgelaufen): {exc} – versuche Login …")
-            page = browser.new_page()
-            do_login(page)
-            target = _open_user_overview(page)
-
-        search_input = _locate_search_input(target)
-        if search_input.count() == 0:
-            try:
-                if isinstance(target, Frame):
-                    target.page.wait_for_selector("input[type='search']", timeout=6000)
-                else:
-                    target.wait_for_selector("input[type='search']", timeout=6000)
-            except Exception:
-                pass
-            search_input = _locate_search_input(target)
-        if search_input.count() == 0:
-            try:
-                if isinstance(target, Frame):
-                    print(f"[DEBUG] user.php Frames: {[f.name for f in target.page.frames]}")
-                else:
-                    print(f"[DEBUG] user.php Frames: {[f.name for f in target.frames]}")
-            except Exception:
-                pass
-            raise RuntimeError("[FEHLER] Suchfeld in user.php nicht gefunden.")
-
-        search_input.fill(email)
-        time.sleep(0.2)
-        print(f"[INFO] Suche nach E-Mail: {email}")
-
-        target_page = _click_lastname_link(target, email)
-        if target_page:
-            if _open_lohnabrechnung_and_edit(target_page):
-                _fill_lohnabrechnung_fields(target_page, payload)
-                if _click_fertig_in_dialog(target_page, timeout_seconds=5.0):
-                    _wait_for_dialog_closed(target_page, timeout_seconds=6.0)
-                if not _click_daten_speichern(target_page, timeout_seconds=8.0):
-                    print("[WARNUNG] 'Daten speichern' nicht gefunden/geklickt.")
-            _fill_stammdaten_fields(target_page, payload)
-            _fill_notfallkontakt(target_page, payload)
-            if _open_sedcard(target_page):
-                print("[INFO] Sedcard geöffnet.")
-                _fill_sedcard_fields(target_page, payload)
-            if _open_vertragsdaten(target_page):
-                print("[INFO] Vertragsdaten geöffnet.")
-                _fill_grundlohn_history(target_page)
-                _fill_vertrag_history(target_page, payload)
-                _fill_tage_fremd(target_page, payload)
-                _fill_sonstiges(target_page, payload)
-                _fill_eintritt_austritt(target_page, payload)
-            if _open_mitarbeiterinformationen(target_page):
-                print("[INFO] Mitarbeiterinformationen geöffnet.")
-                _upload_arbeitsvertrag(target_page, payload)
-                _upload_additional_documents(target_page, payload)
-            print(f"[INFO] Pause für manuelle Schritte ({wait_seconds}s) …")
-            deadline = time.time() + max(1, wait_seconds)
-            while time.time() < deadline:
-                _click_fertig_in_dialog(target_page, timeout_seconds=0.5)
-                time.sleep(0.5)
-        else:
-            print("[INFO] Kein Treffer geklickt – keine Pause.")
-
-        browser.close()
+            tracker.error("run", "exception", str(exc))
+            tracker.log_summary()
+            if attempt <= max_retries:
+                print(f"[WARNUNG] Fehler in Versuch {attempt}: {exc} – retry …")
+                continue
+            raise

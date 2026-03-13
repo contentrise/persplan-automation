@@ -149,3 +149,6 @@ cd ~/Desktop/persplan-schichten
 source .venv/bin/activate
 python3 -m src.main login --headless=false --slowmo=150
 python3 -m src.main planung-zeitraum-advanced --headless=false --slowmo=150 --days-forward=10 --wait-seconds=5
+
+python3 -m src.main login --headless=false --slowmo=150
+python va_anlage.py --headless false --slowmo 100

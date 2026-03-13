@@ -3,6 +3,8 @@ import tempfile
 import requests
 import base64
 import re
+import json
+import os
 from pathlib import Path
 from datetime import datetime
 
@@ -17,6 +19,51 @@ from src.mitarbeiter_vervollstaendigen import (
     _open_mitarbeiterinformationen,
     _open_user_overview,
 )
+
+
+class FieldTracker:
+    def __init__(self, attempt: int, max_retries: int):
+        self.attempt = attempt
+        self.max_retries = max_retries
+        self.entries: list[dict] = []
+
+    def _add(self, section: str, field_id: str, expected: str, actual: str, status: str) -> None:
+        self.entries.append(
+            {
+                "section": section,
+                "field_id": field_id,
+                "expected": expected,
+                "actual": actual,
+                "status": status,
+                "attempt": self.attempt,
+            }
+        )
+
+    def ok(self, section: str, field_id: str, expected: str, actual: str) -> None:
+        self._add(section, field_id, expected, actual, "ok")
+
+    def skip(self, section: str, field_id: str, expected: str, actual: str) -> None:
+        self._add(section, field_id, expected, actual, "skipped")
+
+    def missing(self, section: str, field_id: str, expected: str, actual: str) -> None:
+        self._add(section, field_id, expected, actual, "missing")
+
+    def error(self, section: str, field_id: str, actual: str) -> None:
+        self._add(section, field_id, "", actual, "error")
+
+    def missing_fields(self) -> list[dict]:
+        return [entry for entry in self.entries if entry.get("status") in {"missing", "error"}]
+
+    def log_summary(self) -> None:
+        missing = self.missing_fields()
+        print(
+            "=== MISSING_FIELDS ===\n"
+            + json.dumps(
+                {"attempt": self.attempt, "max_retries": self.max_retries, "missing": missing},
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
 
 UPLOAD_LABELS = {
     "sicherheitsbelehrung": "Sicherheitsbelehrung",
@@ -220,7 +267,10 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
     return unterlagen
 
 
-def _clear_einzureichende_unterlagen(page) -> None:
+def _clear_einzureichende_unterlagen(page, skip: bool = False) -> None:
+    if skip:
+        print("[INFO] Einzureichende Unterlagen: Skip (Retry).")
+        return
     def _find_target():
         candidates = [page]
         inhalt = page.frame(name="inhalt")
@@ -401,6 +451,89 @@ def _normalize_doc_text(value: str) -> str:
     text = str(value or "").strip().lower()
     text = text.replace("ä", "ae").replace("ö", "oe").replace("ü", "ue").replace("ß", "ss")
     return re.sub(r"[^a-z0-9]+", "", text)
+
+
+def _extract_unterlagen_rows(page) -> list[dict]:
+    candidates = [page]
+    try:
+        inhalt = page.frame(name="inhalt")
+    except Exception:
+        inhalt = None
+    if inhalt:
+        candidates.append(inhalt)
+
+    target = None
+    for candidate in candidates:
+        try:
+            if candidate.locator("#einzureichendes").count() > 0:
+                target = candidate
+                break
+        except Exception:
+            continue
+    if target is None:
+        return []
+
+    rows = target.locator("#einzureichendes tbody tr")
+    entries = []
+    for idx in range(rows.count()):
+        row = rows.nth(idx)
+        try:
+            cells = row.locator("td")
+            if cells.count() < 4:
+                continue
+            label = cells.nth(1).inner_text().strip()
+            valid = cells.nth(2).inner_text().strip()
+            vorhanden = cells.nth(3).inner_text().strip()
+            entries.append(
+                {
+                    "label": label,
+                    "valid_until": valid,
+                    "vorhanden": vorhanden,
+                }
+            )
+        except Exception:
+            continue
+    return entries
+
+
+def _unterlage_exists(page, label: str, valid_until: str = "") -> bool:
+    if not label:
+        return False
+    normalized_label = _normalize_doc_text(label)
+    rows = _extract_unterlagen_rows(page)
+    for row in rows:
+        row_label = _normalize_doc_text(row.get("label", ""))
+        if normalized_label and normalized_label not in row_label:
+            continue
+        if valid_until:
+            if valid_until.strip() != str(row.get("valid_until") or "").strip():
+                continue
+        return True
+    return False
+
+
+def _has_profile_image(page) -> bool:
+    candidates = [page]
+    try:
+        inhalt = page.frame(name="inhalt")
+    except Exception:
+        inhalt = None
+    if inhalt:
+        candidates.append(inhalt)
+    for target in candidates:
+        try:
+            found = target.evaluate(
+                """() => {
+                    const imgs = Array.from(document.querySelectorAll('img'))
+                        .filter(img => img.src && !img.src.includes('transparent.gif'));
+                    return imgs.some(img => img.naturalWidth > 10 && img.naturalHeight > 10);
+                }"""
+            )
+            if found:
+                return True
+        except Exception:
+            continue
+    return False
 
 
 def _extract_documents_table(page) -> list[dict]:
@@ -951,89 +1084,134 @@ def run_mitarbeiterinformationen(
         raise RuntimeError("[FEHLER] Keine E-Mail im personalbogen-JSON gefunden.")
     unterlagen = _build_unterlagen_from_payload(payload)
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
-        context = browser.new_context(storage_state=str(state_path))
-        context.add_init_script(
-            """() => {
-                const deny = async () => {
-                    const error = new Error('Permission denied');
-                    error.name = 'NotAllowedError';
-                    throw error;
-                };
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia = deny;
-                }
-                if (navigator.permissions && navigator.permissions.query) {
-                    const originalQuery = navigator.permissions.query.bind(navigator.permissions);
-                    navigator.permissions.query = (params) => {
-                        if (params && (params.name === 'camera' || params.name === 'microphone')) {
-                            return Promise.resolve({
-                                state: 'denied',
-                                onchange: null,
-                                addEventListener: () => {},
-                                removeEventListener: () => {},
-                                dispatchEvent: () => false,
-                            });
-                        }
-                        return originalQuery(params);
-                    };
-                }
-            }"""
-        )
-        page = context.new_page()
+    max_retries = int(os.environ.get("PERSONAL_SCRAPER_MAX_RETRIES", "2"))
+    attempts = max_retries + 1
 
-        print("[INFO] Lade Startseite mit gespeicherter Session …")
-        page.goto(config.BASE_URL, wait_until="domcontentloaded")
-
+    for attempt in range(1, attempts + 1):
+        tracker = FieldTracker(attempt=attempt, max_retries=max_retries)
+        print(f"[INFO] Versuch {attempt}/{attempts} gestartet.")
         try:
-            target = _open_user_overview(page)
-        except Exception as exc:
-            print(f"[WARNUNG] Übersicht nicht geladen (Session evtl. abgelaufen): {exc} – versuche Login …")
-            page = context.new_page()
-            do_login(page)
-            target = _open_user_overview(page)
+            with sync_playwright() as p:
+                browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
+                context = browser.new_context(storage_state=str(state_path))
+                context.add_init_script(
+                    """() => {
+                        const deny = async () => {
+                            const error = new Error('Permission denied');
+                            error.name = 'NotAllowedError';
+                            throw error;
+                        };
+                        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                            navigator.mediaDevices.getUserMedia = deny;
+                        }
+                        if (navigator.permissions && navigator.permissions.query) {
+                            const originalQuery = navigator.permissions.query.bind(navigator.permissions);
+                            navigator.permissions.query = (params) => {
+                                if (params && (params.name === 'camera' || params.name === 'microphone')) {
+                                    return Promise.resolve({
+                                        state: 'denied',
+                                        onchange: null,
+                                        addEventListener: () => {},
+                                        removeEventListener: () => {},
+                                        dispatchEvent: () => false,
+                                    });
+                                }
+                                return originalQuery(params);
+                            };
+                        }
+                    }"""
+                )
+                page = context.new_page()
 
-        search_input = _locate_search_input(target)
-        if search_input.count() == 0:
-            raise RuntimeError("[FEHLER] Suchfeld in user.php nicht gefunden.")
+                print("[INFO] Lade Startseite mit gespeicherter Session …")
+                page.goto(config.BASE_URL, wait_until="domcontentloaded")
 
-        search_input.fill(email)
-        time.sleep(0.2)
-        print(f"[INFO] Suche nach E-Mail: {email}")
+                try:
+                    target = _open_user_overview(page)
+                except Exception as exc:
+                    print(f"[WARNUNG] Übersicht nicht geladen (Session evtl. abgelaufen): {exc} – versuche Login …")
+                    page = context.new_page()
+                    do_login(page)
+                    target = _open_user_overview(page)
 
-        target_page = _click_lastname_link(target, email)
-        if not target_page:
-            print("[INFO] Kein Treffer geklickt – keine Pause.")
-            browser.close()
-            return
+                search_input = _locate_search_input(target)
+                if search_input.count() == 0:
+                    raise RuntimeError("[FEHLER] Suchfeld in user.php nicht gefunden.")
 
-        if _open_mitarbeiterinformationen(target_page):
-            print("[OK] Mitarbeiterinformationen geöffnet.")
-            _clear_einzureichende_unterlagen(target_page)
-            dokumente = _extract_documents_table(target_page)
-            unterlagen = _enrich_unterlagen_from_documents(unterlagen, dokumente)
-            for unterlage in unterlagen:
-                if _click_unterlage_hinzufuegen(target_page):
-                    time.sleep(0.4)
-                    _fill_unterlage_modal_and_save(target_page, unterlage)
-                    time.sleep(0.2)
-                else:
-                    print(f"[WARNUNG] Unterlage konnte nicht angelegt werden: {unterlage.get('bezeichnung')}")
-            if _click_bild_aendern(target_page):
-                with tempfile.TemporaryDirectory(prefix="perso-profilbild-") as tmp:
-                    image_path = _resolve_profile_image(payload, Path(tmp))
-                    if image_path:
-                        image_path = _normalize_profile_image(image_path) or image_path
-                        time.sleep(0.5)
-                        if _upload_image(target_page, image_path):
-                            time.sleep(0.3)
-                            _save_uploaded_image(target_page)
+                search_input.fill(email)
+                time.sleep(0.2)
+                print(f"[INFO] Suche nach E-Mail: {email}")
+
+                target_page = _click_lastname_link(target, email)
+                if not target_page:
+                    print("[INFO] Kein Treffer geklickt – keine Pause.")
+                    browser.close()
+                    return
+
+                if _open_mitarbeiterinformationen(target_page):
+                    print("[OK] Mitarbeiterinformationen geöffnet.")
+                    _clear_einzureichende_unterlagen(target_page, skip=attempt > 1)
+                    dokumente = _extract_documents_table(target_page)
+                    unterlagen = _enrich_unterlagen_from_documents(unterlagen, dokumente)
+                    for unterlage in unterlagen:
+                        label = str(unterlage.get("bezeichnung") or "").strip()
+                        valid_until = str(unterlage.get("gueltig_bis") or "").strip()
+                        if _unterlage_exists(target_page, label, valid_until=valid_until):
+                            print(f"[INFO] Unterlage bereits vorhanden – überspringe: {label}")
+                            tracker.skip("unterlagen", label or unterlage.get("key", ""), "vorhanden", "vorhanden")
+                            continue
+                        if _click_unterlage_hinzufuegen(target_page):
+                            time.sleep(0.4)
+                            _fill_unterlage_modal_and_save(target_page, unterlage)
+                            time.sleep(0.2)
+                        else:
+                            print(f"[WARNUNG] Unterlage konnte nicht angelegt werden: {unterlage.get('bezeichnung')}")
+                        if _unterlage_exists(target_page, label, valid_until=valid_until):
+                            tracker.ok("unterlagen", label or unterlage.get("key", ""), "vorhanden", "vorhanden")
+                        else:
+                            tracker.missing("unterlagen", label or unterlage.get("key", ""), "vorhanden", "fehlend")
+                    if _has_profile_image(target_page):
+                        print("[INFO] Profilbild bereits vorhanden – Upload übersprungen.")
+                        tracker.skip("profilbild", "profilbild", "vorhanden", "vorhanden")
+                    elif _click_bild_aendern(target_page):
+                        with tempfile.TemporaryDirectory(prefix="perso-profilbild-") as tmp:
+                            image_path = _resolve_profile_image(payload, Path(tmp))
+                            if image_path:
+                                image_path = _normalize_profile_image(image_path) or image_path
+                                time.sleep(0.5)
+                                if _upload_image(target_page, image_path):
+                                    time.sleep(0.3)
+                                    _save_uploaded_image(target_page)
+                            else:
+                                print("[WARNUNG] Kein Profilbild im Personalbogen gefunden.")
+                        if _has_profile_image(target_page):
+                            tracker.ok("profilbild", "profilbild", "vorhanden", "vorhanden")
+                        else:
+                            tracker.missing("profilbild", "profilbild", "vorhanden", "fehlend")
                     else:
-                        print("[WARNUNG] Kein Profilbild im Personalbogen gefunden.")
-            print(f"[INFO] Pause für manuelle Schritte ({wait_seconds}s) …")
-            time.sleep(max(1, wait_seconds))
-        else:
-            print("[WARNUNG] Mitarbeiterinformationen konnten nicht geöffnet werden.")
+                        print("[WARNUNG] Button 'Bild ändern' nicht verfügbar.")
+                        tracker.missing("profilbild", "profilbild", "vorhanden", "fehlend")
+                    print(f"[INFO] Pause für manuelle Schritte ({wait_seconds}s) …")
+                    time.sleep(max(1, wait_seconds))
+                else:
+                    print("[WARNUNG] Mitarbeiterinformationen konnten nicht geöffnet werden.")
+                    tracker.missing("run", "mitarbeiterinformationen", "geöffnet", "fehlgeschlagen")
 
-        browser.close()
+                browser.close()
+
+            tracker.log_summary()
+            missing = tracker.missing_fields()
+            if not missing:
+                print("[INFO] Alle Felder gesetzt – Erfolg.")
+                return
+            if attempt <= max_retries:
+                print("[WARNUNG] Fehlende Felder gefunden – starte Retry …")
+                continue
+            raise RuntimeError(f"Fehlende Felder nach {attempts} Versuchen: {missing}")
+        except Exception as exc:
+            tracker.error("run", "exception", str(exc))
+            tracker.log_summary()
+            if attempt <= max_retries:
+                print(f"[WARNUNG] Fehler in Versuch {attempt}: {exc} – retry …")
+                continue
+            raise
