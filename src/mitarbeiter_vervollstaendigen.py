@@ -4,6 +4,8 @@ import re
 import time
 import tempfile
 import shutil
+import sys
+import io
 from pathlib import Path
 from typing import Union
 from urllib.parse import parse_qs, urljoin, urlparse
@@ -13,6 +15,44 @@ import requests
 
 from src import config
 from src.login import do_login
+
+
+class _Tee:
+    def __init__(self, primary, buffer):
+        self.primary = primary
+        self.buffer = buffer
+
+    def write(self, data):
+        try:
+            self.primary.write(data)
+        except Exception:
+            pass
+        try:
+            self.buffer.write(data)
+        except Exception:
+            pass
+        return len(data)
+
+    def flush(self):
+        try:
+            self.primary.flush()
+        except Exception:
+            pass
+        try:
+            self.buffer.flush()
+        except Exception:
+            pass
+
+
+def _has_retry_warning(log_text: str) -> bool:
+    if not log_text:
+        return False
+    patterns = [
+        r"\[WARNUNG\].*(nicht gesetzt|nicht gefunden|fehlgeschlagen)",
+        r"\[WARNUNG\].*nicht sichtbar",
+        r"\[WARNUNG\].*nicht geöffnet",
+    ]
+    return any(re.search(pat, log_text, re.IGNORECASE) for pat in patterns)
 
 
 class FieldTracker:
@@ -2735,6 +2775,8 @@ def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | N
     target, panel = _open_stammdaten_tab(page, "stammdaten", "Stammdaten")
     if not target or not panel:
         print("[WARNUNG] Tab 'Stammdaten' nicht gefunden.")
+        if tracker:
+            tracker.missing("stammdaten", "tab", "sichtbar", "nicht gefunden")
         return
 
     edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
@@ -2996,6 +3038,8 @@ def _fill_notfallkontakt(page: Page, payload: dict, tracker: FieldTracker | None
     target, panel = _open_stammdaten_tab(page, "notfallkontakt", "Notfallkontakt")
     if not target or not panel:
         print("[WARNUNG] Tab 'Notfallkontakt' nicht gefunden.")
+        if tracker:
+            tracker.missing("notfallkontakt", "tab", "sichtbar", "nicht gefunden")
         return
 
     edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
@@ -3280,6 +3324,8 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict, tracker: FieldTracker
             print(f"[WARNUNG] Schulabschluss nicht gemappt: {schulabschluss_raw}")
 
     krankenkasse_input = _prefer_editable_input(panel, "#krankenkasse, [name='krankenkasse']")
+    if tracker and krankenkasse_input.count() == 0:
+        tracker.missing("lohnabrechnung", "krankenkasse", values["krankenkasse"], "nicht gefunden")
     try:
         sel_all = "#krankenkasse, [name='krankenkasse']"
         sel_write = "#krankenkasse.writeInput, [name='krankenkasse'].writeInput"
@@ -3318,6 +3364,13 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict, tracker: FieldTracker
         tatsaechliche_input = _prefer_editable_input(
             panel, "#tatsaechliche_krankenkasse, [name='tatsaechliche_krankenkasse']"
         )
+        if tracker and tatsaechliche_input.count() == 0:
+            tracker.missing(
+                "lohnabrechnung",
+                "tatsaechliche_krankenkasse",
+                values["tatsaechliche_krankenkasse"],
+                "nicht gefunden",
+            )
         try:
             sel_all = "#tatsaechliche_krankenkasse, [name='tatsaechliche_krankenkasse']"
             sel_write = "#tatsaechliche_krankenkasse.writeInput, [name='tatsaechliche_krankenkasse'].writeInput"
@@ -3393,15 +3446,26 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict, tracker: FieldTracker
         f"vertragsform={values['vertragsform']}, "
         f"steuerklasse={values['steuerklasse']}"
     )
-    _set_select_value_logged(panel.locator("#personengruppe"), values["personengruppe"], "Personengruppe")
+    ok_personengruppe = _set_select_value_logged(panel.locator("#personengruppe"), values["personengruppe"], "Personengruppe")
     _set_input_value(panel.locator("#taetigkeitsbezeichnung"), values["taetigkeitsbezeichnung"])
-    _set_select_value_logged(panel.locator("#vertragsform_taetigkeitschluessel"), values["vertragsform"], "Vertragsform")
-    _set_select_value_logged(
+    ok_vertragsform = _set_select_value_logged(
+        panel.locator("#vertragsform_taetigkeitschluessel"), values["vertragsform"], "Vertragsform"
+    )
+    ok_arbeitnehmer = _set_select_value_logged(
         panel.locator("#arbeitnehmerueberlassung_taetigkeitschluessel"),
         "2",
         "Arbeitnehmerüberlassung",
     )
-    _set_select_value_logged(panel.locator("#steuerklasse"), values["steuerklasse"], "Steuerklasse")
+    ok_steuerklasse = _set_select_value_logged(panel.locator("#steuerklasse"), values["steuerklasse"], "Steuerklasse")
+    if tracker:
+        if not ok_personengruppe:
+            tracker.missing("lohnabrechnung", "personengruppe", values["personengruppe"], "nicht gesetzt")
+        if not ok_vertragsform:
+            tracker.missing("lohnabrechnung", "vertragsform", values["vertragsform"], "nicht gesetzt")
+        if not ok_arbeitnehmer:
+            tracker.missing("lohnabrechnung", "arbeitnehmerueberlassung", "2", "nicht gesetzt")
+        if not ok_steuerklasse:
+            tracker.missing("lohnabrechnung", "steuerklasse", values["steuerklasse"], "nicht gesetzt")
     if tracker:
         for field_id, locator, expected in [
             ("personengruppe", panel.locator("#personengruppe"), values["personengruppe"]),
@@ -3593,6 +3657,12 @@ def run_mitarbeiter_vervollstaendigen(
     for attempt in range(1, attempts + 1):
         tracker = FieldTracker(attempt=attempt, max_retries=max_retries)
         print(f"[INFO] Versuch {attempt}/{attempts} gestartet.")
+        stdout_buffer = io.StringIO()
+        stderr_buffer = io.StringIO()
+        prev_stdout = sys.stdout
+        prev_stderr = sys.stderr
+        sys.stdout = _Tee(prev_stdout, stdout_buffer)
+        sys.stderr = _Tee(prev_stderr, stderr_buffer)
         try:
             with sync_playwright() as p:
                 browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
@@ -3642,11 +3712,14 @@ def run_mitarbeiter_vervollstaendigen(
                             _wait_for_dialog_closed(target_page, timeout_seconds=6.0)
                         if not _click_daten_speichern(target_page, timeout_seconds=8.0):
                             print("[WARNUNG] 'Daten speichern' nicht gefunden/geklickt.")
+                            tracker.missing("lohnabrechnung", "daten_speichern", "geklickt", "fehlgeschlagen")
                     _fill_stammdaten_fields(target_page, payload, tracker=tracker)
                     _fill_notfallkontakt(target_page, payload, tracker=tracker)
                     if _open_sedcard(target_page):
                         print("[INFO] Sedcard geöffnet.")
                         _fill_sedcard_fields(target_page, payload, tracker=tracker)
+                    else:
+                        tracker.missing("sedcard", "tab", "geöffnet", "fehlgeschlagen")
                     if _open_vertragsdaten(target_page):
                         print("[INFO] Vertragsdaten geöffnet.")
                         _fill_grundlohn_history(target_page)
@@ -3658,6 +3731,8 @@ def run_mitarbeiter_vervollstaendigen(
                         print("[INFO] Mitarbeiterinformationen geöffnet.")
                         _upload_arbeitsvertrag(target_page, payload, tracker=tracker)
                         _upload_additional_documents(target_page, payload, tracker=tracker)
+                    else:
+                        tracker.missing("uploads", "tab", "geöffnet", "fehlgeschlagen")
                     print(f"[INFO] Pause für manuelle Schritte ({wait_seconds}s) …")
                     deadline = time.time() + max(1, wait_seconds)
                     while time.time() < deadline:
@@ -3668,6 +3743,11 @@ def run_mitarbeiter_vervollstaendigen(
 
                 browser.close()
 
+            sys.stdout = prev_stdout
+            sys.stderr = prev_stderr
+            combined_log = stdout_buffer.getvalue() + "\n" + stderr_buffer.getvalue()
+            if _has_retry_warning(combined_log):
+                tracker.missing("run", "warnung", "keine warnung", "warnung erkannt")
             tracker.log_summary()
             missing = tracker.missing_fields()
             if not missing:
@@ -3678,6 +3758,8 @@ def run_mitarbeiter_vervollstaendigen(
                 continue
             raise RuntimeError(f"Fehlende Felder nach {attempts} Versuchen: {missing}")
         except Exception as exc:
+            sys.stdout = prev_stdout
+            sys.stderr = prev_stderr
             tracker.error("run", "exception", str(exc))
             tracker.log_summary()
             if attempt <= max_retries:

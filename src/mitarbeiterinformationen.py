@@ -5,6 +5,8 @@ import base64
 import re
 import json
 import os
+import sys
+import io
 from pathlib import Path
 from datetime import datetime
 
@@ -19,6 +21,44 @@ from src.mitarbeiter_vervollstaendigen import (
     _open_mitarbeiterinformationen,
     _open_user_overview,
 )
+
+
+class _Tee:
+    def __init__(self, primary, buffer):
+        self.primary = primary
+        self.buffer = buffer
+
+    def write(self, data):
+        try:
+            self.primary.write(data)
+        except Exception:
+            pass
+        try:
+            self.buffer.write(data)
+        except Exception:
+            pass
+        return len(data)
+
+    def flush(self):
+        try:
+            self.primary.flush()
+        except Exception:
+            pass
+        try:
+            self.buffer.flush()
+        except Exception:
+            pass
+
+
+def _has_retry_warning(log_text: str) -> bool:
+    if not log_text:
+        return False
+    patterns = [
+        r"\[WARNUNG\].*(nicht gesetzt|nicht gefunden|fehlgeschlagen)",
+        r"\[WARNUNG\].*nicht sichtbar",
+        r"\[WARNUNG\].*nicht geöffnet",
+    ]
+    return any(re.search(pat, log_text, re.IGNORECASE) for pat in patterns)
 
 
 class FieldTracker:
@@ -1090,6 +1130,12 @@ def run_mitarbeiterinformationen(
     for attempt in range(1, attempts + 1):
         tracker = FieldTracker(attempt=attempt, max_retries=max_retries)
         print(f"[INFO] Versuch {attempt}/{attempts} gestartet.")
+        stdout_buffer = io.StringIO()
+        stderr_buffer = io.StringIO()
+        prev_stdout = sys.stdout
+        prev_stderr = sys.stderr
+        sys.stdout = _Tee(prev_stdout, stdout_buffer)
+        sys.stderr = _Tee(prev_stderr, stderr_buffer)
         try:
             with sync_playwright() as p:
                 browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
@@ -1199,6 +1245,11 @@ def run_mitarbeiterinformationen(
 
                 browser.close()
 
+            sys.stdout = prev_stdout
+            sys.stderr = prev_stderr
+            combined_log = stdout_buffer.getvalue() + "\n" + stderr_buffer.getvalue()
+            if _has_retry_warning(combined_log):
+                tracker.missing("run", "warnung", "keine warnung", "warnung erkannt")
             tracker.log_summary()
             missing = tracker.missing_fields()
             if not missing:
@@ -1209,6 +1260,8 @@ def run_mitarbeiterinformationen(
                 continue
             raise RuntimeError(f"Fehlende Felder nach {attempts} Versuchen: {missing}")
         except Exception as exc:
+            sys.stdout = prev_stdout
+            sys.stderr = prev_stderr
             tracker.error("run", "exception", str(exc))
             tracker.log_summary()
             if attempt <= max_retries:
