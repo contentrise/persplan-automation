@@ -922,6 +922,8 @@ def _fill_sedcard_fields(page: Page, payload: dict, tracker: FieldTracker | None
             print(f"[OK] sedcard {field} → {value}")
         else:
             print(f"[WARNUNG] sedcard {field} nicht gesetzt.")
+            if tracker:
+                tracker.missing("sedcard", field, str(value), _safe_input_value(locator))
         if tracker:
             actual = _safe_input_value(locator)
             if actual == str(value):
@@ -973,6 +975,8 @@ def _fill_sedcard_fields(page: Page, payload: dict, tracker: FieldTracker | None
             print(f"[OK] sedcard fuehrerschein → {fuehrerschein_value}")
         else:
             print("[WARNUNG] sedcard fuehrerschein nicht gesetzt.")
+            if tracker:
+                tracker.missing("sedcard", "fuehrerschein", expected, _safe_select_value(locator))
         if tracker:
             actual = _safe_select_value(locator)
             if actual == expected:
@@ -993,6 +997,8 @@ def _fill_sedcard_fields(page: Page, payload: dict, tracker: FieldTracker | None
             print(f"[OK] sedcard pkw → {pkw_value}")
         else:
             print("[WARNUNG] sedcard pkw nicht gesetzt.")
+            if tracker:
+                tracker.missing("sedcard", "pkw", expected, _safe_select_value(locator))
         if tracker:
             actual = _safe_select_value(locator)
             if actual == expected:
@@ -2618,10 +2624,10 @@ def _force_set_select_value(locator, value: str) -> bool:
         return False
 
 
-def _set_select_value_logged(locator, value: str, field_label: str) -> None:
+def _set_select_value_logged(locator, value: str, field_label: str) -> bool:
     if locator.count() == 0:
         print(f"[WARNUNG] Feld nicht gefunden: {field_label}")
-        return
+        return False
     try:
         locator.first.evaluate("(node) => { node.removeAttribute('disabled'); }")
     except Exception:
@@ -2630,13 +2636,13 @@ def _set_select_value_logged(locator, value: str, field_label: str) -> None:
     actual = _get_select_value(locator)
     if ok and actual == value:
         print(f"[OK] {field_label} gesetzt → {value}")
-        return
+        return True
     if not ok or actual != value:
         forced = _force_set_select_value(locator, value)
         actual = _get_select_value(locator)
         if forced and actual == value:
             print(f"[OK] {field_label} per Fallback gesetzt → {value}")
-            return
+            return True
     print(f"[WARNUNG] {field_label} nicht gesetzt (soll={value}, ist={actual or '—'})")
     return False
 
