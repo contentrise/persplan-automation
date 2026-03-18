@@ -1305,10 +1305,8 @@ def run_mitarbeiterinformationen(
                             tracker.ok("unterlagen", label or unterlage.get("key", ""), "vorhanden", "vorhanden")
                         else:
                             tracker.missing("unterlagen", label or unterlage.get("key", ""), "vorhanden", "fehlend")
-                    if _has_profile_image(target_page):
-                        print("[INFO] Profilbild bereits vorhanden – Upload übersprungen.")
-                        tracker.skip("profilbild", "profilbild", "vorhanden", "vorhanden")
-                    elif _click_bild_aendern(target_page):
+                    # Always replace profile image, even if one seems present.
+                    if _click_bild_aendern(target_page):
                         with tempfile.TemporaryDirectory(prefix="perso-profilbild-") as tmp:
                             image_path = _resolve_profile_image(payload, Path(tmp))
                             if image_path:

@@ -1249,25 +1249,27 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
         print("[WARNUNG] Vertragshistorie-Dialog nicht sichtbar.")
         return
 
-    # Remove existing active contract entry (red X) before inserting a new one.
+    # Deactivate specifically the "Kein Vertrag" row so only the new contract remains active.
     try:
-        deactivate = dialog.locator("a[onclick*='daten_historie_change_status'][onclick*='vertrag_id']").first
-        if deactivate.count() > 0:
-            print("[INFO] Deaktiviere bestehenden Vertrag (X) …")
+        kein_vertrag_link = dialog.locator(
+            "tr:has(td:has-text('Kein Vertrag')) a[onclick*='daten_historie_change_status'][onclick*='vertrag_id']"
+        ).first
+        if kein_vertrag_link.count() > 0:
+            print("[INFO] Deaktiviere 'Kein Vertrag' …")
             try:
-                deactivate.click()
+                kein_vertrag_link.click()
             except Exception:
                 try:
-                    deactivate.evaluate("el => el.click()")
+                    kein_vertrag_link.evaluate("el => el.click()")
                 except Exception:
                     pass
             try:
-                deactivate.wait_for(state="detached", timeout=3000)
+                kein_vertrag_link.wait_for(state="detached", timeout=3000)
             except Exception:
                 pass
-            print("[OK] Bestehender Vertrag deaktiviert (falls vorhanden).")
+            print("[OK] 'Kein Vertrag' deaktiviert (falls vorhanden).")
     except Exception as exc:
-        print(f"[WARNUNG] Deaktivieren des bestehenden Vertrags fehlgeschlagen: {exc}")
+        print(f"[WARNUNG] Deaktivieren von 'Kein Vertrag' fehlgeschlagen: {exc}")
 
     try:
         dialog_text = dialog.inner_text()
@@ -1402,8 +1404,14 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
     vertrag = payload.get("vertrag") if isinstance(payload, dict) else None
     vertrag_value = ""
     if isinstance(vertrag, dict):
-        vertrag_value = _pick_payload_value(vertrag, ["sonstiges", "kanal", "channel"])
-    fallback_value = _pick_payload_value(payload, ["aufmerksam_geworden_durch", "kanal", "channel"])
+        vertrag_value = _pick_payload_value(
+            vertrag,
+            ["sonstiges", "source", "quelle", "kanal", "channel", "traffic_source", "utm_source"],
+        )
+    fallback_value = _pick_payload_value(
+        payload,
+        ["aufmerksam_geworden_durch", "source", "quelle", "kanal", "channel", "traffic_source", "utm_source"],
+    )
     value = vertrag_value or fallback_value
 
     if value is None or str(value).strip() == "":
