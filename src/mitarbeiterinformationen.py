@@ -243,6 +243,11 @@ def _normalize_uploads(uploads: dict) -> dict:
     return normalized
 
 
+# Unterlagen, die niemals als "Einzureichende Unterlage" eingetragen werden sollen.
+NON_EINZUREICHENDE_UNTERLAGEN = {"rentenbefreiung"}
+NON_EINZUREICHENDE_LABELS = {"rentenbefreiung"}
+
+
 def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
     uploads = payload.get("uploads") if isinstance(payload, dict) else {}
     uploads = _normalize_uploads(uploads)
@@ -251,8 +256,6 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
 
     required_keys = _build_required_upload_keys(payload)
     required_set = set(required_keys)
-    # Nicht in "Einzureichende Unterlagen" eintragen (nur bei Dokumenten ablegen).
-    non_einzureichende = {"rentenbefreiung"}
     skip_keys = {
         "personalbogen",
         "vertrag",
@@ -260,7 +263,7 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
         "zusatzvereinbarung",
         "sicherheitsbelehrung",
     }
-    skip_keys.update(non_einzureichende)
+    skip_keys.update(NON_EINZUREICHENDE_UNTERLAGEN)
 
     # Feste Reihenfolge, damit die Einträge in der Akte reproduzierbar sind.
     preferred_order = [
@@ -271,11 +274,11 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
         "aufenthaltserlaubnis",
         "arbeitserlaubnis",
     ]
-    preferred_order = [key for key in preferred_order if key not in non_einzureichende]
+    preferred_order = [key for key in preferred_order if key not in NON_EINZUREICHENDE_UNTERLAGEN]
     ordered_keys = [key for key in preferred_order if key in required_set or key in uploads]
     ordered_keys.extend([key for key in required_keys if key not in ordered_keys])
     ordered_keys.extend([key for key in uploads.keys() if key not in ordered_keys])
-    ordered_keys = [key for key in ordered_keys if key not in non_einzureichende]
+    ordered_keys = [key for key in ordered_keys if key not in NON_EINZUREICHENDE_UNTERLAGEN]
 
     unterlagen = []
     for key in ordered_keys:
@@ -318,6 +321,63 @@ def _build_unterlagen_from_payload(payload: dict) -> list[dict]:
 
 
 def _clear_einzureichende_unterlagen(page, skip: bool = False) -> None:
+    def _remove_disallowed() -> int:
+        labels = {label.strip().lower() for label in NON_EINZUREICHENDE_LABELS if label.strip()}
+        if not labels:
+            return 0
+
+        candidates = [page]
+        inhalt = page.frame(name="inhalt")
+        if inhalt:
+            candidates.append(inhalt)
+        candidates.extend(page.frames)
+
+        removed = 0
+        for target in candidates:
+            try:
+                if target.locator("#einzureichendes").count() == 0:
+                    continue
+            except Exception:
+                continue
+            rows = target.locator("#einzureichendes tbody tr")
+            try:
+                row_count = rows.count()
+            except Exception:
+                row_count = 0
+            for idx in range(row_count):
+                row = rows.nth(idx)
+                try:
+                    cells = row.locator("td")
+                    if cells.count() < 2:
+                        continue
+                    label_text = (cells.nth(1).inner_text() or "").strip().lower()
+                    if label_text not in labels:
+                        continue
+                except Exception:
+                    continue
+                btn = row.locator(
+                    "button[onclick*='maEinzureichendesLoeschen'], "
+                    "button[title*='deaktivieren'], "
+                    "img.sprite_16x16.inaktiv"
+                ).first
+                try:
+                    if btn.count() == 0:
+                        continue
+                    btn.click()
+                    removed += 1
+                    time.sleep(0.4)
+                except Exception:
+                    try:
+                        btn.evaluate("el => el.click()")
+                        removed += 1
+                        time.sleep(0.4)
+                    except Exception:
+                        continue
+        if removed:
+            print(f"[OK] Einzureichende Unterlagen entfernt (verboten): {removed}")
+        return removed
+
+    _remove_disallowed()
     if skip:
         print("[INFO] Einzureichende Unterlagen: Skip (Retry).")
         return
@@ -923,6 +983,9 @@ def _click_unterlage_hinzufuegen(page) -> bool:
 
 def _fill_unterlage_modal_and_save(page, entry: dict) -> bool:
     bezeichnung_text = str(entry.get("bezeichnung") or "Unterlage").strip()
+    if bezeichnung_text.strip().lower() in NON_EINZUREICHENDE_LABELS:
+        print(f"[INFO] Unterlage übersprungen (nicht eintragen): {bezeichnung_text}")
+        return True
     gueltig_bis = str(entry.get("gueltig_bis") or "").strip()
     vorhanden = bool(entry.get("vorhanden"))
 
@@ -1133,6 +1196,17 @@ def run_mitarbeiterinformationen(
     if not email:
         raise RuntimeError("[FEHLER] Keine E-Mail im personalbogen-JSON gefunden.")
     unterlagen = _build_unterlagen_from_payload(payload)
+    if unterlagen:
+        before = len(unterlagen)
+        unterlagen = [
+            u
+            for u in unterlagen
+            if str(u.get("key") or "").strip().lower() not in NON_EINZUREICHENDE_UNTERLAGEN
+            and str(u.get("bezeichnung") or "").strip().lower() not in NON_EINZUREICHENDE_LABELS
+        ]
+        removed = before - len(unterlagen)
+        if removed:
+            print(f"[INFO] Unterlagen-Filter: {removed} Einträge ausgeschlossen (nicht eintragen).")
 
     max_retries = int(os.environ.get("PERSONAL_SCRAPER_MAX_RETRIES", "2"))
     attempts = max_retries + 1
@@ -1211,6 +1285,11 @@ def run_mitarbeiterinformationen(
                     unterlagen = _enrich_unterlagen_from_documents(unterlagen, dokumente)
                     for unterlage in unterlagen:
                         label = str(unterlage.get("bezeichnung") or "").strip()
+                        key = str(unterlage.get("key") or "").strip().lower()
+                        if key in NON_EINZUREICHENDE_UNTERLAGEN or label.lower() in NON_EINZUREICHENDE_LABELS:
+                            print(f"[INFO] Unterlage übersprungen (nicht eintragen): {label or key}")
+                            tracker.skip("unterlagen", label or key, "nicht eintragen", "übersprungen")
+                            continue
                         valid_until = str(unterlage.get("gueltig_bis") or "").strip()
                         if _unterlage_exists(target_page, label, valid_until=valid_until):
                             print(f"[INFO] Unterlage bereits vorhanden – überspringe: {label}")

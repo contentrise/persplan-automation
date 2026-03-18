@@ -1249,6 +1249,26 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
         print("[WARNUNG] Vertragshistorie-Dialog nicht sichtbar.")
         return
 
+    # Remove existing active contract entry (red X) before inserting a new one.
+    try:
+        deactivate = dialog.locator("a[onclick*='daten_historie_change_status'][onclick*='vertrag_id']").first
+        if deactivate.count() > 0:
+            print("[INFO] Deaktiviere bestehenden Vertrag (X) …")
+            try:
+                deactivate.click()
+            except Exception:
+                try:
+                    deactivate.evaluate("el => el.click()")
+                except Exception:
+                    pass
+            try:
+                deactivate.wait_for(state="detached", timeout=3000)
+            except Exception:
+                pass
+            print("[OK] Bestehender Vertrag deaktiviert (falls vorhanden).")
+    except Exception as exc:
+        print(f"[WARNUNG] Deaktivieren des bestehenden Vertrags fehlgeschlagen: {exc}")
+
     try:
         dialog_text = dialog.inner_text()
     except Exception:
@@ -1280,30 +1300,6 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
         print("[WARNUNG] 'eintragen'-Button im Vertrag-Dialog nicht gefunden.")
         return
 
-    # If a previous active contract ("X" row) exists, deactivate it first.
-    try:
-        deactivate = dialog.locator("a[onclick*='daten_historie_change_status'][onclick*='vertrag_id']").first
-        if deactivate.count() > 0:
-            print("[INFO] Deaktiviere bestehenden Vertrag (X) …")
-            before_rows = dialog.locator("tbody tr").count()
-            try:
-                deactivate.click()
-            except Exception:
-                try:
-                    deactivate.evaluate("el => el.click()")
-                except Exception:
-                    pass
-            try:
-                dialog.locator("tbody tr").first.wait_for(state="detached", timeout=3000)
-            except Exception:
-                pass
-            after_rows = dialog.locator("tbody tr").count()
-            if after_rows >= before_rows:
-                print("[WARNUNG] Deaktivieren des bestehenden Vertrags nicht bestätigt.")
-            else:
-                print("[OK] Bestehender Vertrag deaktiviert.")
-    except Exception as exc:
-        print(f"[WARNUNG] Deaktivieren des bestehenden Vertrags fehlgeschlagen: {exc}")
     submit_button.click()
     print(f"[OK] Vertrag eingetragen → {label} ab {hire_date_modal}")
     time.sleep(0.5)
@@ -1403,12 +1399,19 @@ def _fill_tage_fremd(page: Page, payload: dict) -> None:
 
 
 def _fill_sonstiges(page: Page, payload: dict) -> None:
-    value = _pick_payload_value(payload, ["aufmerksam_geworden_durch"])
+    vertrag = payload.get("vertrag") if isinstance(payload, dict) else None
+    vertrag_value = ""
+    if isinstance(vertrag, dict):
+        vertrag_value = _pick_payload_value(vertrag, ["sonstiges", "kanal", "channel"])
+    fallback_value = _pick_payload_value(payload, ["aufmerksam_geworden_durch", "kanal", "channel"])
+    value = vertrag_value or fallback_value
+
     if value is None or str(value).strip() == "":
-        print("[HINWEIS] Kein aufmerksam_geworden_durch im JSON – überspringe Sonstiges.")
+        print("[HINWEIS] Kein Sonstiges/Kanal im JSON – überspringe Sonstiges.")
         return
     value = str(value).strip()
-    print(f"[INFO] Sonstiges-Value aus JSON: {value}")
+    source = "vertrag" if vertrag_value else "fragebogen"
+    print(f"[INFO] Sonstiges-Value aus JSON ({source}): {value}")
 
     target: Union[Frame, Page] = page
     frame = page.frame(name="inhalt")
