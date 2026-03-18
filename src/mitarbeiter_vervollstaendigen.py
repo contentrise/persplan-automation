@@ -1559,7 +1559,29 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
             except Exception:
                 pass
     else:
-        print("[WARNUNG] Sonstiges-Speichern-Button nicht gefunden.")
+        print("[WARNUNG] Sonstiges-Speichern-Button nicht gefunden – versuche Enter/Blur.")
+        try:
+            input_field.press("Enter")
+        except Exception:
+            pass
+        try:
+            dialog.press("Enter")
+        except Exception:
+            pass
+        try:
+            page.keyboard.press("Enter")
+        except Exception:
+            pass
+        try:
+            # Click outside to trigger blur/save, if the UI uses implicit save.
+            page.mouse.click(5, 5)
+        except Exception:
+            pass
+        try:
+            dialog.wait_for(state="hidden", timeout=2000)
+            print(f"[OK] Sonstiges gesetzt → {value} (Dialog geschlossen).")
+        except Exception:
+            pass
 
 
 def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
@@ -2253,11 +2275,19 @@ def _upload_additional_documents(page: Page, payload: dict, tracker: FieldTracke
             "immatrikulation": ["immatrikulation", "schulbescheinigung", "imma"],
             "infektionsschutz": ["infektionsschutz"],
         }.get(stem, [stem])
-        match_fields = ("file", "description")
+        match = None
         if stem == "personalbogen":
-            # Be stricter: only accept actual file-name matches to avoid false positives.
-            match_fields = ("file",)
-        match = _find_document_match(docs_before, keywords, valid_until=gueltig_bis, match_fields=match_fields)
+            # Extra strict: require a real file name with a known extension.
+            for entry in docs_before:
+                file_text = str(entry.get("file") or "").strip().lower()
+                if "personalbogen" not in file_text:
+                    continue
+                ext = Path(file_text).suffix.lower()
+                if ext in {".pdf", ".png", ".jpg", ".jpeg"}:
+                    match = entry
+                    break
+        if match is None:
+            match = _find_document_match(docs_before, keywords, valid_until=gueltig_bis, match_fields=("file", "description"))
         if match:
             print(
                 f"[INFO] Dokument bereits vorhanden – überspringe: {stem} "

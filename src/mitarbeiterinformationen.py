@@ -857,8 +857,16 @@ def _normalize_profile_image(image_path: Path) -> Path | None:
             except Exception:
                 pass
             if img.mode in {"RGBA", "LA"} or (img.mode == "P" and "transparency" in img.info):
-                base = Image.new("RGB", img.size, (255, 255, 255))
-                base.paste(img.convert("RGBA"), mask=img.convert("RGBA").split()[-1])
+                rgba = img.convert("RGBA")
+                try:
+                    alpha = rgba.split()[-1]
+                    bbox = alpha.getbbox()
+                    if bbox:
+                        rgba = rgba.crop(bbox)
+                except Exception:
+                    pass
+                base = Image.new("RGB", rgba.size, (255, 255, 255))
+                base.paste(rgba, mask=rgba.split()[-1])
                 rgb = base
             else:
                 rgb = img.convert("RGB")
