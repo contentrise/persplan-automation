@@ -1426,6 +1426,56 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
     if frame:
         target = frame
 
+    def _find_sonstiges_dialog(timeout_s: float = 8.0) -> tuple[Locator | None, Union[Frame, Page] | None]:
+        deadline = time.time() + timeout_s
+        candidates: list[Union[Frame, Page]] = [page]
+        try:
+            candidates.extend(page.frames)
+        except Exception:
+            pass
+        if target not in candidates:
+            candidates.insert(0, target)
+
+        fallback_dialog = None
+        fallback_target: Union[Frame, Page] | None = None
+
+        while time.time() < deadline:
+            for candidate in candidates:
+                try:
+                    dialogs = candidate.locator("div.ui-dialog")
+                    for idx in range(dialogs.count()):
+                        dialog = dialogs.nth(idx)
+                        try:
+                            if not dialog.is_visible():
+                                continue
+                        except Exception:
+                            continue
+                        try:
+                            title_text = dialog.locator(".ui-dialog-title").first.inner_text().strip().lower()
+                        except Exception:
+                            title_text = ""
+                        try:
+                            dialog_text = dialog.inner_text().strip().lower()
+                        except Exception:
+                            dialog_text = ""
+                        has_input = dialog.locator("input[type='text'], textarea").count() > 0
+                        if not has_input:
+                            continue
+                        if "sonstiges" in title_text or "sonstiges" in dialog_text:
+                            return dialog, candidate
+                        if "feld" in title_text and not fallback_dialog:
+                            fallback_dialog = dialog
+                            fallback_target = candidate
+                        if not fallback_dialog:
+                            fallback_dialog = dialog
+                            fallback_target = candidate
+                except Exception:
+                    continue
+            if fallback_dialog:
+                return fallback_dialog, fallback_target
+            time.sleep(0.2)
+        return None, None
+
     edit_icon = target.locator(
         "img.edit[onclick*=\"feld_aendern\"][onclick*=\"'sonstiges'\"], "
         "img.edit[onclick*='feld_aendern'][onclick*='sonstiges']"
@@ -1444,10 +1494,25 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
         print(f"[WARNUNG] Sonstiges-Dialog konnte nicht geöffnet werden: {exc}")
         return
 
-    dialog = page.locator("div.ui-dialog").first
-    try:
-        dialog.wait_for(state="visible", timeout=8000)
-    except Exception:
+    dialog, dialog_target = _find_sonstiges_dialog(timeout_s=6.0)
+    if dialog is None or dialog_target is None:
+        # Fallback: try to call xajax directly and re-check.
+        try:
+            onclick = edit_icon.get_attribute("onclick") or ""
+        except Exception:
+            onclick = ""
+        match = re.search(r"xajax_feld_aendern\\((\\d+),\\s*'sonstiges'", onclick)
+        if match:
+            try:
+                user_id = int(match.group(1))
+                page.evaluate(
+                    "(uid) => { if (typeof xajax_feld_aendern === 'function') { xajax_feld_aendern(uid, 'sonstiges', 'sonstiges'); } }",
+                    user_id,
+                )
+            except Exception:
+                pass
+            dialog, dialog_target = _find_sonstiges_dialog(timeout_s=4.0)
+    if dialog is None or dialog_target is None:
         print("[WARNUNG] Sonstiges-Dialog nicht sichtbar.")
         return
 
@@ -2124,8 +2189,12 @@ def _upload_arbeitsvertrag(page: Page, payload: dict, tracker: FieldTracker | No
             tracker.skip("uploads", "arbeitsvertrag", "vorhanden", "fehlend")
         return
     docs_before = _extract_documents_table(page)
-    if _document_present(docs_before, ["arbeitsvertrag", "vertrag"]):
-        print("[INFO] Arbeitsvertrag bereits vorhanden – Upload übersprungen.")
+    match = _find_document_match(docs_before, ["arbeitsvertrag", "vertrag"])
+    if match:
+        print(
+            "[INFO] Arbeitsvertrag bereits vorhanden – Upload übersprungen. "
+            f"(file='{match.get('file', '')}', desc='{match.get('description', '')}')"
+        )
         if tracker:
             tracker.skip("uploads", "arbeitsvertrag", "vorhanden", "vorhanden")
         return
@@ -2184,8 +2253,16 @@ def _upload_additional_documents(page: Page, payload: dict, tracker: FieldTracke
             "immatrikulation": ["immatrikulation", "schulbescheinigung", "imma"],
             "infektionsschutz": ["infektionsschutz"],
         }.get(stem, [stem])
-        if _document_present(docs_before, keywords, valid_until=gueltig_bis):
-            print(f"[INFO] Dokument bereits vorhanden – überspringe: {stem}")
+        match_fields = ("file", "description")
+        if stem == "personalbogen":
+            # Be stricter: only accept actual file-name matches to avoid false positives.
+            match_fields = ("file",)
+        match = _find_document_match(docs_before, keywords, valid_until=gueltig_bis, match_fields=match_fields)
+        if match:
+            print(
+                f"[INFO] Dokument bereits vorhanden – überspringe: {stem} "
+                f"(file='{match.get('file', '')}', desc='{match.get('description', '')}')"
+            )
             if tracker:
                 tracker.skip("uploads", stem, "vorhanden", "vorhanden")
             continue
@@ -2602,9 +2679,15 @@ def _extract_documents_table(page) -> list[dict]:
     return entries
 
 
-def _document_present(docs: list[dict], keywords: list[str], valid_until: str = "") -> bool:
+def _find_document_match(
+    docs: list[dict],
+    keywords: list[str],
+    valid_until: str = "",
+    *,
+    match_fields: tuple[str, ...] = ("file", "description"),
+) -> dict | None:
     if not docs:
-        return False
+        return None
     normalized_docs = []
     for entry in docs:
         normalized_docs.append(
@@ -2612,16 +2695,28 @@ def _document_present(docs: list[dict], keywords: list[str], valid_until: str = 
                 "file": _normalize_doc_text(entry.get("file", "")),
                 "description": _normalize_doc_text(entry.get("description", "")),
                 "valid_until": str(entry.get("valid_until") or "").strip(),
+                "raw": entry,
             }
         )
     normalized_keywords = [_normalize_doc_text(key) for key in keywords if key]
     for doc in normalized_docs:
-        if any(k in doc["description"] or k in doc["file"] for k in normalized_keywords):
+        fields = [doc.get(field, "") for field in match_fields]
+        if any(k and any(k in field for field in fields) for k in normalized_keywords):
             if valid_until:
                 if valid_until.strip() and valid_until.strip() != doc["valid_until"].strip():
                     continue
-            return True
-    return False
+            return doc.get("raw")
+    return None
+
+
+def _document_present(
+    docs: list[dict],
+    keywords: list[str],
+    valid_until: str = "",
+    *,
+    match_fields: tuple[str, ...] = ("file", "description"),
+) -> bool:
+    return _find_document_match(docs, keywords, valid_until=valid_until, match_fields=match_fields) is not None
 
 
 def _select_autocomplete_by_typing(
