@@ -525,12 +525,12 @@ def open_mitarbeiteranlage(page: Page):
                 break
             time.sleep(0.25)
 
-            if svnr_error_found:
-                try:
-                    form_frame.locator("[name='sozialversicherungsnummer'], [id='sozialversicherungsnummer']").first.fill("")
-                    print("[OK] sozialversicherungsnummer → (leer)")
-                except Exception as e:
-                    print(f"[FEHLER] sozialversicherungsnummer leeren: {e}")
+        if svnr_error_found:
+            try:
+                form_frame.locator("[name='sozialversicherungsnummer'], [id='sozialversicherungsnummer']").first.fill("")
+                print("[OK] sozialversicherungsnummer → (leer)")
+            except Exception as e:
+                print(f"[FEHLER] sozialversicherungsnummer leeren: {e}")
             add_clicked = _click_add_button()
             if not add_clicked:
                 print("[HINWEIS] Kein Hinzufügen-Button gefunden (Retry nach SVNR-Fehler).")
