@@ -19,6 +19,7 @@ from src.planung_zeitraum_advanced import run_planung_zeitraum as run_planung_ze
 from src.kunden_scraper import run_kunden_scraper
 from src.mitarbeiter_vervollstaendigen import run_mitarbeiter_vervollstaendigen
 from src.mitarbeiterinformationen import run_mitarbeiterinformationen
+from src.vertragsanpassung_transfer import run_vertragsanpassung_transfer
 
 
 def run_login(save_state: str | None, headless: bool | None, slowmo_ms: int | None):
@@ -218,6 +219,13 @@ def main():
     )
     p_tagesplan.add_argument("--headless", choices=["true", "false"], default=None)
     p_tagesplan.add_argument("--slowmo", type=int, default=None)
+
+    p_vtransfer = sub.add_parser(
+        "vertragsanpassung-transfer",
+        help="Überträgt eine unterschriebene Vertragsanpassung in Persplan (Mitarbeiterinformationen -> Dokumente).",
+    )
+    p_vtransfer.add_argument("--headless", choices=["true", "false"], default=None)
+    p_vtransfer.add_argument("--slowmo", type=int, default=None)
     p_tagesplan.add_argument("--wait-seconds", type=int, default=5, help="Pause nach Export (Sek.)")
     p_tagesplan.add_argument(
         "--days-back",
@@ -385,6 +393,11 @@ def main():
             headless=headless,
             slowmo_ms=args.slowmo,
             wait_seconds=args.wait_seconds,
+        )
+    elif args.cmd == "vertragsanpassung-transfer":
+        run_vertragsanpassung_transfer(
+            headless=headless,
+            slowmo_ms=args.slowmo,
         )
 
 
