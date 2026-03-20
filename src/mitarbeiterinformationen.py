@@ -1217,6 +1217,8 @@ def run_mitarbeiterinformationen(
             print(f"[INFO] Unterlagen-Filter: {removed} Einträge ausgeschlossen (nicht eintragen).")
 
     max_retries = int(os.environ.get("PERSONAL_SCRAPER_MAX_RETRIES", "2"))
+    if max_retries > 2:
+        max_retries = 2
     attempts = max_retries + 1
 
     for attempt in range(1, attempts + 1):

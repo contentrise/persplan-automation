@@ -1501,7 +1501,7 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
             onclick = edit_icon.get_attribute("onclick") or ""
         except Exception:
             onclick = ""
-        match = re.search(r"xajax_feld_aendern\\((\\d+),\\s*'sonstiges'", onclick)
+        match = re.search(r"xajax_feld_aendern\((\d+),\s*'sonstiges'", onclick)
         if match:
             try:
                 user_id = int(match.group(1))
@@ -3813,6 +3813,8 @@ def run_mitarbeiter_vervollstaendigen(
         raise RuntimeError("[FEHLER] Keine E-Mail im personalbogen-JSON gefunden.")
 
     max_retries = int(os.environ.get("PERSONAL_SCRAPER_MAX_RETRIES", "2"))
+    if max_retries > 2:
+        max_retries = 2
     attempts = max_retries + 1
 
     for attempt in range(1, attempts + 1):
