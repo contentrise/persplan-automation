@@ -40,6 +40,12 @@ if not (BASE_DIR / "src").is_dir():
 SCRAPER_WORKING_DIR = Path(os.environ.get("SCRAPER_WORKING_DIR") or DEFAULT_WORKING_DIR)
 PYTHON_CMD = os.environ.get("SCRAPER_PYTHON_CMD", os.environ.get("STAFFING_PYTHON_CMD", "python3"))
 POLL_INTERVAL = float(os.environ.get("PERSONAL_SCRAPER_POLL_INTERVAL", "20"))
+DEFAULT_STEP_TIMEOUTS = {
+    "anlage": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_ANLAGE_SECONDS", "180")),
+    "vervollstaendigen": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_VOLL_SECONDS", "300")),
+    "mitarbeiterinformationen": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_INFO_SECONDS", "300")),
+}
+RUN_TIMEOUT_SECONDS = float(os.environ.get("PERSONAL_SCRAPER_RUN_TIMEOUT_SECONDS", str(20 * 60)))
 
 API_BASE = (
     os.environ.get("PERSONAL_SCRAPER_API_BASE")
@@ -118,13 +124,16 @@ def fetch_entry(entry_id: str) -> dict:
     return response.json()
 
 
-def download_contract(contract_url: str, target_path: Path) -> None:
+def download_contract(contract_url: str, target_dir: Path) -> Path:
     response = session.get(contract_url, timeout=60)
     response.raise_for_status()
     content_type = (response.headers.get("Content-Type") or "").lower()
-    if "pdf" not in content_type and not contract_url.lower().endswith(".pdf"):
-        raise RuntimeError(f"Vertrag ist kein PDF (Content-Type: {content_type})")
+    ext = _guess_extension(contract_url, content_type, fallback=".pdf")
+    target_path = target_dir / f"vertrag{ext}"
     target_path.write_bytes(response.content)
+    if "pdf" not in content_type and not contract_url.lower().endswith(".pdf"):
+        LOGGER.warning("Vertrag ist kein PDF (Content-Type: %s). Datei als %s gespeichert.", content_type, target_path.name)
+    return target_path
 
 
 def _guess_extension(url: str, content_type: str, fallback: str = ".bin") -> str:
@@ -163,12 +172,19 @@ def build_input_payload(entry_data: dict, contract_data: dict | None) -> dict:
     }
 
 
-def run_playwright(command: str, env: dict) -> subprocess.CompletedProcess:
+def run_playwright(command: str, env: dict, timeout_seconds: float | None = None) -> subprocess.CompletedProcess:
     if not SCRAPER_WORKING_DIR.exists():
         raise RuntimeError(f"Arbeitsverzeichnis {SCRAPER_WORKING_DIR} existiert nicht")
     cmd = [PYTHON_CMD, *shlex.split(command)]
     LOGGER.info("Starte Playwright: %s (cwd=%s)", " ".join(cmd), SCRAPER_WORKING_DIR)
-    return subprocess.run(cmd, cwd=str(SCRAPER_WORKING_DIR), env=env, capture_output=True, text=True)
+    return subprocess.run(
+        cmd,
+        cwd=str(SCRAPER_WORKING_DIR),
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=timeout_seconds,
+    )
 
 
 def run_login() -> None:
@@ -234,8 +250,7 @@ def process_run(job: dict) -> None:
             if step == "vervollstaendigen":
                 if not contract_file or not contract_file.get("url"):
                     raise RuntimeError("Vertrag fehlt oder URL nicht vorhanden")
-                contract_path = input_dir / "vertrag.pdf"
-                download_contract(contract_file["url"], contract_path)
+                contract_path = download_contract(contract_file["url"], input_dir)
                 LOGGER.info("Datei heruntergeladen: %s", contract_path.name)
 
                 pdf_urls = payload.get("pdfUrls") if isinstance(payload, dict) else {}
@@ -272,12 +287,22 @@ def process_run(job: dict) -> None:
             env = os.environ.copy()
             env["PERSO_INPUT_DIR"] = str(input_dir)
 
-            result = run_playwright(command, env=env)
-            log_chunks.append("=== STDOUT ===\n" + (result.stdout or "").strip())
-            log_chunks.append("=== STDERR ===\n" + (result.stderr or "").strip())
+            try:
+                step_timeout = DEFAULT_STEP_TIMEOUTS.get(step, RUN_TIMEOUT_SECONDS)
+                if step_timeout <= 0:
+                    step_timeout = RUN_TIMEOUT_SECONDS
+                result = run_playwright(command, env=env, timeout_seconds=step_timeout)
+                log_chunks.append("=== STDOUT ===\n" + (result.stdout or "").strip())
+                log_chunks.append("=== STDERR ===\n" + (result.stderr or "").strip())
 
-            if result.returncode != 0:
-                raise RuntimeError(f"Scraper Exit-Code {result.returncode}")
+                if result.returncode != 0:
+                    raise RuntimeError(f"Scraper Exit-Code {result.returncode}")
+            except subprocess.TimeoutExpired as exc:
+                log_chunks.append("=== STDOUT ===\n" + (exc.stdout or "").strip())
+                log_chunks.append("=== STDERR ===\n" + (exc.stderr or "").strip())
+                raise RuntimeError(
+                    f"Scraper Timeout nach {int(step_timeout)}s"
+                ) from exc
 
         duration = round(time.time() - started_at, 2)
         summary = {"durationSeconds": duration, "step": step, "entryId": entry_id}
@@ -294,12 +319,13 @@ def process_run(job: dict) -> None:
         duration = round(time.time() - started_at, 2)
         summary = {"durationSeconds": duration, "step": step, "entryId": entry_id}
         log_chunks.append(f"=== ERROR ===\n{exc}")
+        status = "timeout" if "Scraper Timeout" in str(exc) else "error"
         mark_complete(
             run_id,
-            "error",
+            status,
             {
                 "error": str(exc),
-                "message": "Scraper fehlgeschlagen.",
+                "message": "Scraper Timeout." if status == "timeout" else "Scraper fehlgeschlagen.",
                 "summary": summary,
                 "logText": "\n\n".join(log_chunks),
             },

@@ -1680,18 +1680,21 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
 
 def _find_angebot_file() -> str:
     input_dir = Path(os.environ.get("PERSO_INPUT_DIR", "perso-input"))
-    pdfs = list(input_dir.glob("*.pdf"))
-    if not pdfs:
+    candidates = []
+    for suffix in ("*.pdf", "*.png", "*.jpg", "*.jpeg"):
+        candidates.extend(input_dir.glob(suffix))
+    if not candidates:
         return ""
-    # Poller speichert den Vertrag standardmäßig unter vertrag.pdf.
-    for path in pdfs:
-        if path.name.lower() == "vertrag.pdf":
+    # Poller speichert den Vertrag standardmäßig unter vertrag.*
+    for path in candidates:
+        if path.name.lower().startswith("vertrag."):
             return str(path)
-    # Prefer files containing "angebot" (case-insensitive).
-    for path in pdfs:
-        if "angebot" in path.name.lower():
+    # Prefer files containing "vertrag" or "angebot" (case-insensitive).
+    for path in candidates:
+        name = path.name.lower()
+        if "vertrag" in name or "angebot" in name:
             return str(path)
-    return str(pdfs[0])
+    return str(candidates[0])
 
 
 def _format_date_for_ui(date_str: str) -> str:
@@ -2105,7 +2108,7 @@ def _upload_document_with_modal(
         pass
 
     row = table_body.locator("tr").first
-    deadline = time.time() + 10
+    deadline = time.time() + 20
     while time.time() < deadline and row.count() == 0:
         time.sleep(0.2)
         row = table_body.locator("tr").first
@@ -2152,14 +2155,32 @@ def _upload_document_with_modal(
         return False
     save_button.click()
     print("[OK] Dokument gespeichert.")
+    try:
+        dialog.wait_for(state="hidden", timeout=8000)
+    except Exception:
+        try:
+            close_button = dialog.locator("button:has-text('Schließen'), button:has-text('Abbrechen')").first
+            if close_button.count() > 0:
+                close_button.click()
+        except Exception:
+            pass
     return True
 
 
 def _find_input_file_by_stem(stem: str) -> str:
     input_dir = Path(os.environ.get("PERSO_INPUT_DIR", "perso-input"))
     candidates = sorted(input_dir.glob(f"{stem}.*"))
+    if not candidates and stem == "personalbogen":
+        candidates = sorted(input_dir.glob("personalfragebogen.*"))
     if not candidates:
         return ""
+    preferred = [".pdf", ".png", ".jpg", ".jpeg"]
+    candidates.sort(
+        key=lambda path: (
+            preferred.index(path.suffix.lower()) if path.suffix.lower() in preferred else 999,
+            path.name.lower(),
+        )
+    )
     return str(candidates[0])
 
 
@@ -2220,16 +2241,19 @@ def _upload_arbeitsvertrag(page: Page, payload: dict, tracker: FieldTracker | No
         if tracker:
             tracker.skip("uploads", "arbeitsvertrag", "vorhanden", "vorhanden")
         return
-    _upload_document_with_modal(
+    uploaded = _upload_document_with_modal(
         page=page,
         file_path=pdf_path,
         folder_label="- Arbeitsvertrag",
         folder_value="3",
         bemerkung_text=_build_vertrag_bemerkung(payload),
     )
+    if not uploaded:
+        print("[WARNUNG] Arbeitsvertrag-Upload konnte nicht gestartet werden.")
+    found = _wait_for_document_present(page, ["arbeitsvertrag", "vertrag"], timeout_s=14)
     docs_after = _extract_documents_table(page)
     if tracker:
-        if _document_present(docs_after, ["arbeitsvertrag", "vertrag"]):
+        if found or _document_present(docs_after, ["arbeitsvertrag", "vertrag"]):
             tracker.ok("uploads", "arbeitsvertrag", "vorhanden", "vorhanden")
         else:
             tracker.missing("uploads", "arbeitsvertrag", "vorhanden", "fehlend")
@@ -2268,7 +2292,7 @@ def _upload_additional_documents(page: Page, payload: dict, tracker: FieldTracke
     docs_before = _extract_documents_table(page)
     for stem, bemerkung, folder_label, folder_value, gueltig_bis in jobs:
         keywords = {
-            "personalbogen": ["personalbogen"],
+            "personalbogen": ["personalbogen", "personalfragebogen"],
             "rentenbefreiung": ["rentenbefreiung"],
             "zusatzvereinbarung": ["zusatzvereinbarung"],
             "sicherheitsbelehrung": ["sicherheitsbelehrung"],
@@ -2279,11 +2303,13 @@ def _upload_additional_documents(page: Page, payload: dict, tracker: FieldTracke
         if stem == "personalbogen":
             # Extra strict: require a real file name with a known extension.
             for entry in docs_before:
-                file_text = str(entry.get("file") or "").strip().lower()
-                if "personalbogen" not in file_text:
+                file_text = str(entry.get("file") or "").strip()
+                desc_text = str(entry.get("description") or "").strip()
+                normalized = _normalize_doc_text(f"{file_text} {desc_text}")
+                if "personalbogen" not in normalized and "personalfragebogen" not in normalized:
                     continue
                 ext = Path(file_text).suffix.lower()
-                if ext in {".pdf", ".png", ".jpg", ".jpeg"}:
+                if not file_text or ext in {".pdf", ".png", ".jpg", ".jpeg"}:
                     match = entry
                     break
         if match is None:
@@ -2340,9 +2366,10 @@ def _upload_additional_documents(page: Page, payload: dict, tracker: FieldTracke
                 pass
         if not uploaded:
             print(f"[WARNUNG] Upload fehlgeschlagen: {Path(file_path).name}")
+        found = _wait_for_document_present(page, keywords, valid_until=gueltig_bis, timeout_s=14)
         docs_after = _extract_documents_table(page)
         if tracker:
-            if _document_present(docs_after, keywords, valid_until=gueltig_bis):
+            if found or _document_present(docs_after, keywords, valid_until=gueltig_bis):
                 tracker.ok("uploads", stem, "vorhanden", "vorhanden")
             else:
                 tracker.missing("uploads", stem, "vorhanden", "fehlend")
@@ -2663,6 +2690,13 @@ def _normalize_doc_text(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", text)
 
 
+def _normalize_valid_until(value: str) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    return re.sub(r"\s+", "", text)
+
+
 def _extract_documents_table(page) -> list[dict]:
     candidates = [page]
     try:
@@ -2733,7 +2767,9 @@ def _find_document_match(
         fields = [doc.get(field, "") for field in match_fields]
         if any(k and any(k in field for field in fields) for k in normalized_keywords):
             if valid_until:
-                if valid_until.strip() and valid_until.strip() != doc["valid_until"].strip():
+                expected = _normalize_valid_until(valid_until)
+                actual = _normalize_valid_until(doc["valid_until"])
+                if expected and actual and expected not in actual and actual not in expected:
                     continue
             return doc.get("raw")
     return None
@@ -2747,6 +2783,23 @@ def _document_present(
     match_fields: tuple[str, ...] = ("file", "description"),
 ) -> bool:
     return _find_document_match(docs, keywords, valid_until=valid_until, match_fields=match_fields) is not None
+
+
+def _wait_for_document_present(
+    page: Page,
+    keywords: list[str],
+    valid_until: str = "",
+    *,
+    timeout_s: float = 12.0,
+    match_fields: tuple[str, ...] = ("file", "description"),
+) -> bool:
+    deadline = time.time() + max(1.0, timeout_s)
+    while time.time() < deadline:
+        docs = _extract_documents_table(page)
+        if _document_present(docs, keywords, valid_until=valid_until, match_fields=match_fields):
+            return True
+        time.sleep(0.4)
+    return False
 
 
 def _select_autocomplete_by_typing(

@@ -563,6 +563,13 @@ def _normalize_doc_text(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", text)
 
 
+def _normalize_valid_until(value: str) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    return re.sub(r"\s+", "", text)
+
+
 def _extract_unterlagen_rows(page) -> list[dict]:
     candidates = [page]
     try:
@@ -616,7 +623,9 @@ def _unterlage_exists(page, label: str, valid_until: str = "") -> bool:
         if normalized_label and normalized_label not in row_label:
             continue
         if valid_until:
-            if valid_until.strip() != str(row.get("valid_until") or "").strip():
+            expected = _normalize_valid_until(valid_until)
+            actual = _normalize_valid_until(row.get("valid_until") or "")
+            if expected and actual and expected not in actual and actual not in expected:
                 continue
         return True
     return False
