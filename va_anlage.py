@@ -42,6 +42,18 @@ def _wait_for_inhalt_frame(page: Page, timeout_seconds: int = 20) -> Frame:
         time.sleep(0.5)
     raise RuntimeError("[FEHLER] Frame 'inhalt' wurde nicht gefunden.")
 
+def _find_frame_with_selector(page: Page, selector: str, timeout_seconds: int = 20) -> Frame:
+    deadline = time.time() + timeout_seconds
+    last_error = None
+    while time.time() < deadline:
+        for frame in page.frames:
+            try:
+                if frame.query_selector(selector):
+                    return frame
+            except Exception as exc:
+                last_error = exc
+        time.sleep(0.25)
+    raise RuntimeError(f"[FEHLER] Selector nicht gefunden: {selector}. Last error: {last_error}")
 
 def _debug_skip(label: str, reason: str):
     print(f"[DEBUG] Überspringe '{label}' ({reason}).")
@@ -259,7 +271,9 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
         print(f"[INFO] Öffne Neuer Termin: {target_url}")
         frame.goto(target_url, wait_until="domcontentloaded", timeout=30000)
 
-        frame.wait_for_selector("#kunde", timeout=10000)
+        # PersPlan lädt gelegentlich in ein anderes Frame/neu gerendert – daher per Selector-Scan
+        frame = _find_frame_with_selector(page, "#kunde", timeout_seconds=30)
+        frame.wait_for_selector("#kunde", state="attached", timeout=20000)
         print("[OK] Formular für neuen Termin geladen.")
 
         _log_event_types(frame)
