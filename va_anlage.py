@@ -24,13 +24,14 @@ DEFAULT_NOTE_TEXT = "test"
 RESULTS_PATH = Path("exports") / "va_anlage_result.jsonl"
 
 
-def _require_login_state() -> Path:
+def _require_login_state() -> Path | None:
     state_path = Path(config.STATE_PATH)
     if not state_path.exists():
-        raise RuntimeError(
-            f"[FEHLER] Kein gespeicherter Login-State unter {state_path}. "
-            "Bitte zuerst 'login' ausführen."
+        print(
+            f"[WARNUNG] Kein gespeicherter Login-State unter {state_path}. "
+            "Login wird vor dem Lauf ausgefuehrt."
         )
+        return None
     return state_path
 
 
@@ -92,6 +93,29 @@ def _dump_page_debug_artifacts(page: Page, label: str):
             print(f"[WARNUNG] Screenshot fehlgeschlagen: {exc}")
     except Exception as exc:
         print(f"[WARNUNG] Debug-Artefakte konnten nicht geschrieben werden: {exc}")
+
+def _is_login_required_page(page: Page) -> bool:
+    try:
+        # Check top-level
+        if page.locator("#zurueck_zum_login_button").count() > 0:
+            return True
+        if page.locator("text=Bitte loggen Sie sich ein.").count() > 0:
+            return True
+    except Exception:
+        pass
+    # Check frames (message can render inside frame)
+    try:
+        for frame in page.frames:
+            try:
+                if frame.locator("#zurueck_zum_login_button").count() > 0:
+                    return True
+                if frame.locator("text=Bitte loggen Sie sich ein.").count() > 0:
+                    return True
+            except Exception:
+                continue
+    except Exception:
+        pass
+    return False
 
 def _find_frame_with_any_selector(page: Page, selectors: list[str], timeout_seconds: int = 20) -> tuple[Frame, str]:
     deadline = time.time() + timeout_seconds
@@ -292,11 +316,13 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
     treffpunkt = form_data.get("treffpunkt") or note_text
     personalbedarf = payload.get("personalbedarf") or []
 
-    state_path = _require_login_state()
-
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
-        context = browser.new_context(storage_state=str(state_path))
+        state_path = _require_login_state()
+        if state_path:
+            context = browser.new_context(storage_state=str(state_path))
+        else:
+            context = browser.new_context()
         page = context.new_page()
         success_dialog = {"hit": False, "text": "", "action": ""}
         temp_marker = f"TMP-{int(time.time())}"
@@ -322,8 +348,8 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
 
         page.on("dialog", _handle_dialog)
 
-        print("[INFO] Lade Startseite mit gespeicherter Session …")
-        page.goto(config.BASE_URL, wait_until="load", timeout=20000)
+        print("[INFO] Stelle sicher, dass Login aktiv ist …")
+        do_login(page)
 
         frame = _wait_for_inhalt_frame(page, timeout_seconds=20)
         target_url = urljoin(config.BASE_URL, "planung_neuertermin.php")
@@ -333,6 +359,15 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
             frame.wait_for_load_state("networkidle", timeout=20000)
         except Exception:
             pass
+        if _is_login_required_page(page):
+            print("[WARNUNG] Session abgelaufen (Login erforderlich) – führe Login aus …")
+            do_login(page)
+            frame = _wait_for_inhalt_frame(page, timeout_seconds=20)
+            frame.goto(target_url, wait_until="domcontentloaded", timeout=30000)
+            try:
+                frame.wait_for_load_state("networkidle", timeout=20000)
+            except Exception:
+                pass
 
         # PersPlan lädt gelegentlich in ein anderes Frame/neu gerendert – daher per Selector-Scan
         frame_and_sel = _find_frame_with_any_selector_or_none(
@@ -344,7 +379,7 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
         customer_selector = frame_and_sel[1] if frame_and_sel else "#kunde"
         if not frame:
             # Häufigster Grund: Session abgelaufen → Login-Formular sichtbar
-            if _find_frame_with_selector_or_none(page, "#loginName", timeout_seconds=4):
+            if _find_frame_with_selector_or_none(page, "#loginName", timeout_seconds=4) or _is_login_required_page(page):
                 print("[WARNUNG] Login erforderlich – führe Login aus und versuche erneut …")
                 do_login(page)
                 frame = _wait_for_inhalt_frame(page, timeout_seconds=20)
@@ -367,6 +402,15 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
                     page.wait_for_load_state("networkidle", timeout=20000)
                 except Exception:
                     pass
+                if _is_login_required_page(page):
+                    print("[WARNUNG] Top-Level-Loginseite erkannt – führe Login aus …")
+                    do_login(page)
+                    frame = _wait_for_inhalt_frame(page, timeout_seconds=20)
+                    frame.goto(target_url, wait_until="domcontentloaded", timeout=30000)
+                    try:
+                        frame.wait_for_load_state("networkidle", timeout=20000)
+                    except Exception:
+                        pass
                 frame_and_sel = _find_frame_with_any_selector_or_none(
                     page,
                     ["#kunde", "select[name='kunden_id']", "form#neuerTermin", "form[name='neuerTermin']"],

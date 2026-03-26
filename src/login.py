@@ -19,7 +19,14 @@ def do_login(page: Page):
 
     # Sicherheitshalber warten, bis Formular sichtbar ist
     print("[INFO] Warte auf Loginformular im Frame …")
-    frame.wait_for_selector("#loginName", timeout=15000)
+    login_field = frame.locator("#loginName")
+    if login_field.count() == 0:
+        # Bereits eingeloggt oder andere Seite geladen
+        print("[INFO] Loginformular nicht sichtbar – Session vermutlich aktiv.")
+        frame.page.context.storage_state(path=config.STATE_PATH)
+        print(f"[OK] Session gespeichert unter: {config.STATE_PATH}")
+        return
+    login_field.wait_for(state="visible", timeout=15000)
     print("[OK] Loginformular erkannt.")
 
     username = config.USERNAME
