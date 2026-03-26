@@ -75,6 +75,45 @@ def _dump_frame_debug(page: Page):
                 pass
     except Exception:
         pass
+
+def _dump_page_debug_artifacts(page: Page, label: str):
+    try:
+        timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+        out_dir = Path("exports")
+        out_dir.mkdir(parents=True, exist_ok=True)
+        html_path = out_dir / f"va_anlage_debug_{label}_{timestamp}.html"
+        html_path.write_text(page.content(), encoding="utf-8")
+        print(f"[DEBUG] HTML-Dump geschrieben: {html_path}")
+        try:
+            png_path = out_dir / f"va_anlage_debug_{label}_{timestamp}.png"
+            page.screenshot(path=str(png_path), full_page=True)
+            print(f"[DEBUG] Screenshot geschrieben: {png_path}")
+        except Exception as exc:
+            print(f"[WARNUNG] Screenshot fehlgeschlagen: {exc}")
+    except Exception as exc:
+        print(f"[WARNUNG] Debug-Artefakte konnten nicht geschrieben werden: {exc}")
+
+def _find_frame_with_any_selector(page: Page, selectors: list[str], timeout_seconds: int = 20) -> tuple[Frame, str]:
+    deadline = time.time() + timeout_seconds
+    last_error = None
+    while time.time() < deadline:
+        for frame in page.frames:
+            for selector in selectors:
+                try:
+                    if frame.query_selector(selector):
+                        return frame, selector
+                except Exception as exc:
+                    last_error = exc
+        time.sleep(0.25)
+    raise RuntimeError(
+        f"[FEHLER] Keiner der Selector gefunden: {selectors}. Last error: {last_error}"
+    )
+
+def _find_frame_with_any_selector_or_none(page: Page, selectors: list[str], timeout_seconds: int = 5) -> tuple[Frame, str] | None:
+    try:
+        return _find_frame_with_any_selector(page, selectors, timeout_seconds=timeout_seconds)
+    except Exception:
+        return None
 def _debug_skip(label: str, reason: str):
     print(f"[DEBUG] Überspringe '{label}' ({reason}).")
 
@@ -296,7 +335,13 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
             pass
 
         # PersPlan lädt gelegentlich in ein anderes Frame/neu gerendert – daher per Selector-Scan
-        frame = _find_frame_with_selector_or_none(page, "#kunde", timeout_seconds=30)
+        frame_and_sel = _find_frame_with_any_selector_or_none(
+            page,
+            ["#kunde", "select[name='kunden_id']", "form#neuerTermin", "form[name='neuerTermin']"],
+            timeout_seconds=30,
+        )
+        frame = frame_and_sel[0] if frame_and_sel else None
+        customer_selector = frame_and_sel[1] if frame_and_sel else "#kunde"
         if not frame:
             # Häufigster Grund: Session abgelaufen → Login-Formular sichtbar
             if _find_frame_with_selector_or_none(page, "#loginName", timeout_seconds=4):
@@ -308,7 +353,12 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
                     frame.wait_for_load_state("networkidle", timeout=20000)
                 except Exception:
                     pass
-                frame = _find_frame_with_selector(page, "#kunde", timeout_seconds=30)
+                frame_and_sel = _find_frame_with_any_selector(
+                    page,
+                    ["#kunde", "select[name='kunden_id']", "form#neuerTermin", "form[name='neuerTermin']"],
+                    timeout_seconds=30,
+                )
+                frame, customer_selector = frame_and_sel
             else:
                 # Fallback: Top-Level-Navigation probieren (manchmal wird das Frameset umgangen)
                 print("[WARNUNG] #kunde nicht gefunden – versuche Top-Level-Navigation …")
@@ -317,20 +367,37 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
                     page.wait_for_load_state("networkidle", timeout=20000)
                 except Exception:
                     pass
-                frame = _find_frame_with_selector_or_none(page, "#kunde", timeout_seconds=20)
-                if not frame:
+                frame_and_sel = _find_frame_with_any_selector_or_none(
+                    page,
+                    ["#kunde", "select[name='kunden_id']", "form#neuerTermin", "form[name='neuerTermin']"],
+                    timeout_seconds=20,
+                )
+                if not frame_and_sel:
                     _dump_frame_debug(page)
+                    _dump_page_debug_artifacts(page, "neuer_termin")
                     raise RuntimeError("[FEHLER] Formular '#kunde' nicht gefunden (unerwartete Seite).")
+                frame, customer_selector = frame_and_sel
 
-        frame.wait_for_selector("#kunde", state="attached", timeout=20000)
+        # Falls wir nur das Form gefunden haben, jetzt explizit das Kunden-Select suchen
+        if customer_selector in ("form#neuerTermin", "form[name='neuerTermin']"):
+            if _find_frame_with_selector_or_none(page, "#kunde", timeout_seconds=10):
+                customer_selector = "#kunde"
+            elif _find_frame_with_selector_or_none(page, "select[name='kunden_id']", timeout_seconds=10):
+                customer_selector = "select[name='kunden_id']"
+            else:
+                _dump_frame_debug(page)
+                _dump_page_debug_artifacts(page, "neuer_termin")
+                raise RuntimeError("[FEHLER] Kunden-Select nicht gefunden (form vorhanden).")
+
+        frame.wait_for_selector(customer_selector, state="attached", timeout=20000)
         print("[OK] Formular für neuen Termin geladen.")
 
         _log_event_types(frame)
 
         # Kunde
-        if not _safe_select_label(frame, "#kunde", customer_label, "Kunde"):
-            if not _safe_select_label(frame, "#kunde", DEFAULT_CUSTOMER_LABEL, "Kunde"):
-                _safe_select_value(frame, "#kunde", "39", "Kunde")
+        if not _safe_select_label(frame, customer_selector, customer_label, "Kunde"):
+            if not _safe_select_label(frame, customer_selector, DEFAULT_CUSTOMER_LABEL, "Kunde"):
+                _safe_select_value(frame, customer_selector, "39", "Kunde")
 
         # Veranstaltungstyp (best-effort)
         selected = False
