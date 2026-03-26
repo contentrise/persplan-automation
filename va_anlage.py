@@ -9,6 +9,7 @@ from urllib.parse import urljoin
 from playwright.sync_api import Frame, Page, TimeoutError, sync_playwright
 
 from src import config
+from src.login import do_login
 
 FIELD_TIMEOUT_MS = 5000
 DEFAULT_EVENT_TYPE_LABEL = "Bürojob"
@@ -55,6 +56,25 @@ def _find_frame_with_selector(page: Page, selector: str, timeout_seconds: int = 
         time.sleep(0.25)
     raise RuntimeError(f"[FEHLER] Selector nicht gefunden: {selector}. Last error: {last_error}")
 
+def _find_frame_with_selector_or_none(page: Page, selector: str, timeout_seconds: int = 5) -> Frame | None:
+    try:
+        return _find_frame_with_selector(page, selector, timeout_seconds=timeout_seconds)
+    except Exception:
+        return None
+
+def _dump_frame_debug(page: Page):
+    try:
+        print(f"[DEBUG] Page URL: {page.url}")
+        print("[DEBUG] Verfügbare Frames:")
+        for frame in page.frames:
+            try:
+                name = frame.name or "(no-name)"
+                url = frame.url or "(no-url)"
+                print(f"[DEBUG] - {name}: {url}")
+            except Exception:
+                pass
+    except Exception:
+        pass
 def _debug_skip(label: str, reason: str):
     print(f"[DEBUG] Überspringe '{label}' ({reason}).")
 
@@ -270,9 +290,38 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
         target_url = urljoin(config.BASE_URL, "planung_neuertermin.php")
         print(f"[INFO] Öffne Neuer Termin: {target_url}")
         frame.goto(target_url, wait_until="domcontentloaded", timeout=30000)
+        try:
+            frame.wait_for_load_state("networkidle", timeout=20000)
+        except Exception:
+            pass
 
         # PersPlan lädt gelegentlich in ein anderes Frame/neu gerendert – daher per Selector-Scan
-        frame = _find_frame_with_selector(page, "#kunde", timeout_seconds=30)
+        frame = _find_frame_with_selector_or_none(page, "#kunde", timeout_seconds=30)
+        if not frame:
+            # Häufigster Grund: Session abgelaufen → Login-Formular sichtbar
+            if _find_frame_with_selector_or_none(page, "#loginName", timeout_seconds=4):
+                print("[WARNUNG] Login erforderlich – führe Login aus und versuche erneut …")
+                do_login(page)
+                frame = _wait_for_inhalt_frame(page, timeout_seconds=20)
+                frame.goto(target_url, wait_until="domcontentloaded", timeout=30000)
+                try:
+                    frame.wait_for_load_state("networkidle", timeout=20000)
+                except Exception:
+                    pass
+                frame = _find_frame_with_selector(page, "#kunde", timeout_seconds=30)
+            else:
+                # Fallback: Top-Level-Navigation probieren (manchmal wird das Frameset umgangen)
+                print("[WARNUNG] #kunde nicht gefunden – versuche Top-Level-Navigation …")
+                page.goto(target_url, wait_until="domcontentloaded", timeout=30000)
+                try:
+                    page.wait_for_load_state("networkidle", timeout=20000)
+                except Exception:
+                    pass
+                frame = _find_frame_with_selector_or_none(page, "#kunde", timeout_seconds=20)
+                if not frame:
+                    _dump_frame_debug(page)
+                    raise RuntimeError("[FEHLER] Formular '#kunde' nicht gefunden (unerwartete Seite).")
+
         frame.wait_for_selector("#kunde", state="attached", timeout=20000)
         print("[OK] Formular für neuen Termin geladen.")
 
