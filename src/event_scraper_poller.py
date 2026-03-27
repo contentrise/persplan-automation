@@ -151,6 +151,9 @@ def main() -> None:
 
         result = run_scraper(payload)
         log_text = "\n".join([(result.stdout or "").strip(), (result.stderr or "").strip()]).strip()
+        if log_text:
+            tail = log_text[-4000:]
+            LOGGER.info("Scraper-Output (tail):\n%s", tail)
 
         if result.returncode != 0:
             LOGGER.error("Scraper fehlgeschlagen (rc=%s)", result.returncode)

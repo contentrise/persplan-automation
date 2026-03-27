@@ -165,6 +165,18 @@ def _safe_fill(frame: Frame, selector: str, value: str, label: str):
         _debug_skip(label, f"Fehler beim Füllen: {exc}")
 
 
+def _safe_fill_any(frame: Frame, selectors: list[str], value: str, label: str) -> bool:
+    for selector in selectors:
+        try:
+            if frame.locator(selector).count() == 0:
+                continue
+            _safe_fill(frame, selector, value, label)
+            return True
+        except Exception:
+            continue
+    return False
+
+
 def _safe_select_label(frame: Frame, selector: str, label: str, field_label: str) -> bool:
     locator = frame.locator(selector).first
     if not _safe_wait(locator, field_label):
@@ -232,6 +244,21 @@ def _normalize_date(value: str | None, fallback: str) -> str:
         return parsed.strftime("%d.%m.%Y")
     except Exception:
         return fallback
+
+
+def _normalize_slot_date(value: str | None) -> str:
+    if not value:
+        return ""
+    cleaned = str(value).strip()
+    if not cleaned:
+        return ""
+    if "." in cleaned:
+        return cleaned
+    try:
+        parsed = datetime.strptime(cleaned, "%Y-%m-%d")
+        return parsed.strftime("%d.%m.%Y")
+    except Exception:
+        return ""
 
 def _load_payload(payload_raw: str | None, payload_file: str | None) -> dict:
     if payload_raw:
@@ -651,43 +678,93 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
                             print(f"[WARNUNG] VA-Name konnte nicht aktualisiert werden: {exc}")
 
                         def _open_neue_schicht_popup():
-                            neue_schicht_btn = overview_frame.locator("button:has-text('Neue Schicht')").first
+                            neue_schicht_btn = overview_frame.locator(
+                                "button:has-text('Neue Schicht'), "
+                                "a:has-text('Neue Schicht'), "
+                                "input[value*='Neue Schicht'], "
+                                "img[title*='Neue Schicht']"
+                            ).first
                             popup = None
-                            if _safe_wait(neue_schicht_btn, "Neue Schicht"):
+                            if not _safe_wait(neue_schicht_btn, "Neue Schicht"):
+                                return None, None
+
+                            # Click and wait for popup or inline dialog
+                            existing_pages = set(overview_page.context.pages)
+                            try:
+                                neue_schicht_btn.click()
+                            except Exception:
+                                pass
+
+                            for _ in range(20):
+                                for p in overview_page.context.pages:
+                                    if p not in existing_pages:
+                                        popup = p
+                                        break
+                                if popup:
+                                    break
+                                # Check inline dialog inside current frame
                                 try:
-                                    with overview_page.expect_popup(timeout=15000) as pop:
-                                        neue_schicht_btn.click()
-                                    popup = pop.value
+                                    if overview_frame.locator("#anzahl").first.is_visible():
+                                        return overview_page, overview_frame
                                 except Exception:
-                                    onclick = neue_schicht_btn.get_attribute("onclick") or ""
-                                    if "schicht_hinzufuegen_neu.php" in onclick:
-                                        marker = "schicht_hinzufuegen_neu.php?secureid="
-                                        if marker in onclick:
-                                            start = onclick.find(marker) + len(marker)
-                                            tail = onclick[start:]
-                                            for sep in ("'", "\"", ")", " "):
-                                                if sep in tail:
-                                                    tail = tail.split(sep, 1)[0]
-                                            target_url = urljoin(
-                                                config.BASE_URL,
-                                                f"schicht_hinzufuegen_neu.php?secureid={tail}",
-                                            )
-                                            popup = overview_page.context.new_page()
-                                            popup.goto(target_url, wait_until="domcontentloaded", timeout=30000)
-                            return popup
+                                    pass
+                                time.sleep(0.25)
+
+                            if popup:
+                                return popup, (popup.frame(name="inhalt") or popup.main_frame)
+
+                            # Fallback: derive secureid from onclick
+                            try:
+                                onclick = neue_schicht_btn.get_attribute("onclick") or ""
+                            except Exception:
+                                onclick = ""
+                            if "schicht_hinzufuegen_neu.php" in onclick:
+                                marker = "schicht_hinzufuegen_neu.php?secureid="
+                                if marker in onclick:
+                                    start = onclick.find(marker) + len(marker)
+                                    tail = onclick[start:]
+                                    for sep in ("'", "\"", ")", " "):
+                                        if sep in tail:
+                                            tail = tail.split(sep, 1)[0]
+                                    target_url = urljoin(
+                                        config.BASE_URL,
+                                        f"schicht_hinzufuegen_neu.php?secureid={tail}",
+                                    )
+                                    popup = overview_page.context.new_page()
+                                    popup.goto(target_url, wait_until="domcontentloaded", timeout=30000)
+                                    return popup, (popup.frame(name="inhalt") or popup.main_frame)
+
+                            return None, None
 
                         def _create_shift(slot: dict, position_label: str | None):
-                            popup_page = _open_neue_schicht_popup()
-                            if not popup_page:
+                            popup_page, popup_frame = _open_neue_schicht_popup()
+                            if not popup_page or not popup_frame:
                                 print("[WARNUNG] Neue Schicht Fenster nicht geöffnet.")
                                 return
-                            popup_page.wait_for_load_state("domcontentloaded", timeout=30000)
-                            popup_frame = popup_page.frame(name="inhalt") or popup_page.main_frame
+                            try:
+                                popup_page.wait_for_load_state("domcontentloaded", timeout=30000)
+                            except Exception:
+                                pass
                             popup_frame.wait_for_selector("#anzahl", timeout=20000)
-                            anzahl = str(slot.get("anzahl") or 1)
+                            anzahl = str(slot.get("anzahl") or slot.get("count") or 1)
                             _safe_fill(popup_frame, "#anzahl", anzahl, "Anzahl")
-                            slot_start = slot.get("startTime") or start_time
-                            slot_end = slot.get("endTime") or end_time
+                            slot_start = slot.get("startTime") or slot.get("von") or slot.get("start") or start_time
+                            slot_end = slot.get("endTime") or slot.get("bis") or slot.get("end") or end_time
+                            slot_date_raw = (
+                                slot.get("date")
+                                or slot.get("datum")
+                                or slot.get("startDate")
+                                or slot.get("von_datum")
+                                or slot.get("vonDatum")
+                            )
+                            slot_date = _normalize_slot_date(slot_date_raw)
+                            if slot_date:
+                                _safe_fill_any(
+                                    popup_frame,
+                                    ["#von_datum1", "#datum", "input[name='datum']", "input[name='von_datum']"],
+                                    slot_date,
+                                    "Datum",
+                                )
                             _safe_fill(popup_frame, "#von_uhrzeit", slot_start, "Von Uhrzeit")
                             try:
                                 popup_frame.evaluate(
@@ -729,12 +806,17 @@ def run_va_anlage(headless: bool | None, slowmo_ms: int | None, payload: dict | 
                                 except Exception as exc:
                                     print(f"[WARNUNG] Speichern fehlgeschlagen: {exc}")
 
+                        print(f"[INFO] Personalbedarf Positionen: {len(personalbedarf)}")
                         if not personalbedarf:
                             print("[WARNUNG] Kein Personalbedarf angegeben – keine Schichten angelegt.")
                         else:
                             for entry in personalbedarf:
                                 position_label = entry.get("position") or entry.get("positionLabel") or entry.get("funktion")
                                 slots = entry.get("slots") or []
+                                print(
+                                    f"[INFO] Position '{position_label or '-'}' Slots: "
+                                    f"{len(slots) if slots else 1}"
+                                )
                                 if not slots:
                                     _create_shift({"startTime": start_time, "endTime": end_time, "anzahl": entry.get("anzahl") or 1}, position_label)
                                 else:
