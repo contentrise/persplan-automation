@@ -36,6 +36,7 @@ if not (BASE_DIR / "src").is_dir():
 SCRAPER_WORKING_DIR = Path(os.environ.get("EVENT_SCRAPER_WORKING_DIR") or DEFAULT_WORKING_DIR)
 PYTHON_CMD = os.environ.get("EVENT_SCRAPER_PYTHON_CMD", "python3")
 POLL_INTERVAL = float(os.environ.get("EVENT_SCRAPER_POLL_INTERVAL", "20"))
+SCRAPER_TIMEOUT = float(os.environ.get("EVENT_SCRAPER_TIMEOUT", "900"))
 
 API_BASE = (os.environ.get("EVENT_SCRAPER_API_BASE") or "https://api.greatstaff.com").rstrip("/")
 CLAIM_ENDPOINT = f"{API_BASE}/event-form/scraper/claim"
@@ -103,7 +104,8 @@ def run_scraper(payload: dict) -> subprocess.CompletedProcess:
     try:
         cmd.extend(["--payload-file", tmp_path])
         LOGGER.info("Starte Scraper: %s (cwd=%s)", " ".join(cmd), SCRAPER_WORKING_DIR)
-        return subprocess.run(cmd, cwd=str(SCRAPER_WORKING_DIR), capture_output=True, text=True)
+        timeout = SCRAPER_TIMEOUT if SCRAPER_TIMEOUT > 0 else None
+        return subprocess.run(cmd, cwd=str(SCRAPER_WORKING_DIR), capture_output=True, text=True, timeout=timeout)
     finally:
         try:
             Path(tmp_path).unlink(missing_ok=True)
@@ -149,7 +151,25 @@ def main() -> None:
             "personalbedarf": job.get("personalbedarf") or [],
         }
 
-        result = run_scraper(payload)
+        try:
+            result = run_scraper(payload)
+        except subprocess.TimeoutExpired as exc:
+            stdout = (exc.stdout or "").strip()
+            stderr = (exc.stderr or "").strip()
+            log_text = "\n".join([stdout, stderr]).strip()
+            LOGGER.error("Scraper timeout nach %ss", SCRAPER_TIMEOUT)
+            mark_complete(
+                run_id,
+                "error",
+                {
+                    "requestId": request_id,
+                    "message": "Scraper-Timeout",
+                    "error": f"Timeout nach {int(SCRAPER_TIMEOUT)}s",
+                    "logText": log_text,
+                },
+            )
+            continue
+
         log_text = "\n".join([(result.stdout or "").strip(), (result.stderr or "").strip()]).strip()
         if log_text:
             tail = log_text[-4000:]
