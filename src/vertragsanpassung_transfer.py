@@ -127,10 +127,11 @@ def run_vertragsanpassung_transfer(
     slowmo_ms = config.SLOWMO_MS if slowmo_ms is None else slowmo_ms
 
     payload = _load_payload()
+    personalnummer = str(payload.get("personalnummer", "")).strip()
     phone = str(payload.get("phone", "")).strip()
     description = str(payload.get("description", "")).strip()
-    if not phone:
-        raise RuntimeError("[FEHLER] Keine Telefonnummer im Payload gefunden.")
+    if not personalnummer and not phone:
+        raise RuntimeError("[FEHLER] Keine Personalnummer oder Telefonnummer im Payload gefunden.")
     if not description:
         raise RuntimeError("[FEHLER] Keine Beschreibung im Payload gefunden.")
 
@@ -159,9 +160,13 @@ def run_vertragsanpassung_transfer(
             if search_input.count() == 0:
                 raise RuntimeError("[FEHLER] Suchfeld in user.php nicht gefunden.")
 
-            search_input.fill(phone)
+            search_term = personalnummer or phone
+            search_input.fill(search_term)
             time.sleep(0.3)
-            print(f"[INFO] Suche nach Telefon: {phone}")
+            if personalnummer:
+                print(f"[INFO] Suche nach Personalnummer: {personalnummer}")
+            else:
+                print(f"[INFO] Suche nach Telefon: {phone}")
 
             target_page = _click_first_row(target)
             if not target_page:

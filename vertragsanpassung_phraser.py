@@ -1,9 +1,9 @@
 """
 Erstellt eine CSV mit Metadaten zu allen PDFs im Ordner `import_vertragsanpassung`.
 
-Gespeichert werden pdf_nummer, Vorname, Nachname sowie der am Dokumentende
-platzierte Zahlencode. Die Ausgabe landet standardmäßig unter
-`export_vertragsanpassung`.
+Gespeichert werden pdf_nummer, Vorname, Nachname sowie die im Dokument
+stehenden Kontaktdaten (Personalnummer, E-Mail, Telefon). Die Ausgabe
+landet standardmäßig unter `export_vertragsanpassung`.
 """
 from __future__ import annotations
 
@@ -19,12 +19,21 @@ from typing import Iterable
 from PyPDF2 import PdfReader
 
 
-FIELDNAMES = ["pdf_nummer", "vorname", "nachname", "dokument_code"]
+FIELDNAMES = [
+    "pdf_nummer",
+    "vorname",
+    "nachname",
+    "personalnummer",
+    "email",
+    "telefon",
+    "dokument_code",
+]
 NAME_HINT_PATTERN = re.compile(r"^(herrn?|frau)\b", re.IGNORECASE)
 NAME_FALLBACK_PATTERN = re.compile(
     r"([A-Za-zÄÖÜäöüß' -]{2,}),\s*([A-Za-zÄÖÜäöüß' -]{2,})"
 )
 LONG_NUMBER_PATTERN = re.compile(r"(?<!\d)(?:\d[\s-]?){11,}(?!\d)")
+EMAIL_PATTERN = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
 
 @dataclass
@@ -33,6 +42,9 @@ class ExtractionResult:
     vorname: str
     nachname: str
     dokument_code: str
+    personalnummer: str
+    email: str
+    telefon: str
     pdf_name: str
 
 
@@ -82,6 +94,48 @@ def extract_long_code(text: str) -> str:
     return code
 
 
+def extract_contact_details(text: str) -> tuple[str, str, str]:
+    lines = [sanitize_token(line) for line in text.splitlines()]
+    lines = [line for line in lines if line]
+
+    phone_index = None
+    phone_number = ""
+    for idx, line in enumerate(lines):
+        match = LONG_NUMBER_PATTERN.search(line)
+        if match:
+            phone_index = idx
+            phone_number = re.sub(r"[\s-]", "", match.group(0))
+
+    if phone_index is None:
+        return "", "", ""
+
+    email = ""
+    email_index = None
+    for offset in range(1, 7):
+        idx = phone_index - offset
+        if idx < 0:
+            break
+        candidate = lines[idx]
+        match = EMAIL_PATTERN.search(candidate)
+        if match:
+            email = match.group(0)
+            email_index = idx
+            break
+
+    personalnummer = ""
+    search_start = (email_index - 1) if email_index is not None else (phone_index - 1)
+    for idx in range(search_start, max(search_start - 7, -1), -1):
+        if idx < 0:
+            break
+        candidate = lines[idx]
+        digits = re.sub(r"\D", "", candidate)
+        if 3 <= len(digits) <= 10:
+            personalnummer = digits
+            break
+
+    return personalnummer, email, phone_number
+
+
 def extract_pdf_number(path: Path) -> str:
     digits = re.findall(r"\d+", path.stem)
     if digits:
@@ -92,11 +146,15 @@ def extract_pdf_number(path: Path) -> str:
 def process_pdf(pdf_path: Path) -> ExtractionResult:
     text = extract_text(pdf_path)
     vorname, nachname = extract_name(text)
+    personalnummer, email, telefon = extract_contact_details(text)
     return ExtractionResult(
         pdf_nummer=extract_pdf_number(pdf_path),
         vorname=vorname,
         nachname=nachname,
         dokument_code=extract_long_code(text),
+        personalnummer=personalnummer,
+        email=email,
+        telefon=telefon,
         pdf_name=pdf_path.name,
     )
 
@@ -120,7 +178,10 @@ def write_csv(rows: Iterable[ExtractionResult], output_path: Path) -> None:
                     "pdf_nummer": row.pdf_nummer,
                     "vorname": row.vorname,
                     "nachname": row.nachname,
-                    "dokument_code": f"{ensure_plus_prefix(row.dokument_code)} {row.pdf_name}".strip(),
+                    "personalnummer": row.personalnummer,
+                    "email": row.email,
+                    "telefon": ensure_plus_prefix(row.telefon or row.dokument_code),
+                    "dokument_code": row.pdf_name,
                 }
             )
 
@@ -129,7 +190,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Liest PDFs aus import_vertragsanpassung und erzeugt eine CSV "
-            "mit Name und Dokumentcode."
+            "mit Name und Kontaktdaten."
         )
     )
     parser.add_argument(
