@@ -178,9 +178,7 @@ def run_vertragsanpassung_transfer(
                 print("[OK] Mitarbeiterinformationen geöffnet.")
                 docs_before = _extract_documents_table(target_page)
                 if _document_present(docs_before, ["vertragsanpassung", description]):
-                    print("[INFO] Vertragsanpassung bereits vorhanden – überspringe Upload.")
-                    browser.close()
-                    return
+                    print("[INFO] Vertragsanpassung bereits vorhanden – lade erneut hoch.")
                 print(f"[INFO] Lade Vertragsanpassung hoch: {Path(pdf_path).name}")
                 _upload_document_with_modal(
                     page=target_page,
