@@ -170,6 +170,7 @@ def _extract_event_rows(frame: Frame) -> List[Dict[str, Any]]:
                             ? infoCell.innerText
                             : ""
                     ),
+                    eventHref: titleLink ? (titleLink.getAttribute("href") || "") : "",
                     timeframe: cleanup(timeframeCell ? timeframeCell.innerText : ""),
                     customer: cleanup(customerCell ? customerCell.innerText : ""),
                     address: cleanup(addressCell ? addressCell.innerText : ""),
@@ -193,9 +194,12 @@ def _prepare_event_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         except (TypeError, ValueError):
             filled = total = requests = 0
         offen = max(total - filled, 0)
+        href = (row.get("eventHref") or "").strip()
+        event_url = urljoin(config.BASE_URL, href) if href else ""
         cleaned = {
             "event_id": (row.get("eventId") or "").strip(),
             "title": (row.get("title") or "").strip(),
+            "event_url": event_url,
             "timeframe": (row.get("timeframe") or "").strip(),
             "customer": (row.get("customer") or "").strip(),
             "address": (row.get("address") or "").strip(),
@@ -446,6 +450,7 @@ def _write_open_events_csv(events: List[Dict[str, Any]]) -> Path:
     fieldnames = [
         "event_id",
         "title",
+        "event_url",
         "timeframe",
         "customer",
         "address",
@@ -626,6 +631,7 @@ def _write_events_to_dynamodb(events: List[Dict[str, Any]]) -> str | None:
                 "snapshot_date": snapshot_at[:10],
                 "event_id": event_id,
                 "title": (event.get("title") or "").strip(),
+                "event_url": (event.get("event_url") or "").strip(),
                 "timeframe": (event.get("timeframe") or "").strip(),
                 "customer": (event.get("customer") or "").strip(),
                 "address": (event.get("address") or "").strip(),
