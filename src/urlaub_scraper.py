@@ -1,5 +1,6 @@
 import argparse
 import calendar
+import re
 import time
 from datetime import datetime
 from pathlib import Path
@@ -129,6 +130,55 @@ def read_dialog_message(page, dialog, timeout_ms: int = 4000, poll_ms: int = 200
         time.sleep(poll_ms / 1000.0)
 
     return ""
+
+
+def handle_anfragen_delete_dialog(page, name: str, context: str) -> int | None:
+    """Bestätigt 'Anfragen löschen'-Dialoge und loggt die Anzahl gelöschter Anfragen."""
+    try:
+        dialogs = page.locator("div.ui-dialog:visible")
+        count = dialogs.count()
+    except Exception:
+        return None
+
+    for i in range(count):
+        dialog = dialogs.nth(i)
+        if dialog.locator("button:has-text('Anfragen löschen')").count() == 0:
+            continue
+
+        try:
+            text = dialog.locator(".ui-dialog-content").inner_text(timeout=1000).strip()
+        except Exception:
+            text = ""
+
+        anfragen = None
+        m = re.search(r"hat der Mitarbeiter\\s+(\\d+)\\s+Anfragen", text, re.IGNORECASE)
+        if m:
+            try:
+                anfragen = int(m.group(1))
+            except ValueError:
+                anfragen = None
+
+        try:
+            dialog.locator("button:has-text('Anfragen löschen')").first.click()
+            log_step(f"Dialog 'Anfragen löschen' bestätigt ({context})")
+        except Exception:
+            pass
+
+        if anfragen is not None:
+            log_korrektur(name, f"{context}: {anfragen} Anfragen gelöscht")
+            print(f"[INFO] {name}: {anfragen} Anfragen gelöscht ({context})")
+        else:
+            log_korrektur(name, f"{context}: Anfragen gelöscht (Anzahl unbekannt)")
+            print(f"[INFO] {name}: Anfragen gelöscht ({context})")
+
+        try:
+            dialog.wait_for(state="detached", timeout=5000)
+        except PlaywrightTimeoutError:
+            pass
+
+        return anfragen
+
+    return None
 
 
 def ensure_dialog_closed(page, dialog, reason):
@@ -286,6 +336,8 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                             print(f"[OK] 'Fortfahren' bestätigt ({sec}s).")
                             break
                         time.sleep(1)
+
+                    handle_anfragen_delete_dialog(akte_page, name, "Eintrittsänderung (vor Urlaub)")
 
                     close_btn = akte_page.locator("button:has-text('Schließen')").first
                     if close_btn.count() > 0:
@@ -510,6 +562,8 @@ def run_urlaub_scraper(headless=None, slowmo_ms=None):
                                 print(f"[OK] 'Fortfahren' bestätigt ({sec}s).")
                                 break
                             time.sleep(1)
+
+                        handle_anfragen_delete_dialog(akte_page, name, "Eintrittsänderung (nach Nicht-Eintritt)")
 
                         close_btn = akte_page.locator("button:has-text('Schließen')").first
                         if close_btn.count() > 0:

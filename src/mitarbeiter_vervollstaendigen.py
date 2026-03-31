@@ -2308,8 +2308,10 @@ def _upload_additional_documents(page: Page, payload: dict, tracker: FieldTracke
                 normalized = _normalize_doc_text(f"{file_text} {desc_text}")
                 if "personalbogen" not in normalized and "personalfragebogen" not in normalized:
                     continue
+                if not _entry_has_real_file(entry):
+                    continue
                 ext = Path(file_text).suffix.lower()
-                if not file_text or ext in {".pdf", ".png", ".jpg", ".jpeg"}:
+                if file_text and ext in {".pdf", ".png", ".jpg", ".jpeg"}:
                     match = entry
                     break
         if match is None:
@@ -2697,6 +2699,19 @@ def _normalize_valid_until(value: str) -> str:
     return re.sub(r"\s+", "", text)
 
 
+def _has_allowed_extension(filename: str) -> bool:
+    ext = Path(str(filename or "")).suffix.lower()
+    return ext in {".pdf", ".png", ".jpg", ".jpeg"}
+
+
+def _entry_has_real_file(entry: dict) -> bool:
+    if not isinstance(entry, dict):
+        return False
+    if entry.get("has_download"):
+        return True
+    return _has_allowed_extension(str(entry.get("file") or ""))
+
+
 def _extract_documents_table(page) -> list[dict]:
     candidates = [page]
     try:
@@ -2726,16 +2741,23 @@ def _extract_documents_table(page) -> list[dict]:
             cells = row.locator("td")
             if cells.count() < 5:
                 continue
-            file_text = cells.nth(1).inner_text().strip()
+            file_cell = cells.nth(1)
+            file_text = file_cell.inner_text().strip()
             desc_text = cells.nth(2).inner_text().strip()
             valid_text = cells.nth(4).inner_text().strip()
             if not file_text and not desc_text:
                 continue
+            has_download = False
+            try:
+                has_download = file_cell.locator("a").count() > 0
+            except Exception:
+                has_download = False
             entries.append(
                 {
                     "file": file_text,
                     "description": desc_text,
                     "valid_until": valid_text,
+                    "has_download": has_download,
                 }
             )
         except Exception:
@@ -2754,6 +2776,8 @@ def _find_document_match(
         return None
     normalized_docs = []
     for entry in docs:
+        if not _entry_has_real_file(entry):
+            continue
         normalized_docs.append(
             {
                 "file": _normalize_doc_text(entry.get("file", "")),
@@ -3865,9 +3889,9 @@ def run_mitarbeiter_vervollstaendigen(
     if not email:
         raise RuntimeError("[FEHLER] Keine E-Mail im personalbogen-JSON gefunden.")
 
-    max_retries = int(os.environ.get("PERSONAL_SCRAPER_MAX_RETRIES", "2"))
-    if max_retries > 2:
-        max_retries = 2
+    max_retries = int(os.environ.get("PERSONAL_SCRAPER_MAX_RETRIES", "1"))
+    if max_retries > 1:
+        max_retries = 1
     attempts = max_retries + 1
 
     for attempt in range(1, attempts + 1):

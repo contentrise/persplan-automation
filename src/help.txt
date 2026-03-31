@@ -7,7 +7,6 @@ python3 -m src.main login --headless=false --slowmo=150
 python3 -m src.urlaub_scraper --headless=false --slowmo=150
 
 
-
 Planung Zeitraum (3 Wochen)
 
 python3 -m src.main login --headless=false --slowmo=150
