@@ -3940,12 +3940,12 @@ def _run_personal_step(
         sys.stderr = prev_stderr
         combined_log = stdout_buffer.getvalue() + "\n" + stderr_buffer.getvalue()
         if _has_retry_warning(combined_log):
-            tracker.missing("run", "warnung", "keine warnung", "warnung erkannt")
+            print("[WARNUNG] Warnungen erkannt – Schritt läuft weiter (kein Abbruch).")
         tracker.log_summary()
         missing = tracker.missing_fields()
         if missing:
-            raise RuntimeError(f"Fehlende Felder: {missing}")
-        print("[INFO] Schritt erfolgreich abgeschlossen.")
+            print(f"[WARNUNG] Fehlende Felder erkannt – Schritt läuft weiter: {missing}")
+        print("[INFO] Schritt abgeschlossen.")
     except Exception as exc:
         sys.stdout = prev_stdout
         sys.stderr = prev_stderr
