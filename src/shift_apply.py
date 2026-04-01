@@ -131,7 +131,11 @@ def _find_submit_target(page):
 def _extract_popup_url(onclick_value: str) -> str:
     if not onclick_value:
         return ""
-    match = re.search(r"openWindow\('([^']+)'", onclick_value)
+    # openWindow('termin_input.php?...') or openWindow("termin_input.php?...")
+    match = re.search(r"openWindow\(['\"]([^'\"]+)['\"]", onclick_value)
+    if not match:
+        # Fallback: any termin_input.php?... URL in handler string
+        match = re.search(r"(termin_input\.php\?[^'\"\s)]+)", onclick_value)
     if not match:
         return ""
     return match.group(1)
@@ -147,13 +151,26 @@ def _click_apply_for_shift(page, schicht_id):
     if button.count() == 0:
         raise RuntimeError("Buchungsanfrage-Button nicht gefunden")
     onclick_value = button.get_attribute("onclick") or ""
+    if not onclick_value:
+        try:
+            onclick_value = button.evaluate(
+                "el => el.getAttribute('onclick') || (el.onclick ? el.onclick.toString() : '')"
+            )
+        except Exception:
+            onclick_value = ""
     popup_path = _extract_popup_url(onclick_value)
     if popup_path:
         popup_url = urljoin(config.BASE_URL, popup_path)
         LOGGER.info("Öffne Buchungsanfrage-URL direkt: %s", popup_url)
         popup = page.context.new_page()
         popup.goto(popup_url, wait_until="domcontentloaded", timeout=30000)
+        try:
+            popup.wait_for_load_state("networkidle", timeout=10000)
+        except Exception:
+            pass
         return popup
+    if onclick_value:
+        LOGGER.warning("Kein Popup-Link im onclick gefunden: %s", onclick_value[:200])
     LOGGER.info("Klicke Buchungsanfrage-Button für Schicht %s", schicht_id)
     try:
         with page.context.expect_page(timeout=15000) as popup_event:
@@ -169,6 +186,16 @@ def _click_apply_for_shift(page, schicht_id):
 
 def _submit_form(target, user_id, remark):
     LOGGER.info("Sende Buchungsanfrage für User-ID: %s", user_id)
+    try:
+        LOGGER.info("Formular-URL: %s", target.url)
+    except Exception:
+        pass
+    # Falls Login-Seite statt Formular geladen wurde
+    try:
+        if target.locator("#loginName").count() > 0:
+            raise RuntimeError("LOGIN_REQUIRED: Formular-Seite ist Login (Session fehlt im Popup).")
+    except Exception:
+        pass
     target = _find_submit_target(target) or target
     target.wait_for_selector("select[name='different_user_id']", timeout=15000)
     target.select_option("select[name='different_user_id']", str(user_id))
@@ -214,6 +241,7 @@ def run(payload, headless: bool | None = None):
         browser = p.chromium.launch(headless=headless)
         context = browser.new_context(storage_state=str(config.STATE_PATH))
         page = context.new_page()
+        active_page = page
         page.goto(config.BASE_URL, wait_until="load")
         do_login(page)
 
@@ -242,10 +270,11 @@ def run(payload, headless: bool | None = None):
 
             _open_event(page, event_url)
             popup = _click_apply_for_shift(page, schicht_id)
+            active_page = popup
             _submit_form(popup, resolved_user_id, remark)
             popup.close()
         except Exception as exc:
-            _dump_debug(page, schicht_id or "unknown", str(exc))
+            _dump_debug(active_page, schicht_id or "unknown", str(exc))
             browser.close()
             raise
 
