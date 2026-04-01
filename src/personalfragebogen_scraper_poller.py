@@ -268,7 +268,7 @@ def process_run(job: dict) -> None:
             input_dir = Path(tmp_dir) / "perso-input"
             input_dir.mkdir(parents=True, exist_ok=True)
 
-            needs_contract_file = step in {"vervollstaendigen", "dokumente"}
+            needs_contract_file = step in {"vervollstaendigen", "dokumente", "vertragsdaten"}
             include_contract_data = step in {"vervollstaendigen", "dokumente", "lohnabrechnung", "vertragsdaten"}
             json_payload = build_input_payload(payload, contract_data if include_contract_data else None)
             json_path = input_dir / f"personalbogen-{entry_id}.json"
