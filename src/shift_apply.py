@@ -5,6 +5,7 @@ import os
 import re
 import time
 from pathlib import Path
+from datetime import datetime, timedelta
 from urllib.parse import urljoin
 
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
@@ -211,7 +212,31 @@ def _click_apply_for_shift(page, schicht_id):
         return page
 
 
-def _submit_form(target, user_id, remark):
+def _format_persplan_date(value: str) -> str:
+    """Expect YYYY-MM-DD -> DD.MM.YY (as shown in select options)."""
+    if not value:
+        return ""
+    try:
+        dt = datetime.strptime(value, "%Y-%m-%d")
+        return dt.strftime("%d.%m.%y")
+    except Exception:
+        return ""
+
+
+def _maybe_adjust_end_date(date_str: str, start_time: str, end_time: str) -> str:
+    if not date_str or not start_time or not end_time:
+        return date_str
+    try:
+        start_dt = datetime.strptime(date_str + " " + start_time, "%Y-%m-%d %H:%M")
+        end_dt = datetime.strptime(date_str + " " + end_time, "%Y-%m-%d %H:%M")
+        if end_dt < start_dt:
+            return (start_dt + timedelta(days=1)).strftime("%Y-%m-%d")
+    except Exception:
+        return date_str
+    return date_str
+
+
+def _submit_form(target, user_id, remark, shift_date: str = "", shift_start: str = "", shift_end: str = ""):
     LOGGER.info("Sende Buchungsanfrage für User-ID: %s", user_id)
     try:
         LOGGER.info("Formular-URL: %s", target.url)
@@ -224,6 +249,34 @@ def _submit_form(target, user_id, remark):
     except Exception:
         pass
     target = _find_submit_target(target) or target
+
+    # Falls Zeiten/Daten vorhanden sind, im Formular setzen
+    if shift_date:
+        start_label = _format_persplan_date(shift_date)
+        end_date = _maybe_adjust_end_date(shift_date, shift_start, shift_end)
+        end_label = _format_persplan_date(end_date)
+        if start_label:
+            try:
+                target.select_option("select[name='von_datum']", label=start_label)
+            except Exception:
+                pass
+        if end_label:
+            try:
+                target.select_option("select[name='bis_datum']", label=end_label)
+            except Exception:
+                pass
+
+    if shift_start:
+        try:
+            target.fill("#von_uhrzeit", shift_start)
+        except Exception:
+            pass
+    if shift_end:
+        try:
+            target.fill("#bis_uhrzeit", shift_end)
+        except Exception:
+            pass
+
     target.wait_for_selector("select[name='different_user_id']", timeout=15000)
     target.select_option("select[name='different_user_id']", str(user_id))
     if remark is not None:
@@ -240,7 +293,10 @@ def run(payload, headless: bool | None = None):
     email = str(payload.get("email") or "").strip()
     phone = str(payload.get("phone") or "").strip()
     event_url = str(payload.get("event_url") or "").strip()
+    event_date = str(payload.get("event_date") or "").strip()
     schicht_id = str(payload.get("shift_id") or "").strip()
+    shift_start = str(payload.get("shift_start") or "").strip()
+    shift_end = str(payload.get("shift_end") or "").strip()
     remark = payload.get("remark") or ""
     provided_user_id = str(payload.get("persplan_user_id") or "").strip()
 
@@ -298,7 +354,14 @@ def run(payload, headless: bool | None = None):
             _open_event(page, event_url)
             popup = _click_apply_for_shift(page, schicht_id)
             active_page = popup
-            _submit_form(popup, resolved_user_id, remark)
+            _submit_form(
+                popup,
+                resolved_user_id,
+                remark,
+                shift_date=event_date,
+                shift_start=shift_start,
+                shift_end=shift_end,
+            )
             popup.close()
         except Exception as exc:
             _dump_debug(active_page, schicht_id or "unknown", str(exc))
