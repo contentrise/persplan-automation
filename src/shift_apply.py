@@ -143,8 +143,10 @@ def _extract_popup_url(onclick_value: str) -> str:
 
 def _click_apply_for_shift(page, schicht_id):
     LOGGER.info("Suche Schichtzeile für ID: %s", schicht_id)
+    frame = page.frame(name="inhalt")
+    target = frame if frame else page
     row_selector = f"tr:has(#cb_{schicht_id})"
-    row = page.locator(row_selector).first
+    row = target.locator(row_selector).first
     if row.count() == 0:
         raise RuntimeError(f"Schicht-ID {schicht_id} nicht gefunden")
     button = row.locator("img.group_add").first
@@ -158,6 +160,8 @@ def _click_apply_for_shift(page, schicht_id):
             )
         except Exception:
             onclick_value = ""
+    if onclick_value:
+        LOGGER.info("onclick gefunden: %s", onclick_value[:200])
     popup_path = _extract_popup_url(onclick_value)
     if popup_path:
         popup_url = urljoin(config.BASE_URL, popup_path)
