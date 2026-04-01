@@ -17,7 +17,14 @@ from src.tagesplan_vortag import run_tagesplan_vortag
 from src.planung_zeitraum import run_planung_zeitraum
 from src.planung_zeitraum_advanced import run_planung_zeitraum as run_planung_zeitraum_advanced
 from src.kunden_scraper import run_kunden_scraper
-from src.mitarbeiter_vervollstaendigen import run_mitarbeiter_vervollstaendigen
+from src.mitarbeiter_vervollstaendigen import (
+    run_mitarbeiter_vervollstaendigen,
+    run_mitarbeiter_lohnabrechnung,
+    run_mitarbeiter_stammdaten,
+    run_mitarbeiter_sedcard,
+    run_mitarbeiter_vertragsdaten,
+    run_mitarbeiter_dokumente,
+)
 from src.mitarbeiterinformationen import run_mitarbeiterinformationen
 from src.vertragsanpassung_transfer import run_vertragsanpassung_transfer
 
@@ -334,6 +341,46 @@ def main():
         help="Pause nach dem Öffnen (Sek.)",
     )
 
+    p_lohn = sub.add_parser(
+        "mitarbeiter-lohnabrechnung",
+        help="Öffnet Lohnabrechnung und trägt Krankenkasse/Grunddaten ein",
+    )
+    p_lohn.add_argument("--headless", choices=["true", "false"], default=None)
+    p_lohn.add_argument("--slowmo", type=int, default=None)
+    p_lohn.add_argument("--wait-seconds", type=int, default=0, help="Pause nach dem Schritt (Sek.)")
+
+    p_stamm = sub.add_parser(
+        "mitarbeiter-stammdaten",
+        help="Öffnet Stammdaten und Notfallkontakt und trägt Werte ein",
+    )
+    p_stamm.add_argument("--headless", choices=["true", "false"], default=None)
+    p_stamm.add_argument("--slowmo", type=int, default=None)
+    p_stamm.add_argument("--wait-seconds", type=int, default=0, help="Pause nach dem Schritt (Sek.)")
+
+    p_sed = sub.add_parser(
+        "mitarbeiter-sedcard",
+        help="Öffnet Sedcard und trägt Daten ein",
+    )
+    p_sed.add_argument("--headless", choices=["true", "false"], default=None)
+    p_sed.add_argument("--slowmo", type=int, default=None)
+    p_sed.add_argument("--wait-seconds", type=int, default=0, help="Pause nach dem Schritt (Sek.)")
+
+    p_vertrag = sub.add_parser(
+        "mitarbeiter-vertragsdaten",
+        help="Öffnet Vertragsdaten inkl. Grundlohn und trägt Daten ein",
+    )
+    p_vertrag.add_argument("--headless", choices=["true", "false"], default=None)
+    p_vertrag.add_argument("--slowmo", type=int, default=None)
+    p_vertrag.add_argument("--wait-seconds", type=int, default=0, help="Pause nach dem Schritt (Sek.)")
+
+    p_docs = sub.add_parser(
+        "mitarbeiter-dokumente",
+        help="Öffnet Mitarbeiterinformationen und lädt Dokumente hoch",
+    )
+    p_docs.add_argument("--headless", choices=["true", "false"], default=None)
+    p_docs.add_argument("--slowmo", type=int, default=None)
+    p_docs.add_argument("--wait-seconds", type=int, default=0, help="Pause nach dem Schritt (Sek.)")
+
     args = parser.parse_args()
 
     headless = None if args.headless is None else (args.headless.lower() == "true")
@@ -390,6 +437,36 @@ def main():
         )
     elif args.cmd == "mitarbeiterinformationen":
         run_mitarbeiterinformationen(
+            headless=headless,
+            slowmo_ms=args.slowmo,
+            wait_seconds=args.wait_seconds,
+        )
+    elif args.cmd == "mitarbeiter-lohnabrechnung":
+        run_mitarbeiter_lohnabrechnung(
+            headless=headless,
+            slowmo_ms=args.slowmo,
+            wait_seconds=args.wait_seconds,
+        )
+    elif args.cmd == "mitarbeiter-stammdaten":
+        run_mitarbeiter_stammdaten(
+            headless=headless,
+            slowmo_ms=args.slowmo,
+            wait_seconds=args.wait_seconds,
+        )
+    elif args.cmd == "mitarbeiter-sedcard":
+        run_mitarbeiter_sedcard(
+            headless=headless,
+            slowmo_ms=args.slowmo,
+            wait_seconds=args.wait_seconds,
+        )
+    elif args.cmd == "mitarbeiter-vertragsdaten":
+        run_mitarbeiter_vertragsdaten(
+            headless=headless,
+            slowmo_ms=args.slowmo,
+            wait_seconds=args.wait_seconds,
+        )
+    elif args.cmd == "mitarbeiter-dokumente":
+        run_mitarbeiter_dokumente(
             headless=headless,
             slowmo_ms=args.slowmo,
             wait_seconds=args.wait_seconds,

@@ -44,6 +44,11 @@ DEFAULT_STEP_TIMEOUTS = {
     "anlage": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_ANLAGE_SECONDS", "180")),
     "vervollstaendigen": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_VOLL_SECONDS", "300")),
     "mitarbeiterinformationen": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_INFO_SECONDS", "300")),
+    "lohnabrechnung": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_LOHN_SECONDS", "180")),
+    "stammdaten": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_STAMM_SECONDS", "180")),
+    "sedcard": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_SEDCARD_SECONDS", "180")),
+    "vertragsdaten": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_VERTRAG_SECONDS", "180")),
+    "dokumente": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_DOKUMENTE_SECONDS", "300")),
 }
 RUN_TIMEOUT_SECONDS = float(os.environ.get("PERSONAL_SCRAPER_RUN_TIMEOUT_SECONDS", str(20 * 60)))
 
@@ -76,6 +81,26 @@ STEP_COMMANDS = {
         os.environ.get("PERSONAL_SCRAPER_COMMAND_INFO")
         or os.environ.get("STAFFING_SCRAPER_COMMAND_INFO")
         or "-m src.main mitarbeiterinformationen --headless true"
+    ).strip(),
+    "lohnabrechnung": (
+        os.environ.get("PERSONAL_SCRAPER_COMMAND_LOHN")
+        or "-m src.main mitarbeiter-lohnabrechnung --headless true"
+    ).strip(),
+    "stammdaten": (
+        os.environ.get("PERSONAL_SCRAPER_COMMAND_STAMM")
+        or "-m src.main mitarbeiter-stammdaten --headless true"
+    ).strip(),
+    "sedcard": (
+        os.environ.get("PERSONAL_SCRAPER_COMMAND_SEDCARD")
+        or "-m src.main mitarbeiter-sedcard --headless true"
+    ).strip(),
+    "vertragsdaten": (
+        os.environ.get("PERSONAL_SCRAPER_COMMAND_VERTRAG")
+        or "-m src.main mitarbeiter-vertragsdaten --headless true"
+    ).strip(),
+    "dokumente": (
+        os.environ.get("PERSONAL_SCRAPER_COMMAND_DOKUMENTE")
+        or "-m src.main mitarbeiter-dokumente --headless true"
     ).strip(),
 }
 LOGIN_COMMAND = (
@@ -243,11 +268,13 @@ def process_run(job: dict) -> None:
             input_dir = Path(tmp_dir) / "perso-input"
             input_dir.mkdir(parents=True, exist_ok=True)
 
-            json_payload = build_input_payload(payload, contract_data if step == "vervollstaendigen" else None)
+            needs_contract_file = step in {"vervollstaendigen", "dokumente"}
+            include_contract_data = step in {"vervollstaendigen", "dokumente", "lohnabrechnung", "vertragsdaten"}
+            json_payload = build_input_payload(payload, contract_data if include_contract_data else None)
             json_path = input_dir / f"personalbogen-{entry_id}.json"
             json_path.write_text(json.dumps(json_payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
-            if step == "vervollstaendigen":
+            if needs_contract_file:
                 if not contract_file or not contract_file.get("url"):
                     raise RuntimeError("Vertrag fehlt oder URL nicht vorhanden")
                 contract_path = download_contract(contract_file["url"], input_dir)

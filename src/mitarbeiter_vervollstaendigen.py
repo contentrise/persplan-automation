@@ -3872,6 +3872,199 @@ def _wait_for_dialog_closed(page: Page, timeout_seconds: float = 6.0) -> None:
         pass
 
 
+def _run_personal_step(
+    step_label: str,
+    action_fn,
+    headless: bool | None = None,
+    slowmo_ms: int | None = None,
+    wait_seconds: int = 0,
+) -> None:
+    headless = config.HEADLESS if headless is None else headless
+    slowmo_ms = config.SLOWMO_MS if slowmo_ms is None else slowmo_ms
+
+    state_path = Path(config.STATE_PATH)
+    if not state_path.exists():
+        raise RuntimeError(f"[FEHLER] Kein gespeicherter Login-State unter {state_path}. Bitte zuerst 'login' ausführen.")
+
+    payload = _load_personalbogen_json()
+    email = str(payload.get("email", "")).strip()
+    if not email:
+        raise RuntimeError("[FEHLER] Keine E-Mail im personalbogen-JSON gefunden.")
+
+    tracker = FieldTracker(attempt=1, max_retries=0)
+    print(f"[INFO] Schritt gestartet: {step_label}")
+    stdout_buffer = io.StringIO()
+    stderr_buffer = io.StringIO()
+    prev_stdout = sys.stdout
+    prev_stderr = sys.stderr
+    sys.stdout = _Tee(prev_stdout, stdout_buffer)
+    sys.stderr = _Tee(prev_stderr, stderr_buffer)
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
+            context = browser.new_context(storage_state=str(state_path))
+            page = context.new_page()
+
+            print("[INFO] Lade Startseite mit gespeicherter Session …")
+            page.goto(config.BASE_URL, wait_until="domcontentloaded")
+
+            try:
+                target = _open_user_overview(page)
+            except Exception as exc:
+                print(f"[WARNUNG] Übersicht nicht geladen (Session evtl. abgelaufen): {exc} – versuche Login …")
+                page = context.new_page()
+                do_login(page)
+                target = _open_user_overview(page)
+
+            search_input = _locate_search_input(target)
+            if search_input.count() == 0:
+                raise RuntimeError("[FEHLER] Suchfeld in user.php nicht gefunden.")
+
+            search_input.fill(email)
+            time.sleep(0.2)
+            print(f"[INFO] Suche nach E-Mail: {email}")
+
+            target_page = _click_lastname_link(target, email)
+            if not target_page:
+                raise RuntimeError("[FEHLER] Kein Treffer geklickt – Abbruch.")
+
+            action_fn(target_page, payload, tracker)
+
+            if wait_seconds > 0:
+                print(f"[INFO] Pause für manuelle Schritte ({wait_seconds}s) …")
+                time.sleep(max(1, wait_seconds))
+
+            browser.close()
+
+        sys.stdout = prev_stdout
+        sys.stderr = prev_stderr
+        combined_log = stdout_buffer.getvalue() + "\n" + stderr_buffer.getvalue()
+        if _has_retry_warning(combined_log):
+            tracker.missing("run", "warnung", "keine warnung", "warnung erkannt")
+        tracker.log_summary()
+        missing = tracker.missing_fields()
+        if missing:
+            raise RuntimeError(f"Fehlende Felder: {missing}")
+        print("[INFO] Schritt erfolgreich abgeschlossen.")
+    except Exception as exc:
+        sys.stdout = prev_stdout
+        sys.stderr = prev_stderr
+        tracker.error("run", "exception", str(exc))
+        tracker.log_summary()
+        raise
+
+
+def run_mitarbeiter_lohnabrechnung(
+    headless: bool | None = None,
+    slowmo_ms: int | None = None,
+    wait_seconds: int = 0,
+):
+    def _action(target_page: Page, payload: dict, tracker: FieldTracker) -> None:
+        if _open_lohnabrechnung_and_edit(target_page):
+            _fill_lohnabrechnung_fields(target_page, payload, tracker=tracker)
+            if _click_fertig_in_dialog(target_page, timeout_seconds=5.0):
+                _wait_for_dialog_closed(target_page, timeout_seconds=6.0)
+            if not _click_daten_speichern(target_page, timeout_seconds=8.0):
+                print("[WARNUNG] 'Daten speichern' nicht gefunden/geklickt.")
+                tracker.missing("lohnabrechnung", "daten_speichern", "geklickt", "fehlgeschlagen")
+        else:
+            tracker.missing("lohnabrechnung", "tab", "geöffnet", "fehlgeschlagen")
+
+    _run_personal_step(
+        "lohnabrechnung",
+        _action,
+        headless=headless,
+        slowmo_ms=slowmo_ms,
+        wait_seconds=wait_seconds,
+    )
+
+
+def run_mitarbeiter_stammdaten(
+    headless: bool | None = None,
+    slowmo_ms: int | None = None,
+    wait_seconds: int = 0,
+):
+    def _action(target_page: Page, payload: dict, tracker: FieldTracker) -> None:
+        _fill_stammdaten_fields(target_page, payload, tracker=tracker)
+        _fill_notfallkontakt(target_page, payload, tracker=tracker)
+
+    _run_personal_step(
+        "stammdaten",
+        _action,
+        headless=headless,
+        slowmo_ms=slowmo_ms,
+        wait_seconds=wait_seconds,
+    )
+
+
+def run_mitarbeiter_sedcard(
+    headless: bool | None = None,
+    slowmo_ms: int | None = None,
+    wait_seconds: int = 0,
+):
+    def _action(target_page: Page, payload: dict, tracker: FieldTracker) -> None:
+        if _open_sedcard(target_page):
+            print("[INFO] Sedcard geöffnet.")
+            _fill_sedcard_fields(target_page, payload, tracker=tracker)
+        else:
+            tracker.missing("sedcard", "tab", "geöffnet", "fehlgeschlagen")
+
+    _run_personal_step(
+        "sedcard",
+        _action,
+        headless=headless,
+        slowmo_ms=slowmo_ms,
+        wait_seconds=wait_seconds,
+    )
+
+
+def run_mitarbeiter_vertragsdaten(
+    headless: bool | None = None,
+    slowmo_ms: int | None = None,
+    wait_seconds: int = 0,
+):
+    def _action(target_page: Page, payload: dict, tracker: FieldTracker) -> None:
+        if _open_vertragsdaten(target_page):
+            print("[INFO] Vertragsdaten geöffnet.")
+            _fill_grundlohn_history(target_page)
+            _fill_vertrag_history(target_page, payload)
+            _fill_tage_fremd(target_page, payload)
+            _fill_sonstiges(target_page, payload)
+            _fill_eintritt_austritt(target_page, payload)
+        else:
+            tracker.missing("vertragsdaten", "tab", "geöffnet", "fehlgeschlagen")
+
+    _run_personal_step(
+        "vertragsdaten",
+        _action,
+        headless=headless,
+        slowmo_ms=slowmo_ms,
+        wait_seconds=wait_seconds,
+    )
+
+
+def run_mitarbeiter_dokumente(
+    headless: bool | None = None,
+    slowmo_ms: int | None = None,
+    wait_seconds: int = 0,
+):
+    def _action(target_page: Page, payload: dict, tracker: FieldTracker) -> None:
+        if _open_mitarbeiterinformationen(target_page):
+            print("[INFO] Mitarbeiterinformationen geöffnet.")
+            _upload_arbeitsvertrag(target_page, payload, tracker=tracker)
+            _upload_additional_documents(target_page, payload, tracker=tracker)
+        else:
+            tracker.missing("uploads", "tab", "geöffnet", "fehlgeschlagen")
+
+    _run_personal_step(
+        "dokumente",
+        _action,
+        headless=headless,
+        slowmo_ms=slowmo_ms,
+        wait_seconds=wait_seconds,
+    )
+
+
 def run_mitarbeiter_vervollstaendigen(
     headless: bool | None = None,
     slowmo_ms: int | None = None,
