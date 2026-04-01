@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 from urllib.parse import urljoin
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 from src import config
 from src.login import do_login
@@ -114,6 +114,19 @@ def _open_event(page, event_url):
         pass
 
 
+def _find_submit_target(page):
+    selector = "select[name='different_user_id']"
+    if page.locator(selector).count() > 0:
+        return page
+    for frame in page.frames:
+        try:
+            if frame.locator(selector).count() > 0:
+                return frame
+        except Exception:
+            continue
+    return None
+
+
 def _click_apply_for_shift(page, schicht_id):
     LOGGER.info("Suche Schichtzeile für ID: %s", schicht_id)
     row_selector = f"tr:has(#cb_{schicht_id})"
@@ -124,22 +137,28 @@ def _click_apply_for_shift(page, schicht_id):
     if button.count() == 0:
         raise RuntimeError("Buchungsanfrage-Button nicht gefunden")
     LOGGER.info("Klicke Buchungsanfrage-Button für Schicht %s", schicht_id)
-    with page.context.expect_page(timeout=8000) as popup_event:
-        button.click()
-    popup = popup_event.value
-    popup.wait_for_load_state("domcontentloaded", timeout=15000)
-    return popup
-
-
-def _submit_form(popup, user_id, remark):
-    LOGGER.info("Sende Buchungsanfrage für User-ID: %s", user_id)
-    popup.wait_for_selector("select[name='different_user_id']", timeout=10000)
-    popup.select_option("select[name='different_user_id']", str(user_id))
-    if remark is not None:
-        popup.fill("#bemerkung", remark)
-    popup.locator("input.button[value='senden'], input[name='send_it']").first.click()
     try:
-        popup.wait_for_load_state("networkidle", timeout=10000)
+        with page.context.expect_page(timeout=15000) as popup_event:
+            button.click()
+        popup = popup_event.value
+        popup.wait_for_load_state("domcontentloaded", timeout=15000)
+        return popup
+    except PlaywrightTimeoutError:
+        LOGGER.warning("Kein Popup geöffnet – prüfe Formular im aktuellen Tab")
+        button.click()
+        return page
+
+
+def _submit_form(target, user_id, remark):
+    LOGGER.info("Sende Buchungsanfrage für User-ID: %s", user_id)
+    target = _find_submit_target(target) or target
+    target.wait_for_selector("select[name='different_user_id']", timeout=15000)
+    target.select_option("select[name='different_user_id']", str(user_id))
+    if remark is not None:
+        target.fill("#bemerkung", remark)
+    target.locator("input.button[value='senden'], input[name='send_it']").first.click()
+    try:
+        target.wait_for_load_state("networkidle", timeout=10000)
     except Exception:
         pass
 
@@ -192,6 +211,7 @@ def run(payload, headless: bool | None = None):
 
             if searched_user_id:
                 resolved_user_id = searched_user_id
+                LOGGER.info("User gefunden: persNr=%s → user_id=%s", persnr or "-", resolved_user_id)
                 if persnr:
                     cache[persnr] = resolved_user_id
                     _save_cache(cache)
