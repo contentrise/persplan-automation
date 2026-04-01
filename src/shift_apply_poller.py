@@ -30,7 +30,7 @@ COMPLETE_ENDPOINT = f"{API_BASE}/shift-apply/scraper/complete"
 SECRET = os.environ.get("SHIFT_APPLY_RUN_SECRET") or os.environ.get("SHIFT_APPLY_SECRET")
 
 PYTHON_CMD = os.environ.get("SHIFT_APPLY_PYTHON_CMD", "python3")
-SCRAPER_COMMAND = os.environ.get("SHIFT_APPLY_COMMAND", "-m src.shift_apply")
+SCRAPER_COMMAND = os.environ.get("SHIFT_APPLY_COMMAND", "-m src.shift_apply --headless true")
 BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_WORKING_DIR = BASE_DIR.parent if (BASE_DIR.parent / "src").is_dir() else BASE_DIR
 WORKING_DIR = Path(os.environ.get("SHIFT_APPLY_WORKING_DIR") or DEFAULT_WORKING_DIR)

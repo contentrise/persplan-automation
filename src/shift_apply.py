@@ -130,7 +130,7 @@ def _submit_form(popup, user_id, remark):
         pass
 
 
-def run(payload):
+def run(payload, headless: bool | None = None):
     persnr = str(payload.get("persNr") or "").strip()
     email = str(payload.get("email") or "").strip()
     phone = str(payload.get("phone") or "").strip()
@@ -145,8 +145,10 @@ def run(payload):
     cache = _load_cache()
     resolved_user_id = provided_user_id or cache.get(persnr) or ""
 
+    headless = config.HEADLESS if headless is None else headless
+
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=config.HEADLESS)
+        browser = p.chromium.launch(headless=headless)
         context = browser.new_context(storage_state=str(config.STATE_PATH))
         page = context.new_page()
         page.goto(config.BASE_URL, wait_until="load")
@@ -188,12 +190,16 @@ def run(payload):
 def main():
     parser = argparse.ArgumentParser(description="Shift Apply")
     parser.add_argument("--payload-file", required=True)
+    parser.add_argument("--headless", choices=["true", "false"], default=None)
     args = parser.parse_args()
 
     payload_path = Path(args.payload_file)
     payload = json.loads(payload_path.read_text(encoding="utf-8"))
+    headless = None
+    if args.headless is not None:
+        headless = args.headless == "true"
     try:
-        result = run(payload)
+        result = run(payload, headless=headless)
         print(json.dumps(result, ensure_ascii=False))
     except Exception as exc:
         error_text = str(exc)

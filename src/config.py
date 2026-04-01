@@ -4,7 +4,8 @@ from datetime import datetime
 from pathlib import Path
 
 # --- .env für Basisdaten (Login etc.) ---
-load_dotenv(override=True)
+# Systemd/Runtime-Env soll Vorrang haben (z.B. HEADLESS=true auf Server).
+load_dotenv(override=False)
 
 # --- Basis-Konfiguration aus .env ---
 BASE_URL   = os.getenv("PERSPLAN_BASE_URL", "https://greatstaff.persplan.net/").rstrip("/") + "/"
