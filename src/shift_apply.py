@@ -149,7 +149,9 @@ def _click_apply_for_shift(page, schicht_id):
     row = target.locator(row_selector).first
     if row.count() == 0:
         raise RuntimeError(f"Schicht-ID {schicht_id} nicht gefunden")
-    button = row.locator("img.group_add").first
+    button = row.locator("img.group_add[onclick]").first
+    if button.count() == 0:
+        button = row.locator("img.group_add").first
     if button.count() == 0:
         raise RuntimeError("Buchungsanfrage-Button nicht gefunden")
     onclick_value = button.get_attribute("onclick") or ""
@@ -163,6 +165,28 @@ def _click_apply_for_shift(page, schicht_id):
     if onclick_value:
         LOGGER.info("onclick gefunden: %s", onclick_value[:200])
     popup_path = _extract_popup_url(onclick_value)
+    if not popup_path:
+        try:
+            row_html = row.evaluate("el => el.outerHTML") or ""
+        except Exception:
+            row_html = ""
+        if row_html:
+            popup_path = _extract_popup_url(row_html)
+            if popup_path:
+                LOGGER.info("Popup-Link aus Row-HTML gefunden: %s", popup_path[:200])
+    if not popup_path:
+        try:
+            page_html = target.content()
+        except Exception:
+            page_html = ""
+        if page_html:
+            pattern = rf"(<tr[^>]*>.*?cb_{re.escape(str(schicht_id))}.*?</tr>)"
+            match = re.search(pattern, page_html, re.IGNORECASE | re.DOTALL)
+            if match:
+                row_snippet = match.group(1)
+                popup_path = _extract_popup_url(row_snippet)
+                if popup_path:
+                    LOGGER.info("Popup-Link aus Page-HTML gefunden: %s", popup_path[:200])
     if popup_path:
         popup_url = urljoin(config.BASE_URL, popup_path)
         LOGGER.info("Öffne Buchungsanfrage-URL direkt: %s", popup_url)
