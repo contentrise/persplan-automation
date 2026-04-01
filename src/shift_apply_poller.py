@@ -80,7 +80,9 @@ def run_scraper(payload: dict) -> subprocess.CompletedProcess:
     try:
         cmd.extend(["--payload-file", tmp_path])
         LOGGER.info("Starte Scraper: %s (cwd=%s)", " ".join(cmd), WORKING_DIR)
-        return subprocess.run(cmd, cwd=str(WORKING_DIR), capture_output=True, text=True)
+        env = os.environ.copy()
+        env["HEADLESS"] = "true"
+        return subprocess.run(cmd, cwd=str(WORKING_DIR), capture_output=True, text=True, env=env)
     finally:
         try:
             Path(tmp_path).unlink(missing_ok=True)
