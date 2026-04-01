@@ -1,5 +1,7 @@
 import argparse
 import json
+import logging
+import os
 import time
 from pathlib import Path
 from urllib.parse import urljoin
@@ -10,6 +12,12 @@ from src import config
 from src.login import do_login
 
 CACHE_PATH = Path(".cache/persplan_user_map.json")
+
+logging.basicConfig(
+    level=os.environ.get("SHIFT_APPLY_LOG_LEVEL", "INFO"),
+    format="[%(asctime)s] %(levelname)s %(message)s",
+)
+LOGGER = logging.getLogger("shift_apply")
 
 
 def _dump_debug(page, suffix: str, reason: str) -> None:
@@ -58,6 +66,7 @@ def _open_user_table(page):
 def _find_user_id_by_persnr(page, persnr):
     if not persnr:
         return ""
+    LOGGER.info("Suche User per PersNr: %s", persnr)
     target = _open_user_table(page)
     search = target.locator("#user_tbl_filter input[type='search'], input[aria-controls='user_tbl']").first
     search.fill(persnr)
@@ -78,6 +87,7 @@ def _find_user_id_by_persnr(page, persnr):
 def _find_user_id_by_query(page, query):
     if not query:
         return ""
+    LOGGER.info("Suche User per Query: %s", query)
     target = _open_user_table(page)
     search = target.locator("#user_tbl_filter input[type='search'], input[aria-controls='user_tbl']").first
     search.fill(query)
@@ -96,6 +106,7 @@ def _find_user_id_by_query(page, query):
 
 
 def _open_event(page, event_url):
+    LOGGER.info("Öffne Event: %s", event_url)
     page.goto(event_url, wait_until="domcontentloaded", timeout=30000)
     try:
         page.wait_for_load_state("networkidle", timeout=10000)
@@ -104,6 +115,7 @@ def _open_event(page, event_url):
 
 
 def _click_apply_for_shift(page, schicht_id):
+    LOGGER.info("Suche Schichtzeile für ID: %s", schicht_id)
     row_selector = f"tr:has(#cb_{schicht_id})"
     row = page.locator(row_selector).first
     if row.count() == 0:
@@ -111,6 +123,7 @@ def _click_apply_for_shift(page, schicht_id):
     button = row.locator("img.group_add").first
     if button.count() == 0:
         raise RuntimeError("Buchungsanfrage-Button nicht gefunden")
+    LOGGER.info("Klicke Buchungsanfrage-Button für Schicht %s", schicht_id)
     with page.context.expect_page(timeout=8000) as popup_event:
         button.click()
     popup = popup_event.value
@@ -119,6 +132,7 @@ def _click_apply_for_shift(page, schicht_id):
 
 
 def _submit_form(popup, user_id, remark):
+    LOGGER.info("Sende Buchungsanfrage für User-ID: %s", user_id)
     popup.wait_for_selector("select[name='different_user_id']", timeout=10000)
     popup.select_option("select[name='different_user_id']", str(user_id))
     if remark is not None:
@@ -145,7 +159,19 @@ def run(payload, headless: bool | None = None):
     cache = _load_cache()
     resolved_user_id = provided_user_id or cache.get(persnr) or ""
 
+    LOGGER.info(
+        "Shift-Apply Start: persNr=%s, email=%s, phone=%s, provided_user_id=%s, cached_user_id=%s, event_url=%s, shift_id=%s",
+        persnr or "-",
+        email or "-",
+        phone or "-",
+        provided_user_id or "-",
+        cache.get(persnr) or "-",
+        event_url or "-",
+        schicht_id or "-",
+    )
+
     headless = config.HEADLESS if headless is None else headless
+    LOGGER.info("Headless=%s", headless)
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=headless)
@@ -155,19 +181,26 @@ def run(payload, headless: bool | None = None):
         do_login(page)
 
         try:
-            if not resolved_user_id:
-                resolved_user_id = _find_user_id_by_persnr(page, persnr)
-                if not resolved_user_id and email:
-                    resolved_user_id = _find_user_id_by_query(page, email)
-                if not resolved_user_id and phone:
-                    resolved_user_id = _find_user_id_by_query(page, phone)
-                if not resolved_user_id:
-                    raise RuntimeError(
-                        "USER_NOT_FOUND: Kein Persplan-User gefunden (PersNr/Email/Telefon)."
-                    )
+            # Immer versuchen zu suchen; falls Suche fehlschlägt, kann Cache als Fallback dienen.
+            searched_user_id = ""
+            if persnr:
+                searched_user_id = _find_user_id_by_persnr(page, persnr)
+            if not searched_user_id and email:
+                searched_user_id = _find_user_id_by_query(page, email)
+            if not searched_user_id and phone:
+                searched_user_id = _find_user_id_by_query(page, phone)
+
+            if searched_user_id:
+                resolved_user_id = searched_user_id
                 if persnr:
                     cache[persnr] = resolved_user_id
                     _save_cache(cache)
+            elif not resolved_user_id:
+                raise RuntimeError(
+                    "USER_NOT_FOUND: Kein Persplan-User gefunden (PersNr/Email/Telefon)."
+                )
+            else:
+                LOGGER.warning("User-Suche schlug fehl, verwende Cache/User-ID: %s", resolved_user_id)
 
             _open_event(page, event_url)
             popup = _click_apply_for_shift(page, schicht_id)
