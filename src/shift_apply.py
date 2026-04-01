@@ -131,10 +131,9 @@ def _find_submit_target(page):
 def _extract_popup_url(onclick_value: str) -> str:
     if not onclick_value:
         return ""
-    # openWindow('termin_input.php?...') or openWindow("termin_input.php?...")
-    match = re.search(r"openWindow\(['\"]([^'\"]+)['\"]", onclick_value)
+    # Nur Buchungsanfrage: termin_input.php
+    match = re.search(r"openWindow\(['\"](termin_input\.php\?[^'\"]+)['\"]", onclick_value)
     if not match:
-        # Fallback: any termin_input.php?... URL in handler string
         match = re.search(r"(termin_input\.php\?[^'\"\s)]+)", onclick_value)
     if not match:
         return ""
