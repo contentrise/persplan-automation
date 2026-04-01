@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 import os
+import re
 import time
 from pathlib import Path
 from urllib.parse import urljoin
@@ -127,6 +128,15 @@ def _find_submit_target(page):
     return None
 
 
+def _extract_popup_url(onclick_value: str) -> str:
+    if not onclick_value:
+        return ""
+    match = re.search(r"openWindow\('([^']+)'", onclick_value)
+    if not match:
+        return ""
+    return match.group(1)
+
+
 def _click_apply_for_shift(page, schicht_id):
     LOGGER.info("Suche Schichtzeile für ID: %s", schicht_id)
     row_selector = f"tr:has(#cb_{schicht_id})"
@@ -136,6 +146,14 @@ def _click_apply_for_shift(page, schicht_id):
     button = row.locator("img.group_add").first
     if button.count() == 0:
         raise RuntimeError("Buchungsanfrage-Button nicht gefunden")
+    onclick_value = button.get_attribute("onclick") or ""
+    popup_path = _extract_popup_url(onclick_value)
+    if popup_path:
+        popup_url = urljoin(config.BASE_URL, popup_path)
+        LOGGER.info("Öffne Buchungsanfrage-URL direkt: %s", popup_url)
+        popup = page.context.new_page()
+        popup.goto(popup_url, wait_until="domcontentloaded", timeout=30000)
+        return popup
     LOGGER.info("Klicke Buchungsanfrage-Button für Schicht %s", schicht_id)
     try:
         with page.context.expect_page(timeout=15000) as popup_event:
