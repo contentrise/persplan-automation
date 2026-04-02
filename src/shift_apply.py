@@ -236,6 +236,87 @@ def _maybe_adjust_end_date(date_str: str, start_time: str, end_time: str) -> str
     return date_str
 
 
+def _log_field_value(target, selector: str, label: str) -> str:
+    try:
+        locator = target.locator(selector).first
+        if locator.count() == 0:
+            LOGGER.info("%s: Feld nicht gefunden (%s)", label, selector)
+            return ""
+        value = locator.evaluate("el => el.value || ''")
+        value = str(value or "").strip()
+        LOGGER.info("%s: aktuell='%s'", label, value or "—")
+        return value
+    except Exception as exc:
+        LOGGER.info("%s: Status nicht lesbar (%s)", label, exc)
+        return ""
+
+
+def _set_input_or_select(target, selectors: list[str], value: str, label: str) -> bool:
+    if not value:
+        return False
+    for selector in selectors:
+        try:
+            locator = target.locator(selector).first
+            if locator.count() == 0:
+                continue
+            tag = ""
+            try:
+                tag = (locator.evaluate("el => el.tagName") or "").upper()
+            except Exception:
+                tag = ""
+            if tag == "SELECT":
+                try:
+                    locator.select_option(value=value)
+                    LOGGER.info("%s: Select gesetzt (%s=%s)", label, selector, value)
+                    return True
+                except Exception:
+                    try:
+                        locator.select_option(label=value)
+                        LOGGER.info("%s: Select gesetzt (label=%s)", label, value)
+                        return True
+                    except Exception:
+                        pass
+                if ":" in value:
+                    alt = value.replace(":", ".")
+                    try:
+                        locator.select_option(value=alt)
+                        LOGGER.info("%s: Select gesetzt (alt=%s)", label, alt)
+                        return True
+                    except Exception:
+                        try:
+                            locator.select_option(label=alt)
+                            LOGGER.info("%s: Select gesetzt (alt label=%s)", label, alt)
+                            return True
+                        except Exception:
+                            pass
+            else:
+                try:
+                    locator.fill(value)
+                    LOGGER.info("%s: Input gesetzt (%s=%s)", label, selector, value)
+                    return True
+                except Exception:
+                    try:
+                        locator.evaluate(
+                            """(el, val) => {
+                                el.removeAttribute('readonly');
+                                el.removeAttribute('disabled');
+                                el.value = val;
+                                el.dispatchEvent(new Event('input', { bubbles: true }));
+                                el.dispatchEvent(new Event('change', { bubbles: true }));
+                                el.dispatchEvent(new Event('blur', { bubbles: true }));
+                            }""",
+                            value,
+                        )
+                        LOGGER.info("%s: Input gesetzt (JS fallback=%s)", label, value)
+                        return True
+                    except Exception:
+                        pass
+        except Exception:
+            continue
+    LOGGER.info("%s: kein passendes Feld gefunden (selektoren=%s)", label, ", ".join(selectors))
+    return False
+
+
 def _submit_form(target, user_id, remark, shift_date: str = "", shift_start: str = "", shift_end: str = ""):
     LOGGER.info("Sende Buchungsanfrage für User-ID: %s", user_id)
     try:
@@ -250,35 +331,60 @@ def _submit_form(target, user_id, remark, shift_date: str = "", shift_start: str
         pass
     target = _find_submit_target(target) or target
 
+    LOGGER.info(
+        "Shift-Zeiten (Payload): date=%s, start=%s, end=%s",
+        shift_date or "-",
+        shift_start or "-",
+        shift_end or "-",
+    )
+
+    # Zuerst User auswählen (kann Formularwerte zurücksetzen)
+    target.wait_for_selector("select[name='different_user_id']", timeout=15000)
+    target.select_option("select[name='different_user_id']", str(user_id))
+    try:
+        target.wait_for_load_state("networkidle", timeout=4000)
+    except Exception:
+        pass
+
     # Falls Zeiten/Daten vorhanden sind, im Formular setzen
     if shift_date:
         start_label = _format_persplan_date(shift_date)
         end_date = _maybe_adjust_end_date(shift_date, shift_start, shift_end)
         end_label = _format_persplan_date(end_date)
         if start_label:
-            try:
-                target.select_option("select[name='von_datum']", label=start_label)
-            except Exception:
-                pass
+            _set_input_or_select(
+                target,
+                ["select[name='von_datum']", "#von_datum", "input[name='von_datum']"],
+                start_label,
+                "von_datum",
+            )
         if end_label:
-            try:
-                target.select_option("select[name='bis_datum']", label=end_label)
-            except Exception:
-                pass
+            _set_input_or_select(
+                target,
+                ["select[name='bis_datum']", "#bis_datum", "input[name='bis_datum']"],
+                end_label,
+                "bis_datum",
+            )
 
     if shift_start:
-        try:
-            target.fill("#von_uhrzeit", shift_start)
-        except Exception:
-            pass
+        _set_input_or_select(
+            target,
+            ["#von_uhrzeit", "input[name='von_uhrzeit']", "select[name='von_uhrzeit']"],
+            shift_start,
+            "von_uhrzeit",
+        )
     if shift_end:
-        try:
-            target.fill("#bis_uhrzeit", shift_end)
-        except Exception:
-            pass
+        _set_input_or_select(
+            target,
+            ["#bis_uhrzeit", "input[name='bis_uhrzeit']", "select[name='bis_uhrzeit']"],
+            shift_end,
+            "bis_uhrzeit",
+        )
 
-    target.wait_for_selector("select[name='different_user_id']", timeout=15000)
-    target.select_option("select[name='different_user_id']", str(user_id))
+    _log_field_value(target, "select[name='von_datum']", "von_datum (nachher)")
+    _log_field_value(target, "select[name='bis_datum']", "bis_datum (nachher)")
+    _log_field_value(target, "#von_uhrzeit, input[name='von_uhrzeit'], select[name='von_uhrzeit']", "von_uhrzeit (nachher)")
+    _log_field_value(target, "#bis_uhrzeit, input[name='bis_uhrzeit'], select[name='bis_uhrzeit']", "bis_uhrzeit (nachher)")
     if remark is not None:
         target.fill("#bemerkung", remark)
     target.locator("input.button[value='senden'], input[name='send_it']").first.click()
@@ -307,14 +413,18 @@ def run(payload, headless: bool | None = None):
     resolved_user_id = provided_user_id or cache.get(persnr) or ""
 
     LOGGER.info(
-        "Shift-Apply Start: persNr=%s, email=%s, phone=%s, provided_user_id=%s, cached_user_id=%s, event_url=%s, shift_id=%s",
+        "Shift-Apply Start: persNr=%s, email=%s, phone=%s, provided_user_id=%s, cached_user_id=%s, "
+        "event_url=%s, event_date=%s, shift_id=%s, shift_start=%s, shift_end=%s",
         persnr or "-",
         email or "-",
         phone or "-",
         provided_user_id or "-",
         cache.get(persnr) or "-",
         event_url or "-",
+        event_date or "-",
         schicht_id or "-",
+        shift_start or "-",
+        shift_end or "-",
     )
 
     headless = config.HEADLESS if headless is None else headless
