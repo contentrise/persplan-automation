@@ -337,6 +337,72 @@ def _pick_payload_value(payload: dict, keys: list[str]) -> str:
     return ""
 
 
+def _click_locator_or_js(locator: Locator) -> bool:
+    if locator.count() == 0:
+        return False
+    try:
+        locator.first.click(timeout=3000)
+        return True
+    except Exception:
+        try:
+            locator.first.evaluate("el => el.click()")
+            return True
+        except Exception:
+            return False
+
+
+def _close_ui_dialog(dialog: Locator, label: str, timeout_s: float = 4.0) -> bool:
+    if dialog.count() == 0:
+        return False
+
+    close_button = dialog.locator(
+        "button:has-text('schließen'), button:has-text('Schließen'), "
+        "button:has-text('Abbrechen'), button.ui-dialog-titlebar-close"
+    ).first
+    clicked = _click_locator_or_js(close_button)
+    if clicked:
+        try:
+            dialog.wait_for(state="hidden", timeout=int(timeout_s * 1000))
+            print(f"[OK] {label} geschlossen.")
+            return True
+        except Exception:
+            pass
+
+    try:
+        dialog.evaluate(
+            """node => {
+                const jq = window.jQuery || window.$;
+                if (jq && jq.fn && jq.fn.dialog) {
+                    try { jq(node).dialog('close'); } catch (_) {}
+                }
+                node.style.display = 'none';
+                document.querySelectorAll('.ui-widget-overlay').forEach(overlay => overlay.remove());
+            }"""
+        )
+        try:
+            dialog.wait_for(state="hidden", timeout=int(timeout_s * 1000))
+        except Exception:
+            pass
+        print(f"[OK] {label} geschlossen (JS-Fallback).")
+        return True
+    except Exception as exc:
+        print(f"[WARNUNG] {label} schließen fehlgeschlagen: {exc}")
+        return False
+
+
+def _wait_for_dialog_text(dialog: Locator, needles: list[str], timeout_s: float = 8.0) -> bool:
+    deadline = time.time() + timeout_s
+    while time.time() < deadline:
+        try:
+            dialog_text = dialog.inner_text()
+            if all(needle in dialog_text for needle in needles):
+                return True
+        except Exception:
+            pass
+        time.sleep(0.25)
+    return False
+
+
 def _open_user_overview(page: Page) -> Union[Frame, Page]:
     target_url = urljoin(config.BASE_URL, "user.php")
     print(f"[INFO] Öffne Benutzerübersicht: {target_url}")
@@ -1150,15 +1216,7 @@ def _fill_grundlohn_history(page: Page) -> None:
         dialog_text = ""
     if all(date in dialog_text and amount in dialog_text for date, amount in entries):
         print("[INFO] Grundlohn-Historie bereits vorhanden – schließe Dialog.")
-        close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
-        if close_button.count() > 0:
-            try:
-                close_button.click()
-                print("[OK] Grundlohn-Dialog geschlossen.")
-            except Exception as exc:
-                print(f"[WARNUNG] Grundlohn-Dialog schließen fehlgeschlagen: {exc}")
-        else:
-            print("[WARNUNG] 'schließen' Button im Grundlohn-Dialog nicht gefunden.")
+        _close_ui_dialog(dialog, "Grundlohn-Dialog")
         return
 
     for date_value, amount_value in entries:
@@ -1192,14 +1250,7 @@ def _fill_grundlohn_history(page: Page) -> None:
                 return
         time.sleep(0.5)
 
-    close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
-    if close_button.count() > 0:
-        try:
-            close_button.click()
-            print("[OK] Grundlohn-Dialog geschlossen.")
-        except Exception as exc:
-            print(f"[WARNUNG] Grundlohn-Dialog schließen fehlgeschlagen: {exc}")
-    else:
+    if not _close_ui_dialog(dialog, "Grundlohn-Dialog"):
         print("[WARNUNG] 'schließen' Button im Grundlohn-Dialog nicht gefunden.")
 
 
@@ -1279,16 +1330,34 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
     hire_date_modal = _first_of_month(hire_date_ui)
     if label in dialog_text and hire_date_modal in dialog_text:
         print("[INFO] Vertragshistorie bereits vorhanden – schließe Dialog.")
-        close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
-        if close_button.count() > 0:
-            try:
-                close_button.click()
-                print("[OK] Vertrag-Dialog geschlossen.")
-            except Exception as exc:
-                print(f"[WARNUNG] Vertrag-Dialog schließen fehlgeschlagen: {exc}")
-        else:
-            print("[WARNUNG] 'schließen' Button im Vertrag-Dialog nicht gefunden.")
+        _close_ui_dialog(dialog, "Vertrag-Dialog")
         return
+
+    # Keep Persplan from leaving an older active contract (for example GB - Minijob)
+    # next to the newly inserted contract.
+    try:
+        active_rows = dialog.locator(
+            "tr:has(a[title='deaktivieren'][onclick*='daten_historie_change_status'][onclick*='vertrag_id'])"
+        )
+        for idx in range(active_rows.count()):
+            row = active_rows.nth(idx)
+            try:
+                row_text = row.inner_text()
+            except Exception:
+                row_text = ""
+            if label in row_text and hire_date_modal in row_text:
+                continue
+            deactivate_link = row.locator(
+                "a[title='deaktivieren'][onclick*='daten_historie_change_status'][onclick*='vertrag_id']"
+            ).first
+            if deactivate_link.count() > 0:
+                row_lines = [line.strip() for line in row_text.splitlines() if line.strip()]
+                contract_name = row_lines[1] if len(row_lines) > 1 else (row_lines[0] if row_lines else "unbekannt")
+                print(f"[INFO] Deaktiviere vorhandenen Vertrag: {contract_name}")
+                _click_locator_or_js(deactivate_link)
+                time.sleep(0.4)
+    except Exception as exc:
+        print(f"[WARNUNG] Deaktivieren vorhandener Verträge fehlgeschlagen: {exc}")
 
     select = dialog.locator("#daten_eintragen_wert").first
     date_input = dialog.locator("#daten_eintragen_gueltig_ab").first
@@ -1302,19 +1371,22 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
         print("[WARNUNG] 'eintragen'-Button im Vertrag-Dialog nicht gefunden.")
         return
 
-    submit_button.click()
-    print(f"[OK] Vertrag eingetragen → {label} ab {hire_date_modal}")
-    time.sleep(0.5)
+    if not _click_locator_or_js(submit_button):
+        print("[WARNUNG] Vertrag-'eintragen'-Klick fehlgeschlagen.")
+        return
 
-    close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
-    if close_button.count() > 0:
+    if not _wait_for_dialog_text(dialog, [label, hire_date_modal], timeout_s=8.0):
         try:
-            close_button.click()
-            print("[OK] Vertrag-Dialog geschlossen.")
-        except Exception as exc:
-            print(f"[WARNUNG] Vertrag-Dialog schließen fehlgeschlagen: {exc}")
-    else:
-        print("[WARNUNG] 'schließen' Button im Vertrag-Dialog nicht gefunden.")
+            submit_button.evaluate("el => el.click()")
+        except Exception:
+            pass
+        if not _wait_for_dialog_text(dialog, [label, hire_date_modal], timeout_s=5.0):
+            print(f"[WARNUNG] Vertragseintrag nicht bestätigt → {label} ab {hire_date_modal}")
+            _close_ui_dialog(dialog, "Vertrag-Dialog")
+            return
+
+    print(f"[OK] Vertrag eingetragen → {label} ab {hire_date_modal}")
+    _close_ui_dialog(dialog, "Vertrag-Dialog")
 
 
 def _fill_tage_fremd(page: Page, payload: dict) -> None:
@@ -1363,15 +1435,7 @@ def _fill_tage_fremd(page: Page, payload: dict) -> None:
         dialog_text = ""
     if tage in dialog_text and hire_date in dialog_text:
         print("[INFO] Tage Fremdfirmen bereits vorhanden – schließe Dialog.")
-        close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
-        if close_button.count() > 0:
-            try:
-                close_button.click()
-                print("[OK] Tage Fremdfirmen-Dialog geschlossen.")
-            except Exception as exc:
-                print(f"[WARNUNG] Tage Fremdfirmen-Dialog schließen fehlgeschlagen: {exc}")
-        else:
-            print("[WARNUNG] 'schließen' Button im Tage Fremdfirmen-Dialog nicht gefunden.")
+        _close_ui_dialog(dialog, "Tage Fremdfirmen-Dialog")
         return
 
     value_input = dialog.locator("#daten_eintragen_wert").first
@@ -1389,14 +1453,7 @@ def _fill_tage_fremd(page: Page, payload: dict) -> None:
     print(f"[OK] Tage Fremdfirmen eingetragen → {tage} ab {hire_date}")
     time.sleep(0.5)
 
-    close_button = dialog.locator("button:has-text('schließen'), button:has-text('Schließen')").first
-    if close_button.count() > 0:
-        try:
-            close_button.click()
-            print("[OK] Tage Fremdfirmen-Dialog geschlossen.")
-        except Exception as exc:
-            print(f"[WARNUNG] Tage Fremdfirmen-Dialog schließen fehlgeschlagen: {exc}")
-    else:
+    if not _close_ui_dialog(dialog, "Tage Fremdfirmen-Dialog"):
         print("[WARNUNG] 'schließen' Button im Tage Fremdfirmen-Dialog nicht gefunden.")
 
 
@@ -1499,14 +1556,20 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
     def _try_inline_sonstiges(timeout_s: float = 4.0) -> bool:
         deadline = time.time() + max(0.5, timeout_s)
         inline_input = None
-        container = None
         while time.time() < deadline:
             try:
                 container = target.locator("#sonstiges").first
                 if container.count() > 0:
-                    candidate = container.locator("input[type='text']").first
-                    if candidate.count() > 0:
-                        inline_input = candidate
+                    tag_name = str(container.evaluate("node => node.tagName || ''") or "").lower()
+                    if tag_name in {"input", "textarea"}:
+                        inline_input = container
+                        break
+                    for selector in ("input[type='text']", "textarea", "input"):
+                        candidate = container.locator(selector).first
+                        if candidate.count() > 0:
+                            inline_input = candidate
+                            break
+                    if inline_input is not None:
                         break
             except Exception:
                 pass
@@ -1527,37 +1590,79 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
             except Exception:
                 return False
 
-        # Commit by Enter and blur/click-outside.
+        def _commit_inline_input() -> None:
+            try:
+                inline_input.evaluate(
+                    """(node, val) => {
+                        node.value = val;
+                        node.dispatchEvent(new Event('input', { bubbles: true }));
+                        node.dispatchEvent(new Event('change', { bubbles: true }));
+
+                        const handlerSource = node.getAttribute('onblur') || node.getAttribute('onkeypress') || '';
+                        const match = handlerSource.match(/xajax_feld_eintragen\\(["']?([^"',)]+)["']?,\\s*["']([^"']+)["'],\\s*["']([^"']+)["']/);
+                        if (match && typeof window.xajax_feld_eintragen === 'function') {
+                            window.xajax_feld_eintragen(match[1], match[2], match[3], val);
+                        } else if (typeof node.onblur === 'function') {
+                            node.onblur();
+                        } else {
+                            node.dispatchEvent(new Event('blur', { bubbles: true }));
+                        }
+
+                        if (typeof node.blur === 'function') node.blur();
+                    }""",
+                    value,
+                )
+            except Exception:
+                pass
+
+        # Manual Persplan behavior: Enter or click somewhere else commits the inline edit.
         try:
             inline_input.press("Enter")
         except Exception:
             pass
+        time.sleep(0.2)
+        _commit_inline_input()
         try:
             target.evaluate(
                 """() => {
-                    const input = document.querySelector('#sonstiges input[type="text"]');
+                    const input = document.querySelector('#sonstiges input[type="text"], #sonstiges textarea, input#sonstiges, textarea#sonstiges');
                     if (!input) return;
                     input.dispatchEvent(new Event('input', { bubbles: true }));
                     input.dispatchEvent(new Event('change', { bubbles: true }));
                     input.dispatchEvent(new Event('blur', { bubbles: true }));
+                    if (typeof input.blur === 'function') input.blur();
                 }"""
             )
         except Exception:
             pass
         try:
-            page.mouse.click(5, 5)
+            target.locator("#vertrag, #lohn, body").first.click(force=True, timeout=1500)
+        except Exception:
+            try:
+                page.mouse.click(20, 20)
+            except Exception:
+                pass
+
+        try:
+            target.wait_for_load_state("domcontentloaded", timeout=1000)
         except Exception:
             pass
 
         # Wait for inline input to close and value to appear as text.
         final_text = ""
-        end = time.time() + 4
+        end = time.time() + 8
         while time.time() < end:
             try:
-                if container and container.count() > 0:
-                    final_text = container.inner_text().strip()
-                    still_input = container.locator("input[type='text']").count() > 0
-                    if not still_input and final_text:
+                current = target.locator("#sonstiges").first
+                if current.count() > 0:
+                    tag_name = str(current.evaluate("node => node.tagName || ''") or "").lower()
+                    if tag_name in {"input", "textarea"}:
+                        final_text = current.input_value().strip()
+                        still_input = True
+                    else:
+                        final_text = current.inner_text().strip()
+                        still_input = current.locator("input, textarea").count() > 0
+                    if not still_input and final_text == value:
                         break
             except Exception:
                 pass
@@ -1627,22 +1732,43 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
     except Exception:
         pass
 
-    save_button = dialog.locator(
-        "button:has-text('speichern'), button:has-text('Speichern'), "
-        "button:has-text('OK'), button:has-text('Ok'), button:has-text('Übernehmen')"
-    ).first
-    if save_button.count() > 0:
+    print("[INFO] Sonstiges commit via Enter/Blur …")
+    try:
+        input_field.press("Enter")
+    except Exception:
+        pass
+    try:
+        input_field.evaluate(
+            """node => {
+                node.dispatchEvent(new Event('input', { bubbles: true }));
+                node.dispatchEvent(new Event('change', { bubbles: true }));
+                node.dispatchEvent(new Event('blur', { bubbles: true }));
+                if (typeof node.blur === 'function') node.blur();
+            }"""
+        )
+    except Exception:
+        pass
+    try:
+        dialog_target.locator("#vertrag, #lohn, body").first.click(force=True, timeout=1500)
+    except Exception:
         try:
-            save_button.click()
-            print(f"[OK] Sonstiges gesetzt → {value}")
-        except Exception as exc:
-            print(f"[WARNUNG] Sonstiges speichern fehlgeschlagen: {exc}")
-            try:
-                dialog.press("Enter")
-            except Exception:
-                pass
+            page.mouse.click(20, 20)
+        except Exception:
+            pass
+    try:
+        dialog.wait_for(state="hidden", timeout=2000)
+    except Exception:
+        pass
+    if _try_inline_sonstiges(timeout_s=1.0):
+        return
+    try:
+        final_text = target.locator("#sonstiges").first.inner_text().strip()
+    except Exception:
+        final_text = ""
+    if final_text == value:
+        print(f"[OK] Sonstiges gesetzt → {value}")
     else:
-        print("[WARNUNG] Sonstiges-Speichern-Button nicht gefunden – versuche Enter/Blur.")
+        print(f"[WARNUNG] Sonstiges nicht bestätigt (soll='{value}', ist='{final_text or '—'}').")
         try:
             input_field.press("Enter")
         except Exception:
@@ -1712,13 +1838,7 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     remark = contract_type.upper()
     if hire_date in dialog_text and expected_end in dialog_text and (contract_type in dialog_text or remark in dialog_text):
         print("[INFO] Ein-/Austritt bereits vorhanden – schließe Dialog.")
-        close_button = dialog.locator("button:has-text('Schließen'), button:has-text('schließen')").first
-        if close_button.count() > 0:
-            try:
-                close_button.click()
-                print("[OK] Ein-/Austrittsdatum-Dialog geschlossen.")
-            except Exception as exc:
-                print(f"[WARNUNG] Ein-/Austrittsdatum-Dialog schließen fehlgeschlagen: {exc}")
+        _close_ui_dialog(dialog, "Ein-/Austrittsdatum-Dialog")
         return
 
     eintritt_input = dialog.locator("#eintrittsdatum_neu").first
@@ -1750,14 +1870,7 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     except Exception:
         pass
 
-    close_button = dialog.locator("button:has-text('Schließen'), button:has-text('schließen')").first
-    if close_button.count() > 0:
-        try:
-            close_button.click()
-            print("[OK] Ein-/Austrittsdatum-Dialog geschlossen.")
-        except Exception as exc:
-            print(f"[WARNUNG] Ein-/Austrittsdatum-Dialog schließen fehlgeschlagen: {exc}")
-    else:
+    if not _close_ui_dialog(dialog, "Ein-/Austrittsdatum-Dialog"):
         print("[WARNUNG] 'Schließen' Button im Ein-/Austrittsdatum-Dialog nicht gefunden.")
 
 
