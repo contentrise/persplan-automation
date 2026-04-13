@@ -390,6 +390,57 @@ def _close_ui_dialog(dialog: Locator, label: str, timeout_s: float = 4.0) -> boo
         return False
 
 
+def _find_visible_ui_dialog(page: Page, title: str, timeout_s: float = 8.0) -> Locator | None:
+    deadline = time.time() + max(0.5, timeout_s)
+    while time.time() < deadline:
+        candidates: list[Union[Frame, Page]] = [page]
+        try:
+            candidates.extend(page.frames)
+        except Exception:
+            pass
+        for candidate in candidates:
+            dialogs = candidate.locator("div.ui-dialog").filter(has_text=title)
+            try:
+                count = dialogs.count()
+            except Exception:
+                count = 0
+            for idx in range(count - 1, -1, -1):
+                dialog = dialogs.nth(idx)
+                try:
+                    if dialog.is_visible():
+                        return dialog
+                except Exception:
+                    continue
+        time.sleep(0.2)
+    return None
+
+
+def _wait_for_xajax_idle(page: Page, timeout_s: float = 8.0) -> None:
+    deadline = time.time() + max(0.5, timeout_s)
+    while time.time() < deadline:
+        candidates: list[Union[Frame, Page]] = [page]
+        try:
+            candidates.extend(page.frames)
+        except Exception:
+            pass
+        any_busy = False
+        try:
+            for candidate in candidates:
+                busy = candidate.evaluate(
+                    """() => Array.from(document.querySelectorAll("[id^='xajaxWork'], #loaderContainer"))
+                        .some(el => {
+                            const style = window.getComputedStyle(el);
+                            return style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+                        })"""
+                )
+                any_busy = any_busy or bool(busy)
+            if not any_busy:
+                return
+        except Exception:
+            return
+        time.sleep(0.2)
+
+
 def _wait_for_dialog_text(dialog: Locator, needles: list[str], timeout_s: float = 8.0) -> bool:
     deadline = time.time() + timeout_s
     while time.time() < deadline:
@@ -1203,10 +1254,8 @@ def _fill_grundlohn_history(page: Page) -> None:
     edit_icon.click(force=True)
     print("[OK] Grundlohn-Historie geöffnet.")
 
-    dialog = page.locator("div.ui-dialog:has-text('Grundlohn-Historie')").first
-    try:
-        dialog.wait_for(state="visible", timeout=8000)
-    except Exception:
+    dialog = _find_visible_ui_dialog(page, "Grundlohn-Historie", timeout_s=8.0)
+    if dialog is None:
         print("[WARNUNG] Grundlohn-Historie-Dialog nicht sichtbar.")
         return
 
@@ -1219,36 +1268,86 @@ def _fill_grundlohn_history(page: Page) -> None:
         _close_ui_dialog(dialog, "Grundlohn-Dialog")
         return
 
-    for date_value, amount_value in entries:
+    def _entry_present(date_value: str, amount_value: str) -> bool:
+        try:
+            rows = dialog.locator("tbody tr")
+            for idx in range(rows.count()):
+                row_text = rows.nth(idx).inner_text()
+                if date_value in row_text and amount_value in row_text:
+                    return True
+        except Exception:
+            pass
+        try:
+            dialog_text = dialog.inner_text()
+            return date_value in dialog_text and amount_value in dialog_text
+        except Exception:
+            return False
+
+    def _submit_entry(date_value: str, amount_value: str, *, js_fallback: bool = False) -> bool:
         value_input = dialog.locator("#daten_eintragen_wert").first
         date_input = dialog.locator("#daten_eintragen_gueltig_ab").first
         if value_input.count() == 0 or date_input.count() == 0:
             print("[WARNUNG] Eingabefelder im Grundlohn-Dialog nicht gefunden.")
-            return
-        value_input.fill(amount_value)
-        date_input.fill(date_value)
+            return False
+        try:
+            value_input.fill(amount_value)
+            date_input.fill(date_value)
+        except Exception:
+            pass
+        try:
+            value_input.evaluate(
+                """(node, val) => {
+                    node.value = val;
+                    node.dispatchEvent(new Event('input', { bubbles: true }));
+                    node.dispatchEvent(new Event('change', { bubbles: true }));
+                }""",
+                amount_value,
+            )
+            date_input.evaluate(
+                """(node, val) => {
+                    node.value = val;
+                    node.dispatchEvent(new Event('input', { bubbles: true }));
+                    node.dispatchEvent(new Event('change', { bubbles: true }));
+                }""",
+                date_value,
+            )
+        except Exception:
+            pass
         submit_button = dialog.locator("button:has-text('eintragen')").first
         if submit_button.count() == 0:
             print("[WARNUNG] 'eintragen'-Button im Grundlohn-Dialog nicht gefunden.")
-            return
-        try:
-            submit_button.click()
-            print(f"[OK] Grundlohn eingetragen → {date_value} = {amount_value}")
-        except Exception as exc:
+            return False
+        if js_fallback:
             try:
-                dialog.evaluate(
-                    """() => {
-                        const btn = Array.from(document.querySelectorAll('button'))
-                            .find(b => (b.textContent || '').trim().toLowerCase() === 'eintragen');
-                        if (btn) { btn.click(); return true; }
-                        return false;
-                    }"""
-                )
-                print(f"[OK] Grundlohn eingetragen (JS-Fallback) → {date_value} = {amount_value}")
-            except Exception as js_exc:
-                print(f"[ERROR] Grundlohn 'eintragen' Klick fehlgeschlagen: {exc} / JS: {js_exc}")
-                return
-        time.sleep(0.5)
+                submit_button.evaluate("el => el.click()")
+                return True
+            except Exception:
+                return False
+        return _click_locator_or_js(submit_button)
+
+    for date_value, amount_value in entries:
+        if _entry_present(date_value, amount_value):
+            print(f"[INFO] Grundlohn bereits vorhanden → {date_value} = {amount_value}")
+            continue
+
+        if not _submit_entry(date_value, amount_value):
+            print(f"[WARNUNG] Grundlohn 'eintragen' Klick fehlgeschlagen → {date_value} = {amount_value}")
+            return
+        _wait_for_xajax_idle(page, timeout_s=8.0)
+        if _wait_for_dialog_text(dialog, [date_value, amount_value], timeout_s=6.0):
+            print(f"[OK] Grundlohn eingetragen → {date_value} = {amount_value}")
+            continue
+
+        print(f"[WARNUNG] Grundlohn nicht bestätigt, retry per JS → {date_value} = {amount_value}")
+        if not _submit_entry(date_value, amount_value, js_fallback=True):
+            print(f"[WARNUNG] Grundlohn JS-Retry konnte nicht ausgelöst werden → {date_value} = {amount_value}")
+            return
+        _wait_for_xajax_idle(page, timeout_s=8.0)
+        if _wait_for_dialog_text(dialog, [date_value, amount_value], timeout_s=8.0):
+            print(f"[OK] Grundlohn eingetragen (bestätigt nach Retry) → {date_value} = {amount_value}")
+        else:
+            print(f"[WARNUNG] Grundlohn weiterhin nicht bestätigt → {date_value} = {amount_value}")
+            return
 
     if not _close_ui_dialog(dialog, "Grundlohn-Dialog"):
         print("[WARNUNG] 'schließen' Button im Grundlohn-Dialog nicht gefunden.")
@@ -1290,13 +1389,35 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
         edit_icon.scroll_into_view_if_needed()
     except Exception:
         pass
-    edit_icon.click(force=True)
-    print("[OK] Vertragshistorie geöffnet.")
-
-    dialog = page.locator("div.ui-dialog:has-text('Vertragshistorie')").first
     try:
-        dialog.wait_for(state="visible", timeout=8000)
+        edit_icon.click(force=True)
     except Exception:
+        try:
+            edit_icon.evaluate("el => el.click()")
+        except Exception:
+            pass
+    print("[OK] Vertragshistorie geöffnet.")
+    _wait_for_xajax_idle(page, timeout_s=8.0)
+
+    dialog = _find_visible_ui_dialog(page, "Vertragshistorie", timeout_s=8.0)
+    if dialog is None:
+        try:
+            onclick = edit_icon.get_attribute("onclick") or ""
+        except Exception:
+            onclick = ""
+        match = re.search(r"xajax_render_daten_historie\((\d+),\s*['\"]vertrag_id['\"]", onclick)
+        if match:
+            try:
+                user_id = int(match.group(1))
+                target.evaluate(
+                    "(uid) => { if (typeof xajax_render_daten_historie === 'function') { xajax_render_daten_historie(uid, 'vertrag_id'); } }",
+                    user_id,
+                )
+                _wait_for_xajax_idle(page, timeout_s=8.0)
+                dialog = _find_visible_ui_dialog(page, "Vertragshistorie", timeout_s=8.0)
+            except Exception:
+                pass
+    if dialog is None:
         print("[WARNUNG] Vertragshistorie-Dialog nicht sichtbar.")
         return
 
@@ -1823,10 +1944,8 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     edit_icon.click(force=True)
     print("[OK] Ein-/Austrittsdatum-Dialog geöffnet.")
 
-    dialog = page.locator("div.ui-dialog:has-text('Ein-/Austrittsdatum ändern')").first
-    try:
-        dialog.wait_for(state="visible", timeout=8000)
-    except Exception:
+    dialog = _find_visible_ui_dialog(page, "Ein-/Austrittsdatum ändern", timeout_s=8.0)
+    if dialog is None:
         print("[WARNUNG] Ein-/Austrittsdatum-Dialog nicht sichtbar.")
         return
 
