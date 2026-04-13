@@ -1494,6 +1494,87 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
         print(f"[WARNUNG] Sonstiges-Dialog konnte nicht geöffnet werden: {exc}")
         return
 
+    # Persplan usually edits "Sonstiges" inline inside #sonstiges (no modal dialog).
+    # Flow: click pencil -> input appears -> type -> Enter or blur/outside click.
+    def _try_inline_sonstiges(timeout_s: float = 4.0) -> bool:
+        deadline = time.time() + max(0.5, timeout_s)
+        inline_input = None
+        container = None
+        while time.time() < deadline:
+            try:
+                container = target.locator("#sonstiges").first
+                if container.count() > 0:
+                    candidate = container.locator("input[type='text']").first
+                    if candidate.count() > 0:
+                        inline_input = candidate
+                        break
+            except Exception:
+                pass
+            time.sleep(0.2)
+
+        if inline_input is None:
+            return False
+
+        try:
+            inline_input.click()
+        except Exception:
+            pass
+        try:
+            inline_input.fill(value)
+        except Exception:
+            try:
+                _set_input_value_force(inline_input, value)
+            except Exception:
+                return False
+
+        # Commit by Enter and blur/click-outside.
+        try:
+            inline_input.press("Enter")
+        except Exception:
+            pass
+        try:
+            target.evaluate(
+                """() => {
+                    const input = document.querySelector('#sonstiges input[type="text"]');
+                    if (!input) return;
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                    input.dispatchEvent(new Event('blur', { bubbles: true }));
+                }"""
+            )
+        except Exception:
+            pass
+        try:
+            page.mouse.click(5, 5)
+        except Exception:
+            pass
+
+        # Wait for inline input to close and value to appear as text.
+        final_text = ""
+        end = time.time() + 4
+        while time.time() < end:
+            try:
+                if container and container.count() > 0:
+                    final_text = container.inner_text().strip()
+                    still_input = container.locator("input[type='text']").count() > 0
+                    if not still_input and final_text:
+                        break
+            except Exception:
+                pass
+            time.sleep(0.2)
+
+        if final_text == value:
+            print(f"[OK] Sonstiges gesetzt (inline) → {value}")
+            return True
+        print(
+            f"[WARNUNG] Sonstiges inline gesetzt, aber nicht bestätigt "
+            f"(soll='{value}', ist='{final_text or '—'}')."
+        )
+        return False
+
+    if _try_inline_sonstiges():
+        return
+
     dialog, dialog_target = _find_sonstiges_dialog(timeout_s=6.0)
     if dialog is None or dialog_target is None:
         # Fallback: try to call xajax directly and re-check.
@@ -1513,6 +1594,8 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
                 pass
             dialog, dialog_target = _find_sonstiges_dialog(timeout_s=4.0)
     if dialog is None or dialog_target is None:
+        if _try_inline_sonstiges(timeout_s=2.5):
+            return
         print("[WARNUNG] Sonstiges-Dialog nicht sichtbar.")
         return
 
@@ -2272,6 +2355,13 @@ def _upload_additional_documents(page: Page, payload: dict, tracker: FieldTracke
 
     immatrikulation_bemerkung, immatrikulation_valid_until_raw = _resolve_immatrikulation_bemerkung(payload)
     immatrikulation_valid_until = _format_date_for_ui(str(immatrikulation_valid_until_raw or "").strip())
+    residence_meta = uploads.get("aufenthaltserlaubnis") if isinstance(uploads.get("aufenthaltserlaubnis"), dict) else {}
+    residence_valid_until_raw = str(
+        (residence_meta or {}).get("validUntil")
+        or payload.get("aufenthaltserlaubnis_gueltig_bis")
+        or ""
+    ).strip()
+    residence_valid_until = _format_date_for_ui(residence_valid_until_raw)
 
     jobs = [
         ("personalbogen", "Personalbogen", "- Personalbogen, Rentenbefreiung & Agenda", "5", ""),
@@ -2279,6 +2369,13 @@ def _upload_additional_documents(page: Page, payload: dict, tracker: FieldTracke
         ("zusatzvereinbarung", "Zusatzvereinbarung", "Dokumente", "1", ""),
         ("sicherheitsbelehrung", "Sicherheitsbelehrung", "Dokumente", "1", ""),
         ("immatrikulation", immatrikulation_bemerkung, "- Imma/Schul", "2", immatrikulation_valid_until),
+        (
+            "aufenthaltserlaubnis",
+            "Arbeitsaufenthaltserlaubnis",
+            "Dokumente",
+            "1",
+            residence_valid_until,
+        ),
         (
             "infektionsschutz",
             f"Infektionsschutzbelehrung vom {infektionsschutz_from_date}",
@@ -2297,6 +2394,7 @@ def _upload_additional_documents(page: Page, payload: dict, tracker: FieldTracke
             "zusatzvereinbarung": ["zusatzvereinbarung"],
             "sicherheitsbelehrung": ["sicherheitsbelehrung"],
             "immatrikulation": ["immatrikulation", "schulbescheinigung", "imma"],
+            "aufenthaltserlaubnis": ["aufenthaltserlaubnis", "arbeitsaufenthaltserlaubnis", "aufenthaltstitel"],
             "infektionsschutz": ["infektionsschutz"],
         }.get(stem, [stem])
         match = None
