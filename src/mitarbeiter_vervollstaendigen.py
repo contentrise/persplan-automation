@@ -1421,28 +1421,6 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
         print("[WARNUNG] Vertragshistorie-Dialog nicht sichtbar.")
         return
 
-    # Deactivate specifically the "Kein Vertrag" row so only the new contract remains active.
-    try:
-        kein_vertrag_link = dialog.locator(
-            "tr:has(td:has-text('Kein Vertrag')) a[onclick*='daten_historie_change_status'][onclick*='vertrag_id']"
-        ).first
-        if kein_vertrag_link.count() > 0:
-            print("[INFO] Deaktiviere 'Kein Vertrag' …")
-            try:
-                kein_vertrag_link.click()
-            except Exception:
-                try:
-                    kein_vertrag_link.evaluate("el => el.click()")
-                except Exception:
-                    pass
-            try:
-                kein_vertrag_link.wait_for(state="detached", timeout=3000)
-            except Exception:
-                pass
-            print("[OK] 'Kein Vertrag' deaktiviert (falls vorhanden).")
-    except Exception as exc:
-        print(f"[WARNUNG] Deaktivieren von 'Kein Vertrag' fehlgeschlagen: {exc}")
-
     try:
         dialog_text = dialog.inner_text()
     except Exception:
@@ -1454,8 +1432,89 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
         _close_ui_dialog(dialog, "Vertrag-Dialog")
         return
 
-    # Keep Persplan from leaving an older active contract (for example GB - Minijob)
-    # next to the newly inserted contract.
+    def _submit_contract_entry(*, js_fallback: bool = False) -> bool:
+        select = dialog.locator("#daten_eintragen_wert").first
+        date_input = dialog.locator("#daten_eintragen_gueltig_ab").first
+        if select.count() == 0 or date_input.count() == 0:
+            print("[WARNUNG] Eingabefelder im Vertrag-Dialog nicht gefunden.")
+            return False
+        try:
+            select.select_option(label=label)
+            date_input.fill(hire_date_modal)
+        except Exception:
+            pass
+        try:
+            selected_value = select.evaluate(
+                """(node, label) => {
+                    const option = Array.from(node.options).find(opt => (opt.textContent || '').trim() === label);
+                    if (!option) return '';
+                    node.value = option.value;
+                    node.dispatchEvent(new Event('input', { bubbles: true }));
+                    node.dispatchEvent(new Event('change', { bubbles: true }));
+                    return option.value;
+                }""",
+                label,
+            )
+            date_input.evaluate(
+                """(node, val) => {
+                    node.value = val;
+                    node.dispatchEvent(new Event('input', { bubbles: true }));
+                    node.dispatchEvent(new Event('change', { bubbles: true }));
+                    node.dispatchEvent(new Event('blur', { bubbles: true }));
+                }""",
+                hire_date_modal,
+            )
+        except Exception:
+            selected_value = ""
+        submit_button = dialog.locator("button:has-text('eintragen')").first
+        if submit_button.count() == 0:
+            print("[WARNUNG] 'eintragen'-Button im Vertrag-Dialog nicht gefunden.")
+            return False
+        if js_fallback:
+            try:
+                return bool(
+                    submit_button.evaluate(
+                        """(btn, args) => {
+                            const { value, date } = args || {};
+                            const onclick = btn.getAttribute('onclick') || '';
+                            const match = onclick.match(/xajax_user_daten_eintragen\\((\\d+),\\s*["']vertrag_id["']/);
+                            if (match && typeof window.xajax_user_daten_eintragen === 'function') {
+                                window.xajax_user_daten_eintragen(match[1], 'vertrag_id', value, date);
+                                return true;
+                            }
+                            btn.click();
+                            return true;
+                        }""",
+                        {"value": str(selected_value or ""), "date": hire_date_modal},
+                    )
+                )
+            except Exception:
+                return False
+        return _click_locator_or_js(submit_button)
+
+    # Persplan reuses IDs like #daten_eintragen_wert across old hidden dialogs.
+    # The button's onclick reads via global jQuery, so call XAJAX directly with
+    # the value selected from this visible dialog.
+    if not _submit_contract_entry(js_fallback=True):
+        print("[WARNUNG] Vertrag-'eintragen'-Klick fehlgeschlagen.")
+        return
+    _wait_for_xajax_idle(page, timeout_s=8.0)
+
+    if not _wait_for_dialog_text(dialog, [label, hire_date_modal], timeout_s=8.0):
+        print(f"[WARNUNG] Vertrag nicht bestätigt, retry per XAJAX → {label} ab {hire_date_modal}")
+        if not _submit_contract_entry(js_fallback=True):
+            print(f"[WARNUNG] Vertrag-XAJAX-Retry konnte nicht ausgelöst werden → {label} ab {hire_date_modal}")
+            _close_ui_dialog(dialog, "Vertrag-Dialog")
+            return
+        _wait_for_xajax_idle(page, timeout_s=8.0)
+        if not _wait_for_dialog_text(dialog, [label, hire_date_modal], timeout_s=8.0):
+            print(f"[WARNUNG] Vertragseintrag nicht bestätigt → {label} ab {hire_date_modal}")
+            _close_ui_dialog(dialog, "Vertrag-Dialog")
+            return
+
+    print(f"[OK] Vertrag eingetragen → {label} ab {hire_date_modal}")
+
+    # Erst nach bestätigtem Neueintrag alte aktive Verträge deaktivieren.
     try:
         active_rows = dialog.locator(
             "tr:has(a[title='deaktivieren'][onclick*='daten_historie_change_status'][onclick*='vertrag_id'])"
@@ -1476,37 +1535,10 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
                 contract_name = row_lines[1] if len(row_lines) > 1 else (row_lines[0] if row_lines else "unbekannt")
                 print(f"[INFO] Deaktiviere vorhandenen Vertrag: {contract_name}")
                 _click_locator_or_js(deactivate_link)
-                time.sleep(0.4)
+                _wait_for_xajax_idle(page, timeout_s=5.0)
     except Exception as exc:
         print(f"[WARNUNG] Deaktivieren vorhandener Verträge fehlgeschlagen: {exc}")
 
-    select = dialog.locator("#daten_eintragen_wert").first
-    date_input = dialog.locator("#daten_eintragen_gueltig_ab").first
-    if select.count() == 0 or date_input.count() == 0:
-        print("[WARNUNG] Eingabefelder im Vertrag-Dialog nicht gefunden.")
-        return
-    select.select_option(label=label)
-    date_input.fill(hire_date_modal)
-    submit_button = dialog.locator("button:has-text('eintragen')").first
-    if submit_button.count() == 0:
-        print("[WARNUNG] 'eintragen'-Button im Vertrag-Dialog nicht gefunden.")
-        return
-
-    if not _click_locator_or_js(submit_button):
-        print("[WARNUNG] Vertrag-'eintragen'-Klick fehlgeschlagen.")
-        return
-
-    if not _wait_for_dialog_text(dialog, [label, hire_date_modal], timeout_s=8.0):
-        try:
-            submit_button.evaluate("el => el.click()")
-        except Exception:
-            pass
-        if not _wait_for_dialog_text(dialog, [label, hire_date_modal], timeout_s=5.0):
-            print(f"[WARNUNG] Vertragseintrag nicht bestätigt → {label} ab {hire_date_modal}")
-            _close_ui_dialog(dialog, "Vertrag-Dialog")
-            return
-
-    print(f"[OK] Vertrag eingetragen → {label} ab {hire_date_modal}")
     _close_ui_dialog(dialog, "Vertrag-Dialog")
 
 
@@ -1924,6 +1956,8 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     if not hire_date:
         print("[HINWEIS] Kein hire_date im JSON – überspringe Ein-/Austritt.")
         return
+    hire_date_ui = _format_date_for_ui(hire_date)
+    befristung_bis_ui = _format_date_for_ui(befristung_bis) if befristung_bis else ""
 
     target: Union[Frame, Page] = page
     frame = page.frame(name="inhalt")
@@ -1941,8 +1975,15 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
         edit_icon.scroll_into_view_if_needed()
     except Exception:
         pass
-    edit_icon.click(force=True)
+    try:
+        edit_icon.click(force=True)
+    except Exception:
+        try:
+            edit_icon.evaluate("el => el.click()")
+        except Exception:
+            pass
     print("[OK] Ein-/Austrittsdatum-Dialog geöffnet.")
+    _wait_for_xajax_idle(page, timeout_s=8.0)
 
     dialog = _find_visible_ui_dialog(page, "Ein-/Austrittsdatum ändern", timeout_s=8.0)
     if dialog is None:
@@ -1953,9 +1994,9 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
         dialog_text = dialog.inner_text()
     except Exception:
         dialog_text = ""
-    expected_end = befristung_bis if befristung_bis else "unbefristet"
+    expected_end = befristung_bis_ui if befristung_bis_ui else "unbefristet"
     remark = contract_type.upper()
-    if hire_date in dialog_text and expected_end in dialog_text and (contract_type in dialog_text or remark in dialog_text):
+    if hire_date_ui in dialog_text and expected_end in dialog_text and (contract_type in dialog_text or remark in dialog_text):
         print("[INFO] Ein-/Austritt bereits vorhanden – schließe Dialog.")
         _close_ui_dialog(dialog, "Ein-/Austrittsdatum-Dialog")
         return
@@ -1966,8 +2007,8 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     if eintritt_input.count() == 0 or austritt_input.count() == 0 or bemerkung_input.count() == 0:
         print("[WARNUNG] Ein-/Austrittsdatum-Felder nicht gefunden.")
         return
-    eintritt_input.fill(hire_date)
-    austritt_input.fill(befristung_bis)
+    eintritt_input.fill(hire_date_ui)
+    austritt_input.fill(befristung_bis_ui)
     remark = contract_type.upper()
     bemerkung_input.fill(remark)
 
@@ -1975,9 +2016,23 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     if save_button.count() == 0:
         print("[WARNUNG] Ein-/Austrittsdatum-Speichern-Button nicht gefunden.")
         return
-    save_button.click()
-    print(f"[OK] Ein-/Austritt gesetzt → {hire_date} bis {befristung_bis or 'unbefristet'} ({remark})")
-    time.sleep(0.5)
+    try:
+        save_button.click()
+    except Exception:
+        try:
+            save_button.evaluate(
+                """btn => {
+                    if (typeof window.verarbeitung === 'function') {
+                        window.verarbeitung();
+                    } else {
+                        btn.click();
+                    }
+                }"""
+            )
+        except Exception:
+            pass
+    _wait_for_xajax_idle(page, timeout_s=8.0)
+    print(f"[OK] Ein-/Austritt gesetzt → {hire_date_ui} bis {befristung_bis_ui or 'unbefristet'} ({remark})")
 
     warn_dialog = page.locator("div.ui-dialog:has-text('Warnung')").first
     try:
