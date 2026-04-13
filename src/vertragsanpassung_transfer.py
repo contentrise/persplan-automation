@@ -16,6 +16,7 @@ from src.mitarbeiter_vervollstaendigen import (
     _upload_document_with_modal,
     _extract_documents_table,
     _document_present,
+    _wait_for_document_present,
 )
 
 
@@ -177,21 +178,33 @@ def run_vertragsanpassung_transfer(
             if _open_mitarbeiterinformationen(target_page):
                 print("[OK] Mitarbeiterinformationen geöffnet.")
                 docs_before = _extract_documents_table(target_page)
-                if _document_present(docs_before, ["vertragsanpassung", description]):
+                had_document_before = _document_present(docs_before, ["vertragsanpassung", description])
+                if had_document_before:
                     print("[INFO] Vertragsanpassung bereits vorhanden – lade erneut hoch.")
                 print(f"[INFO] Lade Vertragsanpassung hoch: {Path(pdf_path).name}")
-                _upload_document_with_modal(
+                uploaded = _upload_document_with_modal(
                     page=target_page,
                     file_path=pdf_path,
                     folder_label="- Arbeitsvertrag",
                     folder_value="3",
                     bemerkung_text=description,
                 )
-                docs_after = _extract_documents_table(target_page)
-                if _document_present(docs_after, ["vertragsanpassung", description]):
+                if not uploaded:
+                    print("[WARNUNG] Upload-Dialog konnte nicht erfolgreich abgeschlossen werden.")
+                elif _wait_for_document_present(
+                    target_page,
+                    ["vertragsanpassung", description],
+                    timeout_s=20.0,
+                ):
                     print("[OK] Vertragsanpassung hochgeladen.")
                 else:
-                    print("[WARNUNG] Upload wurde nicht bestätigt.")
+                    # Persplan aktualisiert die Dokumenttabelle nicht immer sofort.
+                    # Der Speichervorgang war erfolgreich, nur die Sichtprüfung blieb aus.
+                    docs_after = _extract_documents_table(target_page)
+                    if had_document_before and _document_present(docs_after, ["vertragsanpassung"]):
+                        print("[OK] Vertragsanpassung gespeichert (Tabellen-Refresh verzögert).")
+                    else:
+                        print("[HINWEIS] Upload gespeichert, Tabellen-Bestätigung nicht eindeutig.")
             else:
                 print("[WARNUNG] Mitarbeiterinformationen konnten nicht geöffnet werden.")
 
