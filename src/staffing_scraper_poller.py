@@ -50,7 +50,7 @@ COMPLETE_ENDPOINT = f"{API_BASE}/staffing/scraper/complete"
 SCRAPER_SECRET = os.environ.get("STAFFING_RUN_SECRET") or os.environ.get("STAFFING_SCRAPER_SECRET")
 SCRAPER_COMMAND = os.environ.get(
     "SCRAPER_COMMAND",
-    "-m src.schichtplan_py --headless true",
+    "-m src.main schicht-bestaetigen --headless true",
 ).strip()
 SCRAPER_LOGIN_COMMAND = os.environ.get(
     "SCRAPER_LOGIN_COMMAND",
@@ -60,6 +60,9 @@ LOGIN_STEP_NAME = (os.environ.get("SCRAPER_LOGIN_STEP") or "login").strip().lowe
 PYTHON_CMD = os.environ.get("SCRAPER_PYTHON_CMD", "python3")
 FORCE_HEADLESS = os.environ.get("SCRAPER_FORCE_HEADLESS", "true").strip().lower() not in {"false", "0", "off"}
 POLL_INTERVAL = float(os.environ.get("SCRAPER_POLL_INTERVAL", "60"))
+RETRY_SCRAPER_AFTER_LOGIN = (
+    os.environ.get("SCRAPER_RETRY_AFTER_LOGIN", "true").strip().lower() not in {"false", "0", "off"}
+)
 
 S3_BUCKET = os.environ.get("STAFFING_BUCKET") or os.environ.get("STAFFING_S3_BUCKET")
 S3_PREFIX = (os.environ.get("STAFFING_PLAN_FOLDER") or "staffing/dienstplan").strip("/")
@@ -67,6 +70,7 @@ S3_REGION = os.environ.get("AWS_REGION") or os.environ.get("AWS_DEFAULT_REGION")
 
 session = requests.Session()
 session.headers.update({"Content-Type": "application/json"})
+LAST_PLAYWRIGHT_LOG = ""
 
 
 def claim_run() -> Optional[dict]:
@@ -103,6 +107,7 @@ def claim_run() -> Optional[dict]:
 
 def run_playwright_command(command: str, *, expect_export: bool) -> Optional[Path]:
     """Führt einen Playwright-Befehl aus und liefert optional die erzeugte CSV."""
+    global LAST_PLAYWRIGHT_LOG
     normalized_command = command.strip()
     if not normalized_command:
         raise RuntimeError("Kein Playwright-Befehl konfiguriert")
@@ -119,7 +124,26 @@ def run_playwright_command(command: str, *, expect_export: bool) -> Optional[Pat
         " ".join(cmd),
         SCRAPER_WORKING_DIR,
     )
-    subprocess.run(cmd, cwd=str(SCRAPER_WORKING_DIR), check=True)
+    try:
+        result = subprocess.run(
+            cmd,
+            cwd=str(SCRAPER_WORKING_DIR),
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        LAST_PLAYWRIGHT_LOG = "\n".join(
+            [(result.stdout or "").strip(), (result.stderr or "").strip()]
+        ).strip()
+    except subprocess.CalledProcessError as exc:
+        LAST_PLAYWRIGHT_LOG = "\n".join(
+            [(exc.stdout or "").strip(), (exc.stderr or "").strip()]
+        ).strip()
+        if LAST_PLAYWRIGHT_LOG:
+            LOGGER.error("Playwright-Output (tail):\n%s", LAST_PLAYWRIGHT_LOG[-4000:])
+        raise
+    if LAST_PLAYWRIGHT_LOG:
+        LOGGER.info("Playwright-Output (tail):\n%s", LAST_PLAYWRIGHT_LOG[-4000:])
 
     if not expect_export:
         return None
@@ -144,6 +168,24 @@ def run_login_process(metadata: Optional[dict] = None) -> None:
     command = resolve_command(LOGIN_STEP_NAME, metadata, SCRAPER_LOGIN_COMMAND)
     LOGGER.info("Führe Login-Skript aus, um Sitzungsdaten zu erneuern …")
     run_playwright_command(command, expect_export=False)
+
+
+def run_scraper_process_with_login_retry(command: str, metadata: Optional[dict] = None) -> tuple[Path, int]:
+    """Startet den Scraper; bei Fehler einmal Session erneuern und komplett neu starten."""
+    max_attempts = 2 if RETRY_SCRAPER_AFTER_LOGIN else 1
+    last_error: Exception | None = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            if attempt > 1:
+                LOGGER.warning("Scraper-Versuch %s/%s: erneuere Session per Login", attempt, max_attempts)
+                run_login_process(metadata)
+            return run_scraper_process(command), attempt
+        except Exception as exc:  # pylint: disable=broad-except
+            last_error = exc
+            LOGGER.exception("Scraper-Versuch %s/%s fehlgeschlagen", attempt, max_attempts)
+            if attempt >= max_attempts:
+                raise
+    raise RuntimeError(str(last_error) if last_error else "Scraper fehlgeschlagen")
 
 
 def snapshot_exports() -> Dict[str, float]:
@@ -327,19 +369,22 @@ def process_run(job: dict) -> None:
                 completion_payload = {
                     "summary": summary,
                     "message": metadata.get("loginMessage") or "Session aktualisiert (Login-Run)",
+                    "logText": LAST_PLAYWRIGHT_LOG,
                 }
                 mark_complete(run_id, "success", completion_payload)
                 return
 
         command = resolve_command(step or "planung", metadata, SCRAPER_COMMAND)
         LOGGER.info("Nutze Playwright-Command für Step '%s': %s", step or "planung", command)
-        export_path = run_scraper_process(command)
+        export_path, attempts_used = run_scraper_process_with_login_retry(command, metadata)
         file_key = upload_to_s3(export_path)
         row_count = count_rows(export_path)
         folder_date = os.environ.get("STAFFING_FOLDER_DATE") or datetime.now().strftime("%Y-%m-%d")
         summary = {
             "totalRows": max(row_count - 1, 0),
             "generatedAt": datetime.utcnow().isoformat(),
+            "attempts": attempts_used,
+            "retriedAfterLogin": attempts_used > 1,
         }
         if login_requested:
             summary["loginStep"] = {"executed": True, "step": step or LOGIN_STEP_NAME}
@@ -353,6 +398,7 @@ def process_run(job: dict) -> None:
             "folderDate": folder_date,
             "summary": summary,
             "message": message,
+            "logText": LAST_PLAYWRIGHT_LOG,
         }
         mark_complete(run_id, "success", completion_payload)
     except Exception as exc:  # pylint: disable=broad-except
@@ -360,7 +406,7 @@ def process_run(job: dict) -> None:
         mark_complete(
             run_id,
             "error",
-            {"error": str(exc)},
+            {"error": str(exc), "logText": LAST_PLAYWRIGHT_LOG},
         )
 
 

@@ -415,6 +415,31 @@ def _find_visible_ui_dialog(page: Page, title: str, timeout_s: float = 8.0) -> L
     return None
 
 
+def _find_visible_ui_dialog_with_selector(page: Page, selector: str, timeout_s: float = 8.0) -> Locator | None:
+    deadline = time.time() + max(0.5, timeout_s)
+    while time.time() < deadline:
+        candidates: list[Union[Frame, Page]] = [page]
+        try:
+            candidates.extend(page.frames)
+        except Exception:
+            pass
+        for candidate in candidates:
+            dialogs = candidate.locator("div.ui-dialog")
+            try:
+                count = dialogs.count()
+            except Exception:
+                count = 0
+            for idx in range(count - 1, -1, -1):
+                dialog = dialogs.nth(idx)
+                try:
+                    if dialog.is_visible() and dialog.locator(selector).count() > 0:
+                        return dialog
+                except Exception:
+                    continue
+        time.sleep(0.2)
+    return None
+
+
 def _wait_for_xajax_idle(page: Page, timeout_s: float = 8.0) -> None:
     deadline = time.time() + max(0.5, timeout_s)
     while time.time() < deadline:
@@ -1694,6 +1719,90 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
         print("[WARNUNG] Sonstiges-Edit-Icon nicht gefunden.")
         return
     try:
+        edit_onclick = edit_icon.get_attribute("onclick") or ""
+    except Exception:
+        edit_onclick = ""
+    user_match = re.search(r"xajax_feld_aendern\((\d+),\s*['\"]sonstiges['\"]", edit_onclick)
+    sonstiges_user_id = user_match.group(1) if user_match else ""
+
+    def _sonstiges_targets() -> list[Union[Frame, Page]]:
+        candidates: list[Union[Frame, Page]] = [target, page]
+        try:
+            candidates.extend(page.frames)
+        except Exception:
+            pass
+        unique: list[Union[Frame, Page]] = []
+        for candidate in candidates:
+            if candidate not in unique:
+                unique.append(candidate)
+        return unique
+
+    def _read_sonstiges_value(timeout_s: float = 0.0) -> str:
+        deadline = time.time() + max(0.0, timeout_s)
+        while True:
+            for candidate in _sonstiges_targets():
+                try:
+                    loc = candidate.locator("#sonstiges").first
+                    if loc.count() == 0:
+                        continue
+                    tag_name = str(loc.evaluate("node => node.tagName || ''") or "").lower()
+                    if tag_name in {"input", "textarea"}:
+                        text = loc.input_value().strip()
+                    else:
+                        input_loc = loc.locator("input, textarea").first
+                        if input_loc.count() > 0:
+                            text = input_loc.input_value().strip()
+                        else:
+                            text = loc.inner_text().strip()
+                    if text:
+                        return text
+                except Exception:
+                    continue
+            if time.time() >= deadline:
+                return ""
+            time.sleep(0.2)
+
+    def _call_sonstiges_xajax_direct() -> bool:
+        for candidate in _sonstiges_targets():
+            try:
+                called = candidate.evaluate(
+                    """(args) => {
+                        const { userId, value } = args || {};
+                        const inputs = Array.from(document.querySelectorAll(
+                            '#sonstiges input[type="text"], #sonstiges textarea, input#sonstiges, textarea#sonstiges, #sonstiges input'
+                        ));
+                        inputs.forEach((input) => {
+                            input.value = value;
+                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                            input.dispatchEvent(new Event('change', { bubbles: true }));
+                        });
+
+                        const handlerSource = inputs
+                            .map((input) => `${input.getAttribute('onblur') || ''}\n${input.getAttribute('onkeypress') || ''}`)
+                            .join('\n');
+                        const match = handlerSource.match(
+                            /xajax_feld_eintragen\\(["']?([^"',)]+)["']?,\\s*["']([^"']+)["'],\\s*["']([^"']+)["']/
+                        );
+                        if (match && typeof window.xajax_feld_eintragen === 'function') {
+                            window.xajax_feld_eintragen(match[1], match[2], match[3], value);
+                            return true;
+                        }
+                        if (userId && typeof window.xajax_feld_eintragen === 'function') {
+                            window.xajax_feld_eintragen(userId, 'sonstiges', 'sonstiges', value);
+                            return true;
+                        }
+                        return false;
+                    }""",
+                    {"userId": sonstiges_user_id, "value": value},
+                )
+                if called:
+                    print("[INFO] Sonstiges direkter XAJAX-Commit ausgelöst.")
+                    return True
+            except Exception:
+                continue
+        return False
+
+    try:
         edit_icon.scroll_into_view_if_needed()
     except Exception:
         pass
@@ -1824,6 +1933,12 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
         if final_text == value:
             print(f"[OK] Sonstiges gesetzt (inline) → {value}")
             return True
+        if _call_sonstiges_xajax_direct():
+            _wait_for_xajax_idle(page, timeout_s=6.0)
+            final_text = _read_sonstiges_value(timeout_s=6.0)
+            if final_text == value:
+                print(f"[OK] Sonstiges gesetzt (direkt) → {value}")
+                return True
         print(
             f"[WARNUNG] Sonstiges inline gesetzt, aber nicht bestätigt "
             f"(soll='{value}', ist='{final_text or '—'}')."
@@ -1842,18 +1957,27 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
             onclick = ""
         match = re.search(r"xajax_feld_aendern\((\d+),\s*'sonstiges'", onclick)
         if match:
-            try:
-                user_id = int(match.group(1))
-                page.evaluate(
-                    "(uid) => { if (typeof xajax_feld_aendern === 'function') { xajax_feld_aendern(uid, 'sonstiges', 'sonstiges'); } }",
-                    user_id,
-                )
-            except Exception:
-                pass
+            user_id = match.group(1)
+            for candidate in _sonstiges_targets():
+                try:
+                    opened = candidate.evaluate(
+                        "(uid) => { if (typeof xajax_feld_aendern === 'function') { xajax_feld_aendern(uid, 'sonstiges', 'sonstiges'); return true; } return false; }",
+                        user_id,
+                    )
+                    if opened:
+                        break
+                except Exception:
+                    continue
             dialog, dialog_target = _find_sonstiges_dialog(timeout_s=4.0)
     if dialog is None or dialog_target is None:
         if _try_inline_sonstiges(timeout_s=2.5):
             return
+        if _call_sonstiges_xajax_direct():
+            _wait_for_xajax_idle(page, timeout_s=6.0)
+            final_text = _read_sonstiges_value(timeout_s=6.0)
+            if final_text == value:
+                print(f"[OK] Sonstiges gesetzt (direkt) → {value}")
+                return
         print("[WARNUNG] Sonstiges-Dialog nicht sichtbar.")
         return
 
@@ -1921,6 +2045,12 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
     if final_text == value:
         print(f"[OK] Sonstiges gesetzt → {value}")
     else:
+        if _call_sonstiges_xajax_direct():
+            _wait_for_xajax_idle(page, timeout_s=6.0)
+            final_text = _read_sonstiges_value(timeout_s=6.0)
+            if final_text == value:
+                print(f"[OK] Sonstiges gesetzt (direkt) → {value}")
+                return
         print(f"[WARNUNG] Sonstiges nicht bestätigt (soll='{value}', ist='{final_text or '—'}').")
         try:
             input_field.press("Enter")
@@ -1987,6 +2117,12 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
 
     dialog = _find_visible_ui_dialog(page, "Ein-/Austrittsdatum ändern", timeout_s=8.0)
     if dialog is None:
+        dialog = _find_visible_ui_dialog_with_selector(
+            page,
+            "#formEditEinAustrittsdatum, #eintrittsdatum_neu, #austrittsdatum_neu",
+            timeout_s=8.0,
+        )
+    if dialog is None:
         print("[WARNUNG] Ein-/Austrittsdatum-Dialog nicht sichtbar.")
         return
 
@@ -2007,42 +2143,80 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     if eintritt_input.count() == 0 or austritt_input.count() == 0 or bemerkung_input.count() == 0:
         print("[WARNUNG] Ein-/Austrittsdatum-Felder nicht gefunden.")
         return
-    eintritt_input.fill(hire_date_ui)
-    austritt_input.fill(befristung_bis_ui)
+    _set_input_value_force(eintritt_input, hire_date_ui)
+    _set_input_value_force(austritt_input, befristung_bis_ui)
     remark = contract_type.upper()
-    bemerkung_input.fill(remark)
+    _set_input_value_force(bemerkung_input, remark)
 
-    save_button = dialog.locator("button:has-text('Speichern')").first
-    if save_button.count() == 0:
-        print("[WARNUNG] Ein-/Austrittsdatum-Speichern-Button nicht gefunden.")
-        return
-    try:
-        save_button.click()
-    except Exception:
+    def _submit_eintritt_austritt() -> bool:
         try:
-            save_button.evaluate(
-                """btn => {
+            submitted = dialog.evaluate(
+                """(node, args) => {
+                    const { eintritt, austritt, bemerkung } = args || {};
+                    const setValue = (selector, value) => {
+                        const el = node.querySelector(selector);
+                        if (!el) return false;
+                        el.removeAttribute('readonly');
+                        el.removeAttribute('disabled');
+                        el.value = value;
+                        el.dispatchEvent(new Event('input', { bubbles: true }));
+                        el.dispatchEvent(new Event('change', { bubbles: true }));
+                        el.dispatchEvent(new Event('blur', { bubbles: true }));
+                        return true;
+                    };
+                    const hasEintritt = setValue('#eintrittsdatum_neu', eintritt);
+                    setValue('#austrittsdatum_neu', austritt);
+                    setValue('#bemerkung', bemerkung);
+                    if (!hasEintritt) return false;
+
                     if (typeof window.verarbeitung === 'function') {
                         window.verarbeitung();
-                    } else {
-                        btn.click();
+                        return true;
                     }
-                }"""
+
+                    const scriptText = Array.from(node.querySelectorAll('script'))
+                        .map((script) => script.textContent || '')
+                        .join('\n');
+                    const match = scriptText.match(/xajax_eintrittsdatum_austrittsdatum_eintragen\\((\\d+),/);
+                    if (match && typeof window.xajax_eintrittsdatum_austrittsdatum_eintragen === 'function') {
+                        window.xajax_eintrittsdatum_austrittsdatum_eintragen(match[1], eintritt, austritt, bemerkung);
+                        return true;
+                    }
+
+                    const button = Array.from(node.querySelectorAll('button')).find((btn) =>
+                        (btn.textContent || '').includes('Speichern')
+                    );
+                    if (button) {
+                        button.click();
+                        return true;
+                    }
+                    return false;
+                }""",
+                {"eintritt": hire_date_ui, "austritt": befristung_bis_ui, "bemerkung": remark},
             )
+            if submitted:
+                return True
         except Exception:
             pass
+
+        save_button = dialog.locator("button:has-text('Speichern')").first
+        if save_button.count() == 0:
+            return False
+        return _click_locator_or_js(save_button)
+
+    if not _submit_eintritt_austritt():
+        print("[WARNUNG] Ein-/Austrittsdatum-Speichern-Button nicht gefunden/ausgelöst.")
+        return
     _wait_for_xajax_idle(page, timeout_s=8.0)
     print(f"[OK] Ein-/Austritt gesetzt → {hire_date_ui} bis {befristung_bis_ui or 'unbefristet'} ({remark})")
 
-    warn_dialog = page.locator("div.ui-dialog:has-text('Warnung')").first
-    try:
-        warn_dialog.wait_for(state="visible", timeout=4000)
+    warn_dialog = _find_visible_ui_dialog(page, "Warnung", timeout_s=4.0)
+    if warn_dialog is not None:
         fortfahren = warn_dialog.locator("button:has-text('Fortfahren')").first
         if fortfahren.count() > 0:
             fortfahren.click()
             print("[OK] Warnung bestätigt (Fortfahren).")
-    except Exception:
-        pass
+            _wait_for_xajax_idle(page, timeout_s=8.0)
 
     if not _close_ui_dialog(dialog, "Ein-/Austrittsdatum-Dialog"):
         print("[WARNUNG] 'Schließen' Button im Ein-/Austrittsdatum-Dialog nicht gefunden.")
@@ -3520,6 +3694,7 @@ def _select_autocomplete_by_bn(
         print(f"[WARNUNG] {field_label}: Eingabefeld nicht gefunden – übersprungen.")
         return False
     _log_locator_state(input_locator, f"{field_label} input (vor)")
+    original_value = _safe_input_value(input_locator)
     if not bn:
         if fallback_text:
             print(f"[WARNUNG] {field_label}: BN fehlt, versuche Textsuche → {fallback_text}")
@@ -3557,6 +3732,12 @@ def _select_autocomplete_by_bn(
                         except Exception:
                             break
                 time.sleep(0.2)
+            if field_label == "tatsaechliche_krankenkasse":
+                _set_input_value_force(input_locator, original_value)
+                print(
+                    f"[WARNUNG] {field_label}: Kein Autocomplete Treffer – Feld bleibt unverändert → {fallback_text}"
+                )
+                return False
             _set_input_value(input_locator, fallback_text)
             print(f"[WARNUNG] {field_label}: Kein Autocomplete Treffer – Fallback gesetzt → {fallback_text}")
             _log_locator_state(input_locator, f"{field_label} input (fallback)")
@@ -3633,6 +3814,13 @@ def _select_autocomplete_by_bn(
         return True
 
     if fallback_text:
+        if field_label == "tatsaechliche_krankenkasse":
+            _set_input_value_force(input_locator, original_value)
+            print(
+                f"[WARNUNG] {field_label}: Kein Autocomplete Treffer für BN {bn} – "
+                f"Feld bleibt unverändert → {fallback_text}"
+            )
+            return False
         _set_input_value(input_locator, fallback_text)
         _force_autocomplete_hidden_fields(input_locator, fallback_text, bn)
         _commit_autocomplete_value(input_locator, fallback_text, bn)
@@ -3900,13 +4088,18 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict, tracker: FieldTracker
     values = _resolve_lohnabrechnung_values(payload)
     panel = target.locator("#administration_user_stammdaten_tabs_lohnabrechnung")
 
-    try:
-        panel.wait_for(state="visible", timeout=8000)
-    except Exception:
-        pass
-    try:
-        target.evaluate(
-            """() => {
+    def _refresh_lohn_panel() -> Locator:
+        refreshed = target.locator("#administration_user_stammdaten_tabs_lohnabrechnung")
+        try:
+            refreshed.wait_for(state="visible", timeout=5000)
+        except Exception:
+            pass
+        return refreshed
+
+    def _ensure_lohn_panel_editable() -> None:
+        try:
+            target.evaluate(
+                """() => {
                 if (typeof makeEdited === 'function') {
                     try { makeEdited(); } catch (e) {}
                 }
@@ -3923,9 +4116,12 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict, tracker: FieldTracker
                     save.removeAttribute('disabled');
                 }
             }"""
-        )
-    except Exception:
-        pass
+            )
+        except Exception:
+            pass
+
+    panel = _refresh_lohn_panel()
+    _ensure_lohn_panel_editable()
 
     schulabschluss_raw = _pick_payload_value(payload, ["schulabschluss"])
     if schulabschluss_raw:
@@ -4022,22 +4218,25 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict, tracker: FieldTracker
                     current_tk,
                 )
         else:
-            _select_autocomplete_by_bn(
+            tatsaechliche_selected = _select_autocomplete_by_bn(
                 target,
                 tatsaechliche_input,
                 values["tatsaechliche_bn"],
                 values["tatsaechliche_krankenkasse"],
                 "tatsaechliche_krankenkasse",
             )
-            _verify_input_value(
-                tatsaechliche_input, values["tatsaechliche_krankenkasse"], "tatsaechliche_krankenkasse"
-            )
-            _commit_autocomplete_value(
-                tatsaechliche_input,
-                values["tatsaechliche_krankenkasse"],
-                values["tatsaechliche_bn"],
-            )
-            _debug_krankenkasse_state(target, tatsaechliche_input, "tatsaechliche_krankenkasse")
+            if tatsaechliche_selected:
+                _verify_input_value(
+                    tatsaechliche_input, values["tatsaechliche_krankenkasse"], "tatsaechliche_krankenkasse"
+                )
+                _commit_autocomplete_value(
+                    tatsaechliche_input,
+                    values["tatsaechliche_krankenkasse"],
+                    values["tatsaechliche_bn"],
+                )
+                _debug_krankenkasse_state(target, tatsaechliche_input, "tatsaechliche_krankenkasse")
+            else:
+                print("[WARNUNG] tatsaechliche_krankenkasse nicht gesetzt – restliche Lohnabrechnung läuft weiter.")
         if tracker:
             actual = _safe_input_value(tatsaechliche_input)
             if actual == values["tatsaechliche_krankenkasse"]:
@@ -4055,16 +4254,24 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict, tracker: FieldTracker
                     actual,
                 )
         if values["krankenkasse"] and values["krankenkasse"] != values["tatsaechliche_krankenkasse"]:
-            _select_autocomplete_by_bn(
-                target,
-                krankenkasse_input,
-                values["krankenkasse_bn"],
-                values["krankenkasse"],
-                "krankenkasse",
-            )
-            _commit_autocomplete_value(krankenkasse_input, values["krankenkasse"], values["krankenkasse_bn"])
-            _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
-            _debug_krankenkasse_state(target, krankenkasse_input, "krankenkasse (post)")
+            panel = _refresh_lohn_panel()
+            _ensure_lohn_panel_editable()
+            krankenkasse_input = _prefer_editable_input(panel, "#krankenkasse, [name='krankenkasse']")
+            if krankenkasse_input.count() > 0:
+                _select_autocomplete_by_bn(
+                    target,
+                    krankenkasse_input,
+                    values["krankenkasse_bn"],
+                    values["krankenkasse"],
+                    "krankenkasse",
+                )
+                _commit_autocomplete_value(krankenkasse_input, values["krankenkasse"], values["krankenkasse_bn"])
+                _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
+                _debug_krankenkasse_state(target, krankenkasse_input, "krankenkasse (post)")
+            else:
+                print("[WARNUNG] krankenkasse nach tatsaechliche_krankenkasse nicht erneut gefunden.")
+    panel = _refresh_lohn_panel()
+    _ensure_lohn_panel_editable()
     print(
         "[INFO] Lohnabrechnung Zielwerte: "
         f"personengruppe={values['personengruppe']}, "
@@ -4275,6 +4482,12 @@ def _verify_lohnabrechnung_kassen_post_save(
     )
 
     if tracker:
+        tk_missing_already = any(
+            entry.get("section") == "lohnabrechnung"
+            and entry.get("field_id") == "tatsaechliche_krankenkasse"
+            and entry.get("status") == "missing"
+            for entry in tracker.entries
+        )
         if expected_kasse and actual_kasse == expected_kasse:
             tracker.ok("lohnabrechnung", "krankenkasse_postsave", expected_kasse, actual_kasse)
         elif expected_kasse:
@@ -4282,7 +4495,7 @@ def _verify_lohnabrechnung_kassen_post_save(
         if expected_tk:
             if actual_tk == expected_tk:
                 tracker.ok("lohnabrechnung", "tatsaechliche_krankenkasse_postsave", expected_tk, actual_tk)
-            else:
+            elif not tk_missing_already:
                 tracker.missing(
                     "lohnabrechnung",
                     "tatsaechliche_krankenkasse_postsave",

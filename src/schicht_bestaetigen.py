@@ -1,4 +1,6 @@
 import csv
+import io
+import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -12,6 +14,33 @@ from src import config
 
 S3_BUCKET = "greatstaff-data-storage"
 S3_PREFIX = "staffing"
+
+
+class _Tee:
+    def __init__(self, primary, buffer):
+        self.primary = primary
+        self.buffer = buffer
+
+    def write(self, data):
+        try:
+            self.primary.write(data)
+        except Exception:
+            pass
+        try:
+            self.buffer.write(data)
+        except Exception:
+            pass
+        return len(data)
+
+    def flush(self):
+        try:
+            self.primary.flush()
+        except Exception:
+            pass
+        try:
+            self.buffer.flush()
+        except Exception:
+            pass
 
 
 def _wait_for_frame(page: Page, name: str, timeout_seconds: int = 20) -> Frame:
@@ -341,18 +370,53 @@ def find_orange_assignments(frame: Frame) -> list[str]:
     """Sammelt alle Mitarbeiter-Namen, deren Schicht orange hinterlegt ist."""
     cells = frame.locator("td.schichtZeitZelle")
     names: list[str] = []
-    for i in range(cells.count()):
+    cell_count = cells.count()
+    orange_cells = 0
+    colored_samples: list[str] = []
+    for i in range(cell_count):
         cell = cells.nth(i)
         style = (cell.get_attribute("style") or "").lower()
-        if "orange" not in style:
+        if style and len(colored_samples) < 8 and ("background" in style or "color" in style):
+            try:
+                sample_text = " ".join(cell.inner_text().strip().split())[:120]
+            except Exception:
+                sample_text = ""
+            colored_samples.append(f"#{i+1}: style='{style[:160]}' text='{sample_text}'")
+        if not _looks_orange_style(style):
             continue
+        orange_cells += 1
         raw_text = cell.inner_text().strip()
         if not raw_text:
             continue
         name = raw_text.split("\n", 1)[0].strip()
         if name:
             names.append(name)
+    print(
+        f"[DEBUG] Orange-Scan: schichtZeitZelle={cell_count}, "
+        f"orange_style={orange_cells}, namen={len(names)}"
+    )
+    if names:
+        print(f"[DEBUG] Orange-Namen: {', '.join(names)}")
+    elif colored_samples:
+        print("[DEBUG] Farbige Zell-Samples ohne Orange-Treffer:")
+        for sample in colored_samples:
+            print(f"[DEBUG]   {sample}")
     return names
+
+
+def _looks_orange_style(style: str) -> bool:
+    if not style:
+        return False
+    normalized = style.replace(" ", "").lower()
+    if "orange" in normalized:
+        return True
+    if any(token in normalized for token in ("#ffa500", "#ff9900", "#f90", "rgb(255,165,0)", "rgb(255,153,0)")):
+        return True
+    rgb_match = re.search(r"rgba?\((\d+),(\d+),(\d+)(?:,[^)]+)?\)", normalized)
+    if not rgb_match:
+        return False
+    red, green, blue = (int(value) for value in rgb_match.groups())
+    return red >= 200 and 80 <= green <= 190 and blue <= 80
 
 
 def split_name(raw: str) -> tuple[str, str]:
@@ -539,16 +603,19 @@ def process_veranstaltungen(
         href = event.get("href", "")
         title = event.get("text", "").strip()
         print(f"[INFO] ({idx}/{total}) Öffne Veranstaltung: {title}")
+        print(f"[DEBUG] Detail-Href ({idx}/{total}): {href}")
 
         frame = _load_inhalt_url(page, href, wait_selector="td.schichtZeitZelle")
         header_info = extract_header_info(frame)
         event_date = header_info.get("date") if header_info else ""
         if not event_date:
             event_date = extract_event_date(title)
+        print(f"[DEBUG] Detail geladen: datum='{event_date or '—'}' header={header_info or {}}")
 
         orange_names = find_orange_assignments(frame)
 
         if orange_names:
+            print(f"[INFO] {title}: {len(orange_names)} orange markierte Mitarbeiter gefunden.")
             for name in orange_names:
                 print(f"[ORANGE] {title} → {name}")
                 normalized = _normalize_name(name)
@@ -591,10 +658,6 @@ def process_veranstaltungen(
 
 
 def write_orange_report(rows: list[dict[str, str]]) -> Path | None:
-    if not rows:
-        print("[INFO] Keine gelben Mitarbeiter – es wird keine CSV erstellt.")
-        return None
-
     export_dir = Path(config.EXPORT_DIR)
     export_dir.mkdir(parents=True, exist_ok=True)
     filename = f"orange_schichten_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
@@ -615,7 +678,10 @@ def write_orange_report(rows: list[dict[str, str]]) -> Path | None:
                 }
             )
 
-    print(f"[OK] CSV mit gelben Mitarbeitern gespeichert: {path}")
+    if rows:
+        print(f"[OK] CSV mit gelben Mitarbeitern gespeichert: {path}")
+    else:
+        print(f"[INFO] Keine gelben Mitarbeiter – leere CSV mit Header gespeichert: {path}")
     return path
 
 
@@ -643,6 +709,38 @@ def upload_report_to_s3(path: Path | None) -> None:
         print(f"[WARNUNG] Upload nach S3 fehlgeschlagen: {exc}")
 
 
+def write_run_log(log_text: str, csv_path: Path | None = None) -> Path:
+    export_dir = Path(config.EXPORT_DIR)
+    export_dir.mkdir(parents=True, exist_ok=True)
+    if csv_path:
+        log_path = export_dir / f"{csv_path.stem}.log"
+    else:
+        log_path = export_dir / f"orange_schichten_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
+    log_path.write_text(log_text.strip() + "\n", encoding="utf-8")
+    return log_path
+
+
+def upload_log_to_s3(log_path: Path | None, csv_path: Path | None) -> None:
+    if log_path is None or csv_path is None or not log_path.exists():
+        return
+    if not S3_BUCKET:
+        print("[INFO] Kein S3_BUCKET konfiguriert – Log-Upload übersprungen.")
+        return
+
+    prefix = S3_PREFIX.strip().strip("/")
+    date_folder = datetime.now().strftime("%Y-%m-%d")
+    log_name = f"{csv_path.stem}.log"
+    key_parts = [part for part in [prefix, date_folder, log_name] if part]
+    key = "/".join(key_parts)
+
+    s3 = boto3.client("s3")
+    try:
+        s3.upload_file(str(log_path), S3_BUCKET, key, ExtraArgs={"ContentType": "text/plain; charset=utf-8"})
+        print(f"[OK] Scraper-Log nach S3 hochgeladen: s3://{S3_BUCKET}/{key}")
+    except Exception as exc:
+        print(f"[WARNUNG] Log-Upload nach S3 fehlgeschlagen: {exc}")
+
+
 def run_schicht_bestaetigen(headless: bool | None = None, slowmo_ms: int | None = None) -> None:
     """
     Hilfsfunktion für CLI: nutzt gespeicherten Login-State und führt nur den Klick aus.
@@ -656,23 +754,45 @@ def run_schicht_bestaetigen(headless: bool | None = None, slowmo_ms: int | None 
             f"[FEHLER] Kein gespeicherter Login-State unter {state_path}. Bitte zuerst 'login' ausführen."
         )
 
-    print("[INFO] Starte Browser für Schicht-Bestätigung …")
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
-        context = browser.new_context(storage_state=str(state_path))
-        page = context.new_page()
+    stdout_buffer = io.StringIO()
+    stderr_buffer = io.StringIO()
+    prev_stdout = sys.stdout
+    prev_stderr = sys.stderr
+    csv_path: Path | None = None
+    caught_exception: Exception | None = None
+    sys.stdout = _Tee(prev_stdout, stdout_buffer)
+    sys.stderr = _Tee(prev_stderr, stderr_buffer)
+    try:
+        print("[INFO] Starte Browser für Schicht-Bestätigung …")
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=headless, slow_mo=slowmo_ms)
+            context = browser.new_context(storage_state=str(state_path))
+            page = context.new_page()
 
-        print("[INFO] Lade Startseite mit bestehender Session …")
-        page.goto(config.BASE_URL, wait_until="load")
+            print("[INFO] Lade Startseite mit bestehender Session …")
+            page.goto(config.BASE_URL, wait_until="load")
 
-        try:
-            frame = open_tagesplan_alt(page)
-            frame = apply_filter(page, frame)
-            events = collect_event_links(frame)
-            phonebook = build_phonebook_from_overview(frame)
-            rows = process_veranstaltungen(page, events, phonebook)
-            csv_path = write_orange_report(rows)
-            upload_report_to_s3(csv_path)
-        finally:
-            print("[INFO] Browser wird geschlossen …")
-            browser.close()
+            try:
+                frame = open_tagesplan_alt(page)
+                frame = apply_filter(page, frame)
+                events = collect_event_links(frame)
+                phonebook = build_phonebook_from_overview(frame)
+                rows = process_veranstaltungen(page, events, phonebook)
+                csv_path = write_orange_report(rows)
+                upload_report_to_s3(csv_path)
+            finally:
+                print("[INFO] Browser wird geschlossen …")
+                browser.close()
+    except Exception as exc:
+        caught_exception = exc
+    finally:
+        sys.stdout = prev_stdout
+        sys.stderr = prev_stderr
+        combined_log = "\n".join([stdout_buffer.getvalue().strip(), stderr_buffer.getvalue().strip()]).strip()
+        if caught_exception:
+            combined_log = f"{combined_log}\n[FEHLER] {caught_exception}".strip()
+        log_path = write_run_log(combined_log, csv_path)
+        print(f"[OK] Scraper-Log gespeichert: {log_path}")
+        upload_log_to_s3(log_path, csv_path)
+    if caught_exception:
+        raise caught_exception
