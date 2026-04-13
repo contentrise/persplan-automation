@@ -3491,10 +3491,12 @@ def _resolve_lohnabrechnung_values(payload: dict) -> dict:
         vertragsform = "2"
         steuerklasse = "1"
 
+    uses_knappschaft = contract_type in {"kb", "gb"} or variant in {"kb", "gb"}
+
     return {
         "variant": variant,
         "krankenkasse": krankenkasse,
-        "krankenkasse_bn": "98000006" if contract_type == "kb" else ("98000006" if variant == "kb" else krankenkasse_bn),
+        "krankenkasse_bn": "98000006" if uses_knappschaft else krankenkasse_bn,
         "tatsaechliche_krankenkasse": tatsaechliche,
         "tatsaechliche_bn": tatsaechliche_bn,
         "personengruppe": personengruppe,
@@ -3589,8 +3591,8 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict, tracker: FieldTracker
             values["krankenkasse"],
             "krankenkasse",
         )
-        _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
         _commit_autocomplete_value(krankenkasse_input, values["krankenkasse"], values["krankenkasse_bn"])
+        _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
         _debug_krankenkasse_state(target, krankenkasse_input, "krankenkasse")
     if tracker:
         actual = _safe_input_value(krankenkasse_input)
@@ -3675,8 +3677,8 @@ def _fill_lohnabrechnung_fields(page: Page, payload: dict, tracker: FieldTracker
                 values["krankenkasse"],
                 "krankenkasse",
             )
-            _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
             _commit_autocomplete_value(krankenkasse_input, values["krankenkasse"], values["krankenkasse_bn"])
+            _verify_input_value(krankenkasse_input, values["krankenkasse"], "krankenkasse")
             _debug_krankenkasse_state(target, krankenkasse_input, "krankenkasse (post)")
     print(
         "[INFO] Lohnabrechnung Zielwerte: "
@@ -3843,6 +3845,67 @@ def _click_daten_speichern(page: Page, timeout_seconds: float = 6.0) -> bool:
     return False
 
 
+def _verify_lohnabrechnung_kassen_post_save(
+    page: Page,
+    payload: dict,
+    tracker: FieldTracker | None = None,
+    timeout_seconds: float = 6.0,
+) -> None:
+    values = _resolve_lohnabrechnung_values(payload)
+    expected_kasse = str(values.get("krankenkasse", "") or "").strip()
+    expected_tk = str(values.get("tatsaechliche_krankenkasse", "") or "").strip()
+
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+    panel = target.locator("#administration_user_stammdaten_tabs_lohnabrechnung")
+    kasse_input = panel.locator("#krankenkasse, [name='krankenkasse']").first
+    tk_input = panel.locator("#tatsaechliche_krankenkasse, [name='tatsaechliche_krankenkasse']").first
+
+    def _read_input(locator) -> str:
+        if locator.count() == 0:
+            return ""
+        try:
+            return str(locator.input_value() or "").strip()
+        except Exception:
+            return ""
+
+    deadline = time.time() + max(1.0, timeout_seconds)
+    actual_kasse = ""
+    actual_tk = ""
+    while time.time() < deadline:
+        actual_kasse = _read_input(kasse_input)
+        actual_tk = _read_input(tk_input)
+        kasse_ok = not expected_kasse or actual_kasse == expected_kasse
+        tk_ok = not expected_tk or actual_tk == expected_tk
+        if kasse_ok and tk_ok:
+            break
+        time.sleep(0.3)
+
+    print(
+        "[CHECK] Lohnabrechnung Post-Save: "
+        f"krankenkasse soll='{expected_kasse or '—'}' ist='{actual_kasse or '—'}' | "
+        f"tatsaechliche soll='{expected_tk or '—'}' ist='{actual_tk or '—'}'"
+    )
+
+    if tracker:
+        if expected_kasse and actual_kasse == expected_kasse:
+            tracker.ok("lohnabrechnung", "krankenkasse_postsave", expected_kasse, actual_kasse)
+        elif expected_kasse:
+            tracker.missing("lohnabrechnung", "krankenkasse_postsave", expected_kasse, actual_kasse or "—")
+        if expected_tk:
+            if actual_tk == expected_tk:
+                tracker.ok("lohnabrechnung", "tatsaechliche_krankenkasse_postsave", expected_tk, actual_tk)
+            else:
+                tracker.missing(
+                    "lohnabrechnung",
+                    "tatsaechliche_krankenkasse_postsave",
+                    expected_tk,
+                    actual_tk or "—",
+                )
+
+
 def _click_fertig_in_dialog(page: Page, timeout_seconds: float = 3.0) -> bool:
     dialog = page.locator(
         "div.ui-dialog.ui-dialog-buttons:has(button:has-text('Fertig')), "
@@ -3967,6 +4030,8 @@ def run_mitarbeiter_lohnabrechnung(
             if not _click_daten_speichern(target_page, timeout_seconds=8.0):
                 print("[WARNUNG] 'Daten speichern' nicht gefunden/geklickt.")
                 tracker.missing("lohnabrechnung", "daten_speichern", "geklickt", "fehlgeschlagen")
+            else:
+                _verify_lohnabrechnung_kassen_post_save(target_page, payload, tracker=tracker)
         else:
             tracker.missing("lohnabrechnung", "tab", "geöffnet", "fehlgeschlagen")
 
@@ -4146,6 +4211,8 @@ def run_mitarbeiter_vervollstaendigen(
                         if not _click_daten_speichern(target_page, timeout_seconds=8.0):
                             print("[WARNUNG] 'Daten speichern' nicht gefunden/geklickt.")
                             tracker.missing("lohnabrechnung", "daten_speichern", "geklickt", "fehlgeschlagen")
+                        else:
+                            _verify_lohnabrechnung_kassen_post_save(target_page, payload, tracker=tracker)
                     _fill_stammdaten_fields(target_page, payload, tracker=tracker)
                     _fill_notfallkontakt(target_page, payload, tracker=tracker)
                     if _open_sedcard(target_page):
