@@ -4052,12 +4052,14 @@ def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | N
         print("[HINWEIS] Kein Schulabschluss im JSON – überspringe Stammdaten.")
         return
 
-    stammdaten_panel_id = "administration_user_stammdaten_tabs_stammdaten"
-    target, panel = _open_stammdaten_tab(page, "stammdaten", "Stammdaten")
+    # Persplan rendert den Schulabschluss im Tab "Lohnabrechnung".
+    # Der Hub-Step heißt weiterhin "stammdaten", weil er zusammen mit dem Notfallkontakt läuft.
+    lohn_panel_id = "administration_user_stammdaten_tabs_lohnabrechnung"
+    target, panel = _open_stammdaten_tab(page, "lohnabrechnung", "Lohnabrechnung")
     if not target or not panel:
-        print("[WARNUNG] Tab 'Stammdaten' nicht gefunden.")
+        print("[WARNUNG] Tab 'Lohnabrechnung' für Schulabschluss nicht gefunden.")
         if tracker:
-            tracker.missing("stammdaten", "tab", "sichtbar", "nicht gefunden")
+            tracker.missing("stammdaten", "schulabschluss_tab", "sichtbar", "nicht gefunden")
         return
 
     edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
@@ -4070,24 +4072,26 @@ def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | N
             pass
         try:
             edit_icon.click(force=True)
-            print("[OK] Stammdaten Edit-Stift geklickt.")
+            print("[OK] Lohnabrechnung Edit-Stift für Schulabschluss geklickt.")
         except Exception as exc:
             try:
                 clicked = edit_icon.evaluate("el => { el.click(); return true; }")
                 if clicked:
-                    print("[OK] Stammdaten Edit-Stift per JS geklickt.")
+                    print("[OK] Lohnabrechnung Edit-Stift für Schulabschluss per JS geklickt.")
                 else:
-                    print(f"[WARNUNG] Stammdaten Edit-Stift nicht klickbar: {exc}")
+                    print(f"[WARNUNG] Lohnabrechnung Edit-Stift für Schulabschluss nicht klickbar: {exc}")
             except Exception as js_exc:
-                print(f"[WARNUNG] Stammdaten Edit-Stift nicht klickbar: {exc} / JS: {js_exc}")
+                print(f"[WARNUNG] Lohnabrechnung Edit-Stift für Schulabschluss nicht klickbar: {exc} / JS: {js_exc}")
     else:
-        print("[WARNUNG] Stammdaten Edit-Stift nicht gefunden.")
+        print("[WARNUNG] Lohnabrechnung Edit-Stift für Schulabschluss nicht gefunden.")
 
-    _force_panel_editable(target, stammdaten_panel_id)
+    _force_panel_editable(target, lohn_panel_id)
 
     value = _map_schulabschluss_to_value(schulabschluss_raw)
+    needs_save = False
     if value:
         loc = panel.locator("#schulabschluss_taetigkeitschluessel, [name='schulabschluss_taetigkeitschluessel']")
+        print(f"[DEBUG] schulabschluss_taetigkeitschluessel Locator count={loc.count()}")
         current = _safe_select_value(loc)
         if current == value:
             print(f"[OK] Stammdaten schulabschluss bereits korrekt → {schulabschluss_raw}")
@@ -4101,6 +4105,13 @@ def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | N
                 label = None
             if _set_select_value_with_fallback(loc, value, label=label):
                 print(f"[OK] Stammdaten schulabschluss → {schulabschluss_raw}")
+                needs_save = True
+                try:
+                    target.evaluate(
+                        "typeof taetigkeitsschluessel_generieren === 'function' && taetigkeitsschluessel_generieren()"
+                    )
+                except Exception:
+                    pass
             else:
                 print("[WARNUNG] Stammdaten schulabschluss nicht gesetzt.")
         if tracker:
@@ -4111,6 +4122,9 @@ def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | N
                 tracker.missing("stammdaten", "schulabschluss", value, actual)
     else:
         print(f"[WARNUNG] Schulabschluss nicht gemappt: {schulabschluss_raw}")
+
+    if not needs_save:
+        return
 
     save_button = panel.locator(
         "input[type='submit'].speichern, input[type='submit'][value*='Daten speichern'], button:has-text('Daten speichern')"
@@ -4123,20 +4137,20 @@ def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | N
             pass
         try:
             save_button.click()
-            print("[OK] Stammdaten gespeichert.")
+            print("[OK] Schulabschluss gespeichert.")
             saved = True
         except Exception as exc:
             try:
                 # Fallback: Click via JS even if hidden.
                 save_button.evaluate("el => el.click()")
-                print("[OK] Stammdaten gespeichert (JS-Fallback).")
+                print("[OK] Schulabschluss gespeichert (JS-Fallback).")
                 saved = True
             except Exception:
-                print(f"[WARNUNG] Stammdaten speichern fehlgeschlagen: {exc}")
+                print(f"[WARNUNG] Schulabschluss speichern fehlgeschlagen: {exc}")
         if saved:
             _wait_after_persplan_save(page)
     else:
-        print("[WARNUNG] Stammdaten Speichern-Button nicht gefunden.")
+        print("[WARNUNG] Schulabschluss Speichern-Button nicht gefunden.")
 
 
 def _dismiss_ui_overlay(page: Page) -> None:
