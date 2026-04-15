@@ -1056,15 +1056,20 @@ def _enter_sedcard_edit_mode(page: Page) -> bool:
     return True
 
 
+def _yes_no_to_select_value(value: str) -> str:
+    normalized = str(value).strip().lower()
+    if normalized in ["ja", "yes", "true", "1", "wahr"]:
+        return "1"
+    if normalized in ["nein", "no", "false", "0", "falsch"]:
+        return "0"
+    return ""
+
+
 def _set_yes_no_select(locator, value: str) -> bool:
     if locator.count() == 0:
         return False
-    normalized = str(value).strip().lower()
-    if normalized in ["ja", "yes", "true", "1", "wahr"]:
-        val = "1"
-    elif normalized in ["nein", "no", "false", "0", "falsch"]:
-        val = "0"
-    else:
+    val = _yes_no_to_select_value(value)
+    if not val:
         return False
     try:
         locator.first.select_option(value=val)
@@ -1073,14 +1078,320 @@ def _set_yes_no_select(locator, value: str) -> bool:
         return False
 
 
-def _fill_sedcard_fields(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
-    target: Union[Frame, Page] = page
+def _get_sedcard_target(page: Page) -> Union[Frame, Page]:
     frame = page.frame(name="inhalt")
-    if frame:
-        target = frame
+    return frame if frame else page
+
+
+def _mark_sedcard_data_edited(target: Union[Frame, Page]) -> None:
+    try:
+        target.evaluate(
+            """() => {
+                const form = document.querySelector("form#formEditSetcard, form[name='formEditSetcard']");
+                const scope = form || document;
+                if (typeof makeEdited === 'function') {
+                    try { makeEdited(); } catch (e) {}
+                }
+                let edited = scope.querySelector("input[name='DataEdited']");
+                if (!edited && form) {
+                    edited = document.createElement('input');
+                    edited.type = 'hidden';
+                    edited.name = 'DataEdited';
+                    form.appendChild(edited);
+                }
+                if (edited) {
+                    edited.value = '1';
+                    edited.setAttribute('value', '1');
+                }
+                scope.querySelectorAll('input, select, textarea, button').forEach((el) => {
+                    el.removeAttribute('readonly');
+                    el.removeAttribute('disabled');
+                });
+                scope.querySelectorAll('button.editSubcontractor, input[type="submit"]').forEach((el) => {
+                    el.classList.remove('hideElement');
+                    el.classList.add('showElement');
+                    if (el.style) {
+                        el.style.display = '';
+                        el.style.visibility = 'visible';
+                    }
+                });
+            }"""
+        )
+    except Exception:
+        pass
+
+
+def _wait_after_sedcard_save(page: Page, target: Union[Frame, Page], timeout_s: float = 10.0) -> None:
+    _wait_for_xajax_idle(page, timeout_s=timeout_s)
+    for candidate in [target, page]:
+        try:
+            candidate.wait_for_load_state("domcontentloaded", timeout=3000)
+        except Exception:
+            pass
+    try:
+        page.wait_for_load_state("networkidle", timeout=5000)
+    except Exception:
+        pass
+    time.sleep(0.8)
+
+
+def _submit_sedcard_form_fallback(target: Union[Frame, Page]) -> bool:
+    try:
+        return bool(
+            target.evaluate(
+                """() => {
+                    const form = document.querySelector("form#formEditSetcard, form[name='formEditSetcard']");
+                    if (!form) return false;
+                    let edited = form.querySelector("input[name='DataEdited']");
+                    if (!edited) {
+                        edited = document.createElement('input');
+                        edited.type = 'hidden';
+                        edited.name = 'DataEdited';
+                        form.appendChild(edited);
+                    }
+                    edited.value = '1';
+                    edited.setAttribute('value', '1');
+                    const buttons = Array.from(form.querySelectorAll("button.editSubcontractor, button, input[type='submit']"));
+                    const button = buttons.find((el) => {
+                        const text = (el.textContent || '').trim();
+                        const value = (el.getAttribute('value') || '').trim();
+                        return el.classList.contains('editSubcontractor') ||
+                            text.includes('Daten speichern') ||
+                            value.includes('Daten speichern') ||
+                            text === 'Speichern';
+                    }) || buttons[0] || null;
+                    if (button) {
+                        button.classList.remove('hideElement');
+                        button.classList.add('showElement');
+                        button.removeAttribute('disabled');
+                        if (button.style) {
+                            button.style.display = '';
+                            button.style.visibility = 'visible';
+                        }
+                    }
+                    if (typeof form.requestSubmit === 'function') {
+                        try {
+                            if (button) form.requestSubmit(button);
+                            else form.requestSubmit();
+                            return true;
+                        } catch (e) {}
+                    }
+                    if (button) {
+                        try {
+                            button.click();
+                            return true;
+                        } catch (e) {}
+                    }
+                    if (typeof form.submit === 'function') {
+                        form.submit();
+                        return true;
+                    }
+                    return false;
+                }"""
+            )
+        )
+    except Exception:
+        return False
+
+
+def _save_sedcard(page: Page, target: Union[Frame, Page]) -> bool:
+    _mark_sedcard_data_edited(target)
+    save_button = target.locator(
+        "form#formEditSetcard button.editSubcontractor, "
+        "form[name='formEditSetcard'] button.editSubcontractor, "
+        "button.editSubcontractor, "
+        "button:has-text('Daten speichern'), "
+        "input[type='submit'][value*='Daten speichern'], "
+        "input.speichern, button:has-text('Speichern')"
+    ).first
+    if save_button.count() > 0:
+        try:
+            save_button.scroll_into_view_if_needed()
+        except Exception:
+            pass
+        try:
+            save_button.wait_for(state="visible", timeout=1500)
+        except Exception:
+            pass
+        try:
+            save_button.click(timeout=5000)
+            print("[OK] Sedcard gespeichert (Daten speichern).")
+            _wait_after_sedcard_save(page, target)
+            return True
+        except Exception:
+            try:
+                save_button.click(force=True, timeout=5000)
+                print("[OK] Sedcard gespeichert (force click).")
+                _wait_after_sedcard_save(page, target)
+                return True
+            except Exception as exc:
+                if _submit_sedcard_form_fallback(target):
+                    print("[OK] Sedcard gespeichert (Form-Submit fallback).")
+                    _wait_after_sedcard_save(page, target)
+                    return True
+                print(f"[WARNUNG] Sedcard speichern fehlgeschlagen: {exc}")
+                return False
+
+    if _submit_sedcard_form_fallback(target):
+        print("[OK] Sedcard gespeichert (Form-Submit fallback ohne Button-Locator).")
+        _wait_after_sedcard_save(page, target)
+        return True
+
+    print("[WARNUNG] Sedcard-Speichern-Button nicht gefunden.")
+    return False
+
+
+def _build_sedcard_expected_values(payload: dict) -> list[dict]:
+    expected: list[dict] = []
+    input_mappings = {
+        "groesse": _pick_payload_value(payload, ["koerpergroesse"]),
+        "konfektion": _pick_payload_value(payload, ["konfektionsgroesse"]),
+        "schuhgroesse": _pick_payload_value(payload, ["schuhgroesse"]),
+        "schulausbildung": _pick_payload_value(payload, ["schulausbildung"]),
+        "fuehrerscheinart": _pick_payload_value(payload, ["fuehrerscheinklasse"]),
+    }
+    for field, value in input_mappings.items():
+        if value:
+            expected.append({"field": field, "kind": "input", "expected": str(value)})
+
+    language_entries = _parse_language_entries(_pick_payload_value(payload, ["fremdsprachen"]))
+    pairs = [
+        ("sprache01a", "sprache01b"),
+        ("sprache02a", "sprache02b"),
+        ("sprache03a", "sprache03b"),
+        ("sprache04a", "sprache04b"),
+    ]
+    for idx, (lang_field, level_field) in enumerate(pairs):
+        if idx >= len(language_entries):
+            break
+        entry = language_entries[idx]
+        language = entry.get("language", "")
+        level = entry.get("level", "")
+        if language:
+            expected.append({"field": lang_field, "kind": "input", "expected": language})
+        if level:
+            expected.append({"field": level_field, "kind": "input", "expected": level})
+    if len(language_entries) > len(pairs):
+        extras = ", ".join([entry.get("language", "") for entry in language_entries[len(pairs):] if entry.get("language")])
+        if extras:
+            expected.append({"field": "sprache04", "kind": "input", "expected": extras})
+
+    for field in ["fuehrerschein", "pkw"]:
+        raw = _pick_payload_value(payload, [field])
+        value = _yes_no_to_select_value(raw)
+        if value:
+            expected.append({"field": field, "kind": "select", "expected": value})
+    return expected
+
+
+def _normalize_sedcard_compare_value(field: str, value: str) -> str:
+    text = re.sub(r"\s+", " ", str(value or "").strip())
+    if field in {"groesse", "schuhgroesse"}:
+        normalized = text.replace(",", ".")
+        try:
+            return f"{float(normalized):g}"
+        except Exception:
+            return normalized
+    if field == "fuehrerscheinart":
+        return text.upper()
+    return text
+
+
+def _sedcard_values_match(field: str, expected: str, actual: str) -> bool:
+    return _normalize_sedcard_compare_value(field, expected) == _normalize_sedcard_compare_value(field, actual)
+
+
+def _read_sedcard_field_value(target: Union[Frame, Page], field: str, kind: str) -> str:
+    locator = target.locator(f"[name='{field}'], #{field}").first
+    if kind == "select":
+        return _safe_select_value(locator)
+    return _safe_input_value(locator)
+
+
+def _reload_sedcard_for_verification(page: Page, timeout_s: float = 12.0) -> Union[Frame, Page]:
+    target = _get_sedcard_target(page)
+    try:
+        current_url = getattr(target, "url", "") or ""
+        if current_url and current_url != "about:blank":
+            target.goto(current_url, wait_until="domcontentloaded", timeout=int(timeout_s * 1000))
+        else:
+            target.evaluate("() => window.location.reload()")
+            target.wait_for_load_state("domcontentloaded", timeout=int(timeout_s * 1000))
+    except Exception as exc:
+        print(f"[DEBUG] Sedcard Reload über Ziel fehlgeschlagen: {exc}")
+        try:
+            page.reload(wait_until="domcontentloaded", timeout=int(timeout_s * 1000))
+        except Exception:
+            pass
+
+    _wait_for_xajax_idle(page, timeout_s=timeout_s)
+    target = _get_sedcard_target(page)
+    try:
+        form_count = target.locator("form#formEditSetcard, form[name='formEditSetcard']").count()
+    except Exception:
+        form_count = 0
+    if form_count == 0:
+        _open_sedcard(page)
+        _wait_for_xajax_idle(page, timeout_s=timeout_s)
+        target = _get_sedcard_target(page)
+    try:
+        target.locator("form#formEditSetcard, form[name='formEditSetcard']").first.wait_for(
+            state="attached",
+            timeout=5000,
+        )
+    except Exception:
+        pass
+    return target
+
+
+def _verify_sedcard_post_save(
+    page: Page,
+    payload: dict,
+    tracker: FieldTracker | None = None,
+    timeout_seconds: float = 8.0,
+) -> bool:
+    expected_items = _build_sedcard_expected_values(payload)
+    if not expected_items:
+        print("[HINWEIS] Keine Sedcard-Werte im JSON – Post-Save-Prüfung übersprungen.")
+        return True
+
+    target = _reload_sedcard_for_verification(page)
+    actuals: dict[str, str] = {}
+    deadline = time.time() + max(1.0, timeout_seconds)
+    while time.time() < deadline:
+        actuals = {
+            item["field"]: _read_sedcard_field_value(target, item["field"], item["kind"])
+            for item in expected_items
+        }
+        if all(_sedcard_values_match(item["field"], item["expected"], actuals.get(item["field"], "")) for item in expected_items):
+            break
+        time.sleep(0.3)
+
+    all_ok = True
+    for item in expected_items:
+        field = item["field"]
+        expected = item["expected"]
+        actual = actuals.get(field, "")
+        ok = _sedcard_values_match(field, expected, actual)
+        if not ok:
+            all_ok = False
+        print(f"[CHECK] Sedcard Post-Save {field}: soll='{expected}' ist='{actual or '—'}'")
+        if tracker:
+            field_id = f"{field}_postsave"
+            if ok:
+                tracker.ok("sedcard", field_id, expected, actual)
+            else:
+                tracker.missing("sedcard", field_id, expected, actual or "—")
+    return all_ok
+
+
+def _fill_sedcard_fields(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
+    target = _get_sedcard_target(page)
 
     if not _enter_sedcard_edit_mode(page):
         return
+    target = _get_sedcard_target(page)
+    _mark_sedcard_data_edited(target)
 
     input_mappings = {
         "groesse": _pick_payload_value(payload, ["koerpergroesse"]),
@@ -1148,7 +1459,12 @@ def _fill_sedcard_fields(page: Page, payload: dict, tracker: FieldTracker | None
     if fuehrerschein_value:
         locator = target.locator("[name='fuehrerschein']")
         current = _safe_select_value(locator)
-        expected = "1" if str(fuehrerschein_value).strip().lower() in ["ja", "yes", "true", "1", "wahr"] else "0"
+        expected = _yes_no_to_select_value(fuehrerschein_value)
+        if not expected:
+            print(f"[WARNUNG] sedcard fuehrerschein nicht gemappt: {fuehrerschein_value}")
+            if tracker:
+                tracker.missing("sedcard", "fuehrerschein", "ja/nein", str(fuehrerschein_value))
+            expected = current
         if current == expected:
             print(f"[OK] sedcard fuehrerschein bereits korrekt → {fuehrerschein_value}")
             if tracker:
@@ -1170,7 +1486,12 @@ def _fill_sedcard_fields(page: Page, payload: dict, tracker: FieldTracker | None
     if pkw_value:
         locator = target.locator("[name='pkw']")
         current = _safe_select_value(locator)
-        expected = "1" if str(pkw_value).strip().lower() in ["ja", "yes", "true", "1", "wahr"] else "0"
+        expected = _yes_no_to_select_value(pkw_value)
+        if not expected:
+            print(f"[WARNUNG] sedcard pkw nicht gemappt: {pkw_value}")
+            if tracker:
+                tracker.missing("sedcard", "pkw", "ja/nein", str(pkw_value))
+            expected = current
         if current == expected:
             print(f"[OK] sedcard pkw bereits korrekt → {pkw_value}")
             if tracker:
@@ -1188,69 +1509,13 @@ def _fill_sedcard_fields(page: Page, payload: dict, tracker: FieldTracker | None
             else:
                 tracker.missing("sedcard", "pkw", expected, actual)
 
-    save_button = target.locator(
-        "button.editSubcontractor, "
-        "button:has-text('Daten speichern'), "
-        "input[type='submit'][value*='Daten speichern'], "
-        "input.speichern, button:has-text('Speichern')"
-    ).first
-    if save_button.count() > 0:
-        try:
-            save_button.scroll_into_view_if_needed()
-        except Exception:
-            pass
-        try:
-            try:
-                save_button.wait_for(state="visible", timeout=1500)
-            except Exception:
-                pass
-            save_button.click()
-            print("[OK] Sedcard gespeichert (Daten speichern).")
-            return
-        except Exception:
-            try:
-                save_button.click(force=True)
-                print("[OK] Sedcard gespeichert (force click).")
-                return
-            except Exception as exc:
-                try:
-                    clicked = target.evaluate(
-                        """() => {
-                            const candidates = [];
-                            const byClass = document.querySelector("button.editSubcontractor");
-                            if (byClass) candidates.push(byClass);
-                            document.querySelectorAll("input[type='submit'], button").forEach((el) => {
-                                const value = (el.getAttribute('value') || '').trim();
-                                const text = (el.textContent || '').trim();
-                                if (value.includes('Daten speichern') || text.includes('Daten speichern') || text === 'Speichern') {
-                                    candidates.push(el);
-                                }
-                            });
-                            for (const el of candidates) {
-                                try {
-                                    el.classList.remove('hideElement');
-                                    el.classList.add('showElement');
-                                    if (el.style) {
-                                        el.style.display = 'inline-block';
-                                        el.style.visibility = 'visible';
-                                    }
-                                    el.removeAttribute('disabled');
-                                    el.removeAttribute('readonly');
-                                    el.click();
-                                    return true;
-                                } catch (e) {}
-                            }
-                            return false;
-                        }"""
-                    )
-                except Exception:
-                    clicked = False
-                if clicked:
-                    print("[OK] Sedcard gespeichert (JS fallback).")
-                else:
-                    print(f"[WARNUNG] Sedcard speichern fehlgeschlagen: {exc}")
-    else:
-        print("[WARNUNG] Sedcard-Speichern-Button nicht gefunden.")
+    if not _save_sedcard(page, target):
+        if tracker:
+            tracker.missing("sedcard", "daten_speichern", "geklickt", "fehlgeschlagen")
+        return
+
+    if not _verify_sedcard_post_save(page, payload, tracker=tracker):
+        print("[WARNUNG] Sedcard Post-Save-Prüfung: gespeicherte Werte weichen ab.")
 
 
 def _fill_grundlohn_history(page: Page) -> None:
