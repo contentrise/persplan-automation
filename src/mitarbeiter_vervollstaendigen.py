@@ -1778,7 +1778,7 @@ def _fill_grundlohn_history(page: Page) -> None:
         print("[WARNUNG] 'schließen' Button im Grundlohn-Dialog nicht gefunden.")
 
 
-def _fill_vertrag_history(page: Page, payload: dict) -> None:
+def _fill_vertrag_history(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
     vertrag = payload.get("vertrag") or {}
     if not isinstance(vertrag, dict):
         vertrag = {}
@@ -1851,9 +1851,10 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
     except Exception:
         dialog_text = ""
     hire_date_ui = _format_date_for_ui(hire_date)
-    hire_date_modal = _first_of_month(hire_date_ui)
-    if label in dialog_text and hire_date_modal in dialog_text:
+    if label in dialog_text and hire_date_ui in dialog_text:
         print("[INFO] Vertragshistorie bereits vorhanden – schließe Dialog.")
+        if tracker:
+            tracker.skip("vertragsdaten", "vertrag", f"{label} ab {hire_date_ui}", "vorhanden")
         _close_ui_dialog(dialog, "Vertrag-Dialog")
         return
 
@@ -1865,7 +1866,7 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
             return False
         try:
             select.select_option(label=label)
-            date_input.fill(hire_date_modal)
+            date_input.fill(hire_date_ui)
         except Exception:
             pass
         try:
@@ -1887,7 +1888,7 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
                     node.dispatchEvent(new Event('change', { bubbles: true }));
                     node.dispatchEvent(new Event('blur', { bubbles: true }));
                 }""",
-                hire_date_modal,
+                hire_date_ui,
             )
         except Exception:
             selected_value = ""
@@ -1910,7 +1911,7 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
                             btn.click();
                             return true;
                         }""",
-                        {"value": str(selected_value or ""), "date": hire_date_modal},
+                        {"value": str(selected_value or ""), "date": hire_date_ui},
                     )
                 )
             except Exception:
@@ -1925,19 +1926,25 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
         return
     _wait_for_xajax_idle(page, timeout_s=8.0)
 
-    if not _wait_for_dialog_text(dialog, [label, hire_date_modal], timeout_s=8.0):
-        print(f"[WARNUNG] Vertrag nicht bestätigt, retry per XAJAX → {label} ab {hire_date_modal}")
+    if not _wait_for_dialog_text(dialog, [label, hire_date_ui], timeout_s=8.0):
+        print(f"[WARNUNG] Vertrag nicht bestätigt, retry per XAJAX → {label} ab {hire_date_ui}")
         if not _submit_contract_entry(js_fallback=True):
-            print(f"[WARNUNG] Vertrag-XAJAX-Retry konnte nicht ausgelöst werden → {label} ab {hire_date_modal}")
+            print(f"[WARNUNG] Vertrag-XAJAX-Retry konnte nicht ausgelöst werden → {label} ab {hire_date_ui}")
+            if tracker:
+                tracker.missing("vertragsdaten", "vertrag", f"{label} ab {hire_date_ui}", "retry fehlgeschlagen")
             _close_ui_dialog(dialog, "Vertrag-Dialog")
             return
         _wait_for_xajax_idle(page, timeout_s=8.0)
-        if not _wait_for_dialog_text(dialog, [label, hire_date_modal], timeout_s=8.0):
-            print(f"[WARNUNG] Vertragseintrag nicht bestätigt → {label} ab {hire_date_modal}")
+        if not _wait_for_dialog_text(dialog, [label, hire_date_ui], timeout_s=8.0):
+            print(f"[WARNUNG] Vertragseintrag nicht bestätigt → {label} ab {hire_date_ui}")
+            if tracker:
+                tracker.missing("vertragsdaten", "vertrag", f"{label} ab {hire_date_ui}", "nicht bestätigt")
             _close_ui_dialog(dialog, "Vertrag-Dialog")
             return
 
-    print(f"[OK] Vertrag eingetragen → {label} ab {hire_date_modal}")
+    print(f"[OK] Vertrag eingetragen → {label} ab {hire_date_ui}")
+    if tracker:
+        tracker.ok("vertragsdaten", "vertrag", f"{label} ab {hire_date_ui}", "bestätigt")
 
     # Erst nach bestätigtem Neueintrag alte aktive Verträge deaktivieren.
     try:
@@ -1950,7 +1957,7 @@ def _fill_vertrag_history(page: Page, payload: dict) -> None:
                 row_text = row.inner_text()
             except Exception:
                 row_text = ""
-            if label in row_text and hire_date_modal in row_text:
+            if label in row_text and hire_date_ui in row_text:
                 continue
             deactivate_link = row.locator(
                 "a[title='deaktivieren'][onclick*='daten_historie_change_status'][onclick*='vertrag_id']"
@@ -2476,7 +2483,7 @@ def _fill_sonstiges(page: Page, payload: dict) -> None:
             pass
 
 
-def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
+def _fill_eintritt_austritt(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
     vertrag = payload.get("vertrag") or {}
     if not isinstance(vertrag, dict):
         vertrag = {}
@@ -2488,6 +2495,10 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
         return
     hire_date_ui = _format_date_for_ui(hire_date)
     befristung_bis_ui = _format_date_for_ui(befristung_bis) if befristung_bis else ""
+    print(
+        "[INFO] Ein-/Austritt Zielwerte: "
+        f"eintritt={hire_date_ui}, austritt={befristung_bis_ui or 'unbefristet'}, bemerkung={contract_type.upper()}"
+    )
 
     target: Union[Frame, Page] = page
     frame = page.frame(name="inhalt")
@@ -2500,31 +2511,140 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     ).first
     if edit_icon.count() == 0:
         print("[WARNUNG] Eintritt/Austritt-Edit-Icon nicht gefunden.")
+        if tracker:
+            tracker.missing("vertragsdaten", "eintritt_austritt_editor", "gefunden", "nicht gefunden")
         return
+    try:
+        edit_onclick = edit_icon.get_attribute("onclick") or ""
+    except Exception:
+        edit_onclick = ""
+
+    def _debug_eintritt_dialog_state(label: str) -> None:
+        try:
+            info = page.evaluate(
+                """() => Array.from(document.querySelectorAll('div.ui-dialog')).map((dialog) => {
+                    const style = window.getComputedStyle(dialog);
+                    const title = (dialog.querySelector('.ui-dialog-title')?.textContent || '').trim();
+                    const text = (dialog.textContent || '').replace(/\\s+/g, ' ').trim().slice(0, 160);
+                    return {
+                        title,
+                        display: style.display,
+                        visibility: style.visibility,
+                        form: !!dialog.querySelector('#formEditEinAustrittsdatum, #eintrittsdatum_neu, #austrittsdatum_neu'),
+                        text
+                    };
+                })"""
+            )
+            print(f"[DEBUG] Ein-/Austrittsdatum Dialogstatus ({label}): {info}")
+        except Exception as exc:
+            print(f"[DEBUG] Ein-/Austrittsdatum Dialogstatus ({label}) fehlgeschlagen: {exc}")
+
+    def _find_eintritt_austritt_dialog(timeout_s: float = 8.0) -> Locator | None:
+        deadline = time.time() + max(0.5, timeout_s)
+        while time.time() < deadline:
+            dialog = _find_visible_ui_dialog(page, "Ein-/Austrittsdatum ändern", timeout_s=0.5)
+            if dialog is not None:
+                return dialog
+            dialog = _find_visible_ui_dialog_with_selector(
+                page,
+                "#formEditEinAustrittsdatum, #eintrittsdatum_neu, #austrittsdatum_neu",
+                timeout_s=0.5,
+            )
+            if dialog is not None:
+                return dialog
+            candidates: list[Union[Frame, Page]] = [target, page]
+            try:
+                candidates.extend(page.frames)
+            except Exception:
+                pass
+            for candidate in candidates:
+                try:
+                    form = candidate.locator(
+                        "#formEditEinAustrittsdatum, #eintrittsdatum_neu, #austrittsdatum_neu"
+                    ).first
+                    if form.count() == 0:
+                        continue
+                    ancestor = form.locator("xpath=ancestor::div[contains(concat(' ', normalize-space(@class), ' '), ' ui-dialog ')][1]").first
+                    if ancestor.count() > 0:
+                        try:
+                            if ancestor.is_visible():
+                                return ancestor
+                        except Exception:
+                            return ancestor
+                except Exception:
+                    continue
+            time.sleep(0.2)
+        return None
+
+    def _open_eintritt_editor_direct() -> bool:
+        if not edit_onclick:
+            return False
+        try:
+            return bool(
+                target.evaluate(
+                    """(onclick) => {
+                        const urlMatch =
+                            onclick.match(/["']url["']\\s*:\\s*["']([^"']+)["']/) ||
+                            onclick.match(/url&quot;\\s*:\\s*&quot;([^&]+)&quot;/);
+                        if (!urlMatch || typeof window.openUiWindowReloaded !== 'function') {
+                            return false;
+                        }
+                        const titleMatch =
+                            onclick.match(/["']title["']\\s*:\\s*["']([^"']+)["']/) ||
+                            onclick.match(/title&quot;\\s*:\\s*&quot;([^&]+)&quot;/);
+                        const decode = (value) => String(value || '')
+                            .replace(/&amp;/g, '&')
+                            .replace(/&quot;/g, '"');
+                        window.openUiWindowReloaded({
+                            url: decode(urlMatch[1]),
+                            title: decode((titleMatch && titleMatch[1]) || 'Ein-/Austrittsdatum ändern')
+                        });
+                        return true;
+                    }""",
+                    edit_onclick,
+                )
+            )
+        except Exception as exc:
+            print(f"[DEBUG] Ein-/Austrittsdatum Direktöffnung fehlgeschlagen: {exc}")
+            return False
+
+    _dismiss_ui_overlay(page)
     try:
         edit_icon.scroll_into_view_if_needed()
     except Exception:
         pass
     try:
         edit_icon.click(force=True)
-    except Exception:
+        print("[OK] Ein-/Austrittsdatum-Dialog Klick ausgelöst.")
+    except Exception as exc:
         try:
-            edit_icon.evaluate("el => el.click()")
+            clicked = edit_icon.evaluate("el => { el.click(); return true; }")
+            if clicked:
+                print("[OK] Ein-/Austrittsdatum-Dialog per JS-Klick ausgelöst.")
         except Exception:
-            pass
-    print("[OK] Ein-/Austrittsdatum-Dialog geöffnet.")
+            print(f"[WARNUNG] Ein-/Austrittsdatum-Dialog Klick fehlgeschlagen: {exc}")
     _wait_for_xajax_idle(page, timeout_s=8.0)
 
-    dialog = _find_visible_ui_dialog(page, "Ein-/Austrittsdatum ändern", timeout_s=8.0)
+    dialog = _find_eintritt_austritt_dialog(timeout_s=8.0)
     if dialog is None:
-        dialog = _find_visible_ui_dialog_with_selector(
-            page,
-            "#formEditEinAustrittsdatum, #eintrittsdatum_neu, #austrittsdatum_neu",
-            timeout_s=8.0,
-        )
+        try:
+            if edit_icon.evaluate("el => { el.click(); return true; }"):
+                print("[DEBUG] Ein-/Austrittsdatum-Dialog erneut per JS-Klick ausgelöst.")
+        except Exception:
+            pass
+        _wait_for_xajax_idle(page, timeout_s=8.0)
+        dialog = _find_eintritt_austritt_dialog(timeout_s=6.0)
+    if dialog is None and _open_eintritt_editor_direct():
+        print("[DEBUG] Ein-/Austrittsdatum-Dialog per openUiWindowReloaded geöffnet.")
+        _wait_for_xajax_idle(page, timeout_s=8.0)
+        dialog = _find_eintritt_austritt_dialog(timeout_s=8.0)
     if dialog is None:
+        _debug_eintritt_dialog_state("nicht gefunden")
         print("[WARNUNG] Ein-/Austrittsdatum-Dialog nicht sichtbar.")
+        if tracker:
+            tracker.missing("vertragsdaten", "eintritt_austritt_dialog", "sichtbar", "nicht gefunden")
         return
+    print("[OK] Ein-/Austrittsdatum-Dialog sichtbar.")
 
     try:
         dialog_text = dialog.inner_text()
@@ -2534,6 +2654,8 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     remark = contract_type.upper()
     if hire_date_ui in dialog_text and expected_end in dialog_text and (contract_type in dialog_text or remark in dialog_text):
         print("[INFO] Ein-/Austritt bereits vorhanden – schließe Dialog.")
+        if tracker:
+            tracker.skip("vertragsdaten", "eintritt_austritt", f"{hire_date_ui} bis {expected_end}", "vorhanden")
         _close_ui_dialog(dialog, "Ein-/Austrittsdatum-Dialog")
         return
 
@@ -2542,6 +2664,8 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
     bemerkung_input = dialog.locator("#bemerkung").first
     if eintritt_input.count() == 0 or austritt_input.count() == 0 or bemerkung_input.count() == 0:
         print("[WARNUNG] Ein-/Austrittsdatum-Felder nicht gefunden.")
+        if tracker:
+            tracker.missing("vertragsdaten", "eintritt_austritt_felder", "gefunden", "nicht gefunden")
         return
     _set_input_value_force(eintritt_input, hire_date_ui)
     _set_input_value_force(austritt_input, befristung_bis_ui)
@@ -2606,6 +2730,8 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
 
     if not _submit_eintritt_austritt():
         print("[WARNUNG] Ein-/Austrittsdatum-Speichern-Button nicht gefunden/ausgelöst.")
+        if tracker:
+            tracker.missing("vertragsdaten", "eintritt_austritt", f"{hire_date_ui} bis {befristung_bis_ui or 'unbefristet'}", "submit fehlgeschlagen")
         return
     _wait_for_xajax_idle(page, timeout_s=8.0)
     print(f"[OK] Ein-/Austritt gesetzt → {hire_date_ui} bis {befristung_bis_ui or 'unbefristet'} ({remark})")
@@ -2617,6 +2743,9 @@ def _fill_eintritt_austritt(page: Page, payload: dict) -> None:
             fortfahren.click()
             print("[OK] Warnung bestätigt (Fortfahren).")
             _wait_for_xajax_idle(page, timeout_s=8.0)
+
+    if tracker:
+        tracker.ok("vertragsdaten", "eintritt_austritt", f"{hire_date_ui} bis {befristung_bis_ui or 'unbefristet'}", "gesetzt")
 
     if not _close_ui_dialog(dialog, "Ein-/Austrittsdatum-Dialog"):
         print("[WARNUNG] 'Schließen' Button im Ein-/Austrittsdatum-Dialog nicht gefunden.")
@@ -5202,10 +5331,10 @@ def run_mitarbeiter_vertragsdaten(
         if _open_vertragsdaten(target_page):
             print("[INFO] Vertragsdaten geöffnet.")
             _fill_grundlohn_history(target_page)
-            _fill_vertrag_history(target_page, payload)
+            _fill_vertrag_history(target_page, payload, tracker)
             _fill_tage_fremd(target_page, payload)
             _fill_sonstiges(target_page, payload)
-            _fill_eintritt_austritt(target_page, payload)
+            _fill_eintritt_austritt(target_page, payload, tracker)
         else:
             tracker.missing("vertragsdaten", "tab", "geöffnet", "fehlgeschlagen")
 
@@ -5333,10 +5462,10 @@ def run_mitarbeiter_vervollstaendigen(
                     if _open_vertragsdaten(target_page):
                         print("[INFO] Vertragsdaten geöffnet.")
                         _fill_grundlohn_history(target_page)
-                        _fill_vertrag_history(target_page, payload)
+                        _fill_vertrag_history(target_page, payload, tracker)
                         _fill_tage_fremd(target_page, payload)
                         _fill_sonstiges(target_page, payload)
-                        _fill_eintritt_austritt(target_page, payload)
+                        _fill_eintritt_austritt(target_page, payload, tracker)
                     if _open_mitarbeiterinformationen(target_page):
                         print("[INFO] Mitarbeiterinformationen geöffnet.")
                         _upload_arbeitsvertrag(target_page, payload, tracker=tracker)
