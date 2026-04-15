@@ -8,7 +8,7 @@ import sys
 import io
 from pathlib import Path
 from typing import Union
-from urllib.parse import parse_qs, urljoin, urlparse
+from urllib.parse import parse_qs, urlencode, urljoin, urlparse, urlunparse
 
 from playwright.sync_api import Frame, Locator, Page, TimeoutError, sync_playwright
 import requests
@@ -672,16 +672,52 @@ def _open_stammdaten_tab(
     panel_id = f"administration_user_stammdaten_tabs_{tab_key}"
     panel_selector = f"#{panel_id}"
 
-    candidates: list[Union[Frame, Page]] = [page]
-    inhalt = page.frame(name="inhalt")
-    if inhalt:
-        candidates.append(inhalt)
-    candidates.extend(page.frames)
-
     try:
         page.wait_for_load_state("domcontentloaded", timeout=6000)
     except Exception:
         pass
+
+    def _candidate_contexts() -> list[Union[Frame, Page]]:
+        contexts: list[Union[Frame, Page]] = []
+        seen: set[int] = set()
+
+        def _add(candidate: Union[Frame, Page] | None) -> None:
+            if not candidate:
+                return
+            ident = id(candidate)
+            if ident in seen:
+                return
+            seen.add(ident)
+            contexts.append(candidate)
+
+        _add(page)
+        try:
+            _add(page.frame(name="inhalt"))
+        except Exception:
+            pass
+        try:
+            for frame in page.frames:
+                _add(frame)
+        except Exception:
+            pass
+        return contexts
+
+    def _panel_dom_visible(candidate: Union[Frame, Page]) -> bool:
+        try:
+            return bool(
+                candidate.evaluate(
+                    """(panelId) => {
+                        const panel = document.getElementById(panelId);
+                        if (!panel) return false;
+                        const style = window.getComputedStyle(panel);
+                        const ariaHidden = panel.getAttribute('aria-hidden');
+                        return ariaHidden !== 'true' && style.display !== 'none' && style.visibility !== 'hidden';
+                    }""",
+                    panel_id,
+                )
+            )
+        except Exception:
+            return False
 
     def _debug_tab_state(candidate: Union[Frame, Page]) -> None:
         try:
@@ -705,7 +741,7 @@ def _open_stammdaten_tab(
             print(f"[DEBUG] {label} Tabs: JS-Check fehlgeschlagen: {exc}")
 
     def _find_panel() -> tuple[Union[Frame, Page] | None, Locator | None, bool]:
-        for candidate in candidates:
+        for candidate in _candidate_contexts():
             try:
                 panel = candidate.locator(panel_selector).first
                 if panel.count() == 0:
@@ -714,6 +750,8 @@ def _open_stammdaten_tab(
                     visible = panel.is_visible()
                 except Exception:
                     visible = False
+                if not visible:
+                    visible = _panel_dom_visible(candidate)
                 return candidate, panel, visible
             except Exception:
                 continue
@@ -799,16 +837,113 @@ def _open_stammdaten_tab(
             print(f"[DEBUG] {label} Tab-Klick JS fehlgeschlagen: {exc}")
             return False
 
-    target, panel, panel_visible = _find_panel()
-    if panel_visible and target and panel:
-        print(f"[DEBUG] {label} Panel bereits sichtbar – Tab-Klick übersprungen.")
-        return target, panel
+    def _force_activate_panel(candidate: Union[Frame, Page]) -> bool:
+        try:
+            return bool(
+                candidate.evaluate(
+                    """(args) => {
+                        const { panelId, label } = args || {};
+                        const panel = document.getElementById(panelId);
+                        const anchor =
+                            document.querySelector(`a[href="#${panelId}"]`) ||
+                            document.querySelector(`li[aria-controls="${panelId}"] a`) ||
+                            Array.from(document.querySelectorAll('a.ui-tabs-anchor')).find((entry) => {
+                                const text = (entry.textContent || '').trim();
+                                return label && text.includes(label);
+                            });
+                        if (anchor) {
+                            try { anchor.click(); } catch (e) {}
+                        }
+                        if (!panel) return false;
+                        document.querySelectorAll('[id^="administration_user_stammdaten_tabs_"]').forEach((el) => {
+                            if (el.id === panelId) {
+                                el.style.display = 'block';
+                                el.style.visibility = 'visible';
+                                el.setAttribute('aria-hidden', 'false');
+                            } else if (el.getAttribute('role') === 'tabpanel') {
+                                el.style.display = 'none';
+                                el.setAttribute('aria-hidden', 'true');
+                            }
+                        });
+                        document.querySelectorAll('ul.ui-tabs-nav li[role="tab"]').forEach((li) => {
+                            const active = li.getAttribute('aria-controls') === panelId;
+                            li.classList.toggle('ui-tabs-active', active);
+                            li.classList.toggle('ui-state-active', active);
+                            li.setAttribute('aria-selected', active ? 'true' : 'false');
+                            li.setAttribute('aria-expanded', active ? 'true' : 'false');
+                            li.setAttribute('tabindex', active ? '0' : '-1');
+                        });
+                        return true;
+                    }""",
+                    {"panelId": panel_id, "label": label},
+                )
+            )
+        except Exception as exc:
+            print(f"[DEBUG] {label} Panel-Aktivierung per JS fehlgeschlagen: {exc}")
+            return False
 
-    for candidate in candidates:
-        _debug_tab_state(candidate)
-        if _click_tab(candidate):
-            target = candidate
-            break
+    def _goto_tab_index(candidate: Union[Frame, Page]) -> bool:
+        tab_indexes = {
+            "stammdaten": "0",
+            "lohnabrechnung": "1",
+            "erweitert": "2",
+            "bankdaten": "3",
+            "notfallkontakt": "4",
+        }
+        index = tab_indexes.get(tab_key)
+        if index is None:
+            return False
+        try:
+            current_url = candidate.url if hasattr(candidate, "url") else ""
+            parsed = urlparse(current_url)
+            if not parsed.scheme or not parsed.netloc:
+                return False
+            query = parse_qs(parsed.query, keep_blank_values=True)
+            if query.get("active_tab_index", [""])[0] == index:
+                return False
+            query["active_tab_index"] = [index]
+            next_url = urlunparse(parsed._replace(query=urlencode(query, doseq=True)))
+            candidate.goto(next_url, wait_until="domcontentloaded", timeout=15000)
+            print(f"[DEBUG] {label} Tab per active_tab_index={index} geladen.")
+            return True
+        except Exception as exc:
+            print(f"[DEBUG] {label} active_tab_index-Fallback fehlgeschlagen: {exc}")
+            return False
+
+    target: Union[Frame, Page] | None = None
+    panel: Locator | None = None
+    debugged: set[int] = set()
+    tried_direct_url: set[int] = set()
+    deadline = time.time() + 12.0
+
+    while time.time() < deadline:
+        target, panel, panel_visible = _find_panel()
+        if panel_visible and target and panel:
+            print(f"[DEBUG] {label} Panel bereits sichtbar – Tab-Klick übersprungen.")
+            return target, panel
+
+        for candidate in _candidate_contexts():
+            ident = id(candidate)
+            if ident not in debugged:
+                _debug_tab_state(candidate)
+                debugged.add(ident)
+            if _click_tab(candidate):
+                time.sleep(0.4)
+                target, panel, panel_visible = _find_panel()
+                if panel_visible and target and panel:
+                    return target, panel
+            target, panel, panel_visible = _find_panel()
+            if target and panel and _force_activate_panel(target):
+                time.sleep(0.2)
+                return target, panel
+            if ident not in tried_direct_url and _goto_tab_index(candidate):
+                tried_direct_url.add(ident)
+                time.sleep(0.6)
+                target, panel, panel_visible = _find_panel()
+                if target and panel:
+                    if panel_visible or _force_activate_panel(target):
+                        return target, panel
+        time.sleep(0.5)
 
     if not target:
         return None, None
@@ -3685,17 +3820,47 @@ def _set_select_value_with_fallback(locator, value: str, label: str | None = Non
     if locator.count() == 0:
         return False
     try:
-        locator.first.evaluate("(node) => { node.removeAttribute('disabled'); }")
+        locator.first.evaluate("(node) => { node.removeAttribute('disabled'); node.removeAttribute('readonly'); }")
     except Exception:
         pass
-    if value and _set_select_value(locator, value):
+    if value and _set_select_value(locator, value) and _get_select_value(locator) == value:
+        return True
+    if value and _force_set_select_value(locator, value) and _get_select_value(locator) == value:
         return True
     if label:
         try:
             locator.first.select_option(label=label)
-            return True
+            if not value or _get_select_value(locator) == value:
+                return True
         except Exception:
-            return False
+            pass
+        try:
+            selected = locator.first.evaluate(
+                """(node, expectedLabel) => {
+                    const normalize = (text) => String(text || '').replace(/\\s+/g, ' ').trim().toLowerCase();
+                    const needle = normalize(expectedLabel);
+                    const option = Array.from(node.options || []).find((entry) => normalize(entry.textContent) === needle);
+                    if (!option) return '';
+                    node.removeAttribute('disabled');
+                    node.removeAttribute('readonly');
+                    node.value = option.value;
+                    if (window.jQuery) {
+                        try {
+                            window.jQuery(node).val(option.value).trigger('input').trigger('change').trigger('blur');
+                        } catch (e) {}
+                    }
+                    node.dispatchEvent(new Event('input', { bubbles: true }));
+                    node.dispatchEvent(new Event('change', { bubbles: true }));
+                    node.dispatchEvent(new Event('blur', { bubbles: true }));
+                    return node.value || '';
+                }""",
+                label,
+            )
+            if selected and (not value or selected == value):
+                return True
+        except Exception:
+            pass
+    return False
 
 
 def _get_select_value(locator) -> str:
@@ -3714,7 +3879,13 @@ def _force_set_select_value(locator, value: str) -> bool:
         locator.first.evaluate(
             """(node, val) => {
                 node.removeAttribute('disabled');
+                node.removeAttribute('readonly');
                 node.value = val;
+                if (window.jQuery) {
+                    try {
+                        window.jQuery(node).val(val).trigger('input').trigger('change').trigger('blur');
+                    } catch (e) {}
+                }
                 node.dispatchEvent(new Event('input', { bubbles: true }));
                 node.dispatchEvent(new Event('change', { bubbles: true }));
                 node.dispatchEvent(new Event('blur', { bubbles: true }));
@@ -3731,10 +3902,10 @@ def _set_select_value_logged(locator, value: str, field_label: str) -> bool:
         print(f"[WARNUNG] Feld nicht gefunden: {field_label}")
         return False
     try:
-        locator.first.evaluate("(node) => { node.removeAttribute('disabled'); }")
+        locator.first.evaluate("(node) => { node.removeAttribute('disabled'); node.removeAttribute('readonly'); }")
     except Exception:
         pass
-    ok = _set_select_value(locator, value)
+    ok = _set_select_value_with_fallback(locator, value)
     actual = _get_select_value(locator)
     if ok and actual == value:
         print(f"[OK] {field_label} gesetzt → {value}")
@@ -3809,6 +3980,53 @@ def _fill_language_fields(target: Union[Frame, Page], entries: list[dict]) -> No
                 print("[WARNUNG] sedcard sprache04 nicht gesetzt.")
 
 
+def _force_panel_editable(target: Union[Frame, Page], panel_id: str) -> None:
+    try:
+        target.evaluate(
+            """(panelId) => {
+                if (typeof makeEdited === 'function') {
+                    try { makeEdited(); } catch (e) {}
+                }
+                const panel = document.getElementById(panelId);
+                if (!panel) return;
+                panel.querySelectorAll('input, select, textarea').forEach((el) => {
+                    el.removeAttribute('readonly');
+                    el.removeAttribute('disabled');
+                });
+                panel.querySelectorAll('.editWorker, .writeInput').forEach((el) => {
+                    el.classList.remove('hideElement');
+                    el.classList.add('showElement');
+                    el.style.display = 'inline-block';
+                    el.removeAttribute('disabled');
+                    el.removeAttribute('readonly');
+                });
+                const save = panel.querySelector("input.speichern, input[type='submit'][value*='Daten speichern'], button");
+                if (save) {
+                    save.classList.remove('hideElement');
+                    save.classList.add('showElement');
+                    save.style.display = 'inline-block';
+                    save.removeAttribute('disabled');
+                    save.removeAttribute('readonly');
+                }
+            }""",
+            panel_id,
+        )
+    except Exception:
+        pass
+
+
+def _wait_after_persplan_save(page: Page) -> None:
+    try:
+        page.wait_for_load_state("domcontentloaded", timeout=5000)
+    except Exception:
+        pass
+    try:
+        page.wait_for_load_state("networkidle", timeout=3000)
+    except Exception:
+        pass
+    time.sleep(0.3)
+
+
 def _map_schulabschluss_to_value(value) -> str | None:
     if not value:
         return None
@@ -3834,6 +4052,7 @@ def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | N
         print("[HINWEIS] Kein Schulabschluss im JSON – überspringe Stammdaten.")
         return
 
+    stammdaten_panel_id = "administration_user_stammdaten_tabs_stammdaten"
     target, panel = _open_stammdaten_tab(page, "stammdaten", "Stammdaten")
     if not target or not panel:
         print("[WARNUNG] Tab 'Stammdaten' nicht gefunden.")
@@ -3863,6 +4082,8 @@ def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | N
                 print(f"[WARNUNG] Stammdaten Edit-Stift nicht klickbar: {exc} / JS: {js_exc}")
     else:
         print("[WARNUNG] Stammdaten Edit-Stift nicht gefunden.")
+
+    _force_panel_editable(target, stammdaten_panel_id)
 
     value = _map_schulabschluss_to_value(schulabschluss_raw)
     if value:
@@ -3895,6 +4116,7 @@ def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | N
         "input[type='submit'].speichern, input[type='submit'][value*='Daten speichern'], button:has-text('Daten speichern')"
     ).first
     if save_button.count() > 0:
+        saved = False
         try:
             save_button.scroll_into_view_if_needed()
         except Exception:
@@ -3902,13 +4124,17 @@ def _fill_stammdaten_fields(page: Page, payload: dict, tracker: FieldTracker | N
         try:
             save_button.click()
             print("[OK] Stammdaten gespeichert.")
+            saved = True
         except Exception as exc:
             try:
                 # Fallback: Click via JS even if hidden.
                 save_button.evaluate("el => el.click()")
                 print("[OK] Stammdaten gespeichert (JS-Fallback).")
+                saved = True
             except Exception:
                 print(f"[WARNUNG] Stammdaten speichern fehlgeschlagen: {exc}")
+        if saved:
+            _wait_after_persplan_save(page)
     else:
         print("[WARNUNG] Stammdaten Speichern-Button nicht gefunden.")
 
@@ -4141,6 +4367,8 @@ def _fill_notfallkontakt(page: Page, payload: dict, tracker: FieldTracker | None
     else:
         print("[WARNUNG] Notfallkontakt Edit-Stift nicht gefunden.")
 
+    _force_panel_editable(target, panel_id)
+
     try:
         target.evaluate(
             """(panelId) => {
@@ -4223,6 +4451,7 @@ def _fill_notfallkontakt(page: Page, payload: dict, tracker: FieldTracker | None
     save_button = panel.locator("input[type='submit'].speichern, input[type='submit'][value*='Daten speichern']").first
     print(f"[DEBUG] Notfallkontakt Speichern-Button count={save_button.count()}")
     if save_button.count() > 0:
+        saved = False
         try:
             save_button.scroll_into_view_if_needed()
         except Exception:
@@ -4230,6 +4459,7 @@ def _fill_notfallkontakt(page: Page, payload: dict, tracker: FieldTracker | None
         try:
             save_button.click()
             print("[OK] Notfallkontakt gespeichert.")
+            saved = True
         except Exception as exc:
             try:
                 target.evaluate(
@@ -4250,8 +4480,11 @@ def _fill_notfallkontakt(page: Page, payload: dict, tracker: FieldTracker | None
                     panel_id,
                 )
                 print("[OK] Notfallkontakt gespeichert (JS-Fallback).")
+                saved = True
             except Exception:
                 print(f"[WARNUNG] Notfallkontakt speichern fehlgeschlagen: {exc}")
+        if saved:
+            _wait_after_persplan_save(page)
     else:
         print("[WARNUNG] Notfallkontakt Speichern-Button nicht gefunden.")
 
