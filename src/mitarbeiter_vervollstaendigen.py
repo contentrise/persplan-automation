@@ -4632,6 +4632,327 @@ def _fill_notfallkontakt(page: Page, payload: dict, tracker: FieldTracker | None
         print("[WARNUNG] Notfallkontakt Speichern-Button nicht gefunden.")
 
 
+def _build_address_line(payload: dict) -> str:
+    direct = _pick_payload_value(payload, ["anschrift"])
+    if direct:
+        return direct
+    street = _pick_payload_value(payload, ["anschrift_strasse", "strasse", "straße"])
+    number = _pick_payload_value(payload, ["anschrift_nummer", "hausnummer"])
+    return " ".join([street, number]).strip()
+
+
+def _derive_gender_value(payload: dict) -> str:
+    explicit = _pick_payload_value(payload, ["geschlecht"])
+    if explicit:
+        normalized = explicit.strip().lower()
+        if normalized in {"m", "maennlich", "männlich", "herr"}:
+            return "M"
+        if normalized in {"w", "weiblich", "frau"}:
+            return "W"
+        if normalized in {"d", "divers"}:
+            return "D"
+        return explicit
+    anrede = _pick_payload_value(payload, ["anrede"]).strip().lower()
+    if anrede == "herr":
+        return "M"
+    if anrede == "frau":
+        return "W"
+    return ""
+
+
+def _normalize_select_text(value: str) -> str:
+    text = str(value or "").strip().lower()
+    text = (
+        text.replace("ä", "ae")
+        .replace("ö", "oe")
+        .replace("ü", "ue")
+        .replace("ß", "ss")
+    )
+    return re.sub(r"[^a-z0-9]+", "", text)
+
+
+def _select_value_or_label(locator, value: str) -> tuple[bool, str]:
+    if locator.count() == 0 or not str(value or "").strip():
+        return False, ""
+    raw = str(value).strip()
+    normalized = _normalize_select_text(raw)
+    try:
+        selected = locator.first.evaluate(
+            """(node, args) => {
+                const raw = String(args.raw || '').trim();
+                const normalized = String(args.normalized || '');
+                const normalize = (value) => String(value || '')
+                    .trim()
+                    .toLowerCase()
+                    .replace(/ä/g, 'ae')
+                    .replace(/ö/g, 'oe')
+                    .replace(/ü/g, 'ue')
+                    .replace(/ß/g, 'ss')
+                    .normalize('NFD')
+                    .replace(/[\\u0300-\\u036f]/g, '')
+                    .replace(/[^a-z0-9]+/g, '');
+                const options = Array.from(node.options || []);
+                const match = options.find((option) => option.value === raw)
+                    || options.find((option) => normalize(option.textContent) === normalized)
+                    || options.find((option) => normalize(option.value) === normalized)
+                    || options.find((option) => normalized && normalize(option.textContent).includes(normalized))
+                    || options.find((option) => normalized && normalized.includes(normalize(option.textContent)));
+                if (!match) return '';
+                node.removeAttribute('disabled');
+                node.removeAttribute('readonly');
+                node.value = match.value;
+                if (window.jQuery) {
+                    try { window.jQuery(node).val(match.value).trigger('input').trigger('change').trigger('blur'); } catch (e) {}
+                }
+                node.dispatchEvent(new Event('input', { bubbles: true }));
+                node.dispatchEvent(new Event('change', { bubbles: true }));
+                node.dispatchEvent(new Event('blur', { bubbles: true }));
+                return node.value || '';
+            }""",
+            {"raw": raw, "normalized": normalized},
+        )
+        return bool(selected), str(selected or "")
+    except Exception:
+        return False, ""
+
+
+def _read_select_label(locator) -> str:
+    if locator.count() == 0:
+        return ""
+    try:
+        return str(
+            locator.first.evaluate(
+                "(node) => node.selectedOptions && node.selectedOptions[0] ? node.selectedOptions[0].textContent.trim() : ''"
+            )
+            or ""
+        ).strip()
+    except Exception:
+        return ""
+
+
+def _field_matches(locator, expected: str, is_select: bool) -> bool:
+    expected_norm = _normalize_select_text(expected)
+    if not expected_norm:
+        return True
+    if is_select:
+        actual_value = _safe_select_value(locator)
+        actual_label = _read_select_label(locator)
+        actual_norms = [_normalize_select_text(actual_value), _normalize_select_text(actual_label)]
+        return any(item == expected_norm or (item and expected_norm in item) or (item and item in expected_norm) for item in actual_norms)
+    actual = _safe_input_value(locator)
+    return str(actual).strip() == str(expected).strip()
+
+
+def _set_reentry_field(
+    panel: Locator,
+    field_id: str,
+    value: str,
+    *,
+    section: str,
+    tracker: FieldTracker | None = None,
+    date_value: bool = False,
+) -> bool:
+    text = str(value or "").strip()
+    if not text:
+        return False
+    if date_value:
+        text = _format_date_for_ui(text)
+        if not text:
+            return False
+    locator = panel.locator(f"#{field_id}, [name='{field_id}']").first
+    if locator.count() == 0:
+        print(f"[WARNUNG] Wiedereintritt {section}: Feld nicht gefunden → {field_id}")
+        if tracker:
+            tracker.missing(section, field_id, text, "nicht gefunden")
+        return False
+    tag = ""
+    try:
+        tag = locator.evaluate("el => el.tagName.toLowerCase()")
+    except Exception:
+        tag = ""
+    is_select = tag == "select"
+    if _field_matches(locator, text, is_select):
+        print(f"[OK] Wiedereintritt {field_id} bereits korrekt.")
+        if tracker:
+            tracker.skip(section, field_id, text, _safe_select_value(locator) if is_select else _safe_input_value(locator))
+        return True
+    ok = False
+    if is_select:
+        ok, _actual = _select_value_or_label(locator, text)
+    else:
+        ok = _set_input_value_force(locator, text)
+    actual = _safe_select_value(locator) if is_select else _safe_input_value(locator)
+    if ok and _field_matches(locator, text, is_select):
+        print(f"[OK] Wiedereintritt {field_id} → {text}")
+        if tracker:
+            tracker.ok(section, field_id, text, actual)
+        return True
+    print(f"[WARNUNG] Wiedereintritt {field_id} nicht gesetzt (soll={text}, ist={actual or '—'}).")
+    if tracker:
+        tracker.missing(section, field_id, text, actual or "—")
+    return False
+
+
+def _open_reentry_stammdaten_tab(
+    page: Page,
+    tab_key: str,
+    label: str,
+    tracker: FieldTracker | None = None,
+) -> tuple[Union[Frame, Page] | None, Locator | None]:
+    target, panel = _open_stammdaten_tab(page, tab_key, label)
+    if not target or not panel:
+        print(f"[WARNUNG] Wiedereintritt Tab nicht gefunden: {label}")
+        if tracker:
+            tracker.missing(f"wiedereintritt_{tab_key}", "tab", "sichtbar", "nicht gefunden")
+        return None, None
+    edit_icon = panel.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
+    if edit_icon.count() == 0:
+        edit_icon = target.locator("img[src*='b_edit.png'][onclick*='makeEdited'], img[title='Bearbeiten']").first
+    if edit_icon.count() > 0:
+        try:
+            edit_icon.scroll_into_view_if_needed()
+        except Exception:
+            pass
+        try:
+            edit_icon.click(force=True, timeout=3000)
+            print(f"[OK] Wiedereintritt {label}: Edit-Stift geklickt.")
+        except Exception:
+            try:
+                edit_icon.evaluate("el => el.click()")
+                print(f"[OK] Wiedereintritt {label}: Edit-Stift per JS geklickt.")
+            except Exception as exc:
+                print(f"[WARNUNG] Wiedereintritt {label}: Edit-Stift nicht klickbar: {exc}")
+    _force_panel_editable(target, f"administration_user_stammdaten_tabs_{tab_key}")
+    return target, panel
+
+
+def _save_reentry_panel(
+    page: Page,
+    panel: Locator,
+    section: str,
+    tracker: FieldTracker | None = None,
+) -> None:
+    save_button = panel.locator(
+        "input[type='submit'].speichern, input[type='submit'][value*='Daten speichern'], button:has-text('Daten speichern')"
+    ).first
+    saved = False
+    if save_button.count() > 0:
+        try:
+            save_button.scroll_into_view_if_needed()
+        except Exception:
+            pass
+        try:
+            save_button.click(timeout=5000)
+            saved = True
+        except Exception:
+            try:
+                save_button.evaluate("el => el.click()")
+                saved = True
+            except Exception:
+                saved = False
+    if saved:
+        print(f"[OK] Wiedereintritt {section}: gespeichert.")
+        _wait_after_persplan_save(page)
+        return
+    print(f"[WARNUNG] Wiedereintritt {section}: Speichern-Button nicht gefunden/geklickt.")
+    if tracker:
+        tracker.missing(section, "daten_speichern", "geklickt", "fehlgeschlagen")
+
+
+def _fill_reentry_stammdaten(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
+    _target, panel = _open_reentry_stammdaten_tab(page, "stammdaten", "Stammdaten", tracker)
+    if not panel:
+        return
+    values = {
+        "anrede": _pick_payload_value(payload, ["anrede"]),
+        "geschlecht": _derive_gender_value(payload),
+        "nachname": _pick_payload_value(payload, ["nachname"]),
+        "vorname": _pick_payload_value(payload, ["vorname"]),
+        "anschrift": _build_address_line(payload),
+        "plz": _pick_payload_value(payload, ["postleitzahl", "plz"]),
+        "ort": _pick_payload_value(payload, ["ort"]),
+        "bundesland": _pick_payload_value(payload, ["bundesland", "bundesland_copy", "bundesland_name"]),
+        "land": _pick_payload_value(payload, ["land_copy", "land"]),
+        "mobil": _pick_payload_value(payload, ["mobil"]),
+        "email": _pick_payload_value(payload, ["email"]),
+    }
+    for field_id, value in values.items():
+        _set_reentry_field(panel, field_id, value, section="wiedereintritt_stammdaten", tracker=tracker)
+    _save_reentry_panel(page, panel, "wiedereintritt_stammdaten", tracker)
+
+
+def _fill_reentry_bankdaten(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
+    _target, panel = _open_reentry_stammdaten_tab(page, "bankdaten", "Bankdaten", tracker)
+    if not panel:
+        return
+    values = {
+        "bank": _pick_payload_value(payload, ["bank"]),
+        "iban": _pick_payload_value(payload, ["iban"]),
+        "bic": _pick_payload_value(payload, ["bic"]),
+        "kontoinhaber": _pick_payload_value(payload, ["kontoinhaber"]),
+    }
+    for field_id, value in values.items():
+        _set_reentry_field(panel, field_id, value, section="wiedereintritt_bankdaten", tracker=tracker)
+    _save_reentry_panel(page, panel, "wiedereintritt_bankdaten", tracker)
+
+
+def _fill_reentry_erweitert(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
+    _target, panel = _open_reentry_stammdaten_tab(page, "erweitert", "Erweitert", tracker)
+    if not panel:
+        return
+    values = {
+        "familienstand": _pick_payload_value(payload, ["familienstand"]),
+        "geburtsname": _pick_payload_value(payload, ["geburtsname"]),
+        "geburtsland": _pick_payload_value(payload, ["geburtsland"]),
+        "staatsbuergerschaft": _pick_payload_value(payload, ["staatsbuergerschaft"]),
+        "ausbildungsabschluss": _pick_payload_value(payload, ["ausbildungsabschluss"]),
+        "personalausweistyp": _pick_payload_value(payload, ["personalausweistyp"]),
+        "personalausweisnummer": _pick_payload_value(payload, ["personalausweisnummer"]),
+        "personalausweis_gueltigkeitsdauer_von": _pick_payload_value(
+            payload,
+            ["personalausweis_gueltigkeitsdauer_von", "ausweis_gueltig_von"],
+        ),
+        "personalausweis_gueltigkeitsdauer": _pick_payload_value(
+            payload,
+            ["personalausweis_gueltigkeitsdauer", "ablaufdatum_perso", "ausweis_gueltig_bis"],
+        ),
+        "personalausweis_ausstellungsbehoerde": _pick_payload_value(
+            payload,
+            ["personalausweis_ausstellungsbehoerde", "ausstellungsbehoerde"],
+        ),
+        "aufenthaltsbewilligung": _pick_payload_value(payload, ["aufenthaltsbewilligung", "aufenthaltstitel"]),
+        "geburtsdatum": _pick_payload_value(payload, ["geburtsdatum"]),
+        "geburtsort": _pick_payload_value(payload, ["geburtsort"]),
+    }
+    date_fields = {"personalausweis_gueltigkeitsdauer_von", "personalausweis_gueltigkeitsdauer", "geburtsdatum"}
+    for field_id, value in values.items():
+        _set_reentry_field(
+            panel,
+            field_id,
+            value,
+            section="wiedereintritt_erweitert",
+            tracker=tracker,
+            date_value=field_id in date_fields,
+        )
+    _save_reentry_panel(page, panel, "wiedereintritt_erweitert", tracker)
+
+
+def _fill_reentry_lohn_extra(page: Page, payload: dict, tracker: FieldTracker | None = None) -> None:
+    target: Union[Frame, Page] = page
+    frame = page.frame(name="inhalt")
+    if frame:
+        target = frame
+    panel = target.locator("#administration_user_stammdaten_tabs_lohnabrechnung")
+    values = {
+        "sozialversicherungsnummer": _pick_payload_value(payload, ["sozialversicherungsnummer"]),
+        "steuernummer": _pick_payload_value(payload, ["steuernummer", "steuer_id"]),
+        "konfession": _pick_payload_value(payload, ["konfession"]),
+        "kinderfreibetrag": _pick_payload_value(payload, ["kinderfreibetrag"]),
+    }
+    for field_id, value in values.items():
+        _set_reentry_field(panel, field_id, value, section="wiedereintritt_lohnabrechnung", tracker=tracker)
+
+
 def _resolve_lohnabrechnung_values(payload: dict) -> dict:
     variant = str(payload.get("form_variant", "")).strip().lower()
     if variant == "geringfuegig":
@@ -5276,6 +5597,39 @@ def run_mitarbeiter_lohnabrechnung(
 
     _run_personal_step(
         "lohnabrechnung",
+        _action,
+        headless=headless,
+        slowmo_ms=slowmo_ms,
+        wait_seconds=wait_seconds,
+    )
+
+
+def run_mitarbeiter_wiedereintritt(
+    headless: bool | None = None,
+    slowmo_ms: int | None = None,
+    wait_seconds: int = 0,
+):
+    def _action(target_page: Page, payload: dict, tracker: FieldTracker) -> None:
+        print("[INFO] Wiedereintritt: prüfe Stammdaten, Bankdaten, Lohnabrechnung und Notfallkontakt.")
+        _fill_reentry_stammdaten(target_page, payload, tracker=tracker)
+        _fill_reentry_erweitert(target_page, payload, tracker=tracker)
+        _fill_reentry_bankdaten(target_page, payload, tracker=tracker)
+        if _open_lohnabrechnung_and_edit(target_page):
+            _fill_lohnabrechnung_fields(target_page, payload, tracker=tracker)
+            _fill_reentry_lohn_extra(target_page, payload, tracker=tracker)
+            if _click_fertig_in_dialog(target_page, timeout_seconds=5.0):
+                _wait_for_dialog_closed(target_page, timeout_seconds=6.0)
+            if not _click_daten_speichern(target_page, timeout_seconds=8.0):
+                print("[WARNUNG] Wiedereintritt: 'Daten speichern' in Lohnabrechnung nicht gefunden/geklickt.")
+                tracker.missing("wiedereintritt_lohnabrechnung", "daten_speichern", "geklickt", "fehlgeschlagen")
+            else:
+                _verify_lohnabrechnung_kassen_post_save(target_page, payload, tracker=tracker)
+        else:
+            tracker.missing("wiedereintritt_lohnabrechnung", "tab", "geöffnet", "fehlgeschlagen")
+        _fill_notfallkontakt(target_page, payload, tracker=tracker)
+
+    _run_personal_step(
+        "wiedereintritt",
         _action,
         headless=headless,
         slowmo_ms=slowmo_ms,

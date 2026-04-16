@@ -19,6 +19,7 @@ from src.planung_zeitraum_advanced import run_planung_zeitraum as run_planung_ze
 from src.kunden_scraper import run_kunden_scraper
 from src.mitarbeiter_vervollstaendigen import (
     run_mitarbeiter_vervollstaendigen,
+    run_mitarbeiter_wiedereintritt,
     run_mitarbeiter_lohnabrechnung,
     run_mitarbeiter_stammdaten,
     run_mitarbeiter_sedcard,
@@ -349,6 +350,14 @@ def main():
     p_lohn.add_argument("--slowmo", type=int, default=None)
     p_lohn.add_argument("--wait-seconds", type=int, default=0, help="Pause nach dem Schritt (Sek.)")
 
+    p_reentry = sub.add_parser(
+        "mitarbeiter-wiedereintritt",
+        help="Prüft/aktualisiert Stammdaten, Bankdaten, Lohnabrechnung und Notfallkontakt für einen Wiedereintritt",
+    )
+    p_reentry.add_argument("--headless", choices=["true", "false"], default=None)
+    p_reentry.add_argument("--slowmo", type=int, default=None)
+    p_reentry.add_argument("--wait-seconds", type=int, default=0, help="Pause nach dem Schritt (Sek.)")
+
     p_stamm = sub.add_parser(
         "mitarbeiter-stammdaten",
         help="Öffnet Stammdaten und Notfallkontakt und trägt Werte ein",
@@ -443,6 +452,12 @@ def main():
         )
     elif args.cmd == "mitarbeiter-lohnabrechnung":
         run_mitarbeiter_lohnabrechnung(
+            headless=headless,
+            slowmo_ms=args.slowmo,
+            wait_seconds=args.wait_seconds,
+        )
+    elif args.cmd == "mitarbeiter-wiedereintritt":
+        run_mitarbeiter_wiedereintritt(
             headless=headless,
             slowmo_ms=args.slowmo,
             wait_seconds=args.wait_seconds,

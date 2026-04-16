@@ -42,6 +42,7 @@ PYTHON_CMD = os.environ.get("SCRAPER_PYTHON_CMD", os.environ.get("STAFFING_PYTHO
 POLL_INTERVAL = float(os.environ.get("PERSONAL_SCRAPER_POLL_INTERVAL", "20"))
 DEFAULT_STEP_TIMEOUTS = {
     "anlage": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_ANLAGE_SECONDS", "180")),
+    "wiedereintritt": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_REENTRY_SECONDS", "300")),
     "vervollstaendigen": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_VOLL_SECONDS", "300")),
     "mitarbeiterinformationen": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_INFO_SECONDS", "300")),
     "lohnabrechnung": float(os.environ.get("PERSONAL_SCRAPER_TIMEOUT_LOHN_SECONDS", "180")),
@@ -71,6 +72,11 @@ STEP_COMMANDS = {
         os.environ.get("PERSONAL_SCRAPER_COMMAND_ANLAGE")
         or os.environ.get("STAFFING_SCRAPER_COMMAND_ANLAGE")
         or "-m src.main mitarbeiteranlage --headless true"
+    ).strip(),
+    "wiedereintritt": (
+        os.environ.get("PERSONAL_SCRAPER_COMMAND_REENTRY")
+        or os.environ.get("PERSONAL_SCRAPER_COMMAND_WIEDEREINTRITT")
+        or "-m src.main mitarbeiter-wiedereintritt --headless true"
     ).strip(),
     "vervollstaendigen": (
         os.environ.get("PERSONAL_SCRAPER_COMMAND_VOLL")
@@ -258,9 +264,27 @@ def process_run(job: dict) -> None:
         LOGGER.info("Starte Login vor Run %s ...", run_id)
         run_login()
         entry = fetch_entry(entry_id)
-        payload = entry.get("data") or {}
-        if isinstance(entry.get("pdfUrls"), dict):
+        root_payload = entry.get("data") or {}
+        reentry_meta = entry.get("reentry") if isinstance(entry.get("reentry"), dict) else {}
+        reentry_payload = reentry_meta.get("data") if isinstance(reentry_meta.get("data"), dict) else None
+        has_completed_reentry_payload = reentry_meta.get("status") == "completed" and reentry_payload
+        use_reentry_payload = (step == "wiedereintritt" and has_completed_reentry_payload) or (
+            step in {"vertragsdaten", "dokumente"} and has_completed_reentry_payload
+        )
+        if step == "wiedereintritt" and not use_reentry_payload:
+            raise RuntimeError("Wiedereintrittsdaten fehlen oder sind noch nicht abgeschlossen.")
+        payload = dict(reentry_payload if use_reentry_payload and reentry_payload else root_payload)
+        if use_reentry_payload:
+            payload["is_reentry"] = True
+            payload["reentry"] = {
+                key: value
+                for key, value in reentry_meta.items()
+                if key not in {"data"}
+            }
+        if isinstance(entry.get("pdfUrls"), dict) and not use_reentry_payload:
             payload["pdfUrls"] = entry.get("pdfUrls")
+        if use_reentry_payload and isinstance(reentry_meta.get("pdfUrls"), dict):
+            payload["pdfUrls"] = reentry_meta.get("pdfUrls")
         contract_data = payload.get("contract_transfer") or {}
         contract_file = contract_data.get("file") if isinstance(contract_data, dict) else None
 
@@ -269,7 +293,13 @@ def process_run(job: dict) -> None:
             input_dir.mkdir(parents=True, exist_ok=True)
 
             needs_contract_file = step in {"vervollstaendigen", "dokumente", "vertragsdaten"}
-            include_contract_data = step in {"vervollstaendigen", "dokumente", "lohnabrechnung", "vertragsdaten"}
+            include_contract_data = step in {
+                "vervollstaendigen",
+                "wiedereintritt",
+                "dokumente",
+                "lohnabrechnung",
+                "vertragsdaten",
+            }
             json_payload = build_input_payload(payload, contract_data if include_contract_data else None)
             json_path = input_dir / f"personalbogen-{entry_id}.json"
             json_path.write_text(json.dumps(json_payload, ensure_ascii=False, indent=2), encoding="utf-8")
