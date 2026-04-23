@@ -1,0 +1,278 @@
+{
+  "id": "duplicate_duplicate_8",
+  "method": "POST",
+  "path": "/c/{company_id}/pipeline_templates/{id}/duplicate",
+  "summary": "Duplicates a pipeline template",
+  "description": "Duplicates a pipeline template. Endpoint: POST /c/{company_id}/pipeline_templates/{id}/duplicate. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/pipeline_templates/{id}/duplicate\n\nRequired params: id, company_id",
+  "example_response": {
+    "pipeline_template": {
+      "default": false,
+      "id": 2576,
+      "position": 2,
+      "title": "Origin template copy",
+      "category": "Category",
+      "created_at": "2026-04-21T07:32:03.397287Z",
+      "updated_at": "2026-04-21T07:32:03.397287Z",
+      "custom": false,
+      "stages": [
+        {
+          "id": 20658,
+          "name": "Referred",
+          "position": -3,
+          "group": "applicants",
+          "category": "referred",
+          "created_at": "2026-04-21T07:32:03.397457Z",
+          "updated_at": "2026-04-21T07:32:03.397457Z",
+          "fair_evaluations_enabled": false,
+          "action_templates": [
+            {
+              "data": {
+                "tags": [
+                  "one",
+                  "two"
+                ]
+              },
+              "id": 160,
+              "kind": "add_tags",
+              "references": []
+            }
+          ],
+          "pipeline_template_id": 2576,
+          "locked": true,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false,
+          "automation_ids": []
+        },
+        {
+          "id": 20659,
+          "name": "Sourced",
+          "position": -2,
+          "group": "applicants",
+          "category": "sourced",
+          "created_at": "2026-04-21T07:32:03.397565Z",
+          "updated_at": "2026-04-21T07:32:03.397565Z",
+          "fair_evaluations_enabled": false,
+          "action_templates": [
+            {
+              "data": {
+                "tags": [
+                  "one",
+                  "two"
+                ]
+              },
+              "id": 161,
+              "kind": "add_tags",
+              "references": []
+            }
+          ],
+          "pipeline_template_id": 2576,
+          "locked": true,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false,
+          "automation_ids": []
+        },
+        {
+          "id": 20660,
+          "name": "Applied",
+          "position": -1,
+          "group": "applicants",
+          "category": "apply",
+          "created_at": "2026-04-21T07:32:03.397673Z",
+          "updated_at": "2026-04-21T07:32:03.397673Z",
+          "fair_evaluations_enabled": false,
+          "action_templates": [
+            {
+              "data": {
+                "tags": [
+                  "one",
+                  "two"
+                ]
+              },
+              "id": 162,
+              "kind": "add_tags",
+              "references": []
+            }
+          ],
+          "pipeline_template_id": 2576,
+          "locked": true,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false,
+          "automation_ids": []
+        },
+        {
+          "id": 20661,
+          "name": "Phone interview",
+          "position": 1,
+          "group": "active",
+          "category": "phone_screen",
+          "created_at": "2026-04-21T07:32:03.397775Z",
+          "updated_at": "2026-04-21T07:32:03.397775Z",
+          "fair_evaluations_enabled": false,
+          "action_templates": [
+            {
+              "data": {
+                "tags": [
+                  "one",
+                  "two"
+                ]
+              },
+              "id": 163,
+              "kind": "add_tags",
+              "references": []
+            }
+          ],
+          "pipeline_template_id": 2576,
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false,
+          "automation_ids": []
+        },
+        {
+          "id": 20662,
+          "name": "On-site interview",
+          "position": 2,
+          "group": "active",
+          "category": "interview",
+          "created_at": "2026-04-21T07:32:03.397908Z",
+          "updated_at": "2026-04-21T07:32:03.397908Z",
+          "fair_evaluations_enabled": false,
+          "action_templates": [
+            {
+              "data": {
+                "tags": [
+                  "one",
+                  "two"
+                ]
+              },
+              "id": 164,
+              "kind": "add_tags",
+              "references": []
+            }
+          ],
+          "pipeline_template_id": 2576,
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false,
+          "automation_ids": []
+        },
+        {
+          "id": 20663,
+          "name": "Evaluation",
+          "position": 3,
+          "group": "active",
+          "category": "evaluation",
+          "created_at": "2026-04-21T07:32:03.398026Z",
+          "updated_at": "2026-04-21T07:32:03.398026Z",
+          "fair_evaluations_enabled": false,
+          "action_templates": [
+            {
+              "data": {
+                "tags": [
+                  "one",
+                  "two"
+                ]
+              },
+              "id": 165,
+              "kind": "add_tags",
+              "references": []
+            }
+          ],
+          "pipeline_template_id": 2576,
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false,
+          "automation_ids": []
+        },
+        {
+          "id": 20664,
+          "name": "Offer",
+          "position": 4,
+          "group": "active",
+          "category": "offer",
+          "created_at": "2026-04-21T07:32:03.398114Z",
+          "updated_at": "2026-04-21T07:32:03.398114Z",
+          "fair_evaluations_enabled": false,
+          "action_templates": [
+            {
+              "data": {
+                "tags": [
+                  "one",
+                  "two"
+                ]
+              },
+              "id": 166,
+              "kind": "add_tags",
+              "references": []
+            }
+          ],
+          "pipeline_template_id": 2576,
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false,
+          "automation_ids": []
+        },
+        {
+          "id": 20665,
+          "name": "Hired",
+          "position": 5,
+          "group": "hires",
+          "category": "hire",
+          "created_at": "2026-04-21T07:32:03.398197Z",
+          "updated_at": "2026-04-21T07:32:03.398197Z",
+          "fair_evaluations_enabled": false,
+          "action_templates": [
+            {
+              "data": {
+                "tags": [
+                  "one",
+                  "two"
+                ]
+              },
+              "id": 167,
+              "kind": "add_tags",
+              "references": []
+            }
+          ],
+          "pipeline_template_id": 2576,
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false,
+          "automation_ids": []
+        }
+      ],
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0,
+      "requires_adjustment": false
+    }
+  },
+  "tags": [
+    "pipeline_templates",
+    "duplicate",
+    "pipeline"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "activity_subscription_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/tracking/activity_subscriptions/update_activity_subscriptions",
+  "summary": "Update admin activity subscriptions",
+  "description": "Update admin activity subscriptions. Endpoint: PATCH /c/{company_id}/tracking/activity_subscriptions/update_activity_subscriptions. Required parameters: value, events, company_id.",
+  "params": [
+    {
+      "name": "value",
+      "type": "string",
+      "required": true,
+      "description": "Possible values: ‘true’, ‘false’, (or 1, 0)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "events",
+      "type": "array",
+      "required": true,
+      "description": "List of events group to update",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"events\": [\n\"candidate_add\",\n\"candidate_import\",\n\"candidate_merge\"\n],\n\"type\": \"web\",\n\"value\": \"false\"\n}",
+  "example_response": {},
+  "tags": [
+    "tracking",
+    "activity_subscriptions"
+  ]
+}

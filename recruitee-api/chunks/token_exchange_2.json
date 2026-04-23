@@ -1,0 +1,26 @@
+{
+  "id": "token_exchange_2",
+  "method": "GET",
+  "path": "/oauth/tokens/trade/{code}",
+  "summary": "Trade authorization_code for access_token",
+  "description": "Trade authorization_code for access_token. Endpoint: GET /oauth/tokens/trade/{code}. Required parameters: code.",
+  "params": [
+    {
+      "name": "code",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /oauth/tokens/trade/{code}\n\nRequired params: code",
+  "example_response": {
+    "error": [
+      "Authorization code not found"
+    ]
+  },
+  "tags": [
+    "tokens",
+    "oauthtoken"
+  ]
+}

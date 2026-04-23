@@ -1,0 +1,42 @@
+{
+  "id": "payment_source_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/billing/payment_source/delete",
+  "summary": "Deletes default payment source for the customer",
+  "description": "Deletes default payment source for the customer. Endpoint: DELETE /c/{company_id}/billing/payment_source/delete. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/billing/payment_source/delete\n\nRequired params: company_id",
+  "example_response": {
+    "billing_information": {
+      "id": 2,
+      "address": "123 st",
+      "currency": "EUR",
+      "email": "email@example.com",
+      "country_code": "NL",
+      "full_name": null,
+      "phone": null,
+      "company_name": "Test company",
+      "invoice_emails": [],
+      "city": "Amsterdam",
+      "postal_code": "12345",
+      "state_code": null,
+      "vat_number": "NL123456789B12",
+      "stripe_card_last4": null,
+      "stripe_card_expiration": null,
+      "stripe_card_type": null,
+      "valid_credit_card": false
+    }
+  },
+  "tags": [
+    "billing",
+    "payment_source"
+  ]
+}

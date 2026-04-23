@@ -1,0 +1,33 @@
+{
+  "id": "attachment_delete_2",
+  "method": "DELETE",
+  "path": "/share/interview/questionnaire/attachments/{id}",
+  "summary": "Delete attachment",
+  "description": "Delete attachment. Endpoint: DELETE /share/interview/questionnaire/attachments/{id}. Required parameters: id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Attachment ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /share/interview/questionnaire/attachments/{id}\n\nRequired params: id",
+  "example_response": {
+    "attachment": {
+      "id": 139,
+      "status": "ok",
+      "filename": "avatar.png",
+      "extension": "png",
+      "created_at": "2026-04-21T07:31:58.395149Z",
+      "image_thumbnail_url": "tmp/bow/attachments/139/image_thumbnail_avatar.png",
+      "image_url": "tmp/bow/attachments/139/image_avatar.png",
+      "file_url": "tmp/bow/attachments/139/avatar.png"
+    }
+  },
+  "tags": [
+    "interview",
+    "questionnaire"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "save_as_template_create_7",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/fieldsets/save_as_template",
+  "summary": "Save a custom fieldset as regular fieldset",
+  "description": "Save a custom fieldset as regular fieldset. Endpoint: POST /c/{company_id}/offer_templates/{offer_template_id}/fieldsets/save_as_template. Required parameters: title, offer_template_id, company_id. Optional parameters include category.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Name of the newly created template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "required": false,
+      "description": "Fieldset category",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"fieldset\": {\n\"name\": \"Nothing happens to anybody which he is not fitted by nature to bear.\"\n}\n}",
+  "example_response": {
+    "fieldset": {
+      "default": false,
+      "id": 76,
+      "name": "Nothing happens to anybody which he is not fitted by nature to bear.",
+      "position": 9,
+      "fields": [],
+      "category": null,
+      "created_at": "2026-04-21T07:32:48.399315Z",
+      "updated_at": "2026-04-21T07:32:48.402749Z",
+      "custom": false
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "fieldsets"
+  ]
+}

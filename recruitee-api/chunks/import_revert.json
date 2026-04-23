@@ -1,0 +1,28 @@
+{
+  "id": "import_revert",
+  "method": "PATCH",
+  "path": "/c/{company_id}/imports/{id}/revert",
+  "summary": "Revert import (delete imported candidates)",
+  "description": "Revert import (delete imported candidates). Endpoint: PATCH /c/{company_id}/imports/{id}/revert. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Import ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/imports/{id}/revert\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "imports"
+  ]
+}

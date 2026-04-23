@@ -1,0 +1,56 @@
+{
+  "id": "template_update_4",
+  "method": "PATCH",
+  "path": "/c/{company_id}/open_questions/template/update_positions",
+  "summary": "Update open question templates positions",
+  "description": "Update open question templates positions. Endpoint: PATCH /c/{company_id}/open_questions/template/update_positions. Required parameters: open_question_template_ids, company_id.",
+  "params": [
+    {
+      "name": "open_question_template_ids",
+      "type": "array",
+      "required": true,
+      "description": "Ordered array of template ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question_template_ids\": [\n209,\n208,\n207\n]\n}",
+  "example_response": {
+    "open_question_templates": [
+      {
+        "default": false,
+        "id": 209,
+        "position": 1,
+        "title": "Open Question Template",
+        "category": "Sample category",
+        "custom": false
+      },
+      {
+        "default": false,
+        "id": 208,
+        "position": 2,
+        "title": "Open Question Template",
+        "category": "Sample category",
+        "custom": false
+      },
+      {
+        "default": false,
+        "id": 207,
+        "position": 3,
+        "title": "Open Question Template",
+        "category": "Sample category",
+        "custom": false
+      }
+    ]
+  },
+  "tags": [
+    "open_questions",
+    "template"
+  ]
+}

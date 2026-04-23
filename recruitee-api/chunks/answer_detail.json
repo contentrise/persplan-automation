@@ -1,0 +1,43 @@
+{
+  "id": "answer_detail",
+  "method": "GET",
+  "path": "/share/eeo/answers",
+  "summary": "Show available EEO answers",
+  "description": "Show available EEO answers. Endpoint: GET /share/eeo/answers.",
+  "params": [],
+  "example_request": "GET /share/eeo/answers",
+  "example_response": {
+    "answers": {
+      "gender": [
+        "Female",
+        "Male",
+        "Prefer not to tell"
+      ],
+      "disability_status": [
+        "Yes, I have a disability, or have had one in the past",
+        "No, I do not have a disability and have not had one in the past",
+        "I do not want to answer"
+      ],
+      "race": [
+        "Hispanic or Latino",
+        "White (not Hispanic or Latino)",
+        "Asian (not Hispanic or Latino)",
+        "Black or African-American (not Hispanic or Latino)",
+        "Native Hawaiian or Other Pacific Islander (not Hispanic or Latino)",
+        "American Indian or Alaskan Native (not Hispanic or Latino)",
+        "Two or More Races (not Hispanic or Latino)",
+        "I do not wish to identify at this time"
+      ],
+      "veteran_status": [
+        "I identify as one or more of the classifications of protected veteran listed above",
+        "I am NOT a protected veteran",
+        "I am NOT a veteran",
+        "I do not wish to identify at this time"
+      ]
+    }
+  },
+  "tags": [
+    "eeo",
+    "answers"
+  ]
+}

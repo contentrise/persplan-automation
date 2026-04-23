@@ -1,0 +1,29 @@
+{
+  "id": "shared_email_provider_archive",
+  "method": "PATCH",
+  "path": "/c/{company_id}/shared_email_providers/{id}/archive",
+  "summary": "Archive Shared Email Provider, disconnects from mail",
+  "description": "Archive Shared Email Provider, disconnects from mail. Endpoint: PATCH /c/{company_id}/shared_email_providers/{id}/archive. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Shared Email Provider ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/shared_email_providers/{id}/archive\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "shared_email_providers",
+    "mailbox"
+  ]
+}

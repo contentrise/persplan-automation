@@ -1,0 +1,50 @@
+{
+  "id": "approval_flows_list",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/approval_flows",
+  "summary": "Lists approval flows available for requisition",
+  "description": "Lists approval flows available for requisition. Endpoint: GET /c/{company_id}/requisitions/{requisition_id}/approval_flows. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions/{requisition_id}/approval_flows\n\nRequired params: requisition_id, company_id",
+  "example_response": {
+    "approval_flows": [
+      {
+        "id": 11,
+        "title": "Approval Flow",
+        "custom": false,
+        "assigned": false
+      },
+      {
+        "id": 12,
+        "title": "Approval Flow",
+        "custom": false,
+        "assigned": false
+      },
+      {
+        "id": 14,
+        "title": "Approval Flow",
+        "custom": true,
+        "assigned": true
+      }
+    ]
+  },
+  "tags": [
+    "requisitions",
+    "approval_flows"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "id": "cv_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/imports/{import_id}/cvs/{id}",
+  "summary": "Update import CV",
+  "description": "Update import CV. Endpoint: PATCH /c/{company_id}/imports/{import_id}/cvs/{id}. Required parameters: id, import_candidate_id, import_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Import CV ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "import_candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Import candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "import_id",
+      "type": "integer",
+      "required": true,
+      "description": "Import ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"cv\": {\n\"import_candidate_id\": 17\n}\n}",
+  "example_response": {
+    "references": [],
+    "cv": {
+      "id": 7,
+      "file_name": "james_bond_cv.pdf",
+      "file_url": "tmp/bow/import_cvs/7/pdf_james_bond_cv.pdf",
+      "original_file_url": "tmp/bow/import_cvs/7/james_bond_cv.pdf",
+      "import_candidate_id": null
+    }
+  },
+  "tags": [
+    "imports",
+    "cvs"
+  ]
+}

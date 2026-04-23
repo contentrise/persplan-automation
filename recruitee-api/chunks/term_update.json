@@ -1,0 +1,40 @@
+{
+  "id": "term_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/careers/terms/update_all",
+  "summary": "Update jobs widget terms",
+  "description": "Update jobs widget terms. Endpoint: PATCH /c/{company_id}/careers/terms/update_all. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"careers_terms\": [\n{\n\"body_html\": \"Accept\",\n\"id\": 11,\n\"position\": 1\n},\n{\n\"body_html\": \"Policy\",\n\"position\": 2\n},\n{\n\"body_html\": \"Terms\",\n\"id\": 10,\n\"position\": 3\n}\n]\n}",
+  "example_response": {
+    "careers_terms": [
+      {
+        "id": 11,
+        "position": 1,
+        "body_html": "Accept"
+      },
+      {
+        "id": 12,
+        "position": 2,
+        "body_html": "Policy"
+      },
+      {
+        "id": 10,
+        "position": 3,
+        "body_html": "Terms"
+      }
+    ]
+  },
+  "tags": [
+    "careers",
+    "terms"
+  ]
+}

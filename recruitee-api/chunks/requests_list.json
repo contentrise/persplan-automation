@@ -1,0 +1,29 @@
+{
+  "id": "requests_list",
+  "method": "GET",
+  "path": "/c/{company_id}/gdpr/candidates/{candidate_id}/requests",
+  "summary": "List candidate's requests",
+  "description": "List candidate's requests. Endpoint: GET /c/{company_id}/gdpr/candidates/{candidate_id}/requests. Required parameters: candidate_id, company_id.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/gdpr/candidates/{candidate_id}/requests\n\nRequired params: candidate_id, company_id",
+  "example_response": {},
+  "tags": [
+    "gdpr",
+    "candidates"
+  ]
+}

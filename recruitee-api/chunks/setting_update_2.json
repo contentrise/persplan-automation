@@ -1,0 +1,59 @@
+{
+  "id": "setting_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/eeo/settings",
+  "summary": "Update company's EEO settings",
+  "description": "Update company's EEO settings. Endpoint: PATCH /c/{company_id}/eeo/settings. Required parameters: enabled, kind, company_id. Optional parameters include email_subject, email_body_html.",
+  "params": [
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email_subject",
+      "type": "string",
+      "required": false,
+      "description": "Email subject",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email_body_html",
+      "type": "string",
+      "required": false,
+      "description": "Email body html",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"company_settings\": {\n\"data_retention_days\": -1,\n\"email_body_html\": \"<p>Updated email body html</p>\",\n\"email_subject\": \"Updated email subject\",\n\"enabled\": true,\n\"kind\": \"ofccp\"\n}\n}",
+  "example_response": {
+    "error": [
+      "Data retention days must be greater than or equal to 0"
+    ],
+    "error_fields": {
+      "data_retention_days": [
+        "must be greater than or equal to 0"
+      ]
+    }
+  },
+  "tags": [
+    "eeo",
+    "settings"
+  ]
+}

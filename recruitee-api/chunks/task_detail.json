@@ -1,0 +1,93 @@
+{
+  "id": "task_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/tasks/{id}",
+  "summary": "Show task",
+  "description": "Show task. Endpoint: GET /c/{company_id}/tasks/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Task ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/tasks/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 7075,
+        "type": "Admin",
+        "email": "john8714@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/7075/normal_avatar_csnd1f9ykrr3.png",
+        "photo_thumb_url": "tmp/bow/admins/7075/thumb_avatar_csnd1f9ykrr3.png",
+        "timezone": "Europe/Warsaw",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 1906,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:33:23.334448Z",
+        "updated_at": "2026-04-21T07:33:23.334448Z",
+        "is_hired": false,
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=1906&company=3423",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      }
+    ],
+    "task": {
+      "id": 86,
+      "description": "Review candidate and rate his skills",
+      "title": "Rate candidate",
+      "admin_id": 7075,
+      "candidate_id": 1906,
+      "completed": false,
+      "timezone": null,
+      "created_at": "2026-04-21T07:33:23.335882Z",
+      "updated_at": "2026-04-21T07:33:23.335882Z",
+      "completed_at": null,
+      "triggered": false,
+      "due_date": null
+    }
+  },
+  "tags": [
+    "tasks"
+  ]
+}

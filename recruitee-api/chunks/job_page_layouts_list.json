@@ -1,0 +1,29 @@
+{
+  "id": "job_page_layouts_list",
+  "method": "GET",
+  "path": "/c/{company_id}/careers/job_page_layouts",
+  "summary": "List job page layouts",
+  "description": "List job page layouts. Endpoint: GET /c/{company_id}/careers/job_page_layouts. Required parameters: company_id. Optional parameters include q.",
+  "params": [
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search by name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/careers/job_page_layouts\n\nRequired params: company_id\n\nOptional params: q",
+  "example_response": {},
+  "tags": [
+    "careers",
+    "job_page_layouts"
+  ]
+}

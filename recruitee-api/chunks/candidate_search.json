@@ -1,0 +1,88 @@
+{
+  "id": "candidate_search",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/events/search/candidates",
+  "summary": "Search for candidates",
+  "description": "Search for candidates. Endpoint: GET /c/{company_id}/interview/events/search/candidates. Required parameters: company_id. Optional parameters include query.",
+  "params": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": false,
+      "description": "Search query, must be at least 3 characters long",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/events/search/candidates\n\nRequired params: company_id\n\nOptional params: query",
+  "example_response": {
+    "candidates": [
+      {
+        "id": 6,
+        "name": "My",
+        "title": null,
+        "company_id": 171,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "M",
+        "photo_thumb_url": null,
+        "offers": [],
+        "highlight": {
+          "name": [
+            "<em>My</em>"
+          ]
+        },
+        "is_hired": false,
+        "salutation": null,
+        "last_activity_at": "2026-04-21T07:30:29Z",
+        "is_anonymous": false,
+        "phones": [],
+        "viewed": false,
+        "assigned_admins_ids": [],
+        "deleted": false,
+        "importance": 1,
+        "score": 1003.52
+      },
+      {
+        "id": 7,
+        "name": "test my",
+        "title": null,
+        "company_id": 171,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "TM",
+        "photo_thumb_url": null,
+        "offers": [],
+        "highlight": {
+          "name": [
+            "test <em>my</em>"
+          ]
+        },
+        "is_hired": false,
+        "salutation": null,
+        "last_activity_at": "2026-04-21T07:30:29Z",
+        "is_anonymous": false,
+        "phones": [],
+        "viewed": false,
+        "assigned_admins_ids": [],
+        "deleted": false,
+        "importance": 1,
+        "score": 1003.1573
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "events"
+  ]
+}

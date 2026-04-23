@@ -1,0 +1,59 @@
+{
+  "id": "pipeline_template_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/pipeline_templates/update_positions",
+  "summary": "Update pipeline templates positions",
+  "description": "Update pipeline templates positions. Endpoint: PATCH /c/{company_id}/pipeline_templates/update_positions. Required parameters: company_id. Optional parameters include pipeline_templates.",
+  "params": [
+    {
+      "name": "pipeline_templates",
+      "type": "array",
+      "required": false,
+      "description": "Ordered array of template ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"pipeline_templates\": [\n2463,\n2462,\n2464\n]\n}",
+  "example_response": {
+    "pipeline_templates": [
+      {
+        "default": false,
+        "id": 2463,
+        "position": 1,
+        "title": "Pipeline Template",
+        "category": "SAMPLE CATEGORY",
+        "custom": false,
+        "requires_adjustment": false
+      },
+      {
+        "default": false,
+        "id": 2462,
+        "position": 2,
+        "title": "Pipeline Template",
+        "category": "SAMPLE CATEGORY",
+        "custom": false,
+        "requires_adjustment": false
+      },
+      {
+        "default": false,
+        "id": 2464,
+        "position": 3,
+        "title": "Pipeline Template",
+        "category": "SAMPLE CATEGORY",
+        "custom": false,
+        "requires_adjustment": false
+      }
+    ]
+  },
+  "tags": [
+    "pipeline_templates",
+    "pipeline"
+  ]
+}

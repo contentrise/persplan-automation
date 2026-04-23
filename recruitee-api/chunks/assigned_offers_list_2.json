@@ -1,0 +1,106 @@
+{
+  "id": "assigned_offers_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/dynamic_fields/{id}/assigned_offers",
+  "summary": "List given field's assigned offers",
+  "description": "List given field's assigned offers. Endpoint: GET /c/{company_id}/dynamic_fields/{id}/assigned_offers. Required parameters: id, company_id. Optional parameters include q, limit, page.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Field ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search offers",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/dynamic_fields/{id}/assigned_offers\n\nRequired params: id, company_id\n\nOptional params: q, limit, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 3,
+      "page": 1
+    },
+    "assigned_offers": [
+      {
+        "id": 12,
+        "status": "draft",
+        "remote": false,
+        "title": "Best Offer",
+        "country_code": null,
+        "created_at": "2026-04-21T07:30:27.188130Z",
+        "updated_at": "2026-04-21T07:30:27.188130Z",
+        "city": null,
+        "state_code": null,
+        "department": null,
+        "location_ids": [],
+        "slug": "best-offer13",
+        "hybrid": false,
+        "on_site": true
+      },
+      {
+        "id": 13,
+        "status": "draft",
+        "remote": false,
+        "title": "Best Offer",
+        "country_code": null,
+        "created_at": "2026-04-21T07:30:27.191772Z",
+        "updated_at": "2026-04-21T07:30:27.191772Z",
+        "city": null,
+        "state_code": null,
+        "department": null,
+        "location_ids": [],
+        "slug": "best-offer14",
+        "hybrid": false,
+        "on_site": true
+      },
+      {
+        "id": 14,
+        "status": "draft",
+        "remote": false,
+        "title": "Best Offer",
+        "country_code": null,
+        "created_at": "2026-04-21T07:30:27.194216Z",
+        "updated_at": "2026-04-21T07:30:27.194216Z",
+        "city": null,
+        "state_code": null,
+        "department": null,
+        "location_ids": [],
+        "slug": "best-offer15",
+        "hybrid": false,
+        "on_site": true
+      }
+    ]
+  },
+  "tags": [
+    "dynamic_fields",
+    "assigned_offers"
+  ]
+}

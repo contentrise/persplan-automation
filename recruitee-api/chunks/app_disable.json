@@ -1,0 +1,25 @@
+{
+  "id": "app_disable",
+  "method": "PATCH",
+  "path": "/two_factor_authentication_settings/app/disable",
+  "summary": "Disables 2FA by app for current admin",
+  "description": "Disables 2FA by app for current admin. Endpoint: PATCH /two_factor_authentication_settings/app/disable.",
+  "params": [],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"secure_change_token\": \"SFMyNTY.g2gDYgAAE-puBgA-s_SunQFiAAFRgA.1LCcwizj1f8TPaQpdy9FXs694jSab9wwJhT0OhvYbpc\"\n}",
+  "example_response": {
+    "two_factor_authentication_settings": {
+      "phone": null,
+      "app_enabled": false,
+      "sms_enabled": false,
+      "otp_secret": "GJXXGM3EGY4HE5TVMJ3A====",
+      "otpauth_uri": "otpauth://totp/Recruitee:john4710@recruitee.com?secret=GJXXGM3EGY4HE5TVMJ3A%3D%3D%3D%3D&issuer=Recruitee&digits=6&period=30",
+      "show_account_recovered": false,
+      "updated_at": "2026-04-21T07:32:45.504355Z"
+    }
+  },
+  "tags": [
+    "two_factor_authentication_settings",
+    "app",
+    "admin"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "assignments_list",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/assignments",
+  "summary": "Lists requisition assignments",
+  "description": "Lists requisition assignments. Endpoint: GET /c/{company_id}/requisitions/{requisition_id}/assignments. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions/{requisition_id}/assignments\n\nRequired params: requisition_id, company_id",
+  "example_response": {
+    "assignments": [
+      {
+        "id": 55,
+        "admin_id": 8188,
+        "followed": true,
+        "is_approver": false,
+        "is_hiring_manager": false,
+        "is_recruiter": false
+      }
+    ]
+  },
+  "tags": [
+    "requisitions",
+    "assignments"
+  ]
+}

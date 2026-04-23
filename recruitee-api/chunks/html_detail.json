@@ -1,0 +1,22 @@
+{
+  "id": "html_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/mailbox/messages/html",
+  "summary": "Return original message body html",
+  "description": "Return original message body html. Endpoint: GET /c/{company_id}/mailbox/messages/html. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/mailbox/messages/html\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "messages"
+  ]
+}

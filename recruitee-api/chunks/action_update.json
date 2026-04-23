@@ -1,0 +1,36 @@
+{
+  "id": "action_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/trigger/action_sets/{action_set_id}/actions/{action_id}",
+  "summary": "Update single send_email action assigned to action set.",
+  "description": "Update single send_email action assigned to action set.. Endpoint: PATCH /c/{company_id}/trigger/action_sets/{action_set_id}/actions/{action_id}. Required parameters: action_set_id, action_id, company_id.",
+  "params": [
+    {
+      "name": "action_set_id",
+      "type": "integer",
+      "required": true,
+      "description": "Action set ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "action_id",
+      "type": "integer",
+      "required": true,
+      "description": "Action ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/trigger/action_sets/{action_set_id}/actions/{action_id}\n\nRequired params: action_set_id, action_id, company_id",
+  "example_response": {},
+  "tags": [
+    "trigger",
+    "action_sets"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "id": "two_factor_authentication_setting_detail",
+  "method": "GET",
+  "path": "/two_factor_authentication_settings",
+  "summary": "Show 2FA settings for current admin",
+  "description": "Show 2FA settings for current admin. Endpoint: GET /two_factor_authentication_settings.",
+  "params": [],
+  "example_request": "GET /two_factor_authentication_settings",
+  "example_response": {
+    "two_factor_authentication_settings": {
+      "phone": null,
+      "app_enabled": false,
+      "sms_enabled": false,
+      "otp_secret": "MV3DC2DWG44DIYTBNNTQ====",
+      "otpauth_uri": "otpauth://totp/Recruitee:john4731@recruitee.com?secret=MV3DC2DWG44DIYTBNNTQ%3D%3D%3D%3D&issuer=Recruitee&digits=6&period=30",
+      "show_account_recovered": false,
+      "updated_at": "2026-04-21T07:32:45.558786Z"
+    }
+  },
+  "tags": [
+    "two_factor_authentication_settings",
+    "admin"
+  ]
+}

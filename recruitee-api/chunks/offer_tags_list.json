@@ -1,0 +1,60 @@
+{
+  "id": "offer_tags_list",
+  "method": "GET",
+  "path": "/c/{company_id}/offer_tags",
+  "summary": "List offer tags",
+  "description": "List offer tags. Endpoint: GET /c/{company_id}/offer_tags. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offer_tags\n\nRequired params: company_id",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 3,
+      "page": 1
+    },
+    "offer_tags": [
+      {
+        "id": 22,
+        "name": "Offer tag 2",
+        "status": null,
+        "context": "offer_tags",
+        "taggings_count": 5,
+        "searchable_name": "offer tag 2",
+        "offer_taggings_count": 0,
+        "offer_template_taggings_count": 0
+      },
+      {
+        "id": 23,
+        "name": "Offer tag 3",
+        "status": null,
+        "context": "offer_tags",
+        "taggings_count": 3,
+        "searchable_name": "offer tag 3",
+        "offer_taggings_count": 0,
+        "offer_template_taggings_count": 0
+      },
+      {
+        "id": 21,
+        "name": "Offer tag 1",
+        "status": null,
+        "context": "offer_tags",
+        "taggings_count": 2,
+        "searchable_name": "offer tag 1",
+        "offer_taggings_count": 0,
+        "offer_template_taggings_count": 0
+      }
+    ]
+  },
+  "tags": [
+    "offer_tags",
+    "tagging"
+  ]
+}

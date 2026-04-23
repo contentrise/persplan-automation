@@ -1,0 +1,22 @@
+{
+  "id": "language_detail_4",
+  "method": "GET",
+  "path": "/share/lang/languages/{code}",
+  "summary": "Get language by code",
+  "description": "Get language by code. Endpoint: GET /share/lang/languages/{code}. Required parameters: code.",
+  "params": [
+    {
+      "name": "code",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/lang/languages/{code}\n\nRequired params: code",
+  "example_response": {},
+  "tags": [
+    "lang",
+    "languages"
+  ]
+}

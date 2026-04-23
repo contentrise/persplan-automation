@@ -1,0 +1,43 @@
+{
+  "id": "convert_create",
+  "method": "POST",
+  "path": "/c/{company_id}/mailbox/convert",
+  "summary": "Create candidate from thread or attachment",
+  "description": "Create candidate from thread or attachment. Endpoint: POST /c/{company_id}/mailbox/convert. Required parameters: thread_id, attachment_assignment_id, company_id. Optional parameters include offers.",
+  "params": [
+    {
+      "name": "offers",
+      "type": "array",
+      "required": false,
+      "description": "Array of offer IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "thread_id",
+      "type": "Mailbox thread ID",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "attachment_assignment_id",
+      "type": "Mailbox attachment assignment ID",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/mailbox/convert\n\nRequired params: thread_id, attachment_assignment_id, company_id\n\nOptional params: offers",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "convert"
+  ]
+}

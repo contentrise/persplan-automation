@@ -1,0 +1,49 @@
+{
+  "id": "gdpr_create",
+  "method": "POST",
+  "path": "/share/gdpr/{candidate_token}",
+  "summary": "Create GDPR request",
+  "description": "Create GDPR request. Endpoint: POST /share/gdpr/{candidate_token}. Required parameters: message, kind, subdomain, candidate_token.",
+  "params": [
+    {
+      "name": "message",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "required": true,
+      "description": "One of: removal, change",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "subdomain",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_token",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /share/gdpr/{candidate_token}\n\nRequired params: message, kind, subdomain, candidate_token",
+  "example_response": {
+    "gdpr": {
+      "candidate_id": 1923,
+      "language": "en",
+      "candidate_name": "John Doe",
+      "company_name": "Test Company"
+    }
+  },
+  "tags": [
+    "gdpr"
+  ]
+}

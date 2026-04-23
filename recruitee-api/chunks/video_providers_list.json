@@ -1,0 +1,22 @@
+{
+  "id": "video_providers_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/events/video_providers",
+  "summary": "List enabled video providers",
+  "description": "List enabled video providers. Endpoint: GET /c/{company_id}/interview/events/video_providers. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/events/video_providers\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "interview",
+    "events"
+  ]
+}

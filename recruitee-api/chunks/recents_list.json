@@ -1,0 +1,50 @@
+{
+  "id": "recents_list",
+  "method": "GET",
+  "path": "/c/{company_id}/workflow_automations/executed_automations/recent",
+  "summary": "List automations executed in the past 30 minutes",
+  "description": "List automations executed in the past 30 minutes. Endpoint: GET /c/{company_id}/workflow_automations/executed_automations/recent. Required parameters: candidate_id, offer_id, disqualify_reason_id, company_id. Optional parameters include trigger_type.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Filter by candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Filter by offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "disqualify_reason_id",
+      "type": "integer",
+      "required": true,
+      "description": "Filter by disqualify reason ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "trigger_type",
+      "type": "string",
+      "required": false,
+      "description": "Filter by trigger type",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/workflow_automations/executed_automations/recent\n\nRequired params: candidate_id, offer_id, disqualify_reason_id, company_id\n\nOptional params: trigger_type",
+  "example_response": {},
+  "tags": [
+    "workflow_automations",
+    "executed_automations"
+  ]
+}

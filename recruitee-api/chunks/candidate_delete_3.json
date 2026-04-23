@@ -1,0 +1,39 @@
+{
+  "id": "candidate_delete_3",
+  "method": "DELETE",
+  "path": "/c/{company_id}/candidates/{id}/delete_cv",
+  "summary": "Delete candidate's CV",
+  "description": "Delete candidate's CV. Endpoint: DELETE /c/{company_id}/candidates/{id}/delete_cv. Required parameters: id, company_id. Optional parameters include delete_parsed_data.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "delete_parsed_data",
+      "type": "boolean",
+      "required": false,
+      "description": "Delete data previously extracted from CV file (should be string ‘true’ or ‘1’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/candidates/{id}/delete_cv\n\nRequired params: id, company_id\n\nOptional params: delete_parsed_data",
+  "example_response": {
+    "error": [
+      "Forbidden"
+    ]
+  },
+  "tags": [
+    "candidates"
+  ]
+}

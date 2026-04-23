@@ -1,0 +1,57 @@
+{
+  "id": "subscription_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/billing/subscription",
+  "summary": "Updates subscription with given params",
+  "description": "Updates subscription with given params. Endpoint: PATCH /c/{company_id}/billing/subscription. Required parameters: company_id. Optional parameters include addons, billing_period, billing_plan_id, payment_intent_id, fte_range.",
+  "params": [
+    {
+      "name": "addons",
+      "type": "array",
+      "required": false,
+      "description": "Optional list of addons",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "billing_period",
+      "type": "integer",
+      "required": false,
+      "description": "Billing period in months; one of 1, 3, 6, 12, 24, 36",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "billing_plan_id",
+      "type": "integer",
+      "required": false,
+      "description": "Billing plan ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "payment_intent_id",
+      "type": "string",
+      "required": false,
+      "description": "Payment intent id from payment provider (Stripe)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "fte_range",
+      "type": "string",
+      "required": false,
+      "description": "Optional bracket with number of employees. Example: 1-20",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/billing/subscription\n\nRequired params: company_id\n\nOptional params: addons, billing_period, billing_plan_id, payment_intent_id, fte_range",
+  "example_response": {},
+  "tags": [
+    "billing",
+    "subscription"
+  ]
+}

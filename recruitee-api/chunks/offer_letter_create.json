@@ -1,0 +1,141 @@
+{
+  "id": "offer_letter_create",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_letters",
+  "summary": "Create offer letter from template",
+  "description": "Create offer letter from template. Endpoint: POST /c/{company_id}/offer_letters. Required parameters: company_id. Optional parameters include id, placement_id, offer_letter_template_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "placement_id",
+      "type": "integer",
+      "required": false,
+      "description": "Placement ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_letter_template_id",
+      "type": "integer",
+      "required": false,
+      "description": "Source template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_letter\": {\n\"placement_id\": 1267\n}\n}",
+  "example_response": {
+    "offer_letter": {
+      "id": 10,
+      "status": "draft",
+      "title": "Offer letter for John Doe",
+      "token": "b143d0a6-af54-41a2-a62f-d63a38234f80",
+      "details": [
+        {
+          "description": "This is the first detail",
+          "title": "Detail 1"
+        },
+        {
+          "description": "This is the second detail",
+          "title": "Detail 2"
+        }
+      ],
+      "admin_id": 9652,
+      "candidate_id": 2407,
+      "created_at": "2026-04-21T07:33:58.773725Z",
+      "updated_at": "2026-04-21T07:33:58.773725Z",
+      "offer_id": 2024,
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          9652
+        ],
+        "role_ids": [
+          4921
+        ]
+      },
+      "lang_code": "en",
+      "email_subject": "Offer letter for John Doe",
+      "email_body_html": "Hi John,<br /><br />I'm excited to share the details of the offer we discussed on the phone. Here is the link with all the details of our proposal for you.",
+      "sent_at": null,
+      "salary": {
+        "enabled": true,
+        "value": "10000",
+        "description": "This is a salary description",
+        "period": "month",
+        "currency": "EUR",
+        "heading": "Salary"
+      },
+      "published_at": null,
+      "email_attachment_assignments": [],
+      "disclaimer": {
+        "enabled": true,
+        "description_html": "<p>Disclaimer: this offer letter is intended solely for informational purposes and does not constitute a legally binding contract or agreement between the recipient and the company. The terms outlined in this letter, including any potential compensation and benefits, are subject to change and are not guaranteed.</p>",
+        "description_json": null,
+        "heading": null
+      },
+      "heading": {
+        "enabled": true,
+        "description_html": null,
+        "description_json": null,
+        "heading": "Welcome to the team, John!"
+      },
+      "intro": {
+        "enabled": true,
+        "description_html": "<p>We'd be excited to have you on the team! You've made a great impression and everyone's eager to start working together.</p>",
+        "description_json": null,
+        "heading": "We think you're a perfect fit!"
+      },
+      "role_description": {
+        "enabled": false,
+        "description_html": "<p>You'll be part of the team handling important tasks that help move our projects forward. Your day-to-day work may include:</p><ul><li><p>Completing assigned tasks</p></li><li><p>Collaborating with team members</p></li><li><p>Supporting project progress</p></li></ul>",
+        "description_json": null,
+        "heading": "About your role"
+      },
+      "summary": {
+        "enabled": true,
+        "description_html": "To accept this offer, please contact your recruiter by phone or email. If you need more time, just let us know.",
+        "description_json": null,
+        "heading": "Next steps"
+      },
+      "benefits": {
+        "enabled": true,
+        "items": [
+          {
+            "description": "We provide comprehensive health coverage for you, fully covered by the company.",
+            "title": "Health insurance"
+          },
+          {
+            "description": "Every year you receive a budget to attend conferences or take courses to grow your skills.",
+            "title": "Learning budget"
+          },
+          {
+            "description": "Work from wherever you’re most comfortable to maintain a good work-life balance.",
+            "title": "Remote work options"
+          }
+        ],
+        "heading": "Benefits"
+      },
+      "start_date": {
+        "date": null,
+        "description": "Start date description",
+        "title": "Start date"
+      },
+      "link_deactivated": false
+    }
+  },
+  "tags": [
+    "offer_letters"
+  ]
+}

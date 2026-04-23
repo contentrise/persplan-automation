@@ -1,0 +1,32 @@
+{
+  "id": "similars_list",
+  "method": "GET",
+  "path": "/c/{company_id}/candidates/similar",
+  "summary": "Find similar candidates",
+  "description": "Find similar candidates. Endpoint: GET /c/{company_id}/candidates/similar. Required parameters: company_id. Optional parameters include email.",
+  "params": [
+    {
+      "name": "email",
+      "type": "array",
+      "required": false,
+      "description": "Array of email addresses",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/candidates/similar\n\nRequired params: company_id\n\nOptional params: email",
+  "example_response": {
+    "references": [],
+    "candidates": []
+  },
+  "tags": [
+    "candidates",
+    "similar"
+  ]
+}

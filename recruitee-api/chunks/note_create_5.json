@@ -1,0 +1,98 @@
+{
+  "id": "note_create_5",
+  "method": "POST",
+  "path": "/c/{company_id}/talent_pools/{talent_pool_id}/notes",
+  "summary": "Create note for talent pool",
+  "description": "Create note for talent pool. Endpoint: POST /c/{company_id}/talent_pools/{talent_pool_id}/notes. Required parameters: talent_pool_id, company_id. Optional parameters include attachments.",
+  "params": [
+    {
+      "name": "attachments",
+      "type": "array",
+      "required": false,
+      "description": "Attachments ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "talent_pool_id",
+      "type": "integer",
+      "required": true,
+      "description": "Talent Pool ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"note\": {\n\"attachments\": [],\n\"body\": \"Test note\",\n\"visibility\": {\n\"admin_ids\": [\n9589\n],\n\"level\": \"protected\",\n\"role_ids\": [\n4877\n]\n}\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 9589,
+        "type": "Admin",
+        "email": "john1590@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9589/normal_avatar_ho8obonbng3c.png",
+        "photo_thumb_url": "tmp/bow/admins/9589/thumb_avatar_ho8obonbng3c.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "note": {
+      "id": 236,
+      "text": "Test note",
+      "replies": [],
+      "body": "<p>Test note</p>",
+      "admin_id": 9589,
+      "candidate_id": null,
+      "attachments": [],
+      "created_at": "2026-04-21T07:33:58.236444Z",
+      "updated_at": "2026-04-21T07:33:58.236444Z",
+      "offer_id": null,
+      "talent_pool_id": 2009,
+      "requisition_id": null,
+      "guest_id": null,
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          9589
+        ],
+        "role_ids": [
+          4877,
+          4878
+        ]
+      },
+      "body_html": "<p>Test note</p>",
+      "reply_to_id": null,
+      "body_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Test note",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "triggered": false,
+      "pinned_at": null
+    }
+  },
+  "tags": [
+    "talent_pools",
+    "notes"
+  ]
+}

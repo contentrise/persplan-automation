@@ -1,0 +1,49 @@
+{
+  "id": "payment_source_create",
+  "method": "POST",
+  "path": "/c/{company_id}/billing/payment_source",
+  "summary": "Create a payment source (card)",
+  "description": "Create a payment source (card). Endpoint: POST /c/{company_id}/billing/payment_source. Required parameters: company_id. Optional parameters include stripe_token.",
+  "params": [
+    {
+      "name": "stripe_token",
+      "type": "string",
+      "required": false,
+      "description": "Stripe token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/billing/payment_source\n\nRequired params: company_id\n\nOptional params: stripe_token",
+  "example_response": {
+    "billing_information": {
+      "id": 1,
+      "address": "123 st",
+      "currency": "EUR",
+      "email": "email@example.com",
+      "country_code": "NL",
+      "full_name": null,
+      "phone": null,
+      "company_name": "Test company",
+      "invoice_emails": [],
+      "city": "Amsterdam",
+      "postal_code": "12345",
+      "state_code": null,
+      "vat_number": "NL123456789B12",
+      "stripe_card_last4": "1234",
+      "stripe_card_expiration": "2022-01-01",
+      "stripe_card_type": "visa",
+      "valid_credit_card": true
+    }
+  },
+  "tags": [
+    "billing",
+    "payment_source"
+  ]
+}

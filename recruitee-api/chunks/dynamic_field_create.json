@@ -1,0 +1,62 @@
+{
+  "id": "dynamic_field_create",
+  "method": "POST",
+  "path": "/c/{company_id}/dynamic_fields",
+  "summary": "Create field",
+  "description": "Create field. Endpoint: POST /c/{company_id}/dynamic_fields. Required parameters: name, company_id. Optional parameters include type.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Field name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "required": false,
+      "description": "Field type",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"dynamic_field\": {\n\"assign_to_blank_offer\": true,\n\"assign_to_blank_offer_template\": true,\n\"assign_to_offer\": false,\n\"assign_to_requisition\": true,\n\"display_on_careers_site\": true,\n\"required\": true,\n\"translations\": [\n{\n\"lang_code\": \"en\",\n\"name\": \"new field\"\n}\n],\n\"type\": \"single_line\"\n}\n}",
+  "example_response": {
+    "dynamic_field": {
+      "id": 65,
+      "name": "new field",
+      "type": "single_line",
+      "required": true,
+      "offers_count": 0,
+      "created_at": "2026-04-21T07:30:27.049412Z",
+      "updated_at": "2026-04-21T07:30:27.049412Z",
+      "configuration": {},
+      "requisitions_count": 0,
+      "assign_to_offer": false,
+      "assign_to_requisition": true,
+      "display_on_careers_site": true,
+      "translations": [
+        {
+          "default": true,
+          "name": "new field",
+          "lang_code": "en",
+          "filled_count": 1,
+          "total_count": 1
+        }
+      ],
+      "offer_templates_count": 0,
+      "assign_to_blank_offer": true,
+      "assign_to_blank_offer_template": true
+    }
+  },
+  "tags": [
+    "dynamic_fields"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "fieldset_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/custom_fields/fieldsets/update_positions",
+  "summary": "Update fieldset positions",
+  "description": "Update fieldset positions. Endpoint: PATCH /c/{company_id}/custom_fields/fieldsets/update_positions. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"fieldsets\": [\n{\n\"id\": 44,\n\"position\": 2\n},\n{\n\"id\": 45,\n\"position\": 3\n},\n{\n\"id\": 46,\n\"position\": 1\n}\n]\n}",
+  "example_response": {},
+  "tags": [
+    "custom_fields",
+    "fieldsets"
+  ]
+}

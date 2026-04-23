@@ -1,0 +1,54 @@
+{
+  "id": "referral_template_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/referral_templates",
+  "summary": "Create custom referral template for offer template",
+  "description": "Create custom referral template for offer template. Endpoint: POST /c/{company_id}/offer_templates/{offer_template_id}/referral_templates. Required parameters: offer_template_id, referral_template, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "referral_template",
+      "type": "map",
+      "required": true,
+      "description": "Custom template params",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"referral_template\": {\n\"referral_questions\": []\n}\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "required_validation",
+        "data": {},
+        "message": "Referral questions can't be blank",
+        "source": "template/referral_questions"
+      }
+    ],
+    "resources": {
+      "referral_questions": [
+        {
+          "code": "required_validation",
+          "data": {},
+          "message": "can't be blank"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "referral_templates"
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "id": "hiddens_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/candidates/{candidate_id}/results/hidden",
+  "summary": "List hidden results for candidate",
+  "description": "List hidden results for candidate. Endpoint: GET /c/{company_id}/interview/candidates/{candidate_id}/results/hidden. Required parameters: candidate_id, company_id. Optional parameters include limit, offer_id, stage_id, page.",
+  "params": [
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default is unlimited",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stage_id",
+      "type": "integer",
+      "required": false,
+      "description": "Stage ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number used for pagination, can be used only with the limit option (1, 2, 3, 4…)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/candidates/{candidate_id}/results/hidden\n\nRequired params: candidate_id, company_id\n\nOptional params: limit, offer_id, stage_id, page",
+  "example_response": {
+    "references": [
+      {
+        "id": 6536,
+        "type": "Admin",
+        "email": "john7466@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/6536/normal_avatar_vevys6uyl82e.png",
+        "photo_thumb_url": "tmp/bow/admins/6536/thumb_avatar_vevys6uyl82e.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 1631,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:33:04.135205Z",
+        "updated_at": "2026-04-21T07:33:04.135205Z",
+        "is_hired": false,
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=1631&company=3257",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      },
+      {
+        "id": 1468,
+        "position": 137,
+        "status": "draft",
+        "type": "Offer",
+        "remote": false,
+        "description": "<p>Elixir</p>\n",
+        "title": "Best Offer",
+        "location": "",
+        "kind": "job",
+        "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+        "url": null,
+        "created_at": "2026-04-21T07:33:04.134151Z",
+        "department": null,
+        "lang_code": "en",
+        "department_id": null,
+        "slug": "best-offer1031",
+        "hybrid": false,
+        "on_site": true,
+        "guid": "guid986",
+        "recruiter_id": null,
+        "hiring_manager_id": null,
+        "wysiwyg_editor": "redactor",
+        "pipeline_template_id": 4736,
+        "careers_job_page_layout_id": null,
+        "job_position_id": null,
+        "mailbox_email": null,
+        "highlight_html": "<p>Elixir</p>\n"
+      },
+      {
+        "id": 37954,
+        "name": "Applied",
+        "position": 24340,
+        "type": "Stage",
+        "group": "active",
+        "category": "none",
+        "created_at": "2026-04-21T07:33:04.132585Z",
+        "updated_at": "2026-04-21T07:33:04.133338Z",
+        "fair_evaluations_enabled": true,
+        "pipeline_template_id": 4736,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      }
+    ],
+    "hidden_interview_results": [
+      {
+        "id": 251,
+        "kind": "rating",
+        "admin_id": 6536,
+        "candidate_id": 1631,
+        "rating": "strong_yes",
+        "created_at": "2026-04-21T07:33:04.138041Z",
+        "updated_at": "2026-04-21T07:33:04.138041Z",
+        "offer_id": 1468,
+        "talent_pool_id": null,
+        "guest_id": null,
+        "stage_id": 37954,
+        "interview_result_answers": [],
+        "interview_template_name": null,
+        "rating_note": null,
+        "interview_template_info_title": null,
+        "interview_template_info_description": null,
+        "rating_required": null
+      },
+      {
+        "id": 250,
+        "kind": "rating",
+        "admin_id": 6536,
+        "candidate_id": 1631,
+        "rating": "strong_yes",
+        "created_at": "2026-04-21T07:33:04.137030Z",
+        "updated_at": "2026-04-21T07:33:04.137030Z",
+        "offer_id": 1468,
+        "talent_pool_id": null,
+        "guest_id": null,
+        "stage_id": 37954,
+        "interview_result_answers": [],
+        "interview_template_name": null,
+        "rating_note": null,
+        "interview_template_info_title": null,
+        "interview_template_info_description": null,
+        "rating_required": null
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "candidates"
+  ]
+}

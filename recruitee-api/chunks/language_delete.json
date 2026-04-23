@@ -1,0 +1,22 @@
+{
+  "id": "language_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/lang/languages/",
+  "summary": "Delete language",
+  "description": "Delete language. Endpoint: DELETE /c/{company_id}/lang/languages/. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/lang/languages/\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "lang",
+    "languages"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "offer_detail_4",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/offers",
+  "summary": "Show assigned to requisition offers",
+  "description": "Show assigned to requisition offers. Endpoint: GET /c/{company_id}/requisitions/{requisition_id}/offers. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions/{requisition_id}/offers\n\nRequired params: requisition_id, company_id",
+  "example_response": {
+    "offers": [
+      {
+        "id": 2515,
+        "status": "draft",
+        "remote": false,
+        "title": "Best Offer",
+        "location": null,
+        "country_code": null,
+        "updated_at": "2026-04-21T07:34:06.090424Z",
+        "city": null,
+        "department": null,
+        "location_ids": [],
+        "department_id": null,
+        "slug": "best-offer172",
+        "hybrid": false,
+        "on_site": true,
+        "guid": "guid168",
+        "qualified_candidates_count": 0,
+        "hired_candidates_count": 0,
+        "disqualified_candidates_count": 0
+      },
+      {
+        "id": 2516,
+        "status": "draft",
+        "remote": false,
+        "title": "Best Offer",
+        "location": null,
+        "country_code": null,
+        "updated_at": "2026-04-21T07:34:06.093188Z",
+        "city": null,
+        "department": null,
+        "location_ids": [],
+        "department_id": null,
+        "slug": "best-offer173",
+        "hybrid": false,
+        "on_site": true,
+        "guid": "guid169",
+        "qualified_candidates_count": 0,
+        "hired_candidates_count": 0,
+        "disqualified_candidates_count": 0
+      }
+    ]
+  },
+  "tags": [
+    "requisitions",
+    "offers"
+  ]
+}

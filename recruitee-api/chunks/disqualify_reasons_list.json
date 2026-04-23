@@ -1,0 +1,68 @@
+{
+  "id": "disqualify_reasons_list",
+  "method": "GET",
+  "path": "/c/{company_id}/disqualify_reasons",
+  "summary": "List disqualify reasons",
+  "description": "List disqualify reasons. Endpoint: GET /c/{company_id}/disqualify_reasons. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/disqualify_reasons\n\nRequired params: company_id",
+  "example_response": {
+    "disqualify_reasons": [
+      {
+        "id": 73,
+        "name": "Reason 1",
+        "position": 1,
+        "action_templates": [
+          {
+            "data": {
+              "tags": [
+                "tag1"
+              ]
+            },
+            "id": 295,
+            "kind": "add_tags",
+            "references": []
+          },
+          {
+            "data": {
+              "text": "this is note",
+              "body": "this is note",
+              "visibility": {
+                "admin_ids": [],
+                "level": "public",
+                "role_ids": []
+              },
+              "body_html": null,
+              "body_json": null
+            },
+            "id": 296,
+            "kind": "add_note",
+            "references": []
+          }
+        ],
+        "automation_ids": [],
+        "open_questions_count": 0
+      },
+      {
+        "id": 74,
+        "name": "Reason 2",
+        "position": 2,
+        "action_templates": [],
+        "automation_ids": [],
+        "open_questions_count": 0
+      }
+    ]
+  },
+  "tags": [
+    "disqualify_reasons",
+    "pipeline"
+  ]
+}

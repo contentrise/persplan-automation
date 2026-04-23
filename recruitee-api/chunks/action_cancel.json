@@ -1,0 +1,29 @@
+{
+  "id": "action_cancel",
+  "method": "PATCH",
+  "path": "/c/{company_id}/trigger/actions/{action_id}/cancel",
+  "summary": "Cancels single action.",
+  "description": "Cancels single action.. Endpoint: PATCH /c/{company_id}/trigger/actions/{action_id}/cancel. Required parameters: action_id, company_id.",
+  "params": [
+    {
+      "name": "action_id",
+      "type": "integer",
+      "required": true,
+      "description": "Action ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/trigger/actions/{action_id}/cancel\n\nRequired params: action_id, company_id",
+  "example_response": {},
+  "tags": [
+    "trigger",
+    "actions"
+  ]
+}

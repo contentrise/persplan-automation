@@ -1,0 +1,59 @@
+{
+  "id": "tags_list",
+  "method": "GET",
+  "path": "/c/{company_id}/tags",
+  "summary": "List candidate tags",
+  "description": "List candidate tags. Endpoint: GET /c/{company_id}/tags. Required parameters: company_id. Optional parameters include sort_by, query, sort_order.",
+  "params": [
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "One of: [name taggings_count]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "query",
+      "type": "string",
+      "required": false,
+      "description": "Search query",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "One of: [desc asc], default: asc",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/tags\n\nRequired params: company_id\n\nOptional params: sort_by, query, sort_order",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 1,
+      "page": 1
+    },
+    "tags": [
+      {
+        "id": 93,
+        "name": "Python developer",
+        "status": null,
+        "context": "tags",
+        "taggings_count": 2,
+        "searchable_name": "python developer"
+      }
+    ]
+  },
+  "tags": [
+    "tags",
+    "tagging"
+  ]
+}

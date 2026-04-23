@@ -1,0 +1,24 @@
+{
+  "id": "count_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/gdpr/auto_delete/count",
+  "summary": "Gets candidates count eligible for auto delete",
+  "description": "Gets candidates count eligible for auto delete. Endpoint: GET /c/{company_id}/gdpr/auto_delete/count. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/gdpr/auto_delete/count\n\nRequired params: company_id",
+  "example_response": {
+    "candidates_count": 2
+  },
+  "tags": [
+    "gdpr",
+    "auto_delete"
+  ]
+}

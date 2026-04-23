@@ -1,0 +1,68 @@
+{
+  "id": "templates_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/templates",
+  "summary": "List interview templates",
+  "description": "List interview templates. Endpoint: GET /c/{company_id}/interview/templates. Required parameters: company_id. Optional parameters include kind.",
+  "params": [
+    {
+      "name": "kind",
+      "type": "string",
+      "required": false,
+      "description": "Limits templates to ‘interview’ or ‘questionnaire’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/templates\n\nRequired params: company_id\n\nOptional params: kind",
+  "example_response": {
+    "references": [
+      {
+        "id": 1211,
+        "type": "Admin",
+        "email": "john651@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1211/normal_avatar_rkwf198r8udo.png",
+        "photo_thumb_url": "tmp/bow/admins/1211/thumb_avatar_rkwf198r8udo.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "interview_templates": [
+      {
+        "id": 4,
+        "name": "Interview template 1",
+        "position": 1,
+        "category": "Engineering",
+        "kind": "interview",
+        "token": "abcdef123456",
+        "info_title": "Interview preperation",
+        "info_description": "<p>Elixir Developer interview</p>\n"
+      },
+      {
+        "id": 5,
+        "name": "Interview template 2",
+        "position": 2,
+        "category": "Engineering",
+        "kind": "interview",
+        "token": "abcdef123456",
+        "info_title": "Interview preperation",
+        "info_description": "<p>Elixir Developer interview</p>\n"
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "templates"
+  ]
+}

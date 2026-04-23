@@ -1,0 +1,228 @@
+{
+  "id": "requisitions_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions",
+  "summary": "Lists requisitions",
+  "description": "Lists requisitions. Endpoint: GET /c/{company_id}/requisitions. Required parameters: company_id. Optional parameters include scope, q, group_by, sort_by.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Scope, can be: ‘active’, ‘requested_by_me’, ‘need_my_approval’, ‘archived’ (default ‘active’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search query - allows to filter by title, guid, location",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "group_by",
+      "type": "string",
+      "required": false,
+      "description": "Allows to group requisitions by department, status, title, location, country, state, recruiter, hiring_manager",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Allows to sort requisitions by title, id, status, department_name, created_at, location, state_name, hires_count, recruiter_name, hiring_manager_name, openings_count, requester_name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions\n\nRequired params: company_id\n\nOptional params: scope, q, group_by, sort_by",
+  "example_response": {
+    "groups": [
+      {
+        "count": 2,
+        "name": "Pomorskie",
+        "requisitions": [
+          {
+            "id": 401,
+            "status": "draft",
+            "title": "Backend Developer",
+            "location": "Poland, Pomorskie, Poznań, 60-001, ul. Wiosny Ludów 2",
+            "form": {
+              "fields": [
+                "locations"
+              ],
+              "dynamic_field_ids": []
+            },
+            "dynamic_fields": [],
+            "country_code": "PL",
+            "openings_count": 0,
+            "offers": [],
+            "offers_count": 0,
+            "created_at": "2026-04-21T07:34:07.436722Z",
+            "updated_at": "2026-04-21T07:34:07.436722Z",
+            "city": "Poznań",
+            "state_code": "22",
+            "followed": false,
+            "location_ids": [
+              343
+            ],
+            "department_name": null,
+            "street": "ul. Wiosny Ludów 2",
+            "guid": "guid187",
+            "requester_name": null,
+            "state_name": "Pomorskie",
+            "archived_at": null,
+            "follower_ids": [],
+            "openings": [],
+            "approval_request": null,
+            "hires_count": 0,
+            "approval_flow_id": 476,
+            "recruiter_name": null,
+            "hiring_manager_name": null,
+            "rejection_reason": null,
+            "rejected_by_id": null
+          },
+          {
+            "id": 402,
+            "status": "draft",
+            "title": "Backend Developer",
+            "location": "Poland, Pomorskie, Poznań, 60-001, ul. Wiosny Ludów 2",
+            "form": {
+              "fields": [
+                "locations"
+              ],
+              "dynamic_field_ids": []
+            },
+            "dynamic_fields": [],
+            "country_code": "PL",
+            "openings_count": 0,
+            "offers": [],
+            "offers_count": 0,
+            "created_at": "2026-04-21T07:34:07.437605Z",
+            "updated_at": "2026-04-21T07:34:07.437605Z",
+            "city": "Poznań",
+            "state_code": "22",
+            "followed": false,
+            "location_ids": [
+              343
+            ],
+            "department_name": null,
+            "street": "ul. Wiosny Ludów 2",
+            "guid": "guid188",
+            "requester_name": null,
+            "state_name": "Pomorskie",
+            "archived_at": null,
+            "follower_ids": [],
+            "openings": [],
+            "approval_request": null,
+            "hires_count": 0,
+            "approval_flow_id": 477,
+            "recruiter_name": null,
+            "hiring_manager_name": null,
+            "rejection_reason": null,
+            "rejected_by_id": null
+          }
+        ]
+      },
+      {
+        "count": 1,
+        "name": "Podlaskie",
+        "requisitions": [
+          {
+            "id": 403,
+            "status": "draft",
+            "title": "Backend Developer",
+            "location": "Poland, Podlaskie, Poznań, 60-001, ul. Wiosny Ludów 2",
+            "form": {
+              "fields": [
+                "locations"
+              ],
+              "dynamic_field_ids": []
+            },
+            "dynamic_fields": [],
+            "country_code": "PL",
+            "openings_count": 0,
+            "offers": [],
+            "offers_count": 0,
+            "created_at": "2026-04-21T07:34:07.438446Z",
+            "updated_at": "2026-04-21T07:34:07.438446Z",
+            "city": "Poznań",
+            "state_code": "20",
+            "followed": false,
+            "location_ids": [
+              344
+            ],
+            "department_name": null,
+            "street": "ul. Wiosny Ludów 2",
+            "guid": "guid189",
+            "requester_name": null,
+            "state_name": "Podlaskie",
+            "archived_at": null,
+            "follower_ids": [],
+            "openings": [],
+            "approval_request": null,
+            "hires_count": 0,
+            "approval_flow_id": 478,
+            "recruiter_name": null,
+            "hiring_manager_name": null,
+            "rejection_reason": null,
+            "rejected_by_id": null
+          }
+        ]
+      },
+      {
+        "count": 1,
+        "name": null,
+        "requisitions": [
+          {
+            "id": 400,
+            "status": "draft",
+            "title": "Backend Developer",
+            "location": null,
+            "form": {
+              "fields": [
+                "locations"
+              ],
+              "dynamic_field_ids": []
+            },
+            "dynamic_fields": [],
+            "country_code": null,
+            "openings_count": 0,
+            "offers": [],
+            "offers_count": 0,
+            "created_at": "2026-04-21T07:34:07.435766Z",
+            "updated_at": "2026-04-21T07:34:07.435766Z",
+            "city": null,
+            "state_code": null,
+            "followed": false,
+            "location_ids": [],
+            "department_name": null,
+            "street": null,
+            "guid": "guid186",
+            "requester_name": null,
+            "state_name": null,
+            "archived_at": null,
+            "follower_ids": [],
+            "openings": [],
+            "approval_request": null,
+            "hires_count": 0,
+            "approval_flow_id": 475,
+            "recruiter_name": null,
+            "hiring_manager_name": null,
+            "rejection_reason": null,
+            "rejected_by_id": null
+          }
+        ]
+      }
+    ]
+  },
+  "tags": [
+    "requisitions"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "shared_email_providers_list",
+  "method": "GET",
+  "path": "/c/{company_id}/mailbox/shared_email_providers",
+  "summary": "Browse Shared Email Provideres",
+  "description": "Browse Shared Email Provideres. Endpoint: GET /c/{company_id}/mailbox/shared_email_providers. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/mailbox/shared_email_providers\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "shared_email_providers"
+  ]
+}

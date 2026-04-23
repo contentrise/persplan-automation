@@ -1,0 +1,45 @@
+{
+  "id": "open_question_create",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/{offer_id}/open_question_templates/open_questions",
+  "summary": "Create Open question",
+  "description": "Create Open question. Endpoint: POST /c/{company_id}/offers/{offer_id}/open_question_templates/open_questions. Required parameters: offer_id, company_id. Optional parameters include source_template_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": false,
+      "description": "Open Question template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question\": {\n\"kind\": \"single_choice\",\n\"open_question_options\": [\n{\n\"disqualify_reason_id\": 5,\n\"translations\": [\n{\n\"body\": \"Open Question Option Translation\",\n\"lang_code\": \"en\"\n}\n]\n},\n{\n\"disqualify_reason_id\": 5,\n\"translations\": [\n{\n\"body\": \"Open Question Option Translation\",\n\"lang_code\": \"en\"\n}\n]\n}\n],\n\"required\": false,\n\"translations\": [\n{\n\"body\": \"What does OTP mean?\",\n\"lang_code\": \"en\"\n}\n],\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n},\n\"source_template_id\": 13\n}",
+  "example_response": {
+    "error": [
+      "Open question options At least one option must be not disqualifying"
+    ],
+    "error_fields": {
+      "open_question_options": [
+        "At least one option must be not disqualifying"
+      ]
+    }
+  },
+  "tags": [
+    "offers",
+    "open_question_templates"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "id": "primary_contact_create",
+  "method": "POST",
+  "path": "/c/{company_id}/primary_contact",
+  "summary": "Create primary contact",
+  "description": "Create primary contact. Endpoint: POST /c/{company_id}/primary_contact. Required parameters: admin_id, company_id. Optional parameters include secondary_contact_emails.",
+  "params": [
+    {
+      "name": "admin_id",
+      "type": "integer",
+      "required": true,
+      "description": "Admin ID.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "secondary_contact_emails",
+      "type": "array",
+      "required": false,
+      "description": "Secondary contact emails",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"admin_id\": 5074,\n\"secondary_contact_emails\": [\n\"admin@example\"\n]\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "format_validation",
+        "data": {},
+        "message": "Secondary contact emails has invalid format",
+        "source": "primary_contact/secondary_contact_emails"
+      }
+    ],
+    "resources": {
+      "secondary_contact_emails": [
+        {
+          "code": "format_validation",
+          "data": {},
+          "message": "has invalid format"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "primary_contact",
+    "company"
+  ]
+}

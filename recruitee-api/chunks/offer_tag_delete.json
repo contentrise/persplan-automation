@@ -1,0 +1,36 @@
+{
+  "id": "offer_tag_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/offer_tags",
+  "summary": "Remove offer tags from company",
+  "description": "Remove offer tags from company. Endpoint: DELETE /c/{company_id}/offer_tags. Required parameters: company_id. Optional parameters include id, ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer tag ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ids",
+      "type": "integer",
+      "required": false,
+      "description": "Offer tag IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/offer_tags\n\nRequired params: company_id\n\nOptional params: id, ids",
+  "example_response": {},
+  "tags": [
+    "offer_tags",
+    "tagging"
+  ]
+}

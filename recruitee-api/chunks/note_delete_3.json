@@ -1,0 +1,46 @@
+{
+  "id": "note_delete_3",
+  "method": "DELETE",
+  "path": "/c/{company_id}/reactions/notes/{note_id}",
+  "summary": "Delete note reaction",
+  "description": "Delete note reaction. Endpoint: DELETE /c/{company_id}/reactions/notes/{note_id}. Required parameters: unicode, note_id, company_id.",
+  "params": [
+    {
+      "name": "unicode",
+      "type": "string",
+      "required": true,
+      "description": "Emoji",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "note_id",
+      "type": "integer",
+      "required": true,
+      "description": "Note ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"unicode\": \"🧑🏿‍🚀\"\n}",
+  "example_response": {
+    "reaction": {
+      "id": 4,
+      "unicode": "🧑🏿‍🚀",
+      "base": "🧑‍🚀",
+      "admin_id": 534,
+      "company_id": 270,
+      "created_at": "2026-04-21T07:30:34.874641Z",
+      "note_id": 9
+    }
+  },
+  "tags": [
+    "reactions",
+    "notes"
+  ]
+}

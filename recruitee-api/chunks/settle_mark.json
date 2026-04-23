@@ -1,0 +1,38 @@
+{
+  "id": "settle_mark",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/applications/settle",
+  "summary": "Mark application as accepted or rejected or reopen application",
+  "description": "Mark application as accepted or rejected or reopen application. Endpoint: PATCH /c/{company_id}/referral/applications/settle. Required parameters: company_id. Optional parameters include claim_status, application_ids.",
+  "params": [
+    {
+      "name": "claim_status",
+      "type": "string",
+      "required": false,
+      "description": "One of: [open accepted rejected]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "application_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of application ids in case of bulk action",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"application\": {\n\"claim_status\": \"accepted\"\n},\n\"application_ids\": [\n49,\n50,\n51\n]\n}",
+  "example_response": {
+    "uuid": "c0c3bb7f-2c06-4ad5-b1b1-c492efd04f1a"
+  },
+  "tags": [
+    "referral",
+    "applications"
+  ]
+}

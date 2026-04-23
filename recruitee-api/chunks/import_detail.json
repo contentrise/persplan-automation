@@ -1,0 +1,115 @@
+{
+  "id": "import_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/imports/{id}",
+  "summary": "Show import",
+  "description": "Show import. Endpoint: GET /c/{company_id}/imports/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Import ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/imports/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "import": {
+      "id": 26,
+      "name": null,
+      "status": "uploaded",
+      "merge": false,
+      "sources": [],
+      "file_name": "import.csv",
+      "columns": [
+        {
+          "match": "name",
+          "name": "Full name",
+          "value": "Natasha Romanova"
+        },
+        {
+          "match": "first_name",
+          "name": "First name",
+          "value": "Natasha"
+        },
+        {
+          "match": "last_name",
+          "name": "Second name",
+          "value": "Romanova"
+        },
+        {
+          "match": "emails",
+          "name": "Email",
+          "value": "natasha@marvel.io"
+        },
+        {
+          "match": "phones",
+          "name": "Phone",
+          "value": "+400-300-200"
+        },
+        {
+          "match": "links",
+          "name": "Web",
+          "value": "google.com"
+        },
+        {
+          "match": "social_links",
+          "name": "Social",
+          "value": "github.com"
+        },
+        {
+          "match": "tags",
+          "name": "Tags",
+          "value": "women;superhero;intelligence"
+        },
+        {
+          "match": null,
+          "name": "Place of birth",
+          "value": "Russia"
+        },
+        {
+          "match": null,
+          "name": "Job",
+          "value": "Black Widow"
+        },
+        {
+          "match": null,
+          "name": "Group",
+          "value": "Avengers"
+        }
+      ],
+      "delimiter": ";",
+      "admin_id": 1128,
+      "offers": [],
+      "file_url": "tmp/bow/imports/26/import.csv",
+      "talent_pools": []
+    },
+    "references": [
+      {
+        "id": 1128,
+        "type": "Admin",
+        "email": "john531@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1128/normal_avatar_e4ackp6b5m6a.png",
+        "photo_thumb_url": "tmp/bow/admins/1128/thumb_avatar_e4ackp6b5m6a.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ]
+  },
+  "tags": [
+    "imports"
+  ]
+}

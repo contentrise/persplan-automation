@@ -1,0 +1,40 @@
+{
+  "id": "identity_provider_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/sso/identity_provider",
+  "summary": "Update SSO Identity Provider for a company",
+  "description": "Update SSO Identity Provider for a company. Endpoint: PATCH /c/{company_id}/sso/identity_provider. Required parameters: company_id. Optional parameters include metadata, role_id.",
+  "params": [
+    {
+      "name": "metadata",
+      "type": "file",
+      "required": false,
+      "description": "Metadata XML file. Can’t update when IdP is active",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "role_id",
+      "type": "integer",
+      "required": false,
+      "description": "Can’t be admin",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"secure_change_token\": \"SFMyNTY.g2gDYgAAITBuBgD9fPWunQFiAAFRgA.d6zMUHxbpNzPCd8HGE511VgWRIUJzKDeoksbJS1WkGw\",\n\"sso_identity_provider\": {\n\"role_id\": 4288\n}\n}",
+  "example_response": {
+    "error": [
+      "Page not found"
+    ]
+  },
+  "tags": [
+    "sso",
+    "identity_provider"
+  ]
+}

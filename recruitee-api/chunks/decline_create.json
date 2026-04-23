@@ -1,0 +1,39 @@
+{
+  "id": "decline_create",
+  "method": "POST",
+  "path": "/share/gdpr/consent/decline",
+  "summary": "Declines the consent link",
+  "description": "Declines the consent link. Endpoint: POST /share/gdpr/consent/decline. Required parameters: subdomain, consent_link_token.",
+  "params": [
+    {
+      "name": "subdomain",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "consent_link_token",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /share/gdpr/consent/decline\n\nRequired params: subdomain, consent_link_token",
+  "example_response": {
+    "consent_link": {
+      "candidate_id": 24,
+      "language": "en",
+      "candidate_name": "John Doe",
+      "extension_days": 100,
+      "company_name": "Test Company",
+      "consent_privacy_link": null,
+      "candidate_token": null
+    }
+  },
+  "tags": [
+    "gdpr",
+    "consent"
+  ]
+}

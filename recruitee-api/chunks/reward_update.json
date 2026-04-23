@@ -1,0 +1,72 @@
+{
+  "id": "reward_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/rewards/{id}",
+  "summary": "Update company's reward for referral program",
+  "description": "Update company's reward for referral program. Endpoint: PATCH /c/{company_id}/referral/rewards/{id}. Required parameters: id, name, photo, body_html, company_id. Optional parameters include offer_assignments_ids, offer_template_assignments_ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Referral reward id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "photo",
+      "type": "file",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "body_html",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_assignments_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of selected offer assignments",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_assignments_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of selected offer template assignments",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"reward\": {\n\"offer_assignments_ids\": [\n97,\n99\n]\n}\n}",
+  "example_response": {
+    "reward": {
+      "id": 47,
+      "name": "Great reward",
+      "photo_thumb_url": null,
+      "photo_url": null,
+      "body_html": "Reward description"
+    }
+  },
+  "tags": [
+    "referral",
+    "rewards"
+  ]
+}

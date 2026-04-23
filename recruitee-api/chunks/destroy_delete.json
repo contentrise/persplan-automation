@@ -1,0 +1,31 @@
+{
+  "id": "destroy_delete",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/destroy",
+  "summary": "Delete candidates in bulk",
+  "description": "Delete candidates in bulk. Endpoint: PATCH /c/{company_id}/bulk/candidates/destroy. Required parameters: company_id. Optional parameters include candidates.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n504,\n505,\n506\n]\n}",
+  "example_response": {
+    "uuid": "20f5561f-3c47-453d-8462-3251bacef39a"
+  },
+  "tags": [
+    "candidates",
+    "destroy"
+  ]
+}

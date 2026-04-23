@@ -1,0 +1,23 @@
+{
+  "id": "country_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/payments/countries",
+  "summary": "Get supported countries info",
+  "description": "Get supported countries info. Endpoint: GET /c/{company_id}/payments/countries. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/payments/countries\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "payments",
+    "countries",
+    "paymentgateway"
+  ]
+}

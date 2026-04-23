@@ -1,0 +1,63 @@
+{
+  "id": "source_create",
+  "method": "POST",
+  "path": "/c/{company_id}/candidates/{candidate_id}/sources",
+  "summary": "Create candidate sources",
+  "description": "Create candidate sources. Endpoint: POST /c/{company_id}/candidates/{candidate_id}/sources. Required parameters: company_id. Optional parameters include sources, source, candidate_id.",
+  "params": [
+    {
+      "name": "sources",
+      "type": "array",
+      "required": false,
+      "description": "Array of sources",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source",
+      "type": "string",
+      "required": false,
+      "description": "Source",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": false,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"sources\": [\n\"Indeed\",\n\"Linkedin\"\n]\n}",
+  "example_response": {
+    "sources": [
+      {
+        "id": 143,
+        "name": "Indeed",
+        "status": null,
+        "context": "sources",
+        "taggings_count": 1,
+        "searchable_name": "indeed"
+      },
+      {
+        "id": 144,
+        "name": "Linkedin",
+        "status": null,
+        "context": "sources",
+        "taggings_count": 1,
+        "searchable_name": "linkedin"
+      }
+    ]
+  },
+  "tags": [
+    "candidates",
+    "sources",
+    "tagging"
+  ]
+}

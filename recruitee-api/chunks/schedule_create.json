@@ -1,0 +1,33 @@
+{
+  "id": "schedule_create",
+  "method": "POST",
+  "path": "/c/{company_id}/interview/schedules",
+  "summary": "Create interview schedule",
+  "description": "Create interview schedule. Endpoint: POST /c/{company_id}/interview/schedules. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_schedule\": {\n\"duration\": 60,\n\"expiration_days\": 5,\n\"interview_schedule_assignments\": [\n{\n\"admin_id\": 4316,\n\"availabilities\": [\n{\n\"day\": 1,\n\"slots\": [\n{\n\"from\": \"09:00:00\",\n\"to\": \"16:00:00\"\n}\n]\n}\n],\n\"timezone\": \"Europe/Amsterdam\"\n}\n],\n\"interview_schedule_result_requests\": [\n{\n\"admin_id\": 4316,\n\"interview_template_id\": 109\n}\n],\n\"kind\": \"meeting\",\n\"location\": \"Poznan\",\n\"name\": \"Interview availability\",\n\"range_end\": 10,\n\"range_start\": 2,\n\"timezone\": \"Europe/Warsaw\"\n}\n}",
+  "example_response": {
+    "error": [],
+    "error_fields": {
+      "interview_schedule_result_requests": [
+        {
+          "interview_template_id": [
+            "is not permitted, you do not have access"
+          ]
+        }
+      ]
+    }
+  },
+  "tags": [
+    "interview",
+    "schedules"
+  ]
+}

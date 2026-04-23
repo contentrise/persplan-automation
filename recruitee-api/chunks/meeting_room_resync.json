@@ -1,0 +1,52 @@
+{
+  "id": "meeting_room_resync",
+  "method": "POST",
+  "path": "/c/{company_id}/interview/meeting_rooms/{id}/resync",
+  "summary": "Resync rooms with deleted calendars",
+  "description": "Resync rooms with deleted calendars. Endpoint: POST /c/{company_id}/interview/meeting_rooms/{id}/resync. Required parameters: id, external_calendar_id, calendar_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Room to resync ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "external_calendar_id",
+      "type": "integer",
+      "required": true,
+      "description": "External calendar ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "calendar_id",
+      "type": "integer",
+      "required": true,
+      "description": "Temporary interview calendar ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"external_calendar_id\": \"snape@resource.calendar.google.com\"\n}",
+  "example_response": {
+    "error": [
+      "Interview calendar id already synced"
+    ],
+    "error_fields": {
+      "interview_calendar_id": [
+        "already synced"
+      ]
+    }
+  },
+  "tags": [
+    "interview",
+    "meeting_rooms"
+  ]
+}

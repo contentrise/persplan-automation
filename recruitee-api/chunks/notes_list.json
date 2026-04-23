@@ -1,0 +1,172 @@
+{
+  "id": "notes_list",
+  "method": "GET",
+  "path": "/c/{company_id}/candidates/{candidate_id}/notes",
+  "summary": "List notes for candidate",
+  "description": "List notes for candidate. Endpoint: GET /c/{company_id}/candidates/{candidate_id}/notes. Required parameters: candidate_id, company_id.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/candidates/{candidate_id}/notes\n\nRequired params: candidate_id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 9362,
+        "type": "Admin",
+        "email": "john1170@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9362/normal_avatar_btwlfb36buan.png",
+        "photo_thumb_url": "tmp/bow/admins/9362/thumb_avatar_btwlfb36buan.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "notes": [
+      {
+        "id": 135,
+        "text": "Test comment",
+        "replies": [
+          {
+            "id": 136,
+            "text": "Test comment",
+            "replies": [],
+            "body": "<p>Test comment</p>",
+            "admin_id": 9362,
+            "candidate_id": 2316,
+            "attachments": [],
+            "created_at": "2026-04-21T07:33:56.695256Z",
+            "updated_at": "2026-04-21T07:33:56.695256Z",
+            "offer_id": null,
+            "talent_pool_id": null,
+            "requisition_id": null,
+            "guest_id": null,
+            "visibility": {
+              "level": "public",
+              "admin_ids": [],
+              "role_ids": []
+            },
+            "body_html": "<p>Test comment</p>",
+            "reply_to_id": 135,
+            "body_json": {
+              "doc": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "text": "Test comment",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  }
+                ],
+                "type": "doc"
+              }
+            },
+            "triggered": false,
+            "reactions": [
+              {
+                "count": 1,
+                "position": 1,
+                "base": "👍",
+                "reactions": [
+                  {
+                    "unicode": "👍",
+                    "admin_ids": [
+                      9362
+                    ]
+                  }
+                ]
+              },
+              {
+                "count": 1,
+                "position": 2,
+                "base": "🧑‍🚀",
+                "reactions": [
+                  {
+                    "unicode": "🧑🏿‍🚀",
+                    "admin_ids": [
+                      9364
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "body": "<p>Test comment</p>",
+        "admin_id": 9362,
+        "candidate_id": 2316,
+        "attachments": [],
+        "created_at": "2026-04-21T07:33:56.694601Z",
+        "updated_at": "2026-04-21T07:33:56.694601Z",
+        "offer_id": null,
+        "talent_pool_id": null,
+        "requisition_id": null,
+        "guest_id": null,
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        },
+        "body_html": "<p>Test comment</p>",
+        "reply_to_id": null,
+        "body_json": {
+          "doc": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "Test comment",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          }
+        },
+        "triggered": false,
+        "pinned_at": null,
+        "reactions": [
+          {
+            "count": 2,
+            "position": 1,
+            "base": "🧑‍🚀",
+            "reactions": [
+              {
+                "unicode": "🧑🏿‍🚀",
+                "admin_ids": [
+                  9362,
+                  9364
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "tags": [
+    "candidates",
+    "notes"
+  ]
+}

@@ -1,0 +1,379 @@
+{
+  "id": "placements_list",
+  "method": "GET",
+  "path": "/c/{company_id}/offers/{offer_id}/placements",
+  "summary": "Placements list",
+  "description": "List placements for offer",
+  "params": [
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Sort by",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stage_id",
+      "type": "integer",
+      "required": false,
+      "description": "Stage ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "disqualified",
+      "type": "boolean",
+      "required": false,
+      "description": "Disqualified",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "Sort order (asc or desc)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_upcoming_events",
+      "type": "boolean",
+      "required": false,
+      "description": "Return upcoming event (default: true)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_overdue_at",
+      "type": "boolean",
+      "required": false,
+      "description": "Return overdue date (default: true)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_created_at",
+      "type": "boolean",
+      "required": false,
+      "description": "Return creation date (default: true)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_notes_count",
+      "type": "boolean",
+      "required": false,
+      "description": "Return notes count (default: true)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_tasks_count",
+      "type": "boolean",
+      "required": false,
+      "description": "Return tasks count (default: true)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_tags",
+      "type": "boolean",
+      "required": false,
+      "description": "Return tags (default: false)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_social_links",
+      "type": "boolean",
+      "required": false,
+      "description": "Return social links (default: false)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_last_activity_at",
+      "type": "boolean",
+      "required": false,
+      "description": "Return last activity date (default: false)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_evaluations",
+      "type": "boolean",
+      "required": false,
+      "description": "Return positive rating and evaluation requests (default: true)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_locations",
+      "type": "boolean",
+      "required": false,
+      "description": "Return assigned location_ids (default: true)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "qualified",
+      "type": "boolean",
+      "required": false,
+      "description": "Qualified",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers/{offer_id}/placements\n\nRequired params: offer_id, company_id\n\nOptional params: sort_by, stage_id, disqualified, sort_order, with_upcoming_events, with_overdue_at, with_created_at, with_notes_count",
+  "example_response": {
+    "stages": [
+      {
+        "id": 55255,
+        "name": "Referred",
+        "position": -3,
+        "group": "applicants",
+        "category": "referred",
+        "created_at": "2026-04-21T07:34:03.010814Z",
+        "updated_at": "2026-04-21T07:34:03.010814Z",
+        "placements": [
+          {
+            "id": 1539,
+            "position": 358,
+            "candidate_id": 2741,
+            "language": null,
+            "candidate": {
+              "id": 2741,
+              "name": "John Doe",
+              "emails": [
+                "john_doe@acme.com"
+              ],
+              "has_avatar": true,
+              "initials": "JD",
+              "photo_thumb_url": null,
+              "created_at": "2026-04-21T07:34:03.020338Z",
+              "updated_at": "2026-04-21T07:34:03.020338Z",
+              "is_hired": false,
+              "positive_ratings": null,
+              "rating_visible": true,
+              "ratings": {},
+              "notes_count": 0,
+              "followed": false,
+              "unread_notifications": false,
+              "last_activity_at": "2026-04-20T07:34:03.021251Z",
+              "linkedin_job_application_id": null,
+              "my_pending_result_request": false,
+              "pending_result_request": false,
+              "is_anonymous": false,
+              "tasks_count": 0,
+              "viewed": false,
+              "upcoming_event_starts_at": null,
+              "upcoming_event_mine": false
+            },
+            "created_at": "2026-04-21T07:34:03.023164Z",
+            "updated_at": "2026-04-21T07:34:03.023164Z",
+            "offer_id": 2347,
+            "talent_pool_id": null,
+            "positive_ratings": null,
+            "rating_visible": true,
+            "ratings": {},
+            "hired_at": null,
+            "hired_by_id": null,
+            "hired_in_other_placement": false,
+            "hired_in_this_placement": false,
+            "location_ids": [],
+            "work_location_id": null,
+            "overdue_diff": null,
+            "overdue_at": null,
+            "stage_id": 55255,
+            "job_starts_at": null,
+            "time_to_hire": null
+          },
+          {
+            "id": 1538,
+            "position": 357,
+            "candidate_id": 2740,
+            "language": null,
+            "candidate": {
+              "id": 2740,
+              "name": "John Doe",
+              "emails": [
+                "john_doe@acme.com"
+              ],
+              "has_avatar": true,
+              "initials": "JD",
+              "photo_thumb_url": null,
+              "created_at": "2026-04-21T07:34:03.020036Z",
+              "updated_at": "2026-04-21T07:34:03.020036Z",
+              "is_hired": false,
+              "positive_ratings": null,
+              "rating_visible": true,
+              "ratings": {},
+              "notes_count": 0,
+              "followed": false,
+              "unread_notifications": false,
+              "last_activity_at": "2026-04-19T07:34:03.020714Z",
+              "linkedin_job_application_id": null,
+              "my_pending_result_request": false,
+              "pending_result_request": false,
+              "is_anonymous": false,
+              "tasks_count": 0,
+              "viewed": false,
+              "upcoming_event_starts_at": null,
+              "upcoming_event_mine": false
+            },
+            "created_at": "2026-04-21T07:34:03.022531Z",
+            "updated_at": "2026-04-21T07:34:03.022531Z",
+            "offer_id": 2347,
+            "talent_pool_id": null,
+            "positive_ratings": null,
+            "rating_visible": true,
+            "ratings": {},
+            "hired_at": null,
+            "hired_by_id": null,
+            "hired_in_other_placement": false,
+            "hired_in_this_placement": false,
+            "location_ids": [],
+            "work_location_id": null,
+            "overdue_diff": null,
+            "overdue_at": null,
+            "stage_id": 55255,
+            "job_starts_at": null,
+            "time_to_hire": null
+          }
+        ],
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 6836,
+        "locked": true,
+        "placements_count": 2,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 55256,
+        "name": "Sourced",
+        "position": -2,
+        "group": "applicants",
+        "category": "sourced",
+        "created_at": "2026-04-21T07:34:03.010905Z",
+        "updated_at": "2026-04-21T07:34:03.010905Z",
+        "placements": [],
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 6836,
+        "locked": true,
+        "placements_count": 0,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 55257,
+        "name": "Applied",
+        "position": -1,
+        "group": "applicants",
+        "category": "apply",
+        "created_at": "2026-04-21T07:34:03.010981Z",
+        "updated_at": "2026-04-21T07:34:03.010981Z",
+        "placements": [],
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 6836,
+        "locked": true,
+        "placements_count": 0,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 55258,
+        "name": "Phone interview",
+        "position": 1,
+        "group": "active",
+        "category": "phone_screen",
+        "created_at": "2026-04-21T07:34:03.011068Z",
+        "updated_at": "2026-04-21T07:34:03.011068Z",
+        "placements": [],
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 6836,
+        "locked": false,
+        "placements_count": 0,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 55259,
+        "name": "On-site interview",
+        "position": 2,
+        "group": "active",
+        "category": "interview",
+        "created_at": "2026-04-21T07:34:03.011138Z",
+        "updated_at": "2026-04-21T07:34:03.011138Z",
+        "placements": [],
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 6836,
+        "locked": false,
+        "placements_count": 0,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 55260,
+        "name": "Evaluation",
+        "position": 3,
+        "group": "active",
+        "category": "evaluation",
+        "created_at": "2026-04-21T07:34:03.011209Z",
+        "updated_at": "2026-04-21T07:34:03.011209Z",
+        "placements": [],
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 6836,
+        "locked": false,
+        "placements_count": 0,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 55261,
+        "name": "Offer",
+        "position": 4,
+        "group": "active",
+        "category": "offer",
+        "created_at": "2026-04-21T07:34:03.011288Z",
+        "updated_at": "2026-04-21T07:34:03.011288Z",
+        "placements": [],
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 6836,
+        "locked": false,
+        "placements_count": 0,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 55262,
+        "name": "Hired",
+        "position": 5,
+        "group": "hires",
+        "category": "hire",
+        "created_at": "2026-04-21T07:34:03.011364Z",
+        "updated_at": "2026-04-21T07:34:03.011364Z",
+        "placements": [],
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 6836,
+        "locked": false,
+        "placements_count": 0,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      }
+    ]
+  },
+  "tags": [
+    "offers",
+    "placements",
+    "pipeline"
+  ]
+}

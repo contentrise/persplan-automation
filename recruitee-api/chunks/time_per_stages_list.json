@@ -1,0 +1,137 @@
+{
+  "id": "time_per_stages_list",
+  "method": "GET",
+  "path": "/c/{company_id}/report/evaluations_and_interviews/time_per_stage",
+  "summary": "Evaluations and interviews - time per stage in events report",
+  "description": "DEPRECATED - This endpoint is deprecated and will be discontinued by the end of 2024.",
+  "params": [
+    {
+      "name": "format",
+      "type": "string",
+      "required": false,
+      "description": "Used for exporting in different format than json, can be: csv",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "filters",
+      "type": "string",
+      "required": false,
+      "description": "Filters in format type:value;type:value (example: job:hiring-manager-54;tag:test;source:linkedin)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default is unlimited",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "group_by",
+      "type": "string",
+      "required": false,
+      "description": "Group results by field, can be: job, departament, team_member, role, month, location",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Sort results by field, can be: group, calendar_events_count, phone_screen_time, interview_time, evaluation_time, offer_time, hire_time",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_start",
+      "type": "string",
+      "required": false,
+      "description": "Used when date_range is ‘range’. Date from which data should be fetched. Should be in format ‘2014-01-30’.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_end",
+      "type": "string",
+      "required": false,
+      "description": "Used when date_range is ‘range’. Date to which data should be fetched. Should be in format ‘2014-01-30’.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "Sort order, can be: asc, desc (default: desc)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number used for pagination, can be used only with the limit option (1, 2, 3, 4…)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_range",
+      "type": "string",
+      "required": false,
+      "description": "Date filter. Can be: range, today, yesterday, this_week, last_week, this_month, last_month, this_quarter, last_quarter, this_year, last_year, last_30_days, last_60_days. If value is range, additional parameters ‘date_start’ and ‘date_end’ must be provided.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/report/evaluations_and_interviews/time_per_stage\n\nRequired params: company_id\n\nOptional params: format, filters, limit, group_by, sort_by, date_start, date_end, sort_order",
+  "example_response": {
+    "values": [
+      [
+        "Elixir Developer",
+        "best-offer67",
+        6,
+        1,
+        30,
+        1,
+        30,
+        1,
+        30,
+        1,
+        30,
+        1,
+        30
+      ]
+    ],
+    "columns": [
+      "group",
+      "job_slug",
+      "calendar_events_count",
+      "phone_screen_count",
+      "phone_screen_time",
+      "interview_count",
+      "interview_time",
+      "evaluation_count",
+      "evaluation_time",
+      "offer_count",
+      "offer_time",
+      "hire_count",
+      "hire_time"
+    ],
+    "total_count": 1,
+    "calendar_events_count": 6,
+    "hire_time": 30,
+    "hire_count": 1,
+    "offer_time": 30,
+    "offer_count": 1,
+    "evaluation_time": 30,
+    "evaluation_count": 1,
+    "interview_time": 30,
+    "interview_count": 1,
+    "phone_screen_time": 30,
+    "phone_screen_count": 1
+  },
+  "tags": [
+    "report",
+    "evaluations_and_interviews"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "switch_wysiwyg_editor_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/offers/switch_wysiwyg_editors",
+  "summary": "Switches wysiwyg editors in all jobs",
+  "description": "Switches wysiwyg editors in all jobs. Endpoint: PATCH /c/{company_id}/bulk/offers/switch_wysiwyg_editors. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/bulk/offers/switch_wysiwyg_editors\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "offers",
+    "switch_wysiwyg_editors"
+  ]
+}

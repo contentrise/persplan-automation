@@ -1,0 +1,71 @@
+{
+  "id": "message_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/mailbox/messages/{id}",
+  "summary": "Update email message",
+  "description": "Update email message. Endpoint: PATCH /c/{company_id}/mailbox/messages/{id}. Required parameters: company_id. Optional parameters include id, attachments, subject, send_at, offer_id, send_at_timezone, original_html.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Message ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "attachments",
+      "type": "array",
+      "required": false,
+      "description": "Array of attachments IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "required": false,
+      "description": "Email subject",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "send_at",
+      "type": "datetime",
+      "required": false,
+      "description": "DateTime in ISO 8601 format",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Optional offer id from current context",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "send_at_timezone",
+      "type": "string",
+      "required": false,
+      "description": "Timezone",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "original_html",
+      "type": "string",
+      "required": false,
+      "description": "Email body in HTML format",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/mailbox/messages/{id}\n\nRequired params: company_id\n\nOptional params: id, attachments, subject, send_at, offer_id, send_at_timezone, original_html",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "messages"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "auto_reply_templates_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/offers/{offer_id}/auto_reply_templates",
+  "summary": "List auto reply templates available for offer",
+  "description": "List auto reply templates available for offer. Endpoint: GET /c/{company_id}/offers/{offer_id}/auto_reply_templates. Required parameters: offer_id, company_id. Optional parameters include title.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": false,
+      "description": "Filter by title",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers/{offer_id}/auto_reply_templates\n\nRequired params: offer_id, company_id\n\nOptional params: title",
+  "example_response": {
+    "auto_reply_templates": [
+      {
+        "default": false,
+        "id": 144,
+        "position": 81,
+        "title": "Template80",
+        "created_at": "2026-04-21T07:32:44.742051Z",
+        "updated_at": "2026-04-21T07:32:44.742051Z",
+        "custom": false
+      }
+    ]
+  },
+  "tags": [
+    "offers",
+    "auto_reply_templates"
+  ]
+}

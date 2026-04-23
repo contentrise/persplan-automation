@@ -1,0 +1,37 @@
+{
+  "id": "client_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/oauth/clients/{client_id}",
+  "summary": "Show client",
+  "description": "Show client. Endpoint: GET /c/{company_id}/oauth/clients/{client_id}. Required parameters: client_id, company_id.",
+  "params": [
+    {
+      "name": "client_id",
+      "type": "integer",
+      "required": true,
+      "description": "Client ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/oauth/clients/{client_id}\n\nRequired params: client_id, company_id",
+  "example_response": {
+    "client": {
+      "id": "20795458-8648-4494-a47e-fdc6da176522",
+      "name": "zapier",
+      "description": null,
+      "display_name": null,
+      "icon": null
+    }
+  },
+  "tags": [
+    "clients",
+    "oauth"
+  ]
+}

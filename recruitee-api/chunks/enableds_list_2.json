@@ -1,0 +1,60 @@
+{
+  "id": "enableds_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/offer_templates/enabled",
+  "summary": "List offer templates enabled for referrals",
+  "description": "List offer templates enabled for referrals. Endpoint: GET /c/{company_id}/referral/offer_templates/enabled. Required parameters: company_id. Optional parameters include q.",
+  "params": [
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search query",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/offer_templates/enabled\n\nRequired params: company_id\n\nOptional params: q",
+  "example_response": {
+    "references": [
+      {
+        "id": 5,
+        "name": "Great reward",
+        "type": "ReferralReward",
+        "photo_thumb_url": null,
+        "photo_url": null,
+        "body_html": "Reward description"
+      }
+    ],
+    "offer_template_assignments": [
+      {
+        "enabled": true,
+        "id": 20,
+        "offer_template": {
+          "id": 106,
+          "name": "Backend Developer Template",
+          "remote": false,
+          "created_at": "2026-04-21T07:30:32.142610Z",
+          "updated_at": "2026-04-21T07:30:32.142610Z",
+          "department": null,
+          "location_ids": [],
+          "hybrid": false,
+          "on_site": false
+        },
+        "referral_reward_id": 5,
+        "referral_template_id": null,
+        "custom_template_id": null
+      }
+    ]
+  },
+  "tags": [
+    "referral",
+    "offer_templates"
+  ]
+}

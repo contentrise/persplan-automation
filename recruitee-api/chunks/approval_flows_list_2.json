@@ -1,0 +1,66 @@
+{
+  "id": "approval_flows_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions/settings/approval_flows",
+  "summary": "Lists company's requisition flows",
+  "description": "Lists company's requisition flows. Endpoint: GET /c/{company_id}/requisitions/settings/approval_flows. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions/settings/approval_flows\n\nRequired params: company_id",
+  "example_response": {
+    "approval_flows": [
+      {
+        "default": false,
+        "id": 61,
+        "position": 17,
+        "title": "First approval flow",
+        "steps": [
+          {
+            "id": 66,
+            "position": 16,
+            "kind": "all",
+            "approver_ids": [
+              2637
+            ],
+            "allows_edit": false
+          },
+          {
+            "id": 67,
+            "position": 17,
+            "kind": "all",
+            "approver_ids": [
+              2638,
+              2637
+            ],
+            "allows_edit": false
+          }
+        ],
+        "department_ids": [],
+        "steps_count": 2
+      },
+      {
+        "default": true,
+        "id": 62,
+        "position": 18,
+        "title": "Approval Flow",
+        "steps": [],
+        "department_ids": [
+          72,
+          73
+        ],
+        "steps_count": 0
+      }
+    ]
+  },
+  "tags": [
+    "requisitions",
+    "settings"
+  ]
+}

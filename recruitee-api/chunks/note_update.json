@@ -1,0 +1,77 @@
+{
+  "id": "note_update",
+  "method": "PATCH",
+  "path": "/share/containers/{token}/notes/{id}",
+  "summary": "Update note",
+  "description": "Update note. Endpoint: PATCH /share/containers/{token}/notes/{id}. Required parameters: id, body, token, auth_token.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Note ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "body",
+      "type": "string",
+      "required": true,
+      "description": "Note body",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auth_token",
+      "type": "string",
+      "required": true,
+      "description": "Guest token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"note\": {\n\"body_json\": {\n\"doc\": {\n\"content\": [\n{\n\"content\": [\n{\n\"text\": \"Average skills\",\n\"type\": \"text\"\n}\n],\n\"type\": \"paragraph\"\n}\n],\n\"type\": \"doc\"\n}\n}\n}\n}",
+  "example_response": {
+    "note": {
+      "id": 69,
+      "body": "<p>Average skills</p>",
+      "admin_id": null,
+      "candidate_id": 1271,
+      "attachments": [],
+      "admin": null,
+      "guest": {
+        "id": 30,
+        "name": "James Smith"
+      },
+      "created_at": "2026-04-21T07:32:45.037472Z",
+      "guest_id": 30,
+      "body_html": "<p>Average skills</p>",
+      "reply_to_id": null,
+      "body_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Average skills",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "triggered": false
+    }
+  },
+  "tags": [
+    "containers",
+    "notes"
+  ]
+}

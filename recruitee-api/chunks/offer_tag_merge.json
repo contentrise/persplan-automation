@@ -1,0 +1,54 @@
+{
+  "id": "offer_tag_merge",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_tags/{id}/merge",
+  "summary": "Merge offer tags",
+  "description": "Merge offer tags. Endpoint: PATCH /c/{company_id}/offer_tags/{id}/merge. Required parameters: name, company_id. Optional parameters include id, ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer tag ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "New offer tag name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ids",
+      "type": "integer",
+      "required": false,
+      "description": "Offer tag IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_tag\": {\n\"name\": \"On-Site\"\n}\n}",
+  "example_response": {
+    "offer_tag": {
+      "id": 14,
+      "name": "On-Site",
+      "status": null,
+      "context": "offer_tags",
+      "taggings_count": 2,
+      "searchable_name": "on-site",
+      "offer_taggings_count": 1,
+      "offer_template_taggings_count": 1
+    }
+  },
+  "tags": [
+    "offer_tags",
+    "tagging"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "feature_discovery_update",
+  "method": "PATCH",
+  "path": "/referral_portal/feature_discovery",
+  "summary": "Update referrer's feature discovery",
+  "description": "Update referrer's feature discovery. Endpoint: PATCH /referral_portal/feature_discovery. Required parameters: referral_intro_used.",
+  "params": [
+    {
+      "name": "referral_intro_used",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"feature_discovery\": {\n\"referral_intro_used\": true\n}\n}",
+  "example_response": {
+    "referrer": {
+      "id": 7,
+      "email": "antone2053@dicki.org",
+      "has_avatar": false,
+      "initials": "LB",
+      "first_name": "Luigi",
+      "last_name": "Bogisich",
+      "preferred_language": null,
+      "anonymized_at": null,
+      "referral_intro_used": true,
+      "avatar_url": null,
+      "is_admin": false,
+      "avatar_thumb_url": null
+    }
+  },
+  "tags": [
+    "referral_portal",
+    "feature_discovery",
+    "referral"
+  ]
+}

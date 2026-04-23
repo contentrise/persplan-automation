@@ -1,0 +1,35 @@
+{
+  "id": "department_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/departments",
+  "summary": "Remove company departments",
+  "description": "Remove company departments. Endpoint: DELETE /c/{company_id}/departments. Required parameters: company_id. Optional parameters include id, ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Department ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ids",
+      "type": "array",
+      "required": false,
+      "description": "Department IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/departments\n\nRequired params: company_id\n\nOptional params: id, ids",
+  "example_response": {},
+  "tags": [
+    "departments"
+  ]
+}

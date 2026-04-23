@@ -2493,7 +2493,7 @@ def _fill_eintritt_austritt(page: Page, payload: dict, tracker: FieldTracker | N
     if not hire_date:
         print("[HINWEIS] Kein hire_date im JSON – überspringe Ein-/Austritt.")
         return
-    hire_date_ui = _format_date_for_ui(hire_date)
+    hire_date_ui = _first_of_month(hire_date)
     befristung_bis_ui = _format_date_for_ui(befristung_bis) if befristung_bis else ""
     print(
         "[INFO] Ein-/Austritt Zielwerte: "

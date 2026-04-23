@@ -1,0 +1,61 @@
+{
+  "id": "save_as_template_create_10",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/referral_templates/save_as_template",
+  "summary": "Save a custom template as a regular template",
+  "description": "Save a custom template as a regular template. Endpoint: POST /c/{company_id}/offer_templates/{offer_template_id}/referral_templates/save_as_template. Required parameters: name, offer_template_id, company_id. Optional parameters include category.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Name of the newly created template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "required": false,
+      "description": "Category of the newly created template (optional)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"referral_template\": {\n\"name\": \" \"\n}\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "required_validation",
+        "data": {},
+        "message": "Name can't be blank",
+        "source": "template/name"
+      }
+    ],
+    "resources": {
+      "name": [
+        {
+          "code": "required_validation",
+          "data": {},
+          "message": "can't be blank"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "referral_templates"
+  ]
+}

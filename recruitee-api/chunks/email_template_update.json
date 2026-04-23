@@ -1,0 +1,85 @@
+{
+  "id": "email_template_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/email_templates/{id}",
+  "summary": "Update email template",
+  "description": "Update email template. Endpoint: PATCH /c/{company_id}/email_templates/{id}. Required parameters: id, title, subject, visibility, body_html, company_id. Optional parameters include template_attachment_assignments.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Email template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "visibility",
+      "type": "map",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "body_html",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_attachment_assignments",
+      "type": "array",
+      "required": false,
+      "description": "Array of template attachment assignments, parameters: (id attachment_id)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"email_template\": {\n\"visibility\": {\n\"admin_ids\": [\n7143\n],\n\"level\": \"protected\",\n\"role_ids\": [\n3581\n]\n}\n}\n}",
+  "example_response": {
+    "email_template": {
+      "id": 14,
+      "position": 1,
+      "title": "Template 1",
+      "admin_id": 7143,
+      "subject": "Thanks for applying",
+      "created_at": "2026-04-21T07:33:24.023400Z",
+      "updated_at": "2026-04-21T07:33:24.026737Z",
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          7143
+        ],
+        "role_ids": [
+          3581
+        ]
+      },
+      "body_html": "Thanks for applying, Regards",
+      "template_attachment_assignments": []
+    }
+  },
+  "tags": [
+    "email_templates",
+    "mailbox"
+  ]
+}

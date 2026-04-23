@@ -1,0 +1,151 @@
+{
+  "id": "timetables_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/timetable",
+  "summary": "Timetable",
+  "description": "Timetable. Endpoint: GET /c/{company_id}/interview/timetable. Required parameters: start_date, end_date, company_id. Optional parameters include scope, type, timezone, calendar_ids.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Scope, can be: ‘my’, ‘all’ (default ‘all’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "required": false,
+      "description": "Event type, can be: ‘internal’, ‘external’, ‘all’ (default ‘all’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "timezone",
+      "type": "string",
+      "required": false,
+      "description": "Date range timezone, format: Europe/Amsterdam",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "description": "Range start date, format: 2017-02-28",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "description": "Range end date, format: 2017-02-28",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "calendar_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of calendar IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/timetable\n\nRequired params: start_date, end_date, company_id\n\nOptional params: scope, type, timezone, calendar_ids",
+  "example_response": {
+    "days": [
+      {
+        "date": "2017-01-01",
+        "events": [
+          {
+            "busy": true,
+            "id": 137,
+            "internal": true,
+            "title": "Meeting - John Doe",
+            "location": "Poznan",
+            "kind": "my",
+            "timezone": "Europe/Amsterdam",
+            "created_at": "2026-04-21T07:33:00.440219Z",
+            "duration": 30,
+            "updated_at": "2026-04-21T07:33:00.440219Z",
+            "admin_ids": [
+              6058
+            ],
+            "starts_at": "2017-01-01T10:00:00.000000Z",
+            "ends_at": "2017-01-01T10:30:00.000000Z",
+            "all_day": false,
+            "rescheduled_at": null
+          },
+          {
+            "busy": true,
+            "id": 52,
+            "internal": false,
+            "title": "External event",
+            "location": "Amsterdam",
+            "kind": "other",
+            "admin_id": 6059,
+            "timezone": "Europe/Warsaw",
+            "admin_name": "John Doe",
+            "created_at": "2026-04-21T07:33:00.452466Z",
+            "duration": 60,
+            "updated_at": "2026-04-21T07:33:00.452466Z",
+            "starts_at": "2017-01-01T12:00:00.000000Z",
+            "ends_at": "2017-01-01T13:00:00.000000Z",
+            "all_day": false,
+            "calendar_name": "Primary Calendar"
+          }
+        ]
+      },
+      {
+        "date": "2017-01-02",
+        "events": [
+          {
+            "busy": true,
+            "id": 53,
+            "internal": false,
+            "title": "External event",
+            "location": "Amsterdam",
+            "kind": "my",
+            "admin_id": 6058,
+            "timezone": "Europe/Warsaw",
+            "admin_name": "John Doe",
+            "created_at": "2026-04-21T07:33:00.454238Z",
+            "duration": 180,
+            "updated_at": "2026-04-21T07:33:00.454238Z",
+            "starts_at": "2017-01-02T10:00:00.000000Z",
+            "ends_at": "2017-01-02T13:00:00.000000Z",
+            "all_day": false,
+            "calendar_name": "Primary Calendar"
+          },
+          {
+            "busy": true,
+            "id": 138,
+            "internal": true,
+            "title": "Meeting - John Doe",
+            "location": "Poznan",
+            "kind": "recruitee",
+            "timezone": "Europe/Amsterdam",
+            "created_at": "2026-04-21T07:33:00.443756Z",
+            "duration": 60,
+            "updated_at": "2026-04-21T07:33:00.443756Z",
+            "admin_ids": [
+              6059
+            ],
+            "starts_at": "2017-01-02T15:00:00.000000Z",
+            "ends_at": "2017-01-02T16:00:00.000000Z",
+            "all_day": false,
+            "rescheduled_at": null
+          }
+        ]
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "timetable"
+  ]
+}

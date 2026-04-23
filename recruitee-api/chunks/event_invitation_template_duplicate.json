@@ -1,0 +1,42 @@
+{
+  "id": "event_invitation_template_duplicate",
+  "method": "POST",
+  "path": "/c/{company_id}/event_invitation_templates/{source_id}",
+  "summary": "Duplicate event invitation template",
+  "description": "Duplicate event invitation template. Endpoint: POST /c/{company_id}/event_invitation_templates/{source_id}. Required parameters: source_id, company_id.",
+  "params": [
+    {
+      "name": "source_id",
+      "type": "integer",
+      "required": true,
+      "description": "ID of the source template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/event_invitation_templates/{source_id}\n\nRequired params: source_id, company_id",
+  "example_response": {
+    "event_invitation_template": {
+      "id": 31,
+      "position": 2,
+      "title": "Template (2)",
+      "admin_id": 583,
+      "subject": "You have an interview scheduled",
+      "created_at": "2026-04-21T07:30:35.311521Z",
+      "updated_at": "2026-04-21T07:30:35.311521Z",
+      "body_html": "You have an interview scheduled, Regards",
+      "template_attachment_assignments": [],
+      "last_used": null
+    }
+  },
+  "tags": [
+    "event_invitation_templates",
+    "mailbox"
+  ]
+}

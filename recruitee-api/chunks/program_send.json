@@ -1,0 +1,42 @@
+{
+  "id": "program_send",
+  "method": "POST",
+  "path": "/c/{company_id}/referral/program/send_invitations",
+  "summary": "Send invitations to company's Referral program",
+  "description": "Send invitations to company's Referral program. Endpoint: POST /c/{company_id}/referral/program/send_invitations. Required parameters: emails, company_id. Optional parameters include message.",
+  "params": [
+    {
+      "name": "message",
+      "type": "text",
+      "required": false,
+      "description": "Customized invitation email message",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "emails",
+      "type": "array",
+      "required": true,
+      "description": "Array of invitation emails",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"emails\": [\n\"test1@recruitee.com\",\n\"test2@recruitee.com\",\n\"test3@recruitee.com\"\n],\n\"incorrect_emails\": [\n\"test1@workable.com\",\n\"test2@breezy.com\",\n\"test3@zoho.com\"\n]\n}",
+  "example_response": {
+    "emails_sent": [
+      "test1@recruitee.com",
+      "test2@recruitee.com",
+      "test3@recruitee.com"
+    ]
+  },
+  "tags": [
+    "referral",
+    "program"
+  ]
+}

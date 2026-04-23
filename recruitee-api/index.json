@@ -1,0 +1,2238 @@
+{
+  "abilities": [
+    "abilities_list"
+  ],
+  "account_recovery_request": [
+    "account_recovery_request_close",
+    "account_recovery_request_detail",
+    "account_recovery_request_start",
+    "account_recovery_request_stop"
+  ],
+  "acquisition": [
+    "cost_per_campaigns_list"
+  ],
+  "action_sets": [
+    "action_set_cancel",
+    "action_update"
+  ],
+  "actions": [
+    "action_cancel",
+    "retry_create"
+  ],
+  "activities": [
+    "activities_list_2"
+  ],
+  "activity_subscriptions": [
+    "activity_subscription_update",
+    "activity_subscriptions_list",
+    "reset_to_default_update"
+  ],
+  "activity_subscriptions_preset": [
+    "activity_subscriptions_preset_update",
+    "activity_subscriptions_presets_list",
+    "reset_to_default_update_2"
+  ],
+  "admin": [
+    "admin_detail",
+    "admin_detail_2",
+    "admin_update",
+    "admin_update_2",
+    "app_disable",
+    "app_enable",
+    "deletion_request_create",
+    "deletion_requests_list",
+    "device_create",
+    "device_delete",
+    "getting_started_step_detail",
+    "getting_started_step_update",
+    "localization_setting_detail",
+    "preference_detail",
+    "preference_update",
+    "report_detail",
+    "report_update",
+    "sm_disable",
+    "sm_enable",
+    "sm_send",
+    "time_format_detail",
+    "token_detail",
+    "token_detail_2",
+    "two_factor_authentication_setting_detail",
+    "two_factor_authentication_setting_hide"
+  ],
+  "admins": [
+    "admin_revoke",
+    "admin_share",
+    "admin_share_2",
+    "admins_list"
+  ],
+  "analytics": [
+    "tracking_datas_list"
+  ],
+  "answers": [
+    "answer_detail"
+  ],
+  "app": [
+    "app_disable",
+    "app_enable"
+  ],
+  "application": [
+    "application_detail",
+    "application_integrate",
+    "application_update"
+  ],
+  "applications": [
+    "application_create",
+    "applications_list",
+    "applications_list_2",
+    "applications_list_3",
+    "candidates_list_3",
+    "counters_list_4",
+    "settle_mark"
+  ],
+  "approval_flows": [
+    "approval_flows_list",
+    "assigned_detail",
+    "assigned_update"
+  ],
+  "approval_request": [
+    "viewed_mark"
+  ],
+  "approved": [
+    "approveds_list"
+  ],
+  "approver_decisions": [
+    "approver_decision_approve",
+    "approver_decision_reject",
+    "approver_decision_send"
+  ],
+  "articles": [
+    "article_detail",
+    "articles_list"
+  ],
+  "assigned_offer_templates": [
+    "assigned_offer_templates_list_2",
+    "assigned_offer_templates_list_3",
+    "assigned_offer_templates_list_5"
+  ],
+  "assigned_offers": [
+    "assigned_offers_list_2",
+    "assigned_offers_list_3",
+    "assigned_offers_list_5"
+  ],
+  "assigned_requisitions": [
+    "assigned_requisitions_list"
+  ],
+  "assignments": [
+    "assignment_delete",
+    "assignment_update",
+    "assignments_list"
+  ],
+  "attachments": [
+    "attachment_create",
+    "attachment_delete",
+    "attachments_list",
+    "attachments_list_2",
+    "attachments_list_3",
+    "attachments_list_4"
+  ],
+  "audit_log": [
+    "audit_log_detail",
+    "audit_logs_list"
+  ],
+  "auto_consent": [
+    "auto_consent_schedule",
+    "count_detail"
+  ],
+  "auto_delete": [
+    "auto_delete_schedule",
+    "count_detail_2"
+  ],
+  "auto_reply_templates": [
+    "assigned_offer_templates_list_3",
+    "assigned_offers_list_3",
+    "auto_reply_template_create",
+    "auto_reply_template_delete",
+    "auto_reply_template_detail",
+    "auto_reply_template_detail_2",
+    "auto_reply_template_detail_3",
+    "auto_reply_template_duplicate",
+    "auto_reply_template_set",
+    "auto_reply_template_set_2",
+    "auto_reply_template_set_3",
+    "auto_reply_template_update",
+    "auto_reply_template_update_2",
+    "auto_reply_templates_list",
+    "auto_reply_templates_list_2",
+    "auto_reply_templates_list_3",
+    "custom_create",
+    "custom_create_2",
+    "custom_update",
+    "custom_update_2",
+    "save_as_template_create",
+    "save_as_template_create_6"
+  ],
+  "automations": [
+    "automation_create",
+    "automation_delete",
+    "automation_update",
+    "automations_list",
+    "automations_list_2",
+    "duplicate_duplicate_11"
+  ],
+  "availability": [
+    "availability_create",
+    "availability_detail",
+    "reschedule_detail"
+  ],
+  "billing": [
+    "billing_information_update",
+    "estimate_calculate",
+    "invoices_list",
+    "payment_intent_create",
+    "payment_source_create",
+    "payment_source_delete",
+    "pdf_detail",
+    "plan_detail",
+    "plans_list",
+    "reactivate_reactivate",
+    "reactivate_reactivate_2",
+    "subscription_create",
+    "subscription_create_2",
+    "subscription_detail",
+    "subscription_lock",
+    "subscription_update"
+  ],
+  "billing_information": [
+    "billing_information_update"
+  ],
+  "breakdown": [
+    "breakdown_detail"
+  ],
+  "calendars": [
+    "calendar_delete",
+    "calendar_resync",
+    "calendar_select",
+    "calendar_update",
+    "calendars_list",
+    "synceds_list"
+  ],
+  "candidate": [
+    "candidate_detail_4",
+    "candidate_detail_5",
+    "candidate_fetch"
+  ],
+  "candidates": [
+    "activities_list_3",
+    "admin_revoke",
+    "admin_share",
+    "admin_share_2",
+    "attachment_create_2",
+    "attachments_list",
+    "candidate_add",
+    "candidate_add_2",
+    "candidate_assign",
+    "candidate_conceal",
+    "candidate_copy",
+    "candidate_create",
+    "candidate_create_2",
+    "candidate_create_3",
+    "candidate_create_4",
+    "candidate_delete",
+    "candidate_delete_2",
+    "candidate_delete_3",
+    "candidate_delete_4",
+    "candidate_detail",
+    "candidate_detail_2",
+    "candidate_detail_3",
+    "candidate_disqualify",
+    "candidate_export",
+    "candidate_follow",
+    "candidate_follow_2",
+    "candidate_import",
+    "candidate_merge",
+    "candidate_move",
+    "candidate_origins_list",
+    "candidate_requalify",
+    "candidate_retrieve",
+    "candidate_retrieve_2",
+    "candidate_reveal",
+    "candidate_set",
+    "candidate_set_2",
+    "candidate_set_3",
+    "candidate_unassign",
+    "candidate_unfollow",
+    "candidate_unfollow_2",
+    "candidate_update",
+    "candidate_update_2",
+    "candidate_update_3",
+    "candidates_list",
+    "candidates_list_2",
+    "candidates_list_4",
+    "candidates_list_5",
+    "check_presences_list",
+    "containers_list",
+    "counters_list_2",
+    "destroy_delete",
+    "dropoff_rates_list",
+    "duplicates_list",
+    "event_create",
+    "field_create",
+    "field_delete",
+    "field_update",
+    "follower_add",
+    "follower_delete",
+    "hiddens_list",
+    "messages_counters_list",
+    "note_create",
+    "note_create_2",
+    "notes_list",
+    "offer_letter_detail_2",
+    "parse_cv_create",
+    "pipeline_speeds_list",
+    "placement_detail",
+    "proceed_rates_list",
+    "quality_of_candidates_list",
+    "request_links_list",
+    "requests_list",
+    "result_create",
+    "result_create_2",
+    "result_request_create",
+    "results_list",
+    "scorecards_list",
+    "similars_list",
+    "slipping_aways_list",
+    "source_add",
+    "source_create",
+    "source_delete",
+    "tag_add",
+    "tag_create",
+    "tag_delete",
+    "task_add",
+    "tasks_list",
+    "time_to_disqualifies_list",
+    "time_to_hires_list",
+    "unbiased_hiring_detail",
+    "unbiased_hiring_update",
+    "view_mark"
+  ],
+  "careers": [
+    "blacklist_entry_create",
+    "blacklist_entry_delete",
+    "blacklist_entry_detail",
+    "blacklist_entry_update",
+    "job_page_layouts_list",
+    "setting_detail",
+    "setting_update",
+    "term_update",
+    "terms_list"
+  ],
+  "chart": [
+    "charts_list"
+  ],
+  "check_presence": [
+    "check_presences_list"
+  ],
+  "checklist": [
+    "checklist_update"
+  ],
+  "client_auths": [
+    "client_auths_list",
+    "counters_list"
+  ],
+  "clients": [
+    "client_authorize",
+    "client_detail",
+    "deauthorize_create"
+  ],
+  "companies": [
+    "company_create",
+    "company_create_2",
+    "company_leave"
+  ],
+  "company": [
+    "abilities_list",
+    "company_update",
+    "company_verification_request_detail",
+    "company_verification_request_update",
+    "deletion_request_create_2",
+    "deletion_requests_list_2",
+    "destroy_delete_2",
+    "destroy_delete_3",
+    "duplicate_duplicate",
+    "invitation_create",
+    "invitation_resend",
+    "invitations_list",
+    "membership_update",
+    "memberships_list",
+    "past_subdomain_delete",
+    "past_subdomains_list",
+    "pending_detail",
+    "primary_contact_create",
+    "primary_contact_detail",
+    "primary_contact_update",
+    "role_create",
+    "role_delete",
+    "role_detail",
+    "role_update",
+    "role_update_2",
+    "role_update_3",
+    "roles_list",
+    "toggle_academy_button_update"
+  ],
+  "company_verification_request": [
+    "company_verification_request_detail",
+    "company_verification_request_update"
+  ],
+  "component_templates": [
+    "component_templates_list"
+  ],
+  "conditions": [
+    "condition_update",
+    "conditions_list",
+    "conditions_list_2"
+  ],
+  "configuration": [
+    "configuration_detail",
+    "configuration_update"
+  ],
+  "connect": [
+    "connect_create"
+  ],
+  "consent": [
+    "consent_create",
+    "consent_create_2",
+    "consent_detail",
+    "consent_detail_2",
+    "consent_detail_3",
+    "consent_revoke",
+    "consent_update",
+    "decline_create"
+  ],
+  "contacts": [
+    "contact_search"
+  ],
+  "container": [
+    "guest_create",
+    "guest_delete",
+    "guest_update",
+    "guest_update_2",
+    "guests_list"
+  ],
+  "containers": [
+    "attachment_create_2",
+    "candidate_detail_3",
+    "container_create",
+    "container_delete",
+    "container_detail",
+    "container_detail_2",
+    "container_share",
+    "container_update",
+    "container_update_2",
+    "container_update_3",
+    "containers_list",
+    "containers_list_2",
+    "destroy_delete_4",
+    "guest_create_2",
+    "guest_update_3",
+    "guests_list_2",
+    "note_create",
+    "note_delete",
+    "note_update",
+    "result_create",
+    "result_delete",
+    "result_update",
+    "results_list"
+  ],
+  "convert": [
+    "convert_create"
+  ],
+  "counters": [
+    "counter_detail",
+    "counter_detail_2",
+    "counters_list",
+    "counters_list_2"
+  ],
+  "countries": [
+    "countries_list",
+    "countries_list_2",
+    "countries_list_3",
+    "country_detail"
+  ],
+  "currencies": [
+    "currencies_list"
+  ],
+  "current": [
+    "currents_list",
+    "currents_list_2"
+  ],
+  "custom_fields": [
+    "assigned_offer_templates_list",
+    "assigned_offers_list",
+    "duplicate_duplicate_2",
+    "field_create",
+    "field_create_2",
+    "field_delete",
+    "field_delete_2",
+    "field_update",
+    "field_update_2",
+    "field_update_3",
+    "fieldset_create",
+    "fieldset_detail",
+    "fieldset_update",
+    "fieldset_update_2",
+    "fieldsets_list",
+    "searchables_list"
+  ],
+  "cvs": [
+    "cv_add",
+    "cv_delete",
+    "cv_update",
+    "cvs_list"
+  ],
+  "dashboard": [
+    "charts_list",
+    "overviews_list",
+    "recent_notes_list",
+    "sidebars_list"
+  ],
+  "dashboards": [
+    "component_create",
+    "component_move",
+    "component_update",
+    "dashboard_create",
+    "dashboard_update",
+    "dashboards_list"
+  ],
+  "data": [
+    "datas_list"
+  ],
+  "data_request": [
+    "data_request_create",
+    "data_request_create_2",
+    "data_request_create_3"
+  ],
+  "deauthorize": [
+    "deauthorize_create"
+  ],
+  "deletion_requests": [
+    "deletion_request_create",
+    "deletion_request_create_2",
+    "deletion_requests_list",
+    "deletion_requests_list_2",
+    "pending_detail"
+  ],
+  "deliver": [
+    "deliver_create"
+  ],
+  "departments": [
+    "department_create",
+    "department_delete",
+    "department_delete_2",
+    "department_detail",
+    "department_merge",
+    "department_merge_2",
+    "department_update",
+    "departments_list"
+  ],
+  "destroy": [
+    "destroy_delete",
+    "destroy_delete_2",
+    "destroy_delete_3",
+    "destroy_delete_4"
+  ],
+  "detail": [
+    "detail_detail"
+  ],
+  "devices": [
+    "device_create",
+    "device_delete"
+  ],
+  "disqualify_reasons": [
+    "disqualify_reason_create",
+    "disqualify_reason_delete",
+    "disqualify_reason_update",
+    "disqualify_reason_update_2",
+    "disqualify_reasons_list"
+  ],
+  "duplicate": [
+    "duplicate_duplicate",
+    "duplicate_duplicate_10",
+    "duplicate_duplicate_3",
+    "duplicate_duplicate_4",
+    "duplicate_duplicate_5",
+    "duplicate_duplicate_6",
+    "duplicate_duplicate_8",
+    "duplicate_duplicate_9"
+  ],
+  "duplicates": [
+    "duplicates_list"
+  ],
+  "dynamic_fields": [
+    "assigned_offer_templates_list_2",
+    "assigned_offers_list_2",
+    "assigned_requisitions_list",
+    "duplicate_duplicate_3",
+    "dynamic_field_create",
+    "dynamic_field_delete",
+    "dynamic_field_detail",
+    "dynamic_field_update",
+    "dynamic_fields_list",
+    "translation_counter_detail"
+  ],
+  "eeo": [
+    "answer_detail",
+    "candidate_detail_4",
+    "data_request_create",
+    "data_request_create_2",
+    "data_request_create_3",
+    "datas_list",
+    "eeo_create",
+    "eeo_detail",
+    "job_category_detail",
+    "offer_enable",
+    "setting_detail_2",
+    "setting_update_2"
+  ],
+  "email_provider": [
+    "email_provider_detail",
+    "email_provider_toggle",
+    "email_provider_update"
+  ],
+  "email_templates": [
+    "email_template_create",
+    "email_template_delete",
+    "email_template_duplicate",
+    "email_template_update",
+    "email_template_update_2",
+    "email_templates_list"
+  ],
+  "estimate": [
+    "estimate_calculate"
+  ],
+  "evaluations_and_interviews": [
+    "calendar_events_breakdowns_list",
+    "evaluated_candidates_list",
+    "evaluation_scores_list",
+    "time_per_stages_list",
+    "time_to_evaluates_list"
+  ],
+  "event_invitation_templates": [
+    "event_invitation_template_create",
+    "event_invitation_template_delete",
+    "event_invitation_template_duplicate",
+    "event_invitation_template_update",
+    "event_invitation_template_update_2",
+    "event_invitation_templates_list"
+  ],
+  "events": [
+    "candidate_search",
+    "counters_list_3",
+    "destroy_delete_5",
+    "event_delete",
+    "event_detail",
+    "event_detail_2",
+    "event_schedule",
+    "event_schedule_2",
+    "event_update",
+    "event_update_2",
+    "events_list",
+    "events_list_2",
+    "events_list_3",
+    "locations_list",
+    "video_providers_list"
+  ],
+  "executed_automations": [
+    "recents_list"
+  ],
+  "feature_discovery": [
+    "feature_discovery_update"
+  ],
+  "feature_request": [
+    "approvers_list",
+    "feature_request_create"
+  ],
+  "features": [
+    "currents_list",
+    "currents_list_2",
+    "specs_list",
+    "specs_list_2"
+  ],
+  "fields": [
+    "fields_list",
+    "searchables_list"
+  ],
+  "fieldsets": [
+    "assigned_offer_templates_list",
+    "assigned_offers_list",
+    "duplicate_duplicate_2",
+    "field_create_2",
+    "field_create_3",
+    "field_create_4",
+    "field_delete_2",
+    "field_delete_3",
+    "field_delete_4",
+    "field_detail",
+    "field_detail_2",
+    "field_update_2",
+    "field_update_3",
+    "field_update_4",
+    "field_update_5",
+    "field_update_6",
+    "field_update_7",
+    "fieldset_create",
+    "fieldset_detail",
+    "fieldset_detail_2",
+    "fieldset_detail_3",
+    "fieldset_set",
+    "fieldset_set_2",
+    "fieldset_update",
+    "fieldset_update_2",
+    "fieldsets_list",
+    "fieldsets_list_2",
+    "fieldsets_list_3",
+    "save_as_template_create_2",
+    "save_as_template_create_7"
+  ],
+  "filters": [
+    "filters_list"
+  ],
+  "finish": [
+    "finish_update"
+  ],
+  "followers": [
+    "follower_add",
+    "follower_delete"
+  ],
+  "fs_counts": [
+    "fs_count_create"
+  ],
+  "funnel": [
+    "funnel_detail"
+  ],
+  "gdpr": [
+    "auto_consent_schedule",
+    "auto_delete_schedule",
+    "candidate_set_3",
+    "complete_create",
+    "configuration_detail",
+    "configuration_update",
+    "consent_create_2",
+    "consent_detail_2",
+    "count_detail",
+    "count_detail_2",
+    "decline_create",
+    "gdpr_create",
+    "gdpr_detail",
+    "requests_list"
+  ],
+  "getting_started_steps": [
+    "getting_started_step_detail",
+    "getting_started_step_update"
+  ],
+  "guests": [
+    "guest_create",
+    "guest_create_2",
+    "guest_delete",
+    "guest_update",
+    "guest_update_2",
+    "guest_update_3",
+    "guests_list",
+    "guests_list_2"
+  ],
+  "hiring_details": [
+    "hiring_detail_detail",
+    "hiring_detail_update",
+    "option_detail"
+  ],
+  "home": [
+    "misc_detail"
+  ],
+  "identity_provider": [
+    "identity_provider_create",
+    "identity_provider_detail",
+    "identity_provider_update",
+    "identity_provider_update_2"
+  ],
+  "imports": [
+    "candidates_list_2",
+    "cv_add",
+    "cv_delete",
+    "cv_update",
+    "cvs_list",
+    "fields_list",
+    "finish_update",
+    "import_assign",
+    "import_create",
+    "import_delete",
+    "import_detail",
+    "import_revert",
+    "imports_list",
+    "map_create",
+    "unmap_update"
+  ],
+  "inboxes": [
+    "inboxes_list"
+  ],
+  "integration": [
+    "integration_create",
+    "integration_toggle"
+  ],
+  "integrations": [
+    "request_create"
+  ],
+  "intelligence": [
+    "setting_detail_3",
+    "setting_update_3"
+  ],
+  "intercom": [
+    "article_detail",
+    "articles_list"
+  ],
+  "interview": [
+    "attachment_create_3",
+    "attachment_delete_2",
+    "availability_create",
+    "availability_detail",
+    "availables_list",
+    "availables_list_2",
+    "calendar_delete",
+    "calendar_resync",
+    "calendar_select",
+    "calendar_update",
+    "calendars_list",
+    "candidate_search",
+    "categories_list",
+    "counters_list_3",
+    "destroy_delete_5",
+    "event_create",
+    "event_delete",
+    "event_detail",
+    "event_detail_2",
+    "event_schedule",
+    "event_schedule_2",
+    "event_update",
+    "event_update_2",
+    "events_list",
+    "events_list_2",
+    "events_list_3",
+    "hiddens_list",
+    "locations_list",
+    "meeting_room_delete",
+    "meeting_room_enable",
+    "meeting_room_resync",
+    "meeting_room_select",
+    "meeting_rooms_list",
+    "next_duplicate_name_detail",
+    "occupancies_list",
+    "questionnaire_create",
+    "questionnaire_detail",
+    "request_link_delete",
+    "request_links_list",
+    "reschedule_detail",
+    "result_create_2",
+    "result_delete_2",
+    "result_detail",
+    "result_request_create",
+    "result_request_delete",
+    "result_request_dismiss",
+    "result_request_dismiss_2",
+    "result_request_revert",
+    "result_requests_list",
+    "result_update_2",
+    "results_list_2",
+    "schedule_create",
+    "schedule_delete",
+    "schedule_detail",
+    "schedule_update",
+    "schedules_list",
+    "scorecards_list",
+    "synceds_list",
+    "template_create",
+    "template_delete",
+    "template_detail",
+    "template_duplicate",
+    "template_update",
+    "template_update_2",
+    "templates_list",
+    "timetables_list",
+    "to_syncs_list",
+    "video_providers_list"
+  ],
+  "invitations": [
+    "destroy_delete_2",
+    "invitation_create",
+    "invitation_resend",
+    "invitations_list"
+  ],
+  "invoices": [
+    "invoices_list",
+    "pdf_detail"
+  ],
+  "iso": [
+    "countries_list",
+    "countries_list_2",
+    "currencies_list",
+    "languages_list",
+    "regions_list"
+  ],
+  "job_categories": [
+    "job_category_detail"
+  ],
+  "job_page_layouts": [
+    "job_page_layouts_list"
+  ],
+  "jobs": [
+    "dropoff_rates_list_2",
+    "job_breakdowns_list",
+    "job_lifetimes_list",
+    "pipeline_speeds_list_2",
+    "proceed_rates_list_2",
+    "time_to_fills_list"
+  ],
+  "lang": [
+    "language_create",
+    "language_delete",
+    "language_detail",
+    "language_detail_2",
+    "language_detail_3",
+    "language_detail_4",
+    "language_update",
+    "language_update_2",
+    "possible_languages_list",
+    "setting_detail_4",
+    "setting_update_4",
+    "setting_update_5"
+  ],
+  "languages": [
+    "language_create",
+    "language_delete",
+    "language_detail",
+    "language_detail_2",
+    "language_detail_3",
+    "language_detail_4",
+    "language_detail_5",
+    "language_detail_6",
+    "language_update",
+    "language_update_2",
+    "language_update_3",
+    "language_update_4",
+    "languages_list"
+  ],
+  "linkedin": [
+    "application_detail",
+    "application_integrate",
+    "application_update",
+    "integration_create",
+    "integration_toggle",
+    "request_create"
+  ],
+  "localization_settings": [
+    "localization_setting_detail"
+  ],
+  "location": [
+    "candidate_add_2"
+  ],
+  "locations": [
+    "counter_detail",
+    "countries_list_3",
+    "duplicate_duplicate_4",
+    "location_archive",
+    "location_create",
+    "location_delete",
+    "location_detail",
+    "location_merge",
+    "location_retrieve",
+    "location_update",
+    "location_update_2",
+    "locations_list_2",
+    "locations_list_3",
+    "locations_list_4",
+    "offer_detail",
+    "regions_list_2",
+    "translation_counter_detail_2"
+  ],
+  "mailbox": [
+    "assigned_offer_templates_list_3",
+    "assigned_offers_list_3",
+    "auto_reply_template_create",
+    "auto_reply_template_delete",
+    "auto_reply_template_detail",
+    "auto_reply_template_duplicate",
+    "auto_reply_template_set",
+    "auto_reply_template_update",
+    "auto_reply_template_update_2",
+    "auto_reply_templates_list",
+    "candidate_detail_5",
+    "candidate_fetch",
+    "connect_create",
+    "contact_search",
+    "convert_create",
+    "count_detail_3",
+    "deliver_create",
+    "email_provider_detail",
+    "email_provider_toggle",
+    "email_provider_update",
+    "email_template_create",
+    "email_template_delete",
+    "email_template_duplicate",
+    "email_template_update",
+    "email_template_update_2",
+    "email_templates_list",
+    "event_invitation_template_create",
+    "event_invitation_template_delete",
+    "event_invitation_template_duplicate",
+    "event_invitation_template_update",
+    "event_invitation_template_update_2",
+    "event_invitation_templates_list",
+    "html_detail",
+    "inboxes_list",
+    "mailbox_schedule",
+    "mailbox_send",
+    "message_delete",
+    "message_update",
+    "protected_domain_create",
+    "protected_domain_delete",
+    "setting_detail_5",
+    "setting_update_6",
+    "shared_email_provider_archive",
+    "shared_email_provider_create",
+    "shared_email_provider_delete",
+    "shared_email_provider_detail",
+    "shared_email_provider_restore",
+    "shared_email_provider_update",
+    "shared_email_providers_list",
+    "shared_email_providers_list_2",
+    "text_detail",
+    "thread_delete",
+    "thread_detail",
+    "thread_mark",
+    "thread_mark_2",
+    "thread_search",
+    "thread_update",
+    "trigger_action_template_update"
+  ],
+  "map": [
+    "map_create"
+  ],
+  "marketplace": [
+    "approvers_list",
+    "feature_request_create"
+  ],
+  "meeting_rooms": [
+    "availables_list",
+    "meeting_room_delete",
+    "meeting_room_enable",
+    "meeting_room_resync",
+    "meeting_room_select",
+    "meeting_rooms_list",
+    "to_syncs_list"
+  ],
+  "memberships": [
+    "destroy_delete_3",
+    "membership_update",
+    "memberships_list"
+  ],
+  "messages": [
+    "html_detail",
+    "message_delete",
+    "message_delete_2",
+    "message_schedule",
+    "message_send",
+    "message_send_2",
+    "message_update",
+    "text_detail"
+  ],
+  "messages_counters": [
+    "messages_counters_list"
+  ],
+  "metrics": [
+    "metrics_list"
+  ],
+  "misc": [
+    "misc_detail"
+  ],
+  "mobile_app": [
+    "version_checks_list"
+  ],
+  "notes": [
+    "checklist_update",
+    "note_create_2",
+    "note_create_3",
+    "note_create_4",
+    "note_create_5",
+    "note_delete",
+    "note_delete_2",
+    "note_delete_3",
+    "note_pin",
+    "note_unpin",
+    "note_update",
+    "note_update_2",
+    "notes_list",
+    "notes_list_2",
+    "notes_list_3",
+    "notes_list_4"
+  ],
+  "notifications": [
+    "counters_list_5",
+    "notification_mark",
+    "notification_mark_2",
+    "notifications_list",
+    "unreads_list"
+  ],
+  "oauth": [
+    "client_authorize",
+    "client_auths_list",
+    "client_detail",
+    "counters_list",
+    "deauthorize_create",
+    "personal_token_create",
+    "personal_token_delete",
+    "personal_token_detail",
+    "personal_token_update",
+    "personal_token_update_2",
+    "personal_tokens_list",
+    "token_exchange"
+  ],
+  "oauthtoken": [
+    "token_detail_3",
+    "token_exchange_2"
+  ],
+  "occupancy": [
+    "occupancies_list"
+  ],
+  "offer_letters": [
+    "offer_letter_create",
+    "offer_letter_deactivate",
+    "offer_letter_delete",
+    "offer_letter_detail",
+    "offer_letter_detail_2",
+    "offer_letter_preview",
+    "offer_letter_send",
+    "offer_letter_update",
+    "reactivate_reactivate_3"
+  ],
+  "offer_tags": [
+    "offer_tag_create",
+    "offer_tag_create_2",
+    "offer_tag_delete",
+    "offer_tag_delete_2",
+    "offer_tag_merge",
+    "offer_tag_merge_2",
+    "offer_tag_update",
+    "offer_tags_list"
+  ],
+  "offer_templates": [
+    "auto_reply_template_detail_3",
+    "auto_reply_template_set_3",
+    "auto_reply_templates_list_3",
+    "automation_create_2",
+    "automation_delete_2",
+    "automation_update_2",
+    "automations_list_3",
+    "automations_list_4",
+    "custom_create_2",
+    "custom_update_2",
+    "duplicate_duplicate_12",
+    "duplicate_duplicate_6",
+    "enableds_list_2",
+    "field_create_4",
+    "field_delete_4",
+    "field_detail_2",
+    "field_update_6",
+    "field_update_7",
+    "fieldset_detail_3",
+    "fieldset_set_2",
+    "fieldsets_list_3",
+    "language_detail_6",
+    "language_update_4",
+    "locations_list_4",
+    "offer_template_assign",
+    "offer_template_assign_2",
+    "offer_template_assignment_detail",
+    "offer_template_copy",
+    "offer_template_create",
+    "offer_template_delete",
+    "offer_template_detail",
+    "offer_template_detail_2",
+    "offer_template_detail_3",
+    "offer_template_toggle",
+    "offer_template_update",
+    "offer_templates_list",
+    "open_question_create_2",
+    "open_question_delete_2",
+    "open_question_template_detail_2",
+    "open_question_template_set_2",
+    "open_question_templates_list_2",
+    "open_question_update_3",
+    "open_question_update_4",
+    "pipeline_template_detail_2",
+    "pipeline_template_set_2",
+    "pipeline_templates_list_2",
+    "referral_template_create_2",
+    "referral_template_update_2",
+    "referral_templates_list_2",
+    "save_as_template_create_10",
+    "save_as_template_create_6",
+    "save_as_template_create_7",
+    "save_as_template_create_8",
+    "save_as_template_create_9",
+    "stage_create_2",
+    "stage_delete_2",
+    "stage_update_3",
+    "stage_update_4",
+    "suggestions_list_3",
+    "suggestions_list_4",
+    "templates_list_6",
+    "templates_list_7",
+    "translate_detail_2",
+    "translate_update_2",
+    "upload_cover_image_create_2",
+    "upload_sharing_image_update_2"
+  ],
+  "offers": [
+    "actives_list",
+    "activities_list_4",
+    "attachments_list_2",
+    "auto_reply_template_detail_2",
+    "auto_reply_template_set_2",
+    "auto_reply_templates_list_2",
+    "automation_create_3",
+    "automation_delete_3",
+    "automation_update_3",
+    "automations_list_5",
+    "automations_list_6",
+    "candidate_create_2",
+    "custom_create",
+    "custom_update",
+    "diffs_list",
+    "duplicate_duplicate_13",
+    "duplicate_duplicate_5",
+    "enableds_list",
+    "field_create_3",
+    "field_delete_3",
+    "field_detail",
+    "field_update_4",
+    "field_update_5",
+    "fieldset_detail_2",
+    "fieldset_set",
+    "fieldsets_list_2",
+    "filter_detail",
+    "grouped_detail",
+    "language_detail_5",
+    "language_update_3",
+    "locations_list_3",
+    "note_create_3",
+    "notes_list_2",
+    "offer_archive",
+    "offer_assign",
+    "offer_assign_2",
+    "offer_assign_3",
+    "offer_assignment_detail",
+    "offer_change",
+    "offer_close",
+    "offer_create",
+    "offer_create_2",
+    "offer_delete",
+    "offer_delete_2",
+    "offer_detail",
+    "offer_detail_2",
+    "offer_detail_3",
+    "offer_detail_4",
+    "offer_detail_5",
+    "offer_detail_6",
+    "offer_disable",
+    "offer_enable",
+    "offer_enable_2",
+    "offer_follow",
+    "offer_follow_2",
+    "offer_mark",
+    "offer_preview",
+    "offer_publish",
+    "offer_retrieve",
+    "offer_tag_create_2",
+    "offer_tag_delete_2",
+    "offer_template_copy",
+    "offer_toggle",
+    "offer_unarchive",
+    "offer_unfollow",
+    "offer_unfollow_2",
+    "offer_unpublish",
+    "offer_update",
+    "offers_list",
+    "open_question_create",
+    "open_question_delete",
+    "open_question_template_detail",
+    "open_question_template_set",
+    "open_question_templates_list",
+    "open_question_update",
+    "open_question_update_2",
+    "opening_fill",
+    "pipeline_template_detail",
+    "pipeline_template_set",
+    "pipeline_templates_list",
+    "placement_detail",
+    "placements_list",
+    "referral_template_create",
+    "referral_template_update",
+    "referral_templates_list",
+    "requisition_assign",
+    "requisitions_list",
+    "save_as_template_create",
+    "save_as_template_create_2",
+    "save_as_template_create_3",
+    "save_as_template_create_4",
+    "save_as_template_create_5",
+    "stage_create",
+    "stage_delete",
+    "stage_update",
+    "stage_update_2",
+    "suggestions_list_5",
+    "suggestions_list_6",
+    "switch_wysiwyg_editor_update",
+    "templates_list_8",
+    "templates_list_9",
+    "translate_detail",
+    "translate_update",
+    "upload_cover_image_create",
+    "upload_sharing_image_update"
+  ],
+  "onboarding": [
+    "sample_data_create",
+    "sample_data_delete"
+  ],
+  "open_question_templates": [
+    "open_question_create",
+    "open_question_create_2",
+    "open_question_delete",
+    "open_question_delete_2",
+    "open_question_template_detail",
+    "open_question_template_detail_2",
+    "open_question_template_set",
+    "open_question_template_set_2",
+    "open_question_templates_list",
+    "open_question_templates_list_2",
+    "open_question_update",
+    "open_question_update_2",
+    "open_question_update_3",
+    "open_question_update_4",
+    "save_as_template_create_3",
+    "save_as_template_create_8"
+  ],
+  "open_questions": [
+    "assigned_offer_templates_list_4",
+    "assigned_offers_list_4",
+    "duplicate_duplicate_7",
+    "open_question_create_3",
+    "open_question_delete_3",
+    "open_question_detail",
+    "open_question_update_5",
+    "open_question_update_6",
+    "open_questions_list",
+    "template_create_2",
+    "template_delete_2",
+    "template_detail_2",
+    "template_set",
+    "template_update_3",
+    "template_update_4",
+    "templates_list_2"
+  ],
+  "openings": [
+    "opening_unassign"
+  ],
+  "overview": [
+    "overviews_list"
+  ],
+  "parse_cv": [
+    "parse_cv_create"
+  ],
+  "password": [
+    "password_create",
+    "request_reset_create"
+  ],
+  "past_subdomains": [
+    "past_subdomain_delete",
+    "past_subdomains_list"
+  ],
+  "payment": [
+    "reactivate_reactivate_2",
+    "subscription_create_2"
+  ],
+  "payment_intent": [
+    "payment_intent_create"
+  ],
+  "payment_source": [
+    "payment_source_create",
+    "payment_source_delete"
+  ],
+  "paymentgateway": [
+    "country_detail"
+  ],
+  "payments": [
+    "country_detail"
+  ],
+  "pdf": [
+    "pdf_detail"
+  ],
+  "pending": [
+    "pending_detail"
+  ],
+  "personal_tokens": [
+    "personal_token_create",
+    "personal_token_delete",
+    "personal_token_detail",
+    "personal_token_update",
+    "personal_token_update_2",
+    "personal_tokens_list"
+  ],
+  "pipeline": [
+    "assigned_offer_templates_list_5",
+    "assigned_offers_list_5",
+    "disqualify_reason_create",
+    "disqualify_reason_delete",
+    "disqualify_reason_update",
+    "disqualify_reason_update_2",
+    "disqualify_reasons_list",
+    "duplicate_duplicate_8",
+    "hiring_detail_detail",
+    "hiring_detail_update",
+    "option_detail",
+    "pipeline_template_create",
+    "pipeline_template_delete",
+    "pipeline_template_detail_3",
+    "pipeline_template_set_3",
+    "pipeline_template_update",
+    "pipeline_template_update_2",
+    "pipeline_templates_list_3",
+    "placement_change",
+    "placement_create",
+    "placement_delete",
+    "placement_detail",
+    "placement_disqualify",
+    "placement_requalify",
+    "placement_update",
+    "placement_update_2",
+    "placements_list",
+    "stage_create_3",
+    "stage_delete_3",
+    "stage_update_5",
+    "stage_update_6"
+  ],
+  "pipeline_templates": [
+    "assigned_offer_templates_list_5",
+    "assigned_offers_list_5",
+    "automation_create_4",
+    "automation_delete_4",
+    "automation_update_4",
+    "automations_list_7",
+    "automations_list_8",
+    "duplicate_duplicate_14",
+    "duplicate_duplicate_8",
+    "pipeline_template_create",
+    "pipeline_template_delete",
+    "pipeline_template_detail",
+    "pipeline_template_detail_2",
+    "pipeline_template_detail_3",
+    "pipeline_template_detail_4",
+    "pipeline_template_detail_5",
+    "pipeline_template_set",
+    "pipeline_template_set_2",
+    "pipeline_template_set_3",
+    "pipeline_template_update",
+    "pipeline_template_update_2",
+    "pipeline_templates_list",
+    "pipeline_templates_list_2",
+    "pipeline_templates_list_3",
+    "save_as_template_create_4",
+    "save_as_template_create_9",
+    "stage_create",
+    "stage_create_2",
+    "stage_create_3",
+    "stage_delete",
+    "stage_delete_2",
+    "stage_delete_3",
+    "stage_update",
+    "stage_update_2",
+    "stage_update_3",
+    "stage_update_4",
+    "stage_update_5",
+    "stage_update_6",
+    "suggestions_list_7",
+    "suggestions_list_8",
+    "templates_list_10",
+    "templates_list_11"
+  ],
+  "placements": [
+    "hiring_detail_detail",
+    "hiring_detail_update",
+    "location_update_2",
+    "option_detail",
+    "placement_change",
+    "placement_create",
+    "placement_delete",
+    "placement_disqualify",
+    "placement_requalify",
+    "placement_update",
+    "placement_update_2",
+    "placements_list"
+  ],
+  "plans": [
+    "plans_list"
+  ],
+  "positions": [
+    "position_detail",
+    "positions_list"
+  ],
+  "possible_languages": [
+    "possible_languages_list"
+  ],
+  "preferences": [
+    "preference_detail",
+    "preference_update"
+  ],
+  "primary_contact": [
+    "primary_contact_create",
+    "primary_contact_detail",
+    "primary_contact_update"
+  ],
+  "profile": [
+    "profile_change",
+    "profile_detail",
+    "profile_update"
+  ],
+  "program": [
+    "program_detail",
+    "program_detail_2",
+    "program_enable",
+    "program_send",
+    "program_update",
+    "program_update_2"
+  ],
+  "questionnaire": [
+    "attachment_create_3",
+    "attachment_delete_2",
+    "questionnaire_create",
+    "questionnaire_detail"
+  ],
+  "quick": [
+    "quicks_list"
+  ],
+  "reactions": [
+    "note_delete_3",
+    "reaction_create"
+  ],
+  "reactivate": [
+    "reactivate_reactivate_3"
+  ],
+  "recent_notes": [
+    "recent_notes_list"
+  ],
+  "referral": [
+    "actives_list",
+    "application_create",
+    "applications_list",
+    "applications_list_2",
+    "applications_list_3",
+    "assigned_offer_templates_list_6",
+    "assigned_offers_list_6",
+    "candidates_list_3",
+    "condition_update",
+    "conditions_list",
+    "conditions_list_2",
+    "counters_list_4",
+    "enableds_list",
+    "enableds_list_2",
+    "feature_discovery_update",
+    "filter_detail",
+    "offer_assign_2",
+    "offer_assign_3",
+    "offer_assignment_detail",
+    "offer_detail_3",
+    "offer_template_assign",
+    "offer_template_assign_2",
+    "offer_template_assignment_detail",
+    "offer_template_toggle",
+    "offer_toggle",
+    "password_create",
+    "profile_change",
+    "profile_detail",
+    "profile_update",
+    "program_detail",
+    "program_detail_2",
+    "program_enable",
+    "program_send",
+    "program_update",
+    "program_update_2",
+    "referral_portal_sign",
+    "referral_portal_sign_2",
+    "referrer_delete",
+    "referrers_list",
+    "registration_create",
+    "registration_register",
+    "request_reset_create",
+    "reward_create",
+    "reward_delete",
+    "reward_detail",
+    "reward_update",
+    "rewards_list",
+    "settle_mark",
+    "socket_token_detail",
+    "template_create_3",
+    "template_delete_3",
+    "template_detail_3",
+    "template_set_2",
+    "template_update_5",
+    "template_update_6",
+    "templates_list_3",
+    "term_update_2",
+    "terms_list_2",
+    "terms_list_3",
+    "upload_create"
+  ],
+  "referral_portal": [
+    "actives_list",
+    "application_create",
+    "applications_list_2",
+    "applications_list_3",
+    "conditions_list_2",
+    "feature_discovery_update",
+    "filter_detail",
+    "offer_detail_3",
+    "password_create",
+    "profile_change",
+    "profile_detail",
+    "profile_update",
+    "program_detail_2",
+    "program_update_2",
+    "referral_portal_sign",
+    "referral_portal_sign_2",
+    "registration_create",
+    "registration_register",
+    "request_reset_create",
+    "socket_token_detail",
+    "terms_list_3",
+    "upload_create"
+  ],
+  "referral_templates": [
+    "referral_template_create",
+    "referral_template_create_2",
+    "referral_template_update",
+    "referral_template_update_2",
+    "referral_templates_list",
+    "referral_templates_list_2",
+    "save_as_template_create_10",
+    "save_as_template_create_5"
+  ],
+  "referrers": [
+    "referrer_delete",
+    "referrers_list"
+  ],
+  "regions": [
+    "regions_list",
+    "regions_list_2"
+  ],
+  "registration": [
+    "registration_create",
+    "registration_register"
+  ],
+  "report": [
+    "activities_list",
+    "breakdown_detail",
+    "calendar_events_breakdowns_list",
+    "candidate_origins_list",
+    "component_create",
+    "component_move",
+    "component_templates_list",
+    "component_update",
+    "cost_per_campaigns_list",
+    "dashboard_create",
+    "dashboard_update",
+    "dashboards_list",
+    "dashboards_list_2",
+    "detail_detail",
+    "dropoff_rates_list",
+    "dropoff_rates_list_2",
+    "email_activities_list",
+    "evaluated_candidates_list",
+    "evaluation_scores_list",
+    "filters_list",
+    "first_response_times_list",
+    "funnel_detail",
+    "job_breakdowns_list",
+    "job_lifetimes_list",
+    "metrics_list",
+    "pipeline_speeds_list",
+    "pipeline_speeds_list_2",
+    "proceed_rates_list",
+    "proceed_rates_list_2",
+    "quality_of_candidates_list",
+    "quality_of_candidates_list_2",
+    "report_detail",
+    "report_update",
+    "single_metric_detail",
+    "slipping_aways_list",
+    "task_completions_list",
+    "time_based_detail",
+    "time_per_stages_list",
+    "time_to_disqualifies_list",
+    "time_to_evaluates_list",
+    "time_to_fills_list",
+    "time_to_hires_list",
+    "trend_detail"
+  ],
+  "request_links": [
+    "request_link_delete"
+  ],
+  "requests": [
+    "complete_create"
+  ],
+  "requisitions": [
+    "activities_list_5",
+    "approval_flow_create",
+    "approval_flow_delete",
+    "approval_flow_update",
+    "approval_flows_list",
+    "approval_flows_list_2",
+    "approveds_list",
+    "approver_decision_approve",
+    "approver_decision_reject",
+    "approver_decision_send",
+    "assigned_detail",
+    "assigned_update",
+    "assignment_delete",
+    "assignment_update",
+    "assignments_list",
+    "attachments_list_3",
+    "counter_detail_2",
+    "diffs_list",
+    "duplicate_duplicate_9",
+    "dynamic_field_delete_2",
+    "form_delete",
+    "form_detail",
+    "form_update",
+    "note_create_4",
+    "notes_list_3",
+    "offer_detail_4",
+    "opening_fill",
+    "opening_unassign",
+    "requisition_archive",
+    "requisition_archive_2",
+    "requisition_assign",
+    "requisition_cancel",
+    "requisition_create",
+    "requisition_delete",
+    "requisition_detail",
+    "requisition_follow",
+    "requisition_follow_2",
+    "requisition_retrieve",
+    "requisition_retrieve_2",
+    "requisition_unfollow",
+    "requisition_unfollow_2",
+    "requisition_update",
+    "requisitions_list",
+    "requisitions_list_2",
+    "setting_detail_6",
+    "setting_update_7",
+    "viewed_mark"
+  ],
+  "resource": [
+    "article_detail",
+    "articles_list",
+    "countries_list_3",
+    "regions_list_2"
+  ],
+  "result_requests": [
+    "result_request_delete",
+    "result_request_dismiss",
+    "result_request_dismiss_2",
+    "result_request_revert",
+    "result_requests_list"
+  ],
+  "results": [
+    "result_delete",
+    "result_delete_2",
+    "result_detail",
+    "result_update",
+    "result_update_2",
+    "results_list_2"
+  ],
+  "rewards": [
+    "reward_create",
+    "reward_delete",
+    "reward_detail",
+    "reward_update",
+    "rewards_list"
+  ],
+  "roles": [
+    "abilities_list",
+    "duplicate_duplicate",
+    "role_create",
+    "role_delete",
+    "role_detail",
+    "role_update",
+    "role_update_2",
+    "role_update_3",
+    "roles_list"
+  ],
+  "sample_data": [
+    "sample_data_create",
+    "sample_data_delete"
+  ],
+  "schedules": [
+    "availables_list_2",
+    "next_duplicate_name_detail",
+    "schedule_create",
+    "schedule_delete",
+    "schedule_detail",
+    "schedule_update",
+    "schedules_list"
+  ],
+  "search": [
+    "candidate_create_4",
+    "candidate_export",
+    "candidates_list_4",
+    "candidates_list_5",
+    "fs_count_create",
+    "quicks_list",
+    "segment_create",
+    "segment_delete",
+    "segment_hide",
+    "segment_update",
+    "segment_update_2",
+    "segment_update_3",
+    "segments_list"
+  ],
+  "secure_change": [
+    "token_detail",
+    "token_detail_2"
+  ],
+  "segments": [
+    "segment_create",
+    "segment_delete",
+    "segment_hide",
+    "segment_update",
+    "segment_update_2",
+    "segment_update_3",
+    "segments_list"
+  ],
+  "settings": [
+    "approval_flow_create",
+    "approval_flow_delete",
+    "approval_flow_update",
+    "approval_flows_list_2",
+    "blacklist_entry_create",
+    "blacklist_entry_delete",
+    "blacklist_entry_detail",
+    "blacklist_entry_update",
+    "dynamic_field_delete_2",
+    "form_delete",
+    "form_detail",
+    "form_update",
+    "full_detail",
+    "protected_domain_create",
+    "protected_domain_delete",
+    "setting_delete",
+    "setting_detail",
+    "setting_detail_2",
+    "setting_detail_3",
+    "setting_detail_4",
+    "setting_detail_5",
+    "setting_detail_6",
+    "setting_detail_7",
+    "setting_disable",
+    "setting_enable",
+    "setting_register",
+    "setting_register_2",
+    "setting_update",
+    "setting_update_2",
+    "setting_update_3",
+    "setting_update_4",
+    "setting_update_5",
+    "setting_update_6",
+    "setting_update_7",
+    "unbiased_hiring_detail",
+    "unbiased_hiring_update"
+  ],
+  "shared_email_providers": [
+    "connect_create",
+    "shared_email_provider_archive",
+    "shared_email_provider_create",
+    "shared_email_provider_delete",
+    "shared_email_provider_detail",
+    "shared_email_provider_restore",
+    "shared_email_provider_update",
+    "shared_email_providers_list",
+    "shared_email_providers_list_2",
+    "trigger_action_template_update"
+  ],
+  "sidebar": [
+    "sidebars_list"
+  ],
+  "similar": [
+    "similars_list"
+  ],
+  "single_metric": [
+    "single_metric_detail"
+  ],
+  "slack_integrations": [
+    "slack_integration_delete",
+    "slack_integration_detail",
+    "slack_integration_disconnect",
+    "slack_integration_update"
+  ],
+  "sms": [
+    "sm_disable",
+    "sm_enable",
+    "sm_send"
+  ],
+  "socket_token": [
+    "socket_token_detail"
+  ],
+  "sources": [
+    "source_add",
+    "source_create",
+    "source_create_2",
+    "source_delete",
+    "source_delete_2",
+    "source_merge",
+    "source_merge_2",
+    "source_update",
+    "sources_list"
+  ],
+  "spec": [
+    "specs_list",
+    "specs_list_2"
+  ],
+  "sso": [
+    "identity_provider_create",
+    "identity_provider_detail",
+    "identity_provider_update",
+    "identity_provider_update_2"
+  ],
+  "stages": [
+    "stage_create_3",
+    "stage_delete_3",
+    "stage_update_5",
+    "stage_update_6"
+  ],
+  "subscription": [
+    "plan_detail",
+    "reactivate_reactivate",
+    "reactivate_reactivate_2",
+    "subscription_create",
+    "subscription_create_2",
+    "subscription_detail",
+    "subscription_lock",
+    "subscription_update"
+  ],
+  "suggestions": [
+    "suggestions_list",
+    "suggestions_list_2"
+  ],
+  "switch_wysiwyg_editors": [
+    "switch_wysiwyg_editor_update"
+  ],
+  "tagging": [
+    "offer_tag_create",
+    "offer_tag_create_2",
+    "offer_tag_delete",
+    "offer_tag_delete_2",
+    "offer_tag_merge",
+    "offer_tag_merge_2",
+    "offer_tag_update",
+    "offer_tags_list",
+    "source_create",
+    "source_create_2",
+    "source_delete",
+    "source_delete_2",
+    "source_merge",
+    "source_merge_2",
+    "source_update",
+    "sources_list",
+    "tag_create",
+    "tag_create_2",
+    "tag_delete",
+    "tag_delete_2",
+    "tag_merge",
+    "tag_merge_2",
+    "tag_update",
+    "tags_list"
+  ],
+  "tags": [
+    "tag_add",
+    "tag_create",
+    "tag_create_2",
+    "tag_delete",
+    "tag_delete_2",
+    "tag_merge",
+    "tag_merge_2",
+    "tag_update",
+    "tags_list"
+  ],
+  "talent_pools": [
+    "activities_list_6",
+    "attachments_list_4",
+    "candidate_create_3",
+    "duplicate_duplicate_10",
+    "note_create_5",
+    "notes_list_4",
+    "talent_pool_archive",
+    "talent_pool_assign",
+    "talent_pool_create",
+    "talent_pool_delete",
+    "talent_pool_detail",
+    "talent_pool_follow",
+    "talent_pool_mark",
+    "talent_pool_unfollow",
+    "talent_pool_update",
+    "talent_pools_list"
+  ],
+  "task": [
+    "task_add"
+  ],
+  "tasks": [
+    "task_create",
+    "task_delete",
+    "task_detail",
+    "task_update",
+    "tasks_list",
+    "tasks_list_2"
+  ],
+  "team_members": [
+    "activities_list",
+    "email_activities_list",
+    "first_response_times_list",
+    "quality_of_candidates_list_2",
+    "task_completions_list"
+  ],
+  "teams": [
+    "team_detail",
+    "teams_list"
+  ],
+  "template": [
+    "assigned_offer_templates_list_4",
+    "assigned_offers_list_4",
+    "duplicate_duplicate_7",
+    "open_question_create_3",
+    "open_question_delete_3",
+    "open_question_detail",
+    "open_question_update_5",
+    "open_question_update_6",
+    "open_questions_list",
+    "template_create_2",
+    "template_delete_2",
+    "template_detail_2",
+    "template_set",
+    "template_update_3",
+    "template_update_4",
+    "templates_list_2"
+  ],
+  "templates": [
+    "assigned_offer_templates_list_6",
+    "assigned_offers_list_6",
+    "categories_list",
+    "dashboards_list_2",
+    "template_create",
+    "template_create_3",
+    "template_delete",
+    "template_delete_3",
+    "template_detail",
+    "template_detail_3",
+    "template_duplicate",
+    "template_set_2",
+    "template_update",
+    "template_update_2",
+    "template_update_5",
+    "template_update_6",
+    "templates_list",
+    "templates_list_3",
+    "templates_list_4",
+    "templates_list_5"
+  ],
+  "terms": [
+    "term_update",
+    "term_update_2",
+    "terms_list",
+    "terms_list_2",
+    "terms_list_3"
+  ],
+  "texting": [
+    "candidate_detail_6",
+    "consent_detail_3",
+    "consent_update",
+    "full_detail",
+    "message_delete_2",
+    "message_schedule",
+    "message_send",
+    "message_send_2",
+    "setting_delete",
+    "setting_detail_7",
+    "setting_disable",
+    "setting_enable",
+    "setting_register",
+    "setting_register_2",
+    "thread_detail_2",
+    "thread_detail_3"
+  ],
+  "threads": [
+    "candidate_detail_6",
+    "count_detail_3",
+    "thread_delete",
+    "thread_detail",
+    "thread_detail_2",
+    "thread_detail_3",
+    "thread_mark",
+    "thread_mark_2",
+    "thread_search",
+    "thread_update"
+  ],
+  "time_based": [
+    "time_based_detail"
+  ],
+  "time_format": [
+    "time_format_detail"
+  ],
+  "timetable": [
+    "timetables_list"
+  ],
+  "toggle_academy_button": [
+    "toggle_academy_button_update"
+  ],
+  "token": [
+    "token_detail",
+    "token_detail_2",
+    "token_detail_3",
+    "token_exchange"
+  ],
+  "tokens": [
+    "token_exchange_2"
+  ],
+  "tracking": [
+    "activities_list_2",
+    "activities_list_3",
+    "activities_list_4",
+    "activities_list_5",
+    "activities_list_6",
+    "activity_subscription_update",
+    "activity_subscriptions_list",
+    "activity_subscriptions_preset_update",
+    "activity_subscriptions_presets_list",
+    "counters_list_5",
+    "notification_mark",
+    "notification_mark_2",
+    "notifications_list",
+    "reset_to_default_update",
+    "reset_to_default_update_2",
+    "slack_integration_delete",
+    "slack_integration_detail",
+    "slack_integration_disconnect",
+    "slack_integration_update",
+    "unreads_list"
+  ],
+  "tracking_data": [
+    "tracking_datas_list"
+  ],
+  "translate": [
+    "translate_detail",
+    "translate_detail_2",
+    "translate_update",
+    "translate_update_2"
+  ],
+  "translation_counters": [
+    "translation_counter_detail",
+    "translation_counter_detail_2"
+  ],
+  "trend": [
+    "trend_detail"
+  ],
+  "trigger": [
+    "action_cancel",
+    "action_set_cancel",
+    "action_update",
+    "grouped_detail",
+    "retry_create"
+  ],
+  "trigger_action_templates": [
+    "trigger_action_template_update"
+  ],
+  "two_factor_authentication_settings": [
+    "app_disable",
+    "app_enable",
+    "sm_disable",
+    "sm_enable",
+    "sm_send",
+    "two_factor_authentication_setting_detail",
+    "two_factor_authentication_setting_hide"
+  ],
+  "unmap": [
+    "unmap_update"
+  ],
+  "upload_cover_image": [
+    "upload_cover_image_create",
+    "upload_cover_image_create_2"
+  ],
+  "upload_sharing_image": [
+    "upload_sharing_image_update",
+    "upload_sharing_image_update_2"
+  ],
+  "uploads": [
+    "upload_create",
+    "upload_create_2"
+  ],
+  "version_check": [
+    "version_checks_list"
+  ],
+  "view": [
+    "view_mark"
+  ],
+  "workflow_automations": [
+    "automation_create",
+    "automation_create_2",
+    "automation_create_3",
+    "automation_create_4",
+    "automation_delete",
+    "automation_delete_2",
+    "automation_delete_3",
+    "automation_delete_4",
+    "automation_update",
+    "automation_update_2",
+    "automation_update_3",
+    "automation_update_4",
+    "automations_list",
+    "automations_list_2",
+    "automations_list_3",
+    "automations_list_4",
+    "automations_list_5",
+    "automations_list_6",
+    "automations_list_7",
+    "automations_list_8",
+    "duplicate_duplicate_11",
+    "duplicate_duplicate_12",
+    "duplicate_duplicate_13",
+    "duplicate_duplicate_14",
+    "offer_detail_5",
+    "offer_detail_6",
+    "offer_template_detail_2",
+    "offer_template_detail_3",
+    "pipeline_template_detail_4",
+    "pipeline_template_detail_5",
+    "recents_list",
+    "suggestions_list",
+    "suggestions_list_2",
+    "suggestions_list_3",
+    "suggestions_list_4",
+    "suggestions_list_5",
+    "suggestions_list_6",
+    "suggestions_list_7",
+    "suggestions_list_8",
+    "templates_list_10",
+    "templates_list_11",
+    "templates_list_4",
+    "templates_list_5",
+    "templates_list_6",
+    "templates_list_7",
+    "templates_list_8",
+    "templates_list_9",
+    "workflow_automation_detail",
+    "workflow_automation_detail_2"
+  ]
+}

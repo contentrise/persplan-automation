@@ -1,0 +1,21 @@
+{
+  "id": "upload_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/uploads",
+  "summary": "Create upload",
+  "description": "Create upload. Endpoint: POST /c/{company_id}/uploads. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/uploads\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "uploads"
+  ]
+}

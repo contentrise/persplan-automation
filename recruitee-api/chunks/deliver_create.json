@@ -1,0 +1,29 @@
+{
+  "id": "deliver_create",
+  "method": "POST",
+  "path": "/c/{company_id}/mailbox/deliver",
+  "summary": "Re-deliver message",
+  "description": "Re-deliver message. Endpoint: POST /c/{company_id}/mailbox/deliver. Required parameters: message_id, company_id.",
+  "params": [
+    {
+      "name": "message_id",
+      "type": "Mailbox Message ID",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/mailbox/deliver\n\nRequired params: message_id, company_id",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "deliver"
+  ]
+}

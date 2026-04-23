@@ -1,0 +1,69 @@
+{
+  "id": "calendar_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/interview/calendars/{id}",
+  "summary": "Delete interview calendar",
+  "description": "Delete interview calendar. Endpoint: DELETE /c/{company_id}/interview/calendars/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview calendar ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/interview/calendars/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "interview_calendar": {
+      "access": "public",
+      "id": 48,
+      "name": "Primary Calendar",
+      "status": "pending",
+      "kind": "personal",
+      "admin_id": 2042,
+      "provider": "google",
+      "external_calendars": [
+        {
+          "access": true,
+          "id": "primary@calendar.google.com",
+          "name": "Primary calendar",
+          "already_synced": false,
+          "already_synced_by": null,
+          "is_primary": null
+        },
+        {
+          "access": true,
+          "id": "n0pd37gkckrd0i41stjg@calendar.google.com",
+          "name": "Holidays",
+          "already_synced": false,
+          "already_synced_by": null,
+          "is_primary": null
+        },
+        {
+          "access": false,
+          "id": "obcol8eiejgbrbs0vp@calendar.google.com",
+          "name": "Company events",
+          "already_synced": false,
+          "already_synced_by": null,
+          "is_primary": null
+        }
+      ],
+      "external_calendar_id": "primary@calendar.google.com",
+      "synced_at": "2026-04-21T06:47:25.310661Z",
+      "sync_email": null,
+      "subscription_active": true
+    }
+  },
+  "tags": [
+    "interview",
+    "calendars"
+  ]
+}

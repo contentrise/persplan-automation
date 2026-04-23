@@ -1,0 +1,59 @@
+{
+  "id": "save_as_template_create",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/{offer_id}/auto_reply_templates/save_as_template",
+  "summary": "Save a custom template as regular template",
+  "description": "Save a custom template as regular template. Endpoint: POST /c/{company_id}/offers/{offer_id}/auto_reply_templates/save_as_template. Required parameters: title, offer_id, company_id. Optional parameters include translations, template_attachment_assignments.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Name of the newly created template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "translations",
+      "type": "map",
+      "required": false,
+      "description": "Fields: [‘lang_code’, ‘subject’, ‘body_html’]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_attachment_assignments",
+      "type": "array",
+      "required": false,
+      "description": "Array of template attachment assignments, parameters: (id attachment_id)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"auto_reply_template\": {\n\"title\": \"\"\n}\n}",
+  "example_response": {
+    "error": [
+      "Title can't be blank"
+    ],
+    "error_fields": {
+      "title": [
+        "can't be blank"
+      ]
+    }
+  },
+  "tags": [
+    "offers",
+    "auto_reply_templates"
+  ]
+}

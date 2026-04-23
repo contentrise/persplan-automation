@@ -1,0 +1,45 @@
+{
+  "id": "tag_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/tags/{id}",
+  "summary": "Update candidate tag",
+  "description": "Update candidate tag. Endpoint: PATCH /c/{company_id}/tags/{id}. Required parameters: id, name, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Tag ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Tag name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"tag\": {\n\"name\": \"Manager\"\n}\n}",
+  "example_response": {
+    "tag": {
+      "id": 80,
+      "name": "Manager",
+      "status": null,
+      "context": "tags",
+      "taggings_count": 0,
+      "searchable_name": "manager"
+    }
+  },
+  "tags": [
+    "tags",
+    "tagging"
+  ]
+}

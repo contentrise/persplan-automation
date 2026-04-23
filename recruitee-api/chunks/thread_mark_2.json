@@ -1,0 +1,64 @@
+{
+  "id": "thread_mark_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/mailbox/threads/mark",
+  "summary": "Mark threads as read",
+  "description": "Mark threads as read. Endpoint: PATCH /c/{company_id}/mailbox/threads/mark. Required parameters: company_id. Optional parameters include id, scope, read, q, until, archived.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Thread ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "One of: [my, sent, candidates, followed, followed_candidates, followed_jobs, not_converted, general, jobs]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "read",
+      "type": "boolean",
+      "required": false,
+      "description": "Mark as read(true) or unread(false)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search query",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "until",
+      "type": "datetime",
+      "required": false,
+      "description": "Most recent message timestamp",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "archived",
+      "type": "boolean",
+      "required": false,
+      "description": "Mark as archived(true) or not(false)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/mailbox/threads/mark\n\nRequired params: company_id\n\nOptional params: id, scope, read, q, until, archived",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "threads"
+  ]
+}

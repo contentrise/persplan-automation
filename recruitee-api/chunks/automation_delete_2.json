@@ -1,0 +1,29 @@
+{
+  "id": "automation_delete_2",
+  "method": "DELETE",
+  "path": "/c/{company_id}/workflow_automations/offer_templates/automations/{automation_id}",
+  "summary": "Delete automation",
+  "description": "Delete automation. Endpoint: DELETE /c/{company_id}/workflow_automations/offer_templates/automations/{automation_id}. Required parameters: automation_id, company_id.",
+  "params": [
+    {
+      "name": "automation_id",
+      "type": "integer",
+      "required": true,
+      "description": "Automation ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/workflow_automations/offer_templates/automations/{automation_id}\n\nRequired params: automation_id, company_id",
+  "example_response": {},
+  "tags": [
+    "workflow_automations",
+    "offer_templates"
+  ]
+}

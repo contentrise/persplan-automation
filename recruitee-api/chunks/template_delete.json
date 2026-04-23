@@ -1,0 +1,150 @@
+{
+  "id": "template_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/interview/templates/{id}",
+  "summary": "Delete interview template",
+  "description": "Delete interview template. Endpoint: DELETE /c/{company_id}/interview/templates/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/interview/templates/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 1260,
+        "type": "Admin",
+        "email": "john768@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1260/normal_avatar_9pfn77uwo19e.png",
+        "photo_thumb_url": "tmp/bow/admins/1260/thumb_avatar_9pfn77uwo19e.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "interview_template": {
+      "id": 50,
+      "name": "Elixir Developer",
+      "position": 39,
+      "category": "Engineering",
+      "kind": "interview",
+      "token": "abcdef123456",
+      "admin_id": 1260,
+      "created_at": "2026-04-21T07:30:56.969006Z",
+      "updated_at": "2026-04-21T07:30:56.975953Z",
+      "rating_required": null,
+      "interview_questions": [
+        {
+          "id": 138,
+          "position": 1,
+          "options": null,
+          "title": "Can you legally work in EU?",
+          "required": true,
+          "kind": "boolean",
+          "hint": "If person is not EU citizen ask for Visa"
+        },
+        {
+          "id": 139,
+          "position": 1,
+          "options": null,
+          "title": "What is your greatest strength?",
+          "required": true,
+          "kind": "text",
+          "hint": "When you are asked about your greatest strengths, it is important to discuss the attributes that will qualify you for the specific job and set you apart from the other candidates."
+        },
+        {
+          "id": 140,
+          "position": 1,
+          "options": null,
+          "title": "How would you rate your Elixir knowledge?",
+          "required": true,
+          "kind": "single_choice",
+          "hint": "Ask how the candidate would rate himself",
+          "interview_question_options": [
+            {
+              "id": 233,
+              "position": 1,
+              "title": "Poor",
+              "hint": null
+            },
+            {
+              "id": 234,
+              "position": 1,
+              "title": "Medium",
+              "hint": null
+            },
+            {
+              "id": 235,
+              "position": 1,
+              "title": "Great",
+              "hint": null
+            },
+            {
+              "id": 236,
+              "position": 1,
+              "title": "Excellent",
+              "hint": null
+            }
+          ]
+        },
+        {
+          "id": 141,
+          "position": 1,
+          "options": null,
+          "title": "How would you rate your Elixir knowledge?",
+          "required": true,
+          "kind": "dropdown",
+          "hint": "Ask how the candidate would rate himself",
+          "interview_question_options": [
+            {
+              "id": 237,
+              "position": 1,
+              "title": "Poor",
+              "hint": null
+            },
+            {
+              "id": 238,
+              "position": 1,
+              "title": "Medium",
+              "hint": null
+            },
+            {
+              "id": 239,
+              "position": 1,
+              "title": "Great",
+              "hint": null
+            },
+            {
+              "id": 240,
+              "position": 1,
+              "title": "Excellent",
+              "hint": null
+            }
+          ]
+        }
+      ],
+      "info_title": "Interview preperation",
+      "info_description": "<p>Elixir Developer interview</p>\n"
+    }
+  },
+  "tags": [
+    "interview",
+    "templates"
+  ]
+}

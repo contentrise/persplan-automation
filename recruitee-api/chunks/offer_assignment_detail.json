@@ -1,0 +1,69 @@
+{
+  "id": "offer_assignment_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/offers/{offer_id}/offer_assignment",
+  "summary": "Show referral offer assignment info",
+  "description": "Show referral offer assignment info. Endpoint: GET /c/{company_id}/referral/offers/{offer_id}/offer_assignment. Required parameters: offer_id, company_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/offers/{offer_id}/offer_assignment\n\nRequired params: offer_id, company_id",
+  "example_response": {
+    "offer_assignment": {
+      "enabled": false,
+      "id": 68,
+      "offer": {
+        "id": 1078,
+        "status": "draft",
+        "title": "Best Offer",
+        "location": "",
+        "kind": "job",
+        "department": null,
+        "lang_code": "en",
+        "slug": "best-offer627",
+        "guid": "guid598"
+      },
+      "referral_template": {
+        "default": true,
+        "id": 203,
+        "name": "Default",
+        "position": 1,
+        "category": null,
+        "created_at": "2026-04-21T07:32:49.381956Z",
+        "updated_at": "2026-04-21T07:32:49.381956Z",
+        "custom": false,
+        "referral_questions": [
+          {
+            "id": 212,
+            "position": 145,
+            "options": [],
+            "title": "Default",
+            "required": false,
+            "kind": "string"
+          }
+        ]
+      },
+      "referral_reward": null,
+      "referral_reward_id": null,
+      "referral_template_id": 203,
+      "custom_template_id": null
+    }
+  },
+  "tags": [
+    "referral",
+    "offers"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "candidate_assign",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/assign",
+  "summary": "Assign candidates to offers and/or talent pools",
+  "description": "Assign candidates to offers and/or talent pools. Endpoint: PATCH /c/{company_id}/bulk/candidates/assign. Required parameters: company_id. Optional parameters include candidates, offers, run_actions.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offers",
+      "type": "array",
+      "required": false,
+      "description": "Array of offer IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "run_actions",
+      "type": "boolean",
+      "required": false,
+      "description": "Run automated actions (default: true)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n394,\n395,\n396\n],\n\"offer_id\": 365,\n\"run_actions\": true\n}",
+  "example_response": {
+    "uuid": "00f46b09-f025-423d-9764-f3bb37b28a97"
+  },
+  "tags": [
+    "candidates"
+  ]
+}

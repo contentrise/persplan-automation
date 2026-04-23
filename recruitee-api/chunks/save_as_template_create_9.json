@@ -1,0 +1,151 @@
+{
+  "id": "save_as_template_create_9",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/save_as_template",
+  "summary": "Save a custom template as regular template",
+  "description": "Save a custom template as regular template. Endpoint: POST /c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/save_as_template. Required parameters: title, offer_template_id, company_id. Optional parameters include category.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Name of the newly created template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "required": false,
+      "description": "Category of the newly created template (optional)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"pipeline_template\": {\n\"title\": \"New template\"\n}\n}",
+  "example_response": {
+    "pipeline_template": {
+      "default": false,
+      "id": 2667,
+      "position": 91,
+      "title": "New template",
+      "category": "SAMPLE CATEGORY",
+      "custom": false,
+      "stages": [
+        {
+          "id": 21389,
+          "name": "Referred",
+          "position": -3,
+          "group": "applicants",
+          "category": "referred",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21390,
+          "name": "Sourced",
+          "position": -2,
+          "group": "applicants",
+          "category": "sourced",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21391,
+          "name": "Applied",
+          "position": -1,
+          "group": "applicants",
+          "category": "apply",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21392,
+          "name": "Phone interview",
+          "position": 1,
+          "group": "active",
+          "category": "phone_screen",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21393,
+          "name": "On-site interview",
+          "position": 2,
+          "group": "active",
+          "category": "interview",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21394,
+          "name": "Evaluation",
+          "position": 3,
+          "group": "active",
+          "category": "evaluation",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21395,
+          "name": "Offer",
+          "position": 4,
+          "group": "active",
+          "category": "offer",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21396,
+          "name": "Hired",
+          "position": 5,
+          "group": "hires",
+          "category": "hire",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        }
+      ],
+      "requires_adjustment": false
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "pipeline_templates"
+  ]
+}

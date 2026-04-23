@@ -1,0 +1,45 @@
+{
+  "id": "searchables_list",
+  "method": "GET",
+  "path": "/c/{company_id}/custom_fields/fields/searchable",
+  "summary": "List of searchable candidate fields",
+  "description": "List of searchable candidate fields. Endpoint: GET /c/{company_id}/custom_fields/fields/searchable. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/custom_fields/fields/searchable\n\nRequired params: company_id",
+  "example_response": {
+    "fields": [
+      {
+        "name": "Residency",
+        "search_key": "boolean_residency"
+      },
+      {
+        "name": "Seniority Level",
+        "search_key": "dropdown_seniority_level"
+      },
+      {
+        "name": "About Me",
+        "search_key": "multi_line_about_me"
+      },
+      {
+        "name": "Certificates",
+        "search_key": "single_line_certificates"
+      },
+      {
+        "name": "Salary",
+        "search_key": "single_line_salary"
+      }
+    ]
+  },
+  "tags": [
+    "custom_fields",
+    "fields"
+  ]
+}

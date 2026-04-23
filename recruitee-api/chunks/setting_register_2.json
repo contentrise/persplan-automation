@@ -1,0 +1,78 @@
+{
+  "id": "setting_register_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/texting/settings/register_phone",
+  "summary": "Register phone number at provider for current company",
+  "description": "Register phone number at provider for current company. Endpoint: PATCH /c/{company_id}/texting/settings/register_phone. Required parameters: country_code, company_id. Optional parameters include address.",
+  "params": [
+    {
+      "name": "address",
+      "type": "map",
+      "required": false,
+      "description": "Contains company address:",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "country_code",
+      "type": "string",
+      "required": true,
+      "description": "Country code of phone number to register, i.e. ‘US’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"country_code\": \"CA\"\n}",
+  "example_response": {
+    "texting_settings": {
+      "enabled": true,
+      "company_id": 1886,
+      "phone_numbers": [
+        {
+          "number": "+16086803412",
+          "country_code": "CA"
+        }
+      ],
+      "credits_used": 0,
+      "total_credits": 50,
+      "valid_until": "2026-04-21T07:32:10.958579Z",
+      "campaign_request_status": null,
+      "scheduled_deleted_at": null,
+      "provider_active": false,
+      "supported_countries": [
+        {
+          "requirements": [],
+          "country_code": "CA",
+          "country_name": "Canada"
+        },
+        {
+          "requirements": [
+            "address"
+          ],
+          "country_code": "NL",
+          "country_name": "Netherlands"
+        },
+        {
+          "requirements": [],
+          "country_code": "SE",
+          "country_name": "Sweden"
+        },
+        {
+          "requirements": [],
+          "country_code": "US",
+          "country_name": "United States"
+        }
+      ],
+      "free_credits_active": true
+    }
+  },
+  "tags": [
+    "texting",
+    "settings"
+  ]
+}

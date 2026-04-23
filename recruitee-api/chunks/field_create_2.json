@@ -1,0 +1,45 @@
+{
+  "id": "field_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/custom_fields/fieldsets/{fieldset_id}/fields",
+  "summary": "Create fieldset field",
+  "description": "Create fieldset field. Endpoint: POST /c/{company_id}/custom_fields/fieldsets/{fieldset_id}/fields. Required parameters: company_id. Optional parameters include fieldset_id.",
+  "params": [
+    {
+      "name": "fieldset_id",
+      "type": "integer",
+      "required": false,
+      "description": "Fieldset ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"field\": {\n\"kind\": \"address\",\n\"visibility\": {\n\"admin_ids\": [\n1054\n],\n\"level\": \"protected\",\n\"role_ids\": [\n536\n]\n}\n}\n}",
+  "example_response": {
+    "field": {
+      "id": 17,
+      "position": 1,
+      "visible": true,
+      "kind": "address",
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          1054
+        ],
+        "role_ids": [
+          536
+        ]
+      }
+    }
+  },
+  "tags": [
+    "custom_fields",
+    "fieldsets"
+  ]
+}

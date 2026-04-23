@@ -1,0 +1,56 @@
+{
+  "id": "eeo_create",
+  "method": "POST",
+  "path": "/share/eeo/{data_request_token}",
+  "summary": "Saves EEO survey answers",
+  "description": "Saves EEO survey answers. Endpoint: POST /share/eeo/{data_request_token}. Required parameters: skip, gender, disability_status, race, veteran_status, data_request_token.",
+  "params": [
+    {
+      "name": "skip",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "gender",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "disability_status",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "race",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "veteran_status",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "data_request_token",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /share/eeo/{data_request_token}\n\nRequired params: skip, gender, disability_status, race, veteran_status, data_request_token",
+  "example_response": {},
+  "tags": [
+    "eeo"
+  ]
+}

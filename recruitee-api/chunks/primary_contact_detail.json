@@ -1,0 +1,35 @@
+{
+  "id": "primary_contact_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/primary_contact",
+  "summary": "Return primary contact details. If no PAC exists, returns 204 with empty fields.",
+  "description": "Return primary contact details. If no PAC exists, returns 204 with empty fields.. Endpoint: GET /c/{company_id}/primary_contact. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/primary_contact\n\nRequired params: company_id",
+  "example_response": {
+    "primary_contact": {
+      "id": null,
+      "admin_id": null,
+      "company_id": null,
+      "has_avatar": false,
+      "initials": null,
+      "created_at": null,
+      "updated_at": null,
+      "avatar_url": null,
+      "primary_contact_name": null,
+      "secondary_contact_emails": []
+    }
+  },
+  "tags": [
+    "primary_contact",
+    "company"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "open_question_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/open_questions/template/{template_id}/open_questions/{id}",
+  "summary": "Show Open Question for a given template",
+  "description": "Show Open Question for a given template. Endpoint: GET /c/{company_id}/open_questions/template/{template_id}/open_questions/{id}. Required parameters: id, template_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Open Question id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/open_questions/template/{template_id}/open_questions/{id}\n\nRequired params: id, template_id, company_id",
+  "example_response": {
+    "open_question": {
+      "id": 121,
+      "position": 1,
+      "visible": true,
+      "options": null,
+      "required": false,
+      "kind": "multi_choice",
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      },
+      "open_question_options": [
+        {
+          "id": 145,
+          "position": 1,
+          "options": {},
+          "translations": [
+            {
+              "body": "Option Body",
+              "lang_code": "en"
+            }
+          ],
+          "disqualify_reason_id": null
+        }
+      ],
+      "translations": [
+        {
+          "body": "Question Body",
+          "lang_code": "en"
+        }
+      ],
+      "open_question_template_id": 112,
+      "is_knockout_question": false
+    }
+  },
+  "tags": [
+    "open_questions",
+    "template"
+  ]
+}

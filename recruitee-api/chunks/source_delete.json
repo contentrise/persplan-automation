@@ -1,0 +1,55 @@
+{
+  "id": "source_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/candidates/{candidate_id}/sources",
+  "summary": "Remove candidate's sources",
+  "description": "Remove candidate's sources. Endpoint: DELETE /c/{company_id}/candidates/{candidate_id}/sources. Required parameters: candidate_id, company_id. Optional parameters include sources, source.",
+  "params": [
+    {
+      "name": "sources",
+      "type": "array",
+      "required": false,
+      "description": "Array of sources",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source",
+      "type": "string",
+      "required": false,
+      "description": "Source",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"source\": \"Indeed\"\n}",
+  "example_response": {
+    "sources": [
+      {
+        "id": 157,
+        "name": "Indeed",
+        "status": null,
+        "context": "sources",
+        "taggings_count": 0,
+        "searchable_name": "indeed"
+      }
+    ]
+  },
+  "tags": [
+    "candidates",
+    "sources",
+    "tagging"
+  ]
+}

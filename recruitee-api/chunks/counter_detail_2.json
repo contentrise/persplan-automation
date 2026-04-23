@@ -1,0 +1,28 @@
+{
+  "id": "counter_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions/counters",
+  "summary": "Returns requisitions counters",
+  "description": "Returns requisitions counters. Endpoint: GET /c/{company_id}/requisitions/counters. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions/counters\n\nRequired params: company_id",
+  "example_response": {
+    "counters": {
+      "active": 2,
+      "need_my_approval": 1,
+      "requested_by_me": 1
+    }
+  },
+  "tags": [
+    "requisitions",
+    "counters"
+  ]
+}

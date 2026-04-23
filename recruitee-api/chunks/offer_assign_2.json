@@ -1,0 +1,45 @@
+{
+  "id": "offer_assign_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/offers/{offer_id}/assign_reward",
+  "summary": "Assign referral reward for given offer",
+  "description": "Assign referral reward for given offer. Endpoint: PATCH /c/{company_id}/referral/offers/{offer_id}/assign_reward. Required parameters: offer_id, offer_assignment, company_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_assignment",
+      "type": "map",
+      "required": true,
+      "description": "Offer assignment params (only: referral_reward_id::integer)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_assignment\": {\n\"referral_reward_id\": 29\n}\n}",
+  "example_response": {
+    "error": [
+      "Referral reward id is not permitted, you do not have access"
+    ],
+    "error_fields": {
+      "referral_reward_id": [
+        "is not permitted, you do not have access"
+      ]
+    }
+  },
+  "tags": [
+    "referral",
+    "offers"
+  ]
+}

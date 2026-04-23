@@ -1,0 +1,47 @@
+{
+  "id": "upload_cover_image_create",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/{id}/upload_cover_image",
+  "summary": "Upload cover image",
+  "description": "Upload cover image. Endpoint: POST /c/{company_id}/offers/{id}/upload_cover_image. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"cover_image\": {\n\"filename\": \"cover_image.png\",\n\"path\": \"test/files/photos/female13.jpg\",\n\"content_type\": null\n}\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": null,
+        "data": {},
+        "message": "Cover image size too large",
+        "source": "offer/cover_image"
+      }
+    ],
+    "resources": {
+      "cover_image": [
+        {
+          "code": null,
+          "data": {},
+          "message": "size too large"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offers",
+    "upload_cover_image"
+  ]
+}

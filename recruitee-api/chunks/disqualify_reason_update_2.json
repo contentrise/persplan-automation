@@ -1,0 +1,41 @@
+{
+  "id": "disqualify_reason_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/disqualify_reasons/update_positions",
+  "summary": "Update disqualify reasons positions",
+  "description": "Update disqualify reasons positions. Endpoint: PATCH /c/{company_id}/disqualify_reasons/update_positions. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"disqualify_reasons\": [\n{\n\"id\": 99,\n\"position\": 1\n},\n{\n\"id\": 100,\n\"position\": 2\n}\n]\n}",
+  "example_response": {
+    "disqualify_reasons": [
+      {
+        "id": 99,
+        "name": "Not a fit",
+        "position": 1,
+        "action_templates": [],
+        "automation_ids": [],
+        "open_questions_count": 0
+      },
+      {
+        "id": 100,
+        "name": "Not a fit",
+        "position": 2,
+        "action_templates": [],
+        "automation_ids": [],
+        "open_questions_count": 0
+      }
+    ]
+  },
+  "tags": [
+    "disqualify_reasons",
+    "pipeline"
+  ]
+}

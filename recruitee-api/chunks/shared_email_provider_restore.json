@@ -1,0 +1,29 @@
+{
+  "id": "shared_email_provider_restore",
+  "method": "PATCH",
+  "path": "/c/{company_id}/shared_email_providers/restore",
+  "summary": "Restore archived Shared Mailbox (mailbox provider)",
+  "description": "Restore archived Shared Mailbox (mailbox provider). Endpoint: PATCH /c/{company_id}/shared_email_providers/restore. Required parameters: password, company_id.",
+  "params": [
+    {
+      "name": "password",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/shared_email_providers/restore\n\nRequired params: password, company_id",
+  "example_response": {},
+  "tags": [
+    "shared_email_providers",
+    "mailbox"
+  ]
+}

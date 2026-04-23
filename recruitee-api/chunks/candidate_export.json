@@ -1,0 +1,36 @@
+{
+  "id": "candidate_export",
+  "method": "POST",
+  "path": "/c/{company_id}/search/new/candidates/export",
+  "summary": "Full Candidates Search - CSV export",
+  "description": "Full Candidates Search - CSV export. Endpoint: POST /c/{company_id}/search/new/candidates/export. Required parameters: company_id. Optional parameters include sort_by, filters_json.",
+  "params": [
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Sort order (default: ‘created_at_desc’; possible values: ‘[relevance | created_at | candidate_name | candidate_rating | candidate_positive_ratings | candidate_job_title | candidate_stage_name]_[asc | desc]’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "filters_json",
+      "type": "string",
+      "required": false,
+      "description": "Array of filters ([FilterGroup, ...]), serialized to a JSON string",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"filters\": [\n{\n\"filter\": \"jobs\",\n\"status\": {\n\"in\": [\n\"internal\"\n]\n}\n}\n]\n}",
+  "example_response": {},
+  "tags": [
+    "candidates",
+    "search"
+  ]
+}

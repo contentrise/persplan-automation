@@ -1,0 +1,62 @@
+{
+  "id": "guests_list",
+  "method": "GET",
+  "path": "/c/{company_id}/share/guests",
+  "summary": "List guests",
+  "description": "List guests. Endpoint: GET /c/{company_id}/share/guests. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/share/guests\n\nRequired params: company_id",
+  "example_response": {
+    "references": [],
+    "guests": [
+      {
+        "id": 14,
+        "name": "James Smith",
+        "email": "james522@example.com",
+        "auth_token": "zXyuWv98735",
+        "has_avatar": false,
+        "initials": "JS",
+        "created_at": "2026-04-21T07:31:49.564116Z",
+        "updated_at": "2026-04-21T07:31:49.564116Z",
+        "recruiter": true,
+        "container_ids": []
+      },
+      {
+        "id": 15,
+        "name": "James Smith",
+        "email": "james523@example.com",
+        "auth_token": "zXyuWv98736",
+        "has_avatar": false,
+        "initials": "JS",
+        "created_at": "2026-04-21T07:31:49.564528Z",
+        "updated_at": "2026-04-21T07:31:49.564528Z",
+        "recruiter": true,
+        "container_ids": []
+      },
+      {
+        "id": 16,
+        "name": "James Smith",
+        "email": "james524@example.com",
+        "auth_token": "zXyuWv98737",
+        "has_avatar": false,
+        "initials": "JS",
+        "created_at": "2026-04-21T07:31:49.564763Z",
+        "updated_at": "2026-04-21T07:31:49.564763Z",
+        "recruiter": true,
+        "container_ids": []
+      }
+    ]
+  },
+  "tags": [
+    "guests",
+    "container"
+  ]
+}

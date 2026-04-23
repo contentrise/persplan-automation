@@ -1,0 +1,63 @@
+{
+  "id": "token_exchange",
+  "method": "POST",
+  "path": "/oauth/token",
+  "summary": "Exchange the authorization code for access token",
+  "description": "Exchange the authorization code for access token. Endpoint: POST /oauth/token. Required parameters: code, refresh_token, client_id, client_secret, redirect_uri, grant_type.",
+  "params": [
+    {
+      "name": "code",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "refresh_token",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "client_id",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "client_secret",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "redirect_uri",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "grant_type",
+      "type": "string",
+      "required": true,
+      "description": "possible values: ‘authorization_code’, ‘refresh_token’",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /oauth/token\n\nRequired params: code, refresh_token, client_id, client_secret, redirect_uri, grant_type",
+  "example_response": {
+    "scope": "read,write",
+    "access_token": "czFnb3FOdXZqL3hmR1N4VGs2SUQ1Zz09",
+    "refresh_token": null,
+    "expires_at": 2092116687,
+    "token_type": "bearer"
+  },
+  "tags": [
+    "token",
+    "oauth"
+  ]
+}

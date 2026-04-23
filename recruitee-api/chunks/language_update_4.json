@@ -1,0 +1,57 @@
+{
+  "id": "language_update_4",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/languages/",
+  "summary": "Updates offer templates language list",
+  "description": "Updates offer templates language list. Endpoint: PATCH /c/{company_id}/offer_templates/{offer_template_id}/languages/. Required parameters: offer_template_id, company_id. Optional parameters include enabled, make_primary.",
+  "params": [
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "required": false,
+      "description": "Enable/Disable a language",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "make_primary",
+      "type": "boolean",
+      "required": false,
+      "description": "Sets language as primary",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"language\": {\n\"enabled\": false\n}\n}",
+  "example_response": {
+    "code": "de",
+    "enabled": false,
+    "name": "German",
+    "primary": false,
+    "native_name": "Deutsch",
+    "offer_template_id": 387,
+    "translation_fields_count": 11,
+    "missing_translation_fields": {
+      "auto_reply_template_fields": [],
+      "dynamic_field_ids": [],
+      "open_question_ids": [],
+      "offer_fields": []
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "languages"
+  ]
+}

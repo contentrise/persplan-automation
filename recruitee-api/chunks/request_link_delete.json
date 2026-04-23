@@ -1,0 +1,29 @@
+{
+  "id": "request_link_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/interview/request_links/{id}",
+  "summary": "Delete interview request link",
+  "description": "Delete interview request link. Endpoint: DELETE /c/{company_id}/interview/request_links/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview request link ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/interview/request_links/{id}\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "interview",
+    "request_links"
+  ]
+}

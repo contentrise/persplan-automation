@@ -1,0 +1,35 @@
+{
+  "id": "categories_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/templates/categories",
+  "summary": "List templates categories",
+  "description": "List templates categories. Endpoint: GET /c/{company_id}/interview/templates/categories. Required parameters: company_id. Optional parameters include kind.",
+  "params": [
+    {
+      "name": "kind",
+      "type": "string",
+      "required": false,
+      "description": "Interview template kind, can be ‘interview’ or ‘questionnaire’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/templates/categories\n\nRequired params: company_id\n\nOptional params: kind",
+  "example_response": {
+    "categories": [
+      "Development",
+      "Finance",
+      "Sales"
+    ]
+  },
+  "tags": [
+    "interview",
+    "templates"
+  ]
+}

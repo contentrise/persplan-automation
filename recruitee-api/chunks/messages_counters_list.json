@@ -1,0 +1,31 @@
+{
+  "id": "messages_counters_list",
+  "method": "GET",
+  "path": "/c/{company_id}/candidates/messages_counters",
+  "summary": "Messages counters and unread flags for candidate profile",
+  "description": "Messages counters and unread flags for candidate profile. Endpoint: GET /c/{company_id}/candidates/messages_counters. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/candidates/messages_counters\n\nRequired params: company_id",
+  "example_response": {
+    "messages_counters": {
+      "mailbox_messages_count": 0,
+      "mailbox_threads_unread": false,
+      "texting_messages_count": 2,
+      "texting_received_messages_count": 0,
+      "texting_sent_messages_count": 2,
+      "texting_threads_unread": false
+    }
+  },
+  "tags": [
+    "candidates",
+    "messages_counters"
+  ]
+}

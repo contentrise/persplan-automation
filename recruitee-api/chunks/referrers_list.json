@@ -1,0 +1,101 @@
+{
+  "id": "referrers_list",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/referrers",
+  "summary": "List of external referrers (no admins)",
+  "description": "List of external referrers (no admins). Endpoint: GET /c/{company_id}/referral/referrers. Required parameters: company_id. Optional parameters include q, limit, sort_by, sort_order, page.",
+  "params": [
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search query",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "One of: [name, email]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "One of: [desc asc], default: asc",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/referrers\n\nRequired params: company_id\n\nOptional params: q, limit, sort_by, sort_order, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 3,
+      "page": 1
+    },
+    "referrers": [
+      {
+        "id": 184,
+        "email": "faye1921@howe.info",
+        "has_avatar": false,
+        "initials": "LC",
+        "first_name": "Libbie",
+        "last_name": "Conn",
+        "anonymized_at": null,
+        "avatar_url": null,
+        "avatar_thumb_url": null,
+        "claimed_applications_count": 0
+      },
+      {
+        "id": 183,
+        "email": "eusebio1988@heathcote.name",
+        "has_avatar": false,
+        "initials": "LS",
+        "first_name": "Louvenia",
+        "last_name": "Satterfield",
+        "anonymized_at": null,
+        "avatar_url": null,
+        "avatar_thumb_url": null,
+        "claimed_applications_count": 0
+      },
+      {
+        "id": 182,
+        "email": "dina2047@stoltenberg.org",
+        "has_avatar": false,
+        "initials": "CB",
+        "first_name": "Cydney",
+        "last_name": "Bechtelar",
+        "anonymized_at": null,
+        "avatar_url": null,
+        "avatar_thumb_url": null,
+        "claimed_applications_count": 1
+      }
+    ]
+  },
+  "tags": [
+    "referral",
+    "referrers"
+  ]
+}

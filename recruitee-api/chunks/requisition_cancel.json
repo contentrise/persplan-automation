@@ -1,0 +1,32 @@
+{
+  "id": "requisition_cancel",
+  "method": "PATCH",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/cancel",
+  "summary": "Cancels a pending requisition",
+  "description": "Cancels a pending requisition. Endpoint: PATCH /c/{company_id}/requisitions/{requisition_id}/cancel. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/requisitions/{requisition_id}/cancel\n\nRequired params: requisition_id, company_id",
+  "example_response": {
+    "error": [
+      "action is not allowed"
+    ]
+  },
+  "tags": [
+    "requisitions"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "auto_reply_template_create",
+  "method": "POST",
+  "path": "/c/{company_id}/auto_reply_templates",
+  "summary": "Create auto-reply template",
+  "description": "Create auto-reply template. Endpoint: POST /c/{company_id}/auto_reply_templates. Required parameters: title, company_id. Optional parameters include translations, template_attachment_assignments.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "translations",
+      "type": "map",
+      "required": false,
+      "description": "Fields: [‘lang_code’, ‘subject’, ‘body_html’]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_attachment_assignments",
+      "type": "array",
+      "required": false,
+      "description": "Array of template attachment assignments, parameters: (id attachment_id)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"auto_reply_template\": {\n\"title\": \"Title\",\n\"translations\": [\n{\n\"body_html\": \"Body\",\n\"lang_code\": \"en\",\n\"subject\": \"Subject\"\n},\n{\n\"body_html\": \"Toga\",\n\"lang_code\": \"sp\",\n\"subject\": \"Tema\"\n},\n{\n\"body_html\": \"XXX\",\n\"lang_code\": \"xx\",\n\"subject\": \"XX\"\n}\n]\n}\n}",
+  "example_response": {
+    "auto_reply_template": {
+      "default": false,
+      "id": 61,
+      "position": 1,
+      "title": "Title",
+      "created_at": "2026-04-21T07:32:25.554847Z",
+      "updated_at": "2026-04-21T07:32:25.554847Z",
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0,
+      "translations": [
+        {
+          "subject": "Subject",
+          "lang_code": "en",
+          "body_html": "Body"
+        }
+      ],
+      "template_attachment_assignments": []
+    }
+  },
+  "tags": [
+    "auto_reply_templates",
+    "mailbox"
+  ]
+}

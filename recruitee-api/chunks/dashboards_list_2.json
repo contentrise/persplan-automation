@@ -1,0 +1,22 @@
+{
+  "id": "dashboards_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/report/templates/dashboards",
+  "summary": "Lists dashboard templates",
+  "description": "Lists dashboard templates. Endpoint: GET /c/{company_id}/report/templates/dashboards. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/report/templates/dashboards\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "report",
+    "templates"
+  ]
+}

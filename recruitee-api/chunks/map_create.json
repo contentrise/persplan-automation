@@ -1,0 +1,57 @@
+{
+  "id": "map_create",
+  "method": "POST",
+  "path": "/c/{company_id}/imports/{id}/map",
+  "summary": "Map columns (match to existing fields)",
+  "description": "Map columns (match to existing fields). Endpoint: POST /c/{company_id}/imports/{id}/map. Required parameters: id, columns, company_id. Optional parameters include merge, sources, delimiter.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Import ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "merge",
+      "type": "boolean",
+      "required": false,
+      "description": "Merge flag",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sources",
+      "type": "array",
+      "required": false,
+      "description": "List of sources",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "columns",
+      "type": "array",
+      "required": true,
+      "description": "List of columns with matched field",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "delimiter",
+      "type": "string",
+      "required": false,
+      "description": "Field delimiter",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/imports/{id}/map\n\nRequired params: id, columns, company_id\n\nOptional params: merge, sources, delimiter",
+  "example_response": {},
+  "tags": [
+    "imports",
+    "map"
+  ]
+}

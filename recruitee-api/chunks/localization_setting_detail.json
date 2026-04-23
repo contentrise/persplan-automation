@@ -1,0 +1,14 @@
+{
+  "id": "localization_setting_detail",
+  "method": "GET",
+  "path": "/localization_settings",
+  "summary": "Returns proposed time format and start day of the week",
+  "description": "Returns proposed time format and start day of the week. Endpoint: GET /localization_settings.",
+  "params": [],
+  "example_request": "GET /localization_settings",
+  "example_response": {},
+  "tags": [
+    "localization_settings",
+    "admin"
+  ]
+}

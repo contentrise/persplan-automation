@@ -1,0 +1,120 @@
+{
+  "id": "activities_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/tracking/activities",
+  "summary": "List activities",
+  "description": "List activities. Endpoint: GET /c/{company_id}/tracking/activities. Required parameters: company_id. Optional parameters include events, limit, candidates, offers, note_id, talent_pools, stage_id, requisitions, and more.",
+  "params": [
+    {
+      "name": "events",
+      "type": "string",
+      "required": false,
+      "description": "List of events names",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of activities, default is 20",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offers",
+      "type": "array",
+      "required": false,
+      "description": "Array of offer ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "note_id",
+      "type": "integer",
+      "required": false,
+      "description": "Note Id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "talent_pools",
+      "type": "array",
+      "required": false,
+      "description": "Array of talent pool ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stage_id",
+      "type": "integer",
+      "required": false,
+      "description": "Stage Id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "requisitions",
+      "type": "array",
+      "required": false,
+      "description": "Array of requisition ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "disqualify_reason_id",
+      "type": "integer",
+      "required": false,
+      "description": "DisqualifyReason Id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "start_date",
+      "type": "string",
+      "required": false,
+      "description": "Start date, format: 12 Sep 2015",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "end_date",
+      "type": "string",
+      "required": false,
+      "description": "End date, format: 12 Sep 2015",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, 4, 5)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "cursor_order",
+      "type": "string",
+      "required": false,
+      "description": "Cursor pagination order: asc, desc (default: desc)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "cursor_position",
+      "type": "integer",
+      "required": false,
+      "description": "Id of activity to paginate from (cursor pagination)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/tracking/activities\n\nRequired params: company_id\n\nOptional params: events, limit, candidates, offers, note_id, talent_pools, stage_id, requisitions",
+  "example_response": {},
+  "tags": [
+    "tracking",
+    "activities"
+  ]
+}

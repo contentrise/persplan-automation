@@ -1,0 +1,79 @@
+{
+  "id": "assigned_requisitions_list",
+  "method": "GET",
+  "path": "/c/{company_id}/dynamic_fields/{id}/assigned_requisitions",
+  "summary": "List given field's assigned requisitions",
+  "description": "List given field's assigned requisitions. Endpoint: GET /c/{company_id}/dynamic_fields/{id}/assigned_requisitions. Required parameters: id, company_id. Optional parameters include q, limit, page.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Field ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search requisitions",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/dynamic_fields/{id}/assigned_requisitions\n\nRequired params: id, company_id\n\nOptional params: q, limit, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 3,
+      "page": 1
+    },
+    "assigned_requisitions": [
+      {
+        "id": 2,
+        "title": "Backend Developer",
+        "created_at": "2026-04-21T07:30:26.431405Z",
+        "updated_at": "2026-04-21T07:30:26.431405Z",
+        "department": null
+      },
+      {
+        "id": 3,
+        "title": "Backend Developer",
+        "created_at": "2026-04-21T07:30:26.432533Z",
+        "updated_at": "2026-04-21T07:30:26.432533Z",
+        "department": null
+      },
+      {
+        "id": 4,
+        "title": "Backend Developer",
+        "created_at": "2026-04-21T07:30:26.433587Z",
+        "updated_at": "2026-04-21T07:30:26.433587Z",
+        "department": null
+      }
+    ]
+  },
+  "tags": [
+    "dynamic_fields",
+    "assigned_requisitions"
+  ]
+}

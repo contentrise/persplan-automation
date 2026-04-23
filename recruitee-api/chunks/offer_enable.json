@@ -1,0 +1,45 @@
+{
+  "id": "offer_enable",
+  "method": "PATCH",
+  "path": "/c/{company_id}/eeo/bulk/offers",
+  "summary": "Enable/disable EEO in multiple jobs",
+  "description": "Enable/disable EEO in multiple jobs. Endpoint: PATCH /c/{company_id}/eeo/bulk/offers. Required parameters: enabled, offer_ids, company_id. Optional parameters include job_category.",
+  "params": [
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_ids",
+      "type": "array",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "job_category",
+      "type": "string",
+      "required": false,
+      "description": "EEO Job category",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"enabled\": true,\n\"job_category\": \"Technicians\",\n\"offer_ids\": [\n1658,\n1659,\n1660\n]\n}",
+  "example_response": {
+    "uuid": "172512e9-51db-4ec9-acb9-a055b452001e"
+  },
+  "tags": [
+    "eeo",
+    "offers"
+  ]
+}

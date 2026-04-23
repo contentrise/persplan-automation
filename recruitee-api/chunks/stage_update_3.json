@@ -1,0 +1,88 @@
+{
+  "id": "stage_update_3",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/stages/",
+  "summary": "Update pipeline template stage",
+  "description": "Update pipeline template stage. Endpoint: PATCH /c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/stages/. Required parameters: stage, offer_template_id, source_template_id, company_id.",
+  "params": [
+    {
+      "name": "stage",
+      "type": "map",
+      "required": true,
+      "description": "Stage params: name (string, required) - stage name; category (string, required) - stage category; action_templates (array, optional) - stage automated actions; time_limit (integer, optional) - candidate time limit for stage; fair_evaluations_enabled (boolean, optional) - fair evaluation feature status",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"source_template_id\": 3365,\n\"stage\": {\n\"action_templates\": [\n{\n\"data\": {\n\"body_json\": {\n\"doc\": {\n\"content\": [\n{\n\"content\": [\n{\n\"text\": \"Remind me about this!\",\n\"type\": \"text\"\n}\n],\n\"type\": \"paragraph\"\n}\n],\n\"type\": \"doc\"\n}\n},\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n},\n\"kind\": \"add_note\"\n}\n],\n\"category\": \"none\",\n\"name\": \"Limbo\",\n\"position\": \"6\",\n\"time_limit\": 86400\n}\n}",
+  "example_response": {
+    "stage": {
+      "id": 27072,
+      "name": "Limbo",
+      "position": 6,
+      "group": "active",
+      "category": "none",
+      "fair_evaluations_enabled": false,
+      "action_templates": [
+        {
+          "data": {
+            "text": null,
+            "body": null,
+            "visibility": {
+              "admin_ids": [],
+              "level": "public",
+              "role_ids": []
+            },
+            "body_html": "<p>Remind me about this!</p>",
+            "body_json": {
+              "doc": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "text": "Remind me about this!",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  }
+                ],
+                "type": "doc"
+              }
+            }
+          },
+          "id": 216,
+          "kind": "add_note",
+          "references": []
+        }
+      ],
+      "locked": false,
+      "time_limit": 86400,
+      "candidate_anonymization_enabled": false
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "pipeline_templates"
+  ]
+}

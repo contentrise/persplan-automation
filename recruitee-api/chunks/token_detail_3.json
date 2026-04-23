@@ -1,0 +1,22 @@
+{
+  "id": "token_detail_3",
+  "method": "GET",
+  "path": "/oauth/token",
+  "summary": "Show current access token",
+  "description": "Show current access token. Endpoint: GET /oauth/token.",
+  "params": [],
+  "example_request": "GET /oauth/token",
+  "example_response": {
+    "errors": [
+      {
+        "code": "unauthorized",
+        "data": {},
+        "message": "Unauthorized"
+      }
+    ]
+  },
+  "tags": [
+    "token",
+    "oauthtoken"
+  ]
+}

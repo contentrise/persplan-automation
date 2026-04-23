@@ -1,0 +1,110 @@
+{
+  "id": "event_invitation_template_create",
+  "method": "POST",
+  "path": "/c/{company_id}/event_invitation_templates",
+  "summary": "Create email template",
+  "description": "Create email template. Endpoint: POST /c/{company_id}/event_invitation_templates. Required parameters: title, subject, body_html, company_id. Optional parameters include template_attachment_assignments.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "body_html",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_attachment_assignments",
+      "type": "array",
+      "required": false,
+      "description": "Array of template attachment assignments, parameters: (id attachment_id)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"event_invitation_template\": {\n\"template_attachment_assignments\": [\n{\n\"attachment_id\": 1\n},\n{\n\"attachment_id\": 2\n}\n],\n\"title\": \"Title\"\n}\n}",
+  "example_response": {
+    "event_invitation_template": {
+      "id": 17,
+      "position": 1,
+      "title": "Title",
+      "admin_id": 560,
+      "subject": null,
+      "created_at": "2026-04-21T07:30:35.155851Z",
+      "updated_at": "2026-04-21T07:30:35.155851Z",
+      "body_html": null,
+      "template_attachment_assignments": [
+        {
+          "id": 1,
+          "attachment": {
+            "id": 1,
+            "status": "ok",
+            "filename": "avatar.png",
+            "extension": "png",
+            "source": "default",
+            "kind": "image",
+            "admin_id": 561,
+            "candidate_id": null,
+            "file_size": null,
+            "created_at": "2026-04-21T07:30:35.150542Z",
+            "image_thumbnail_url": "tmp/bow/attachments/1/image_thumbnail_avatar.png",
+            "image_url": "tmp/bow/attachments/1/image_avatar.png",
+            "file_url": "tmp/bow/attachments/1/avatar.png",
+            "offer_id": null,
+            "talent_pool_id": null,
+            "requisition_id": null,
+            "guest_id": null,
+            "uploader": null
+          }
+        },
+        {
+          "id": 2,
+          "attachment": {
+            "id": 2,
+            "status": "ok",
+            "filename": "avatar.png",
+            "extension": "png",
+            "source": "default",
+            "kind": "image",
+            "admin_id": 562,
+            "candidate_id": null,
+            "file_size": null,
+            "created_at": "2026-04-21T07:30:35.152774Z",
+            "image_thumbnail_url": "tmp/bow/attachments/2/image_thumbnail_avatar.png",
+            "image_url": "tmp/bow/attachments/2/image_avatar.png",
+            "file_url": "tmp/bow/attachments/2/avatar.png",
+            "offer_id": null,
+            "talent_pool_id": null,
+            "requisition_id": null,
+            "guest_id": null,
+            "uploader": null
+          }
+        }
+      ],
+      "last_used": null
+    }
+  },
+  "tags": [
+    "event_invitation_templates",
+    "mailbox"
+  ]
+}

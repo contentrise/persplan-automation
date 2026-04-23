@@ -1,0 +1,55 @@
+{
+  "id": "tag_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/candidates/{candidate_id}/tags",
+  "summary": "Remove candidate's tags",
+  "description": "Remove candidate's tags. Endpoint: DELETE /c/{company_id}/candidates/{candidate_id}/tags. Required parameters: candidate_id, company_id. Optional parameters include tag, tags.",
+  "params": [
+    {
+      "name": "tag",
+      "type": "string",
+      "required": false,
+      "description": "Tag",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "tags",
+      "type": "array",
+      "required": false,
+      "description": "Array of tags",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"tag\": \"Development\"\n}",
+  "example_response": {
+    "tags": [
+      {
+        "id": 95,
+        "name": "Development",
+        "status": null,
+        "context": "tags",
+        "taggings_count": 0,
+        "searchable_name": "development"
+      }
+    ]
+  },
+  "tags": [
+    "candidates",
+    "tags",
+    "tagging"
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "id": "container_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/share/containers/{id}",
+  "summary": "Update container",
+  "description": "Update container. Endpoint: PATCH /c/{company_id}/share/containers/{id}. Required parameters: id, company_id. Optional parameters include expiration_date, visibility_options, access_options, candidate_ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Container ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "expiration_date",
+      "type": "string",
+      "required": false,
+      "description": "Container expiration date",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "visibility_options",
+      "type": "string",
+      "required": false,
+      "description": "Array of visibility options (‘profile’, ‘attachments’, ‘activities’, ‘events’, ‘jobs’, ‘talent_pools’, ‘notes’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "access_options",
+      "type": "string",
+      "required": false,
+      "description": "Array of access options (‘notes’, ‘results’, ‘attachments’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"container\": {\n\"access_options\": [\n\"notes\",\n\"results\",\n\"attachments\"\n],\n\"candidate_ids\": [\n251\n],\n\"expiration_date\": \"2026-05-21T07:31:00.704331Z\",\n\"visibility_options\": [\n\"cv\",\n\"jobs\"\n]\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 1297,
+        "type": "Admin",
+        "email": "john835@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1297/normal_avatar_mfa8c36se8h8.png",
+        "photo_thumb_url": "tmp/bow/admins/1297/thumb_avatar_mfa8c36se8h8.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 251,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:31:00.703077Z",
+        "updated_at": "2026-04-21T07:31:00.703077Z",
+        "is_hired": false,
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=251&company=674",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      }
+    ],
+    "container": {
+      "active": true,
+      "id": 31,
+      "name": null,
+      "token": "aBcDeFg123456",
+      "admin_id": 1297,
+      "emails": [],
+      "candidates_count": 1,
+      "created_at": "2026-04-21T07:31:00.702080Z",
+      "updated_at": "2026-04-21T07:31:00.706764Z",
+      "notes_count": 0,
+      "expiration_date": "2026-05-21T07:31:00.704331Z",
+      "share_url": "http://company543.recruitee.internal:3003/v/share/aBcDeFg123456",
+      "visibility_options": [
+        "cv",
+        "jobs"
+      ],
+      "access_options": [
+        "notes",
+        "results",
+        "attachments"
+      ],
+      "candidate_ids": [
+        251
+      ],
+      "container_url": "http://company543.recruitee.internal:3003/share/aBcDeFg123456",
+      "reviews_count": 0
+    }
+  },
+  "tags": [
+    "containers"
+  ]
+}

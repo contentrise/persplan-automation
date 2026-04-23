@@ -1,0 +1,24 @@
+{
+  "id": "terms_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/terms",
+  "summary": "List terms & privacy policy for company's Referral program",
+  "description": "List terms & privacy policy for company's Referral program. Endpoint: GET /c/{company_id}/referral/terms. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/terms\n\nRequired params: company_id",
+  "example_response": {
+    "terms": []
+  },
+  "tags": [
+    "referral",
+    "terms"
+  ]
+}

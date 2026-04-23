@@ -1,0 +1,89 @@
+{
+  "id": "plans_list",
+  "method": "GET",
+  "path": "/c/{company_id}/billing/plans",
+  "summary": "Lists billing plans",
+  "description": "Lists billing plans. Endpoint: GET /c/{company_id}/billing/plans. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/billing/plans\n\nRequired params: company_id",
+  "example_response": {
+    "plans": [
+      {
+        "id": 234,
+        "unlimited": false,
+        "currency": "EUR",
+        "created_at": "2026-04-21T07:33:32.150153Z",
+        "base_slots": 1,
+        "tier": "launch",
+        "pricing_model": "flat_fee",
+        "base_price": 1,
+        "slot_price": 1,
+        "billing_period": 1,
+        "custom": false,
+        "prices": [],
+        "pricing": {
+          "1": {
+            "base_price": 1,
+            "kiwihr_plus_price": 700,
+            "slot_price": 1,
+            "texting_price": 1
+          },
+          "12": {
+            "base_price": 10,
+            "kiwihr_plus_price": 7000,
+            "slot_price": 10,
+            "texting_price": 12
+          }
+        },
+        "company_size": null
+      },
+      {
+        "id": 236,
+        "unlimited": false,
+        "currency": "EUR",
+        "created_at": "2026-04-21T07:33:32.150627Z",
+        "base_slots": 1,
+        "tier": "lead",
+        "pricing_model": "flat_fee",
+        "base_price": 1,
+        "slot_price": 1,
+        "billing_period": 6,
+        "custom": false,
+        "prices": [],
+        "pricing": {
+          "1": {
+            "base_price": 0,
+            "kiwihr_plus_price": 700,
+            "slot_price": 0,
+            "texting_price": 0
+          },
+          "6": {
+            "base_price": 1,
+            "kiwihr_plus_price": 4200,
+            "slot_price": 1,
+            "texting_price": 1
+          },
+          "12": {
+            "base_price": 0,
+            "kiwihr_plus_price": 7000,
+            "slot_price": 0,
+            "texting_price": 0
+          }
+        },
+        "company_size": null
+      }
+    ]
+  },
+  "tags": [
+    "billing",
+    "plans"
+  ]
+}

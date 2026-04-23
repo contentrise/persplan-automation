@@ -1,0 +1,41 @@
+{
+  "id": "fieldset_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/custom_fields/fieldsets/{id}",
+  "summary": "Update company fieldset",
+  "description": "Update company fieldset. Endpoint: PATCH /c/{company_id}/custom_fields/fieldsets/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Fieldset ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"fieldset\": {\n\"default\": true\n}\n}",
+  "example_response": {
+    "fieldset": {
+      "default": true,
+      "id": 27,
+      "name": "Fieldset 19",
+      "position": 2,
+      "fields": [],
+      "category": null,
+      "updated_at": "2026-04-21T07:30:45.521396Z",
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0
+    }
+  },
+  "tags": [
+    "custom_fields",
+    "fieldsets"
+  ]
+}

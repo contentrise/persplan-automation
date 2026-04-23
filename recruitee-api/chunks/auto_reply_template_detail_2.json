@@ -1,0 +1,58 @@
+{
+  "id": "auto_reply_template_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/offers/{offer_id}/auto_reply_templates/{id}",
+  "summary": "Show auto reply template",
+  "description": "Show auto reply template. Endpoint: GET /c/{company_id}/offers/{offer_id}/auto_reply_templates/{id}. Required parameters: id, offer_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Auto-reply template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers/{offer_id}/auto_reply_templates/{id}\n\nRequired params: id, offer_id, company_id",
+  "example_response": {
+    "auto_reply_template": {
+      "default": false,
+      "id": 112,
+      "position": 54,
+      "title": "Template53",
+      "created_at": "2026-04-21T07:32:42.579973Z",
+      "updated_at": "2026-04-21T07:32:42.579973Z",
+      "translations": [
+        {
+          "subject": "subject",
+          "lang_code": "en",
+          "body_html": "<p>Body</p>"
+        },
+        {
+          "subject": "subject",
+          "lang_code": "de",
+          "body_html": "<p>Body</p>"
+        }
+      ],
+      "template_attachment_assignments": []
+    }
+  },
+  "tags": [
+    "offers",
+    "auto_reply_templates"
+  ]
+}

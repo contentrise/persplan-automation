@@ -1,0 +1,57 @@
+{
+  "id": "offer_detail_3",
+  "method": "GET",
+  "path": "/referral_portal/offers/{offer_id}",
+  "summary": "Show offer with reward details",
+  "description": "Show offer with reward details. Endpoint: GET /referral_portal/offers/{offer_id}. Required parameters: offer_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer id",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /referral_portal/offers/{offer_id}\n\nRequired params: offer_id",
+  "example_response": {
+    "offer_assignment": {
+      "id": 19,
+      "offer": {
+        "id": 613,
+        "status": "published",
+        "remote": false,
+        "description": "<p>Elixir</p>\n",
+        "title": "Best Offer",
+        "location": null,
+        "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+        "dynamic_fields": [],
+        "department": "Dept 18",
+        "location_ids": [],
+        "locations": [],
+        "hybrid": false,
+        "on_site": true
+      },
+      "referral_template": {
+        "id": 66,
+        "referral_questions": [
+          {
+            "id": 69,
+            "position": 3,
+            "options": [],
+            "title": "Default",
+            "required": false,
+            "kind": "string"
+          }
+        ]
+      },
+      "referral_reward_id": 14,
+      "referral_template_id": 66
+    }
+  },
+  "tags": [
+    "referral_portal",
+    "offers",
+    "referral"
+  ]
+}

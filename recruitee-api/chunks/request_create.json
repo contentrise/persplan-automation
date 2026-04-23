@@ -1,0 +1,29 @@
+{
+  "id": "request_create",
+  "method": "POST",
+  "path": "/c/{company_id}/linkedin/integrations/request",
+  "summary": "Request multiple integrations to initiate the onboarding process",
+  "description": "Request multiple integrations to initiate the onboarding process. Endpoint: POST /c/{company_id}/linkedin/integrations/request. Required parameters: company_id. Optional parameters include integrations.",
+  "params": [
+    {
+      "name": "integrations",
+      "type": "array",
+      "required": false,
+      "description": "List of integrations",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/linkedin/integrations/request\n\nRequired params: company_id\n\nOptional params: integrations",
+  "example_response": {},
+  "tags": [
+    "linkedin",
+    "integrations"
+  ]
+}

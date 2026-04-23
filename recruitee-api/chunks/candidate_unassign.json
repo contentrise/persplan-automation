@@ -1,0 +1,37 @@
+{
+  "id": "candidate_unassign",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/unassign",
+  "summary": "Unassign candidates from offers and/or talent pools",
+  "description": "Unassign candidates from offers and/or talent pools. Endpoint: PATCH /c/{company_id}/bulk/candidates/unassign. Required parameters: company_id. Optional parameters include candidates, offer_ids.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of offer IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n519,\n520,\n521\n],\n\"offer_id\": 462\n}",
+  "example_response": {
+    "uuid": "4a659b05-7c3d-4ea7-a5cd-bbd33b6b7901"
+  },
+  "tags": [
+    "candidates"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "overviews_list",
+  "method": "GET",
+  "path": "/c/{company_id}/dashboard/overview",
+  "summary": "Overview counters",
+  "description": "Overview counters. Endpoint: GET /c/{company_id}/dashboard/overview. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/dashboard/overview\n\nRequired params: company_id",
+  "example_response": {
+    "counters": {
+      "sources": [
+        {
+          "count": 2,
+          "id": 115,
+          "name": "source1"
+        }
+      ],
+      "candidates": 0,
+      "tags": [
+        {
+          "count": 3,
+          "id": 113,
+          "name": "tag2"
+        },
+        {
+          "count": 1,
+          "id": 112,
+          "name": "tag1"
+        }
+      ],
+      "admins": 1,
+      "talent_pools": 0,
+      "jobs": 0
+    }
+  },
+  "tags": [
+    "dashboard",
+    "overview"
+  ]
+}

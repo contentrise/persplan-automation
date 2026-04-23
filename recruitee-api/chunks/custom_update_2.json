@@ -1,0 +1,93 @@
+{
+  "id": "custom_update_2",
+  "method": "PATCH",
+  "path": "/c/offer_templates/{offer_template_id}/auto_reply_templates/custom",
+  "summary": "Updates offer template's custom auto reply template",
+  "description": "Updates offer template's custom auto reply template. Endpoint: PATCH /c/offer_templates/{offer_template_id}/auto_reply_templates/custom. Required parameters: offer_template_id. Optional parameters include auto_reply_template.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auto_reply_template",
+      "type": "map",
+      "required": false,
+      "description": "Auto-reply template params:",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"auto_reply_template\": {\n\"template_attachment_assignments\": [\n{\n\"attachment_id\": 19,\n\"id\": 7\n},\n{\n\"attachment_id\": 20\n}\n]\n}\n}",
+  "example_response": {
+    "auto_reply_template": {
+      "default": false,
+      "id": 51,
+      "position": 37,
+      "title": "Template36",
+      "created_at": "2026-04-21T07:30:46.616191Z",
+      "updated_at": "2026-04-21T07:30:46.622341Z",
+      "translations": [
+        {
+          "subject": "subject",
+          "lang_code": "en",
+          "body_html": "<p>Body</p>"
+        }
+      ],
+      "template_attachment_assignments": [
+        {
+          "id": 7,
+          "attachment": {
+            "id": 19,
+            "status": "ok",
+            "filename": "avatar.png",
+            "extension": "png",
+            "source": "default",
+            "kind": "image",
+            "admin_id": 1051,
+            "candidate_id": null,
+            "file_size": null,
+            "created_at": "2026-04-21T07:30:46.617417Z",
+            "image_thumbnail_url": "tmp/bow/attachments/19/image_thumbnail_avatar.png",
+            "image_url": "tmp/bow/attachments/19/image_avatar.png",
+            "file_url": "tmp/bow/attachments/19/avatar.png",
+            "offer_id": null,
+            "talent_pool_id": null,
+            "requisition_id": null,
+            "guest_id": null,
+            "uploader": null
+          }
+        },
+        {
+          "id": 8,
+          "attachment": {
+            "id": 20,
+            "status": "ok",
+            "filename": "avatar.png",
+            "extension": "png",
+            "source": "default",
+            "kind": "image",
+            "admin_id": 1052,
+            "candidate_id": null,
+            "file_size": null,
+            "created_at": "2026-04-21T07:30:46.618418Z",
+            "image_thumbnail_url": "tmp/bow/attachments/20/image_thumbnail_avatar.png",
+            "image_url": "tmp/bow/attachments/20/image_avatar.png",
+            "file_url": "tmp/bow/attachments/20/avatar.png",
+            "offer_id": null,
+            "talent_pool_id": null,
+            "requisition_id": null,
+            "guest_id": null,
+            "uploader": null
+          }
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "auto_reply_templates"
+  ]
+}

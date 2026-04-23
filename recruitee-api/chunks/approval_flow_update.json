@@ -1,0 +1,62 @@
+{
+  "id": "approval_flow_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/requisitions/settings/approval_flows/{approval_flow_id}",
+  "summary": "Update approval flow",
+  "description": "Update approval flow. Endpoint: PATCH /c/{company_id}/requisitions/settings/approval_flows/{approval_flow_id}. Required parameters: approval_flow_id, company_id.",
+  "params": [
+    {
+      "name": "approval_flow_id",
+      "type": "integer",
+      "required": true,
+      "description": "Approval Flow ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"approval_flow\": {\n\"department_ids\": [\n79,\n80\n],\n\"steps\": [\n{\n\"approver_ids\": [\n2672,\n2673\n],\n\"kind\": \"any\",\n\"position\": 1\n},\n{\n\"approver_ids\": [\n2673\n],\n\"position\": 2\n}\n],\n\"title\": \"First flow\"\n}\n}",
+  "example_response": {
+    "approval_flow": {
+      "default": false,
+      "id": 86,
+      "position": 39,
+      "title": "First flow",
+      "steps": [
+        {
+          "id": 84,
+          "position": 1,
+          "kind": "any",
+          "approver_ids": [
+            2672,
+            2673
+          ],
+          "allows_edit": false
+        },
+        {
+          "id": 85,
+          "position": 2,
+          "kind": "all",
+          "approver_ids": [
+            2673
+          ],
+          "allows_edit": false
+        }
+      ],
+      "department_ids": [
+        79,
+        80
+      ],
+      "steps_count": 2
+    }
+  },
+  "tags": [
+    "requisitions",
+    "settings"
+  ]
+}

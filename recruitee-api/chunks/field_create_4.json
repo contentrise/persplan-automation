@@ -1,0 +1,55 @@
+{
+  "id": "field_create_4",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/fieldsets/fields",
+  "summary": "Create field",
+  "description": "Create field. Endpoint: POST /c/{company_id}/offer_templates/{offer_template_id}/fieldsets/fields. Required parameters: field, offer_template_id, company_id. Optional parameters include source_fieldset_id.",
+  "params": [
+    {
+      "name": "field",
+      "type": "map",
+      "required": true,
+      "description": "Field params: kind (string, required); position (integer); name (string, required) - only if kind is special, ignored otherwise; visibility (map) - visibility options; options (map) - kind specific field options",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_fieldset_id",
+      "type": "integer",
+      "required": false,
+      "description": "Source fieldset ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"field\": {\n\"kind\": \"address\",\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n},\n\"source_fieldset_id\": 153\n}",
+  "example_response": {
+    "field": {
+      "id": 262,
+      "position": 4,
+      "visible": true,
+      "kind": "address",
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      }
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "fieldsets"
+  ]
+}

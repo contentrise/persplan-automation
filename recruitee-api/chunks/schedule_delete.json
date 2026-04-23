@@ -1,0 +1,79 @@
+{
+  "id": "schedule_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/interview/schedules/{id}",
+  "summary": "Delete interview schedule",
+  "description": "Delete interview schedule. Endpoint: DELETE /c/{company_id}/interview/schedules/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview schedule ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/interview/schedules/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 4347,
+        "type": "Admin",
+        "email": "john3455@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/4347/normal_avatar_o1bcol4k3uwc.png",
+        "photo_thumb_url": "tmp/bow/admins/4347/thumb_avatar_o1bcol4k3uwc.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "interview_schedule": {
+      "id": 60,
+      "name": "Interview availability",
+      "private": false,
+      "location": "Poznań",
+      "kind": "meeting",
+      "token": "aBcDeFg123464",
+      "timezone": "Europe/Warsaw",
+      "created_at": "2026-04-21T07:32:26.920758Z",
+      "duration": 60,
+      "updated_at": "2026-04-21T07:32:26.920758Z",
+      "note": null,
+      "custom_name": null,
+      "public_note": null,
+      "video_provider": null,
+      "expiration_days": 2,
+      "hide_candidates_names": false,
+      "reminders": [],
+      "exclude_candidate_from_attendees": false,
+      "video": null,
+      "organizer_id": null,
+      "interview_schedule_assignments": [],
+      "interview_schedule_result_requests": [],
+      "interview_schedule_room_assignments": [],
+      "range_start": 2,
+      "range_end": 10,
+      "slots_interval": 30,
+      "buffer_time": 0,
+      "events_per_day_limit": 0,
+      "exclude_all_day_events": true,
+      "reschedule_enabled": true,
+      "assign_any_interviewer": false
+    }
+  },
+  "tags": [
+    "interview",
+    "schedules"
+  ]
+}

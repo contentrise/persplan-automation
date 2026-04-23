@@ -1,0 +1,180 @@
+{
+  "id": "email_provider_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/email_provider",
+  "summary": "Update email provider",
+  "description": "Update email provider. Endpoint: PATCH /c/{company_id}/email_provider. Required parameters: signature, email, username, password, provider, smtp_server, smtp_port, smtp_use_ssl, imap_server, imap_port, imap_use_ssl, ooo_message_json, ooo_enabled, ooo_starts_at, ooo_ends_at, ooo_include_signature, oauth_refresh_token, company_id.",
+  "params": [
+    {
+      "name": "signature",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "password",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "provider",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "smtp_server",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "smtp_port",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "smtp_use_ssl",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "imap_server",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "imap_port",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "imap_use_ssl",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ooo_message_json",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ooo_enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ooo_starts_at",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ooo_ends_at",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ooo_include_signature",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "oauth_refresh_token",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"email_provider\": {\n\"ooo_enabled\": true,\n\"ooo_ends_at\": \"2026-05-01T07:30:38.755256Z\",\n\"ooo_message_json\": {\n\"doc\": {\n\"content\": [\n{\n\"content\": [\n{\n\"text\": \"General context\",\n\"type\": \"text\"\n}\n],\n\"type\": \"paragraph\"\n}\n],\n\"type\": \"doc\"\n}\n},\n\"ooo_starts_at\": \"2026-04-26T07:30:38.755223Z\",\n\"signature\": \"~ John Smith\"\n}\n}",
+  "example_response": {
+    "email_provider": {
+      "id": 30,
+      "domain": "company606.test.recruitee.com",
+      "signature": "~ John Smith",
+      "email": "john.doe@company606.test.recruitee.com",
+      "username": "john.doe",
+      "provider": "recruitee",
+      "subdomain": "company606",
+      "migrated": false,
+      "auto_forward": true,
+      "domain_migration_date": null,
+      "domain_migration_future_email": null,
+      "domain_migration_infobox": false,
+      "ooo_message_text": "General context",
+      "ooo_message_html": "<p>General context</p>",
+      "ooo_message_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "General context",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "ooo_enabled": true,
+      "ooo_starts_at": "2026-04-26T07:30:38.755223Z",
+      "ooo_ends_at": "2026-05-01T07:30:38.755256Z",
+      "ooo_status": "future",
+      "ooo_include_signature": false,
+      "username_display": "john.doe"
+    }
+  },
+  "tags": [
+    "email_provider",
+    "mailbox"
+  ]
+}

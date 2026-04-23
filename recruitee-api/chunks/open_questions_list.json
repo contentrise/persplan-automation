@@ -1,0 +1,31 @@
+{
+  "id": "open_questions_list",
+  "method": "GET",
+  "path": "/c/{company_id}/open_questions/template/{template_id}/open_questions",
+  "summary": "List open questions for a given template",
+  "description": "List open questions for a given template. Endpoint: GET /c/{company_id}/open_questions/template/{template_id}/open_questions. Required parameters: template_id, company_id.",
+  "params": [
+    {
+      "name": "template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/open_questions/template/{template_id}/open_questions\n\nRequired params: template_id, company_id",
+  "example_response": {
+    "open_questions": []
+  },
+  "tags": [
+    "open_questions",
+    "template"
+  ]
+}

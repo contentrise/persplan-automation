@@ -1,0 +1,94 @@
+{
+  "id": "open_question_template_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/offers/{offer_id}/open_question_templates/{id}",
+  "summary": "Show open question template",
+  "description": "Show open question template. Endpoint: GET /c/{company_id}/offers/{offer_id}/open_question_templates/{id}. Required parameters: id, offer_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Open Question template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers/{offer_id}/open_question_templates/{id}\n\nRequired params: id, offer_id, company_id",
+  "example_response": {
+    "open_question_template": {
+      "default": false,
+      "id": 97,
+      "position": 43,
+      "title": "Open Question Template",
+      "category": "Sample category",
+      "custom": false,
+      "open_questions": [
+        {
+          "id": 105,
+          "position": 44,
+          "visible": true,
+          "options": null,
+          "required": false,
+          "kind": "string",
+          "visibility": {
+            "level": "public",
+            "admin_ids": [],
+            "role_ids": []
+          },
+          "open_question_options": [
+            {
+              "id": 131,
+              "position": 73,
+              "options": {},
+              "translations": [
+                {
+                  "body": "[DE] Yes",
+                  "lang_code": "de"
+                }
+              ],
+              "disqualify_reason_id": null
+            },
+            {
+              "id": 132,
+              "position": 74,
+              "options": {},
+              "translations": [
+                {
+                  "body": "[DE] No",
+                  "lang_code": "de"
+                }
+              ],
+              "disqualify_reason_id": null
+            }
+          ],
+          "translations": [
+            {
+              "body": "[DE] What?",
+              "lang_code": "de"
+            }
+          ],
+          "open_question_template_id": 97,
+          "is_knockout_question": false
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offers",
+    "open_question_templates"
+  ]
+}

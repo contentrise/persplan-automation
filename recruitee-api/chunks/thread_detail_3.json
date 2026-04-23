@@ -1,0 +1,72 @@
+{
+  "id": "thread_detail_3",
+  "method": "GET",
+  "path": "/c/{company_id}/texting/threads/",
+  "summary": "Show specific texting thread",
+  "description": "Show specific texting thread. Endpoint: GET /c/{company_id}/texting/threads/. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/texting/threads/\n\nRequired params: company_id",
+  "example_response": {
+    "texting_thread": {
+      "id": 55,
+      "messages": [
+        {
+          "id": 45,
+          "status": "delivered",
+          "text": "text",
+          "to": "receiver",
+          "admin_id": 4070,
+          "from": "older",
+          "created_at": "2026-04-21T07:32:24.834608Z",
+          "send_at": null,
+          "updated_at": "2030-02-26T12:00:00.000000Z",
+          "send_at_timezone": null,
+          "thread_id": 55,
+          "aspect": "sent",
+          "sent_by": "John Doe",
+          "status_details": null,
+          "status_error_code": null,
+          "text_json": null,
+          "unread_ids": [],
+          "segments_count": 1
+        },
+        {
+          "id": 44,
+          "status": "failed",
+          "text": "text",
+          "to": "receiver",
+          "admin_id": 4069,
+          "from": "newer",
+          "created_at": "2026-04-21T07:32:24.833689Z",
+          "send_at": null,
+          "updated_at": "2030-02-27T12:00:00.000000Z",
+          "send_at_timezone": null,
+          "thread_id": 55,
+          "aspect": "sent",
+          "sent_by": "John Doe",
+          "status_details": "Something went wrong. If the error persists, please contact our support.",
+          "status_error_code": "unsupported_error",
+          "text_json": null,
+          "unread_ids": [],
+          "segments_count": 1
+        }
+      ],
+      "to": "+48123456789",
+      "company_id": 2062,
+      "candidate_id": null,
+      "updated_at": "2026-04-21T07:32:24.832749Z"
+    }
+  },
+  "tags": [
+    "texting",
+    "threads"
+  ]
+}

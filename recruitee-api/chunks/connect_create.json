@@ -1,0 +1,100 @@
+{
+  "id": "connect_create",
+  "method": "POST",
+  "path": "/c/{company_id}/shared_email_providers/connect",
+  "summary": "Connect shared mailbox (mailbox provider)",
+  "description": "Connect shared mailbox (mailbox provider). Endpoint: POST /c/{company_id}/shared_email_providers/connect. Required parameters: email, username, password, smtp_server, smtp_port, smtp_use_ssl, imap_server, imap_port, imap_use_ssl, company_id. Optional parameters include name, signature.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "description": "New name of Shared Email Provider",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "signature",
+      "type": "string",
+      "required": false,
+      "description": "New signature of Shared Email Provider",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "password",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "smtp_server",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "smtp_port",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "smtp_use_ssl",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "imap_server",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "imap_port",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "imap_use_ssl",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/shared_email_providers/connect\n\nRequired params: email, username, password, smtp_server, smtp_port, smtp_use_ssl, imap_server, imap_port, imap_use_ssl, company_id\n\nOptional params: name, signature",
+  "example_response": {},
+  "tags": [
+    "shared_email_providers",
+    "connect",
+    "mailbox"
+  ]
+}

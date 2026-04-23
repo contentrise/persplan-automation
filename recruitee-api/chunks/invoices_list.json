@@ -1,0 +1,59 @@
+{
+  "id": "invoices_list",
+  "method": "GET",
+  "path": "/c/{company_id}/invoices",
+  "summary": "List invoices",
+  "description": "List invoices. Endpoint: GET /c/{company_id}/invoices. Required parameters: company_id. Optional parameters include limit, page, invoices_offset, credit_notes_offset.",
+  "params": [
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results (default: 30)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (default: 1)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "invoices_offset",
+      "type": "string",
+      "required": false,
+      "description": "External offset for invoices pagination",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "credit_notes_offset",
+      "type": "string",
+      "required": false,
+      "description": "External offset for credit notes pagination",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/invoices\n\nRequired params: company_id\n\nOptional params: limit, page, invoices_offset, credit_notes_offset",
+  "example_response": {
+    "meta": {
+      "limit": 30,
+      "total_count": 0,
+      "page": 1,
+      "invoices_offset": null,
+      "credit_notes_offset": null
+    },
+    "invoices": []
+  },
+  "tags": [
+    "invoices",
+    "billing"
+  ]
+}

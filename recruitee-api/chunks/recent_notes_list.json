@@ -1,0 +1,123 @@
+{
+  "id": "recent_notes_list",
+  "method": "GET",
+  "path": "/c/{company_id}/dashboard/recent_notes",
+  "summary": "Recent notes",
+  "description": "Recent notes. Endpoint: GET /c/{company_id}/dashboard/recent_notes. Required parameters: company_id. Optional parameters include scope, limit, page.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Limits recent notes to ‘followed_candidates’, ‘mentioning_me’ or ‘all’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit of items per page",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/dashboard/recent_notes\n\nRequired params: company_id\n\nOptional params: scope, limit, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 1,
+      "page": 1
+    },
+    "references": [
+      {
+        "id": 671,
+        "name": "John Doe",
+        "type": "Candidate",
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:31:51.612268Z",
+        "updated_at": "2026-04-21T07:31:51.612268Z",
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=671&company=1426",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "tasks_count": 0,
+        "viewed": false,
+        "last_message_at": null
+      },
+      {
+        "id": 2747,
+        "type": "Admin",
+        "email": "john770@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2747/normal_avatar_r5smg8pub7sf.png",
+        "photo_thumb_url": "tmp/bow/admins/2747/thumb_avatar_r5smg8pub7sf.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "notes": [
+      {
+        "id": 60,
+        "admin_id": 2747,
+        "candidate_id": 671,
+        "created_at": "2026-04-21T07:31:51.613381Z",
+        "updated_at": "2026-04-21T07:31:51.613381Z",
+        "guest_id": null,
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        },
+        "body_json": {
+          "doc": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "Test comment",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          }
+        },
+        "triggered": false
+      }
+    ]
+  },
+  "tags": [
+    "dashboard",
+    "recent_notes"
+  ]
+}

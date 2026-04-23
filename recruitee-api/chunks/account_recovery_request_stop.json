@@ -1,0 +1,21 @@
+{
+  "id": "account_recovery_request_stop",
+  "method": "GET",
+  "path": "/account-recovery-request/{token}/stop",
+  "summary": "Stops 2FA recovery process for current admin",
+  "description": "Stops 2FA recovery process for current admin. Endpoint: GET /account-recovery-request/{token}/stop. Required parameters: token.",
+  "params": [
+    {
+      "name": "token",
+      "type": "string",
+      "required": true,
+      "description": "Account recovery request token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /account-recovery-request/{token}/stop\n\nRequired params: token",
+  "example_response": {},
+  "tags": [
+    "account_recovery_request"
+  ]
+}

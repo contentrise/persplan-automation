@@ -1,0 +1,63 @@
+{
+  "id": "cvs_list",
+  "method": "GET",
+  "path": "/c/{company_id}/imports/{import_id}/cvs",
+  "summary": "List import cvs",
+  "description": "List import cvs. Endpoint: GET /c/{company_id}/imports/{import_id}/cvs. Required parameters: import_id, company_id.",
+  "params": [
+    {
+      "name": "import_id",
+      "type": "integer",
+      "required": true,
+      "description": "Import ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/imports/{import_id}/cvs\n\nRequired params: import_id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 15,
+        "name": "Natasha Romanova",
+        "type": "ImportCandidate",
+        "emails": [
+          "black@widow.io"
+        ]
+      }
+    ],
+    "cvs": [
+      {
+        "id": 5,
+        "file_name": "james_bond_cv.pdf",
+        "file_url": "tmp/bow/import_cvs/5/pdf_james_bond_cv.pdf",
+        "original_file_url": "tmp/bow/import_cvs/5/james_bond_cv.pdf",
+        "import_candidate_id": 15
+      },
+      {
+        "id": 4,
+        "file_name": "james_bond_cv.pdf",
+        "file_url": "tmp/bow/import_cvs/4/pdf_james_bond_cv.pdf",
+        "original_file_url": "tmp/bow/import_cvs/4/james_bond_cv.pdf",
+        "import_candidate_id": null
+      },
+      {
+        "id": 3,
+        "file_name": "james_bond_cv.pdf",
+        "file_url": "tmp/bow/import_cvs/3/pdf_james_bond_cv.pdf",
+        "original_file_url": "tmp/bow/import_cvs/3/james_bond_cv.pdf",
+        "import_candidate_id": null
+      }
+    ]
+  },
+  "tags": [
+    "imports",
+    "cvs"
+  ]
+}

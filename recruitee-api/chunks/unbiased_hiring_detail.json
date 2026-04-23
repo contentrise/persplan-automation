@@ -1,0 +1,33 @@
+{
+  "id": "unbiased_hiring_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/candidates/settings/unbiased_hiring",
+  "summary": "Show company's candidate settings",
+  "description": "Show company's candidate settings. Endpoint: GET /c/{company_id}/candidates/settings/unbiased_hiring. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/candidates/settings/unbiased_hiring\n\nRequired params: company_id",
+  "example_response": {
+    "anonymous_candidates": {
+      "enabled": true,
+      "all_jobs_count": 2,
+      "enabled_jobs_count": 1
+    },
+    "fair_evaluations": {
+      "enabled": true,
+      "all_jobs_count": 2,
+      "enabled_jobs_count": 0
+    }
+  },
+  "tags": [
+    "candidates",
+    "settings"
+  ]
+}

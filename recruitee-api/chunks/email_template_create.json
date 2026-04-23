@@ -1,0 +1,70 @@
+{
+  "id": "email_template_create",
+  "method": "POST",
+  "path": "/c/{company_id}/email_templates",
+  "summary": "Create email template",
+  "description": "Create email template. Endpoint: POST /c/{company_id}/email_templates. Required parameters: title, subject, visibility, body_html, company_id. Optional parameters include template_attachment_assignments.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "visibility",
+      "type": "map",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "body_html",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_attachment_assignments",
+      "type": "array",
+      "required": false,
+      "description": "Array of template attachment assignments, parameters: (id attachment_id)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"email_template\": {}\n}",
+  "example_response": {
+    "error": [
+      "Visibility can't be blank",
+      "Title can't be blank"
+    ],
+    "error_fields": {
+      "title": [
+        "can't be blank"
+      ],
+      "visibility": [
+        "can't be blank"
+      ]
+    }
+  },
+  "tags": [
+    "email_templates",
+    "mailbox"
+  ]
+}

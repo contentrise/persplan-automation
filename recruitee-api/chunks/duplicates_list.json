@@ -1,0 +1,159 @@
+{
+  "id": "duplicates_list",
+  "method": "GET",
+  "path": "/c/{company_id}/candidates/{id}/duplicates",
+  "summary": "List candidate duplicates possible to be merged",
+  "description": "List candidate duplicates possible to be merged. Endpoint: GET /c/{company_id}/candidates/{id}/duplicates. Required parameters: id, company_id. Optional parameters include candidate_ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_ids",
+      "type": "array",
+      "required": false,
+      "description": "Custom candidates IDs, separated by comma",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/candidates/{id}/duplicates\n\nRequired params: id, company_id\n\nOptional params: candidate_ids",
+  "example_response": {
+    "references": [],
+    "duplicates": [
+      {
+        "id": 3148,
+        "name": "John Doe",
+        "fields": [
+          {
+            "id": null,
+            "visible": true,
+            "values": [],
+            "origin": "manual",
+            "kind": "education",
+            "visibility": {
+              "level": "public",
+              "admin_ids": [],
+              "role_ids": []
+            },
+            "is_anonymous": false,
+            "fixed": true
+          },
+          {
+            "id": null,
+            "visible": true,
+            "values": [],
+            "origin": "manual",
+            "kind": "experience",
+            "visibility": {
+              "level": "public",
+              "admin_ids": [],
+              "role_ids": []
+            },
+            "is_anonymous": false,
+            "fixed": true
+          }
+        ],
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john@doe.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:34:19.769907Z",
+        "updated_at": "2026-04-21T07:34:19.769907Z",
+        "cv_original_url": null,
+        "cv_url": null,
+        "placements": [],
+        "referral_referrers_ids": [],
+        "sourcing_origin": null,
+        "custom_fields": [],
+        "phones": [],
+        "cv_created_at": null
+      },
+      {
+        "id": 3149,
+        "name": "John Doe",
+        "fields": [
+          {
+            "id": 346,
+            "visible": true,
+            "values": [
+              {
+                "degree": "Bachelor",
+                "major": "Computer Science",
+                "school": "University of Poznan"
+              }
+            ],
+            "origin": "manual",
+            "kind": "education",
+            "visibility": {
+              "level": "public",
+              "admin_ids": [],
+              "role_ids": []
+            },
+            "is_anonymous": false,
+            "fixed": true
+          },
+          {
+            "id": 345,
+            "visible": true,
+            "values": [
+              {
+                "company": "Alpha Tech",
+                "location": "San Francisco",
+                "title": "Software Engineer"
+              }
+            ],
+            "origin": "manual",
+            "kind": "experience",
+            "visibility": {
+              "level": "public",
+              "admin_ids": [],
+              "role_ids": []
+            },
+            "is_anonymous": false,
+            "fixed": true
+          }
+        ],
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john@doe.com",
+          "john@smith.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:34:19.770228Z",
+        "updated_at": "2026-04-21T07:34:19.770228Z",
+        "cv_original_url": null,
+        "cv_url": null,
+        "placements": [],
+        "referral_referrers_ids": [],
+        "sourcing_origin": null,
+        "custom_fields": [],
+        "phones": [],
+        "cv_created_at": null
+      }
+    ]
+  },
+  "tags": [
+    "candidates",
+    "duplicates"
+  ]
+}

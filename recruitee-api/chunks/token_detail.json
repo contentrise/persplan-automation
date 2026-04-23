@@ -1,0 +1,34 @@
+{
+  "id": "token_detail",
+  "method": "POST",
+  "path": "/c/{company_id}/secure_change/token",
+  "summary": "Get secure change token",
+  "description": "Get secure change token. Endpoint: POST /c/{company_id}/secure_change/token. Required parameters: email_code, company_id.",
+  "params": [
+    {
+      "name": "email_code",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"secure_change\": {\n\"email_code\": \"000000\"\n}\n}",
+  "example_response": {
+    "error": [
+      "Forbidden"
+    ]
+  },
+  "tags": [
+    "secure_change",
+    "token",
+    "admin"
+  ]
+}

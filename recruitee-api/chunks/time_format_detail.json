@@ -1,0 +1,14 @@
+{
+  "id": "time_format_detail",
+  "method": "GET",
+  "path": "/time_format",
+  "summary": "[DEPRECATED] Returns proposed time format and start day of the week",
+  "description": "[DEPRECATED] Returns proposed time format and start day of the week. Endpoint: GET /time_format.",
+  "params": [],
+  "example_request": "GET /time_format",
+  "example_response": {},
+  "tags": [
+    "time_format",
+    "admin"
+  ]
+}

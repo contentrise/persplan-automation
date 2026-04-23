@@ -1,0 +1,52 @@
+{
+  "id": "talent_pool_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/talent_pools/{id}",
+  "summary": "Update talent pool",
+  "description": "Update talent pool. Endpoint: PATCH /c/{company_id}/talent_pools/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Talent Pool ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"talent_pool\": {\n\"description\": \"<p>Elixir</p>\\n\"\n}\n}",
+  "example_response": {
+    "talent_pool": {
+      "id": 1891,
+      "position": 64,
+      "status": "draft",
+      "description": "<p>Elixir</p>\n",
+      "title": "Best Talent Pool",
+      "admins": [],
+      "candidates_count": 0,
+      "created_at": "2026-04-21T07:33:54.984683Z",
+      "updated_at": "2026-04-21T07:33:54.986558Z",
+      "admin_ids": [],
+      "notes_count": 0,
+      "followed": false,
+      "attachments_count": 0,
+      "adminapp_url": "http://app.recruitee.internal:3003/#/talent_pools/best-talent-pool124",
+      "example": false,
+      "department_id": null,
+      "slug": "best-talent-pool124",
+      "guid": "talent-pool-guid63",
+      "mailbox_email": "tp.talent-pool-guid63@company717.test.recruitee.com",
+      "followers": [],
+      "follower_ids": []
+    }
+  },
+  "tags": [
+    "talent_pools"
+  ]
+}

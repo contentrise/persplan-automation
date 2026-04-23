@@ -1,0 +1,56 @@
+{
+  "id": "auto_reply_template_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/auto_reply_templates/update_positions",
+  "summary": "Update auto reply templates' positions",
+  "description": "Update auto reply templates' positions. Endpoint: PATCH /c/{company_id}/auto_reply_templates/update_positions. Required parameters: company_id. Optional parameters include auto_reply_templates.",
+  "params": [
+    {
+      "name": "auto_reply_templates",
+      "type": "array",
+      "required": false,
+      "description": "Ordered array of template ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"auto_reply_templates\": [\n83,\n82,\n84\n]\n}",
+  "example_response": {
+    "auto_reply_templates": [
+      {
+        "default": false,
+        "id": 83,
+        "position": 1,
+        "title": "Template27",
+        "created_at": "2026-04-21T07:32:25.763522Z",
+        "updated_at": "2026-04-21T07:32:25.763522Z"
+      },
+      {
+        "default": false,
+        "id": 82,
+        "position": 2,
+        "title": "Template26",
+        "created_at": "2026-04-21T07:32:25.762758Z",
+        "updated_at": "2026-04-21T07:32:25.762758Z"
+      },
+      {
+        "default": false,
+        "id": 84,
+        "position": 3,
+        "title": "Template28",
+        "created_at": "2026-04-21T07:32:25.764268Z",
+        "updated_at": "2026-04-21T07:32:25.764268Z"
+      }
+    ]
+  },
+  "tags": [
+    "auto_reply_templates",
+    "mailbox"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "result_request_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/interview/result_requests/{id}",
+  "summary": "Delete interview result request",
+  "description": "Delete interview result request. Endpoint: DELETE /c/{company_id}/interview/result_requests/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview result request ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/interview/result_requests/{id}\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "interview",
+    "result_requests"
+  ]
+}

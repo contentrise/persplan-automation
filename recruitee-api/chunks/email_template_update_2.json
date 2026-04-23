@@ -1,0 +1,80 @@
+{
+  "id": "email_template_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/email_templates/update_positions",
+  "summary": "Update email templates positions",
+  "description": "Update email templates positions. Endpoint: PATCH /c/{company_id}/email_templates/update_positions. Required parameters: company_id. Optional parameters include positions.",
+  "params": [
+    {
+      "name": "positions",
+      "type": "array",
+      "required": false,
+      "description": "Array of templates ids an their positions",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"email_templates\": [\n{\n\"id\": 17,\n\"position\": 2\n},\n{\n\"id\": 18,\n\"position\": 1\n},\n{\n\"id\": 19,\n\"position\": 3\n}\n]\n}",
+  "example_response": {
+    "email_templates": [
+      {
+        "id": 18,
+        "position": 1,
+        "title": "Template",
+        "admin_id": 7145,
+        "subject": "Thanks for applying",
+        "created_at": "2026-04-21T07:33:24.094096Z",
+        "updated_at": "2026-04-21T07:33:24.094096Z",
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        },
+        "body_html": "Thanks for applying, Regards",
+        "template_attachment_assignments": []
+      },
+      {
+        "id": 17,
+        "position": 2,
+        "title": "Template",
+        "admin_id": 7145,
+        "subject": "Thanks for applying",
+        "created_at": "2026-04-21T07:33:24.093510Z",
+        "updated_at": "2026-04-21T07:33:24.093510Z",
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        },
+        "body_html": "Thanks for applying, Regards",
+        "template_attachment_assignments": []
+      },
+      {
+        "id": 19,
+        "position": 3,
+        "title": "Template",
+        "admin_id": 7145,
+        "subject": "Thanks for applying",
+        "created_at": "2026-04-21T07:33:24.094407Z",
+        "updated_at": "2026-04-21T07:33:24.094407Z",
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        },
+        "body_html": "Thanks for applying, Regards",
+        "template_attachment_assignments": []
+      }
+    ]
+  },
+  "tags": [
+    "email_templates",
+    "mailbox"
+  ]
+}

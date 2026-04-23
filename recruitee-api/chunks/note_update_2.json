@@ -1,0 +1,90 @@
+{
+  "id": "note_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/notes/{id}",
+  "summary": "Update note",
+  "description": "Update note. Endpoint: PATCH /c/{company_id}/notes/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Note ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"note\": {\n\"visibility\": {\n\"admin_ids\": [\n9389\n],\n\"level\": \"protected\",\n\"role_ids\": [\n4724\n]\n}\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 9389,
+        "type": "Admin",
+        "email": "john1221@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9389/normal_avatar_vefc99rtdfr1.png",
+        "photo_thumb_url": "tmp/bow/admins/9389/thumb_avatar_vefc99rtdfr1.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "note": {
+      "id": 151,
+      "text": "Test comment",
+      "replies": [],
+      "body": "<p>Test comment</p>",
+      "admin_id": 9389,
+      "candidate_id": 2327,
+      "attachments": [],
+      "created_at": "2026-04-21T07:33:56.869157Z",
+      "updated_at": "2026-04-21T07:33:56.874196Z",
+      "offer_id": null,
+      "talent_pool_id": null,
+      "requisition_id": null,
+      "guest_id": null,
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          9389
+        ],
+        "role_ids": [
+          4724,
+          4725
+        ]
+      },
+      "body_html": "<p>Test comment</p>",
+      "reply_to_id": null,
+      "body_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Test comment",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "triggered": false,
+      "pinned_at": null
+    }
+  },
+  "tags": [
+    "notes"
+  ]
+}

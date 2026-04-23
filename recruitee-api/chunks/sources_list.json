@@ -1,0 +1,54 @@
+{
+  "id": "sources_list",
+  "method": "GET",
+  "path": "/c/{company_id}/sources",
+  "summary": "List sources",
+  "description": "List sources. Endpoint: GET /c/{company_id}/sources. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/sources\n\nRequired params: company_id",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 3,
+      "page": 1
+    },
+    "sources": [
+      {
+        "id": 133,
+        "name": "Source 2",
+        "status": null,
+        "context": "sources",
+        "taggings_count": 5,
+        "searchable_name": "source 2"
+      },
+      {
+        "id": 134,
+        "name": "Source 3",
+        "status": null,
+        "context": "sources",
+        "taggings_count": 3,
+        "searchable_name": "source 3"
+      },
+      {
+        "id": 132,
+        "name": "Source 1",
+        "status": null,
+        "context": "sources",
+        "taggings_count": 2,
+        "searchable_name": "source 1"
+      }
+    ]
+  },
+  "tags": [
+    "sources",
+    "tagging"
+  ]
+}

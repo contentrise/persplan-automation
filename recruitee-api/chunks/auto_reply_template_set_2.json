@@ -1,0 +1,53 @@
+{
+  "id": "auto_reply_template_set_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{offer_id}/auto_reply_templates/assign",
+  "summary": "Sets or unsets offer's auto reply template",
+  "description": "Sets or unsets offer's auto reply template. Endpoint: PATCH /c/{company_id}/offers/{offer_id}/auto_reply_templates/assign. Required parameters: offer_id, auto_reply_template_id, company_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auto_reply_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Auto-reply template ID; pass null to unset",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"auto_reply_template_id\": 133\n}",
+  "example_response": {
+    "auto_reply_template": {
+      "default": false,
+      "id": 133,
+      "position": 71,
+      "title": "Template70",
+      "created_at": "2026-04-21T07:32:44.007412Z",
+      "updated_at": "2026-04-21T07:32:44.007412Z",
+      "translations": [
+        {
+          "subject": "subject",
+          "lang_code": "en",
+          "body_html": "<p>Body</p>"
+        }
+      ],
+      "template_attachment_assignments": []
+    }
+  },
+  "tags": [
+    "offers",
+    "auto_reply_templates"
+  ]
+}

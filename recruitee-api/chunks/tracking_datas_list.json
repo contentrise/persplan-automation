@@ -1,0 +1,39 @@
+{
+  "id": "tracking_datas_list",
+  "method": "GET",
+  "path": "/c/{company_id}/analytics/tracking_data",
+  "summary": "Minimal set of data used for tracking user in Mixpanel.",
+  "description": "Minimal set of data used for tracking user in Mixpanel.. Endpoint: GET /c/{company_id}/analytics/tracking_data. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/analytics/tracking_data\n\nRequired params: company_id",
+  "example_response": {
+    "Company ID": 2669,
+    "android_identity_hash": "5f9b9c8d166a33ebdbca7a19da7fd9c53218ace57154e9de9561decad6626eea",
+    "company_id": 2669,
+    "company_name": "Test Company",
+    "created_at": 1776756765,
+    "email": "john4812@recruitee.com",
+    "first_name": "John",
+    "id": 5147,
+    "identity_hash": "e16cd1d1bb37473d1c12dc0a5a9181a0c2162084197878a8baadc72699738509",
+    "ios_identity_hash": "2d049c2909df73c749c82e0e6230d9aab2c6dc6e8e58518cd8b26a1cbae119d8",
+    "is_trial": false,
+    "last_name": "Doe",
+    "membership_id": 2515,
+    "name": "John Doe",
+    "plan": "launch",
+    "tellent_user_guid": null
+  },
+  "tags": [
+    "analytics",
+    "tracking_data"
+  ]
+}

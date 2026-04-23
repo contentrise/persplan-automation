@@ -1,0 +1,42 @@
+{
+  "id": "referral_portal_sign",
+  "method": "POST",
+  "path": "/referral_portal/sign_in",
+  "summary": "Sign in external user as referrer",
+  "description": "Sign in external user as referrer. Endpoint: POST /referral_portal/sign_in. Required parameters: email, password.",
+  "params": [
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "password",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"session\": {\n\"email\": \"tyree_brown@orn.net\",\n\"password\": \"valid\"\n}\n}",
+  "example_response": {
+    "error": [
+      "Password Invalid email or password",
+      "Email Invalid email or password"
+    ],
+    "error_fields": {
+      "email": [
+        "Invalid email or password"
+      ],
+      "password": [
+        "Invalid email or password"
+      ]
+    }
+  },
+  "tags": [
+    "referral_portal",
+    "referral"
+  ]
+}

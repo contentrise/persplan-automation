@@ -1,0 +1,48 @@
+{
+  "id": "templates_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/open_questions/template",
+  "summary": "List open questions templates",
+  "description": "List open questions templates. Endpoint: GET /c/{company_id}/open_questions/template. Required parameters: company_id. Optional parameters include title.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": false,
+      "description": "Filter by title",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/open_questions/template\n\nRequired params: company_id\n\nOptional params: title",
+  "example_response": {
+    "open_question_templates": [
+      {
+        "default": false,
+        "id": 195,
+        "position": 54,
+        "title": "First template",
+        "category": "Some category",
+        "custom": false
+      },
+      {
+        "default": false,
+        "id": 196,
+        "position": 55,
+        "title": "Second template",
+        "category": "Another category",
+        "custom": false
+      }
+    ]
+  },
+  "tags": [
+    "open_questions",
+    "template"
+  ]
+}

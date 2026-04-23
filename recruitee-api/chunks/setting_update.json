@@ -1,0 +1,82 @@
+{
+  "id": "setting_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/careers/settings",
+  "summary": "Update careers settings",
+  "description": "Update careers settings. Endpoint: PATCH /c/{company_id}/careers/settings. Required parameters: enabled, domain, indexing_enabled, applications_limit_per_single_offer, applications_limit_per_single_offer_days, applications_limit_per_candidate, applications_limit_per_candidate_days, company_id.",
+  "params": [
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "domain",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "indexing_enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "applications_limit_per_single_offer",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "applications_limit_per_single_offer_days",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "applications_limit_per_candidate",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "applications_limit_per_candidate_days",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"settings\": {\n\"applications_limit_per_candidate\": 3,\n\"applications_limit_per_candidate_days\": 20,\n\"applications_limit_per_single_offer\": 6,\n\"applications_limit_per_single_offer_days\": 10,\n\"domain\": \"example.com\",\n\"enabled\": true,\n\"indexing_enabled\": true\n}\n}",
+  "example_response": {
+    "settings": {
+      "enabled": true,
+      "domain": "example.com",
+      "subdomain": "acme",
+      "indexing_enabled": true,
+      "applications_limit_per_single_offer": 6,
+      "applications_limit_per_single_offer_days": 10,
+      "applications_limit_per_candidate": 3,
+      "applications_limit_per_candidate_days": 20
+    }
+  },
+  "tags": [
+    "careers",
+    "settings"
+  ]
+}

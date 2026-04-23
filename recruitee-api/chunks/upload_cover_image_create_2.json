@@ -1,0 +1,32 @@
+{
+  "id": "upload_cover_image_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_templates/{id}/upload_cover_image",
+  "summary": "Upload cover image",
+  "description": "Upload cover image. Endpoint: POST /c/{company_id}/offer_templates/{id}/upload_cover_image. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer Template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"cover_image\": {\n\"filename\": \"cover_image.png\",\n\"path\": \"test/files/photos/male16.jpg\",\n\"content_type\": null\n}\n}",
+  "example_response": {
+    "file_name": "offer_cover_image_de1nvnsdhv4k.png",
+    "url": "tmp/bow/offers/93/offer_cover_image_de1nvnsdhv4k.png"
+  },
+  "tags": [
+    "offer_templates",
+    "upload_cover_image"
+  ]
+}

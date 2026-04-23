@@ -1,0 +1,239 @@
+{
+  "id": "offer_template_copy",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{offer_id}/offer_templates/{offer_template_id}/copy_data",
+  "summary": "Copy data from offer template to offer",
+  "description": "Copy data from offer template to offer. Endpoint: PATCH /c/{company_id}/offers/{offer_id}/offer_templates/{offer_template_id}/copy_data. Required parameters: scope, offer_id, offer_template_id, company_id. Optional parameters include placements_movements.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": true,
+      "description": "What data should be copied (all/missing_fields)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "placements_movements",
+      "type": "array",
+      "required": false,
+      "description": "Array of objects, example: [ { “source_stage_id”: 123, “destination_stage_id”: 124 }, { “source_stage_id”: 125, “destination_stage_id”: 126 }, { “source_stage_id”: 127, “destination_stage_id”: 128 } ]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"scope\": \"all\"\n}",
+  "example_response": {
+    "offer": {
+      "city": null,
+      "open_question_template_id": null,
+      "hired_candidates_without_openings_count": null,
+      "requirements": "<p>Super text2</p>",
+      "pipeline_template": null,
+      "auto_reply_template_id": null,
+      "hire_assistant": null,
+      "department_id": null,
+      "primary_lang_code": "en",
+      "fieldset": null,
+      "admins": [],
+      "has_additional_info": true,
+      "visibility_options": [
+        "linkedin",
+        "indeed"
+      ],
+      "options_photo": "required",
+      "sharing_image": "https://example.com/image.jpg",
+      "followers": [],
+      "enabled_for_referrals": false,
+      "position": 2,
+      "email_confirmation_subject": null,
+      "options_salutation": "required",
+      "notes_count": 0,
+      "email_confirmation_body": null,
+      "shared_openings_count": null,
+      "dynamic_fields": [],
+      "options_cv": "required",
+      "locations_question_required": true,
+      "education": "college_coursework",
+      "country_code": null,
+      "title": "Offer template",
+      "created_at": "2026-04-21T07:30:23.905398Z",
+      "number_of_openings": null,
+      "description": "<p>Super text2</p>",
+      "description_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Super text2",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "updated_at": "2026-04-21T07:30:23.998639Z",
+      "hiring_manager_id": null,
+      "category": "administrative",
+      "wysiwyg_editor": "prosemirror",
+      "mailbox_email": "job.guid1@company2.test.recruitee.com",
+      "state_code": null,
+      "cover_image_url": null,
+      "on_site": false,
+      "slug": "offer-template",
+      "disqualified_candidates_count": 0,
+      "sharing_title": "sharing title from offer",
+      "closed_at": null,
+      "fieldset_id": null,
+      "careers_job_page_layout_id": null,
+      "hired_candidates_count": 0,
+      "careers_url": "http://company2.recruitee.internal:3003/o/offer-template",
+      "cover_image": null,
+      "status": "draft",
+      "locations_question": "Template question",
+      "street": null,
+      "sharing_description": "sharing title from offer",
+      "highlight_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Super text2",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "attachments_count": 0,
+      "example": false,
+      "dynamic_fields_count": 0,
+      "employment_type": "fulltime_fixed_term",
+      "locations_question_type": "multiple_choice",
+      "kind": "job",
+      "job_scheduler": null,
+      "published_at": null,
+      "options_cover_letter": "required",
+      "recruiter_id": null,
+      "tags": [],
+      "requirements_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Super text2",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "candidates_count": 0,
+      "default_translations": {
+        "description": "<p>Super text2</p>",
+        "title": "Offer template",
+        "email_confirmation_body": null,
+        "email_confirmation_subject": null,
+        "locations_question": "Template question",
+        "description_html": "<p>Super text2</p>",
+        "description_json": {
+          "doc": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "Super text2",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          }
+        }
+      },
+      "requirements_html": "<p>Super text2</p>",
+      "max_hours_per_week": "40",
+      "max_hours": 40,
+      "remote": true,
+      "state_name": null,
+      "options_title": "required",
+      "fields": [],
+      "experience": "mid_level",
+      "pipeline_template_id": null,
+      "hybrid": false,
+      "id": 2,
+      "sharing_image_url": "tmp/bow/offers/2/normal_https://example.com/image.jpg",
+      "min_hours_per_week": "20",
+      "location_ids": [],
+      "min_hours": 20,
+      "priority": "high",
+      "url": "http://company2.recruitee.internal:3003/o/offer-template",
+      "email_confirmation": true,
+      "description_html": "<p>Super text2</p>",
+      "eeo_settings": null,
+      "highlight_html": "<p>Super text2</p>",
+      "job_position_id": null,
+      "qualified_candidates_count": 0,
+      "postal_code": null,
+      "location": null,
+      "options_phone": "required",
+      "has_active_campaign": false,
+      "lang_code": "en",
+      "issues": {
+        "is_requisition_missing": true,
+        "is_required_data_missing": true,
+        "is_migrated_html_equal": null,
+        "is_dynamic_fields_limit_exceeded": false
+      },
+      "adminapp_url": "http://app.recruitee.internal:3003/#/offers/offer-template",
+      "pipeline": false,
+      "followed": false,
+      "department": null,
+      "salary": {
+        "max": null,
+        "min": null,
+        "period": null,
+        "currency": null
+      },
+      "guid": "guid1",
+      "offer_tags": []
+    }
+  },
+  "tags": [
+    "offers",
+    "offer_templates"
+  ]
+}

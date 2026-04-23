@@ -1,0 +1,50 @@
+{
+  "id": "option_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/placements/{id}/hiring_details/options",
+  "summary": "Get hiring details for hired placement",
+  "description": "Get hiring details for hired placement. Endpoint: GET /c/{company_id}/placements/{id}/hiring_details/options. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Placement ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/placements/{id}/hiring_details/options\n\nRequired params: id, company_id",
+  "example_response": {
+    "locations": [
+      {
+        "id": 280,
+        "name": "Location 1",
+        "selected": false
+      },
+      {
+        "id": 281,
+        "name": "Location 2",
+        "selected": false
+      },
+      {
+        "id": 282,
+        "name": "Location 3",
+        "selected": false
+      }
+    ],
+    "other_jobs": [],
+    "sharing_containers_count": 0
+  },
+  "tags": [
+    "placements",
+    "hiring_details",
+    "pipeline"
+  ]
+}

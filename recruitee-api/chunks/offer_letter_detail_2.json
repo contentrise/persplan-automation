@@ -1,0 +1,29 @@
+{
+  "id": "offer_letter_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/offer_letters/candidates/{candidate_id}/offer_letters",
+  "summary": "Show candidate's offer letters",
+  "description": "Show candidate's offer letters. Endpoint: GET /c/{company_id}/offer_letters/candidates/{candidate_id}/offer_letters. Required parameters: company_id. Optional parameters include candidate_id.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": false,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offer_letters/candidates/{candidate_id}/offer_letters\n\nRequired params: company_id\n\nOptional params: candidate_id",
+  "example_response": {},
+  "tags": [
+    "offer_letters",
+    "candidates"
+  ]
+}

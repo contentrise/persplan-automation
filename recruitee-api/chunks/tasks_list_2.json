@@ -1,0 +1,126 @@
+{
+  "id": "tasks_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/tasks",
+  "summary": "List tasks for company",
+  "description": "List tasks for company. Endpoint: GET /c/{company_id}/tasks. Required parameters: company_id. Optional parameters include scope, status, limit, sort_by, admin_ids, sort_order, page.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Limits tasks to ‘my’, ‘unassigned’ or ‘all’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "required": false,
+      "description": "Limits tasks to ‘completed’ or ‘uncompleted’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit of items per page",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Order tasks by, ‘due_date’, ‘created_at’, ‘completed_at’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "admin_ids",
+      "type": "array",
+      "required": false,
+      "description": "Limits tasks to assigned to selected admins",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "Order tasks by ‘asc’ or ‘desc’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/tasks\n\nRequired params: company_id\n\nOptional params: scope, status, limit, sort_by, admin_ids, sort_order, page",
+  "example_response": {
+    "meta": {
+      "counters": {
+        "completed": 1,
+        "uncompleted": 0
+      }
+    },
+    "references": [
+      {
+        "id": 7080,
+        "type": "Admin",
+        "email": "john8724@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/7080/normal_avatar_tks1efd6efo8.png",
+        "photo_thumb_url": "tmp/bow/admins/7080/thumb_avatar_tks1efd6efo8.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 7077,
+        "type": "Admin",
+        "email": "john8720@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/7077/normal_avatar_vtwscv2th7n7.png",
+        "photo_thumb_url": "tmp/bow/admins/7077/thumb_avatar_vtwscv2th7n7.png",
+        "timezone": "Europe/Warsaw",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "tasks": [
+      {
+        "id": 90,
+        "description": "Review candidate and rate his skills",
+        "title": "Rate candidate",
+        "admin_id": 7080,
+        "candidate_id": null,
+        "completed": true,
+        "timezone": null,
+        "created_at": "2026-04-21T07:33:23.364236Z",
+        "updated_at": "2026-04-21T07:33:23.364236Z",
+        "admin_ids": [
+          7077
+        ],
+        "completed_at": "2026-04-21T07:28:23.363679Z",
+        "triggered": false,
+        "due_date": null
+      }
+    ]
+  },
+  "tags": [
+    "tasks"
+  ]
+}

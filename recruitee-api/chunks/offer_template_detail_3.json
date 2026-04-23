@@ -1,0 +1,29 @@
+{
+  "id": "offer_template_detail_3",
+  "method": "GET",
+  "path": "/c/{company_id}/workflow_automations/offer_templates/{id}",
+  "summary": "Show context details",
+  "description": "Show context details. Endpoint: GET /c/{company_id}/workflow_automations/offer_templates/{id}. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Context related resource ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/workflow_automations/offer_templates/{id}\n\nRequired params: company_id\n\nOptional params: id",
+  "example_response": {},
+  "tags": [
+    "workflow_automations",
+    "offer_templates"
+  ]
+}

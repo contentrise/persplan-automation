@@ -1,0 +1,46 @@
+{
+  "id": "email_provider_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/email_provider",
+  "summary": "Get email provider",
+  "description": "Get email provider. Endpoint: GET /c/{company_id}/email_provider. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/email_provider\n\nRequired params: company_id",
+  "example_response": {
+    "email_provider": {
+      "id": 27,
+      "domain": "company600.test.recruitee.com",
+      "signature": null,
+      "email": "john.doe@acme.test.recruitee.com",
+      "username": "john.doe",
+      "provider": "recruitee",
+      "subdomain": "company600",
+      "migrated": false,
+      "auto_forward": true,
+      "domain_migration_date": null,
+      "domain_migration_future_email": null,
+      "domain_migration_infobox": false,
+      "ooo_message_text": "I'm out of office",
+      "ooo_message_html": "<p>I'm out of office</p>",
+      "ooo_message_json": {},
+      "ooo_enabled": false,
+      "ooo_starts_at": null,
+      "ooo_ends_at": null,
+      "ooo_status": "inactive",
+      "ooo_include_signature": false,
+      "username_display": "john.doe"
+    }
+  },
+  "tags": [
+    "email_provider",
+    "mailbox"
+  ]
+}

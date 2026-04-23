@@ -1,0 +1,28 @@
+{
+  "id": "candidate_retrieve",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/retrieve",
+  "summary": "Retrieve candidates in bulk",
+  "description": "Retrieve candidates in bulk. Endpoint: PATCH /c/{company_id}/bulk/candidates/retrieve. Required parameters: company_id. Optional parameters include candidates.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/bulk/candidates/retrieve\n\nRequired params: company_id\n\nOptional params: candidates",
+  "example_response": {},
+  "tags": [
+    "candidates"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "id": "unreads_list",
+  "method": "GET",
+  "path": "/c/{company_id}/tracking/notifications/unread",
+  "summary": "List unread notifications",
+  "description": "List unread notifications. Endpoint: GET /c/{company_id}/tracking/notifications/unread. Required parameters: company_id. Optional parameters include events, limit, offers, talent_pools, requisitions, start_date, end_date, cursor_order, and more.",
+  "params": [
+    {
+      "name": "events",
+      "type": "string",
+      "required": false,
+      "description": "List of events names",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of activities, default is 20",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offers",
+      "type": "array",
+      "required": false,
+      "description": "Array of offer ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "talent_pools",
+      "type": "array",
+      "required": false,
+      "description": "Array of talent pool ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "requisitions",
+      "type": "array",
+      "required": false,
+      "description": "Array of requisition ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "start_date",
+      "type": "string",
+      "required": false,
+      "description": "Start date, format: 12 Sep 2015",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "end_date",
+      "type": "string",
+      "required": false,
+      "description": "End date, format: 12 Sep 2015",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "cursor_order",
+      "type": "string",
+      "required": false,
+      "description": "Order: asc, desc",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "cursor_position",
+      "type": "integer",
+      "required": false,
+      "description": "Id of activity",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/tracking/notifications/unread\n\nRequired params: company_id\n\nOptional params: events, limit, offers, talent_pools, requisitions, start_date, end_date, cursor_order",
+  "example_response": {},
+  "tags": [
+    "tracking",
+    "notifications"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "id": "form_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/requisitions/settings/form/{field_name}",
+  "summary": "Delete non-custom form's field by name",
+  "description": "Delete non-custom form's field by name. Endpoint: DELETE /c/{company_id}/requisitions/settings/form/{field_name}. Required parameters: field_name, company_id.",
+  "params": [
+    {
+      "name": "field_name",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/requisitions/settings/form/{field_name}\n\nRequired params: field_name, company_id",
+  "example_response": {
+    "form": {
+      "fields": [
+        "department"
+      ],
+      "dynamic_fields": [],
+      "pristine": false
+    }
+  },
+  "tags": [
+    "requisitions",
+    "settings"
+  ]
+}

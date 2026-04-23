@@ -1,0 +1,29 @@
+{
+  "id": "result_request_revert",
+  "method": "PATCH",
+  "path": "/c/{company_id}/interview/result_requests/{id}/revert",
+  "summary": "Revert dismissed interview result request",
+  "description": "Revert dismissed interview result request. Endpoint: PATCH /c/{company_id}/interview/result_requests/{id}/revert. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview result request ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/interview/result_requests/{id}/revert\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "interview",
+    "result_requests"
+  ]
+}

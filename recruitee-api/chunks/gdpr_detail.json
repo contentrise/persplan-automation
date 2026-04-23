@@ -1,0 +1,35 @@
+{
+  "id": "gdpr_detail",
+  "method": "GET",
+  "path": "/share/gdpr/{candidate_token}",
+  "summary": "Show fields required for GDPR requests",
+  "description": "Show fields required for GDPR requests. Endpoint: GET /share/gdpr/{candidate_token}. Required parameters: subdomain, candidate_token.",
+  "params": [
+    {
+      "name": "subdomain",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_token",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/gdpr/{candidate_token}\n\nRequired params: subdomain, candidate_token",
+  "example_response": {
+    "gdpr": {
+      "candidate_id": 1920,
+      "language": "fr",
+      "candidate_name": "John Doe",
+      "company_name": "Test Company"
+    }
+  },
+  "tags": [
+    "gdpr"
+  ]
+}

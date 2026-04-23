@@ -1,0 +1,45 @@
+{
+  "id": "consent_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/texting/consent/",
+  "summary": "Update consent for a given candidate",
+  "description": "Update consent for a given candidate. Endpoint: PATCH /c/{company_id}/texting/consent/. Required parameters: status, status_changed_at, company_id.",
+  "params": [
+    {
+      "name": "status",
+      "type": "string",
+      "required": true,
+      "description": "Consent status. One of: [given, no_consent]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "status_changed_at",
+      "type": "datetime",
+      "required": true,
+      "description": "Consent status change date",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"status\": \"no_consent\",\n\"status_changed_at\": null\n}",
+  "example_response": {
+    "error": [
+      "Status changed at can't be blank"
+    ],
+    "error_fields": {
+      "status_changed_at": [
+        "can't be blank"
+      ]
+    }
+  },
+  "tags": [
+    "texting",
+    "consent"
+  ]
+}

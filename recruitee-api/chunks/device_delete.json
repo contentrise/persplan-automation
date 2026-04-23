@@ -1,0 +1,30 @@
+{
+  "id": "device_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/devices/",
+  "summary": "Delete admin's device for push notifications",
+  "description": "Delete admin's device for push notifications. Endpoint: DELETE /c/{company_id}/devices/. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/devices/\n\nRequired params: company_id",
+  "example_response": {
+    "device": {
+      "id": 2,
+      "kind": "ios",
+      "token": "token",
+      "uid": "uid",
+      "app_type": "release"
+    }
+  },
+  "tags": [
+    "devices",
+    "admin"
+  ]
+}

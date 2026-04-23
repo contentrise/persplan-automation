@@ -1,0 +1,24 @@
+{
+  "id": "two_factor_authentication_setting_hide",
+  "method": "PATCH",
+  "path": "/two_factor_authentication_settings/hide_account_recovered_infobox",
+  "summary": "Hides infobox about user account recovery",
+  "description": "Hides infobox about user account recovery. Endpoint: PATCH /two_factor_authentication_settings/hide_account_recovered_infobox.",
+  "params": [],
+  "example_request": "PATCH /two_factor_authentication_settings/hide_account_recovered_infobox",
+  "example_response": {
+    "two_factor_authentication_settings": {
+      "phone": null,
+      "app_enabled": false,
+      "sms_enabled": false,
+      "otp_secret": "ONZDQ3DWN5ZWCYLTOR2A====",
+      "otpauth_uri": "otpauth://totp/Recruitee:john4668@recruitee.com?secret=ONZDQ3DWN5ZWCYLTOR2A%3D%3D%3D%3D&issuer=Recruitee&digits=6&period=30",
+      "show_account_recovered": false,
+      "updated_at": "2026-04-21T07:32:45.393321Z"
+    }
+  },
+  "tags": [
+    "two_factor_authentication_settings",
+    "admin"
+  ]
+}

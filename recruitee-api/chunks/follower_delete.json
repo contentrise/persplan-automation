@@ -1,0 +1,42 @@
+{
+  "id": "follower_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/candidates/{id}/followers",
+  "summary": "Remove followers from candidate",
+  "description": "Remove followers from candidate. Endpoint: DELETE /c/{company_id}/candidates/{id}/followers. Required parameters: id, company_id. Optional parameters include admin_ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "admin_ids",
+      "type": "array",
+      "required": false,
+      "description": "List of admin IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"admin_ids\": [\n12572\n]\n}",
+  "example_response": {
+    "candidate": {
+      "id": 3343,
+      "admin_ids": [],
+      "followed": false
+    }
+  },
+  "tags": [
+    "candidates",
+    "followers"
+  ]
+}

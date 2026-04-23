@@ -1,0 +1,29 @@
+{
+  "id": "subscription_create",
+  "method": "POST",
+  "path": "/c/{company_id}/billing/subscription/cancel",
+  "summary": "Cancels subscription",
+  "description": "Cancels subscription. Endpoint: POST /c/{company_id}/billing/subscription/cancel. Required parameters: company_id. Optional parameters include reason.",
+  "params": [
+    {
+      "name": "reason",
+      "type": "string",
+      "required": false,
+      "description": "Reason for cancelling the product subscription",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/billing/subscription/cancel\n\nRequired params: company_id\n\nOptional params: reason",
+  "example_response": {},
+  "tags": [
+    "billing",
+    "subscription"
+  ]
+}

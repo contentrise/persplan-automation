@@ -1,0 +1,42 @@
+{
+  "id": "setting_update_3",
+  "method": "PATCH",
+  "path": "/c/{company_id}/intelligence/settings",
+  "summary": "Update company's Intelligence settings",
+  "description": "Update company's Intelligence settings. Endpoint: PATCH /c/{company_id}/intelligence/settings. Required parameters: ai_writer_enabled, evaluation_insights_writer_enabled, company_id.",
+  "params": [
+    {
+      "name": "ai_writer_enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "evaluation_insights_writer_enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"company_settings\": {\n\"ai_writer_enabled\": true\n}\n}",
+  "example_response": {
+    "company_settings": {
+      "id": 2,
+      "ai_writer_enabled": true,
+      "evaluation_insights_enabled": false
+    }
+  },
+  "tags": [
+    "intelligence",
+    "settings"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "open_question_delete_2",
+  "method": "DELETE",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/open_question_templates/open_questions/{id}",
+  "summary": "Delete Open Question from a template",
+  "description": "Delete Open Question from a template. Endpoint: DELETE /c/{company_id}/offer_templates/{offer_template_id}/open_question_templates/open_questions/{id}. Required parameters: offer_template_id, source_template_id, company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Open Question ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Open Question template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"source_template_id\": 230\n}",
+  "example_response": {},
+  "tags": [
+    "offer_templates",
+    "open_question_templates"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "fieldset_set_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/fieldsets/assign",
+  "summary": "Sets or unsets offer template's fieldset",
+  "description": "Sets or unsets offer template's fieldset. Endpoint: PATCH /c/{company_id}/offer_templates/{offer_template_id}/fieldsets/assign. Required parameters: offer_template_id, fieldset_id, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "fieldset_id",
+      "type": "integer",
+      "required": true,
+      "description": "Fieldset ID; pass null to unset",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"fieldset_id\": null\n}",
+  "example_response": {
+    "fieldset": null
+  },
+  "tags": [
+    "offer_templates",
+    "fieldsets"
+  ]
+}

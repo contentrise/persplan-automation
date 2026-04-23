@@ -1,0 +1,28 @@
+{
+  "id": "position_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/positions/{id}",
+  "summary": "Show position",
+  "description": "Show position. Endpoint: GET /c/{company_id}/positions/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Position ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/positions/{id}\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "positions"
+  ]
+}

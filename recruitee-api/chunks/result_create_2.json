@@ -1,0 +1,38 @@
+{
+  "id": "result_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/interview/candidates/{candidate_id}/results",
+  "summary": "Create interview result for candidate",
+  "description": "Create interview result for candidate. Endpoint: POST /c/{company_id}/interview/candidates/{candidate_id}/results. Required parameters: candidate_id, company_id.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_result\": {}\n}",
+  "example_response": {
+    "error": [
+      "Kind can't be blank"
+    ],
+    "error_fields": {
+      "kind": [
+        "can't be blank"
+      ]
+    }
+  },
+  "tags": [
+    "interview",
+    "candidates"
+  ]
+}

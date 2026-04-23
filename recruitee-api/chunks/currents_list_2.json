@@ -1,0 +1,22 @@
+{
+  "id": "currents_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/features/current/",
+  "summary": "List a single feature",
+  "description": "List a single feature. Endpoint: GET /c/{company_id}/features/current/. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/features/current/\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "features",
+    "current"
+  ]
+}

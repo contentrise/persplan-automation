@@ -1,0 +1,31 @@
+{
+  "id": "identity_provider_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/sso/identity_provider",
+  "summary": "Show company's SSO Identity Provider configuration",
+  "description": "Show company's SSO Identity Provider configuration. Endpoint: GET /c/{company_id}/sso/identity_provider. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/sso/identity_provider\n\nRequired params: company_id",
+  "example_response": {
+    "error": [
+      "Page not found"
+    ],
+    "meta": {
+      "entity_id": "recruitee-test",
+      "acs_url": "https://auth.recruitee.internal:4010/sso/sp/consume/company6060",
+      "metadata_url": null
+    }
+  },
+  "tags": [
+    "sso",
+    "identity_provider"
+  ]
+}

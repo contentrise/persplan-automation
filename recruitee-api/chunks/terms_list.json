@@ -1,0 +1,40 @@
+{
+  "id": "terms_list",
+  "method": "GET",
+  "path": "/c/{company_id}/careers/terms",
+  "summary": "List jobs widget terms",
+  "description": "List jobs widget terms. Endpoint: GET /c/{company_id}/careers/terms. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/careers/terms\n\nRequired params: company_id",
+  "example_response": {
+    "careers_terms": [
+      {
+        "id": 1,
+        "position": 0,
+        "body_html": "<p>Terms and Conditions"
+      },
+      {
+        "id": 2,
+        "position": 1,
+        "body_html": "<p>Terms and Conditions"
+      },
+      {
+        "id": 3,
+        "position": 2,
+        "body_html": "<p>Terms and Conditions"
+      }
+    ]
+  },
+  "tags": [
+    "careers",
+    "terms"
+  ]
+}

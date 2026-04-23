@@ -1,0 +1,71 @@
+{
+  "id": "offer_template_assignment_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/offer_templates/offer_template_assignment",
+  "summary": "Show referral offer template assignment info",
+  "description": "Show referral offer template assignment info. Endpoint: GET /c/{company_id}/referral/offer_templates/offer_template_assignment. Required parameters: offer_id, company_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/offer_templates/offer_template_assignment\n\nRequired params: offer_id, company_id",
+  "example_response": {
+    "offer_template_assignment": {
+      "enabled": false,
+      "id": 28,
+      "offer_template": {
+        "id": 118,
+        "name": "Backend Developer Template",
+        "remote": false,
+        "created_at": "2026-04-21T07:30:32.356547Z",
+        "updated_at": "2026-04-21T07:30:32.356547Z",
+        "department": "Backend Developer",
+        "location_ids": [
+          14
+        ],
+        "hybrid": false,
+        "on_site": false
+      },
+      "referral_template": {
+        "default": true,
+        "id": 52,
+        "name": "Default",
+        "position": 1,
+        "category": null,
+        "created_at": "2026-04-21T07:30:32.350240Z",
+        "updated_at": "2026-04-21T07:30:32.350240Z",
+        "custom": false,
+        "referral_questions": [
+          {
+            "id": 54,
+            "position": 52,
+            "options": [],
+            "title": "Default",
+            "required": false,
+            "kind": "string"
+          }
+        ]
+      },
+      "referral_reward": null,
+      "referral_reward_id": null,
+      "referral_template_id": 52,
+      "custom_template_id": null
+    }
+  },
+  "tags": [
+    "referral",
+    "offer_templates"
+  ]
+}

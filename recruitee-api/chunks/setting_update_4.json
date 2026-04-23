@@ -1,0 +1,43 @@
+{
+  "id": "setting_update_4",
+  "method": "PUT",
+  "path": "/c/{company_id}/lang/settings",
+  "summary": "Update settings",
+  "description": "Update settings. Endpoint: PUT /c/{company_id}/lang/settings. Required parameters: language, multilang_enabled, selected_language_id, company_id.",
+  "params": [
+    {
+      "name": "language",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "multilang_enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "selected_language_id",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PUT /c/{company_id}/lang/settings\n\nRequired params: language, multilang_enabled, selected_language_id, company_id",
+  "example_response": {},
+  "tags": [
+    "lang",
+    "settings"
+  ]
+}

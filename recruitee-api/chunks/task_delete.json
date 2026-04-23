@@ -1,0 +1,59 @@
+{
+  "id": "task_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/tasks/{id}",
+  "summary": "Delete task",
+  "description": "Delete task. Endpoint: DELETE /c/{company_id}/tasks/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Task ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/tasks/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 7020,
+        "type": "Admin",
+        "email": "john8615@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/7020/normal_avatar_avp931v24ss5.png",
+        "photo_thumb_url": "tmp/bow/admins/7020/thumb_avatar_avp931v24ss5.png",
+        "timezone": "Europe/Warsaw",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "task": {
+      "id": 51,
+      "description": "Review candidate and rate his skills",
+      "title": "Rate candidate",
+      "admin_id": 7020,
+      "candidate_id": null,
+      "completed": false,
+      "timezone": null,
+      "created_at": "2026-04-21T07:33:23.064982Z",
+      "updated_at": "2026-04-21T07:33:23.064982Z",
+      "completed_at": null,
+      "triggered": false,
+      "due_date": null
+    }
+  },
+  "tags": [
+    "tasks"
+  ]
+}

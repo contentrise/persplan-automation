@@ -1,0 +1,98 @@
+{
+  "id": "language_detail_6",
+  "method": "GET",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/languages",
+  "summary": "Show offer template languages with translation completeness data",
+  "description": "Show offer template languages with translation completeness data. Endpoint: GET /c/{company_id}/offer_templates/{offer_template_id}/languages. Required parameters: offer_template_id, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offer_templates/{offer_template_id}/languages\n\nRequired params: offer_template_id, company_id",
+  "example_response": {
+    "languages": [
+      {
+        "code": "en",
+        "enabled": true,
+        "name": "English",
+        "primary": true,
+        "native_name": "English",
+        "offer_template_id": 389,
+        "translation_fields_count": 6,
+        "missing_translation_fields": {
+          "auto_reply_template_fields": [],
+          "dynamic_field_ids": [],
+          "open_question_ids": [],
+          "offer_fields": []
+        }
+      },
+      {
+        "code": "de",
+        "enabled": true,
+        "name": "German",
+        "primary": false,
+        "native_name": "Deutsch",
+        "offer_template_id": 389,
+        "translation_fields_count": 6,
+        "missing_translation_fields": {
+          "auto_reply_template_fields": [],
+          "dynamic_field_ids": [],
+          "open_question_ids": [],
+          "offer_fields": []
+        }
+      },
+      {
+        "code": "nl",
+        "enabled": false,
+        "name": "Dutch",
+        "primary": false,
+        "native_name": "Nederlands",
+        "offer_template_id": 389,
+        "translation_fields_count": 0,
+        "missing_translation_fields": {
+          "auto_reply_template_fields": [],
+          "dynamic_field_ids": [],
+          "open_question_ids": [],
+          "offer_fields": [
+            "description",
+            "requirements",
+            "sharing_description",
+            "sharing_image",
+            "sharing_title",
+            "title"
+          ]
+        }
+      }
+    ],
+    "translation_fields_count": 6,
+    "translation_fields": {
+      "auto_reply_template_fields": [],
+      "dynamic_field_ids": [],
+      "open_question_ids": [],
+      "offer_fields": [
+        "title",
+        "description",
+        "requirements",
+        "sharing_title",
+        "sharing_description",
+        "sharing_image"
+      ]
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "languages"
+  ]
+}

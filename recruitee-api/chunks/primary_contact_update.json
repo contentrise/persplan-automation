@@ -1,0 +1,51 @@
+{
+  "id": "primary_contact_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/primary_contact",
+  "summary": "Update primary contact",
+  "description": "Update primary contact. Endpoint: PATCH /c/{company_id}/primary_contact. Required parameters: admin_id, company_id. Optional parameters include secondary_contact_emails.",
+  "params": [
+    {
+      "name": "admin_id",
+      "type": "integer",
+      "required": true,
+      "description": "Admin ID.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "secondary_contact_emails",
+      "type": "array",
+      "required": false,
+      "description": "Secondary contact emails",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"admin_id\": 5071,\n\"secondary_contact_emails\": [\n\"testing@recruitee.com\"\n]\n}",
+  "example_response": {
+    "primary_contact": {
+      "id": 2,
+      "admin_id": 5071,
+      "company_id": 2603,
+      "has_avatar": false,
+      "initials": "JD",
+      "created_at": "2026-04-21T07:32:45.264856Z",
+      "updated_at": "2026-04-21T07:32:45.267091Z",
+      "avatar_url": "tmp/bow/admins/5071/thumb_avatar_er5gmwa43429.png",
+      "primary_contact_name": "John Doe",
+      "secondary_contact_emails": [
+        "testing@recruitee.com"
+      ]
+    }
+  },
+  "tags": [
+    "primary_contact",
+    "company"
+  ]
+}

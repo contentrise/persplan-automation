@@ -1,0 +1,29 @@
+{
+  "id": "complete_create",
+  "method": "POST",
+  "path": "/c/{company_id}/gdpr/requests/{id}/complete",
+  "summary": "Complete request",
+  "description": "Complete request. Endpoint: POST /c/{company_id}/gdpr/requests/{id}/complete. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Request ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/gdpr/requests/{id}/complete\n\nRequired params: company_id\n\nOptional params: id",
+  "example_response": {},
+  "tags": [
+    "gdpr",
+    "requests"
+  ]
+}

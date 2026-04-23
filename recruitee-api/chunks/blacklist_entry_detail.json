@@ -1,0 +1,44 @@
+{
+  "id": "blacklist_entry_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/careers/settings/blacklist_entry",
+  "summary": "Show current careers blacklist entries",
+  "description": "Show current careers blacklist entries. Endpoint: GET /c/{company_id}/careers/settings/blacklist_entry. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/careers/settings/blacklist_entry\n\nRequired params: company_id",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 2,
+      "page": 1
+    },
+    "blacklist": [
+      {
+        "id": 17,
+        "email": "blocked2@example.com",
+        "phone": "+4812345672995",
+        "blocked_by_id": 4105,
+        "blocked_at": "2026-04-21T07:32:25.000000Z"
+      },
+      {
+        "id": 16,
+        "email": "blocked1@example.com",
+        "phone": "+4812345672993",
+        "blocked_by_id": 4104,
+        "blocked_at": "2026-04-21T07:32:25.000000Z"
+      }
+    ]
+  },
+  "tags": [
+    "careers",
+    "settings"
+  ]
+}

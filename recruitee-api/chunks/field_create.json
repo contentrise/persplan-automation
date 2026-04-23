@@ -1,0 +1,48 @@
+{
+  "id": "field_create",
+  "method": "POST",
+  "path": "/c/{company_id}/custom_fields/candidates/{candidate_id}/fields",
+  "summary": "Create candidate field",
+  "description": "Create candidate field. Endpoint: POST /c/{company_id}/custom_fields/candidates/{candidate_id}/fields. Required parameters: company_id. Optional parameters include candidate_id.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": false,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"field\": {\n\"kind\": \"single_line\",\n\"name\": \"Salary\",\n\"values\": [\n{\n\"text\": \"100k/y\"\n}\n],\n\"visibility\": {\n\"admin_ids\": [\n3505\n],\n\"level\": \"protected\",\n\"role_ids\": []\n}\n}\n}",
+  "example_response": {
+    "field": {
+      "id": 54,
+      "name": "Salary",
+      "visible": true,
+      "values": [
+        {
+          "text": "100k/y"
+        }
+      ],
+      "origin": "manual",
+      "kind": "single_line",
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      },
+      "fixed": null
+    }
+  },
+  "tags": [
+    "custom_fields",
+    "candidates"
+  ]
+}

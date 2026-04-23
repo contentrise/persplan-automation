@@ -1,0 +1,578 @@
+{
+  "id": "reschedule_detail",
+  "method": "GET",
+  "path": "/share/interview/availability/{schedule_token}/{request_link_token}/reschedule",
+  "summary": "Show reschedule availability for a given request link",
+  "description": "Show reschedule availability for a given request link. Endpoint: GET /share/interview/availability/{schedule_token}/{request_link_token}/reschedule. Required parameters: request_link_token, schedule_token. Optional parameters include candidate_timezone.",
+  "params": [
+    {
+      "name": "request_link_token",
+      "type": "string",
+      "required": true,
+      "description": "Result link token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "schedule_token",
+      "type": "string",
+      "required": true,
+      "description": "Schedule token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_timezone",
+      "type": "string",
+      "required": false,
+      "description": "Candidate timezone",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/interview/availability/{schedule_token}/{request_link_token}/reschedule\n\nRequired params: request_link_token, schedule_token\n\nOptional params: candidate_timezone",
+  "example_response": {
+    "availability": {
+      "location": "Poznań",
+      "kind": "meeting",
+      "days": [
+        {
+          "date": "2026-04-23",
+          "slots": [
+            {
+              "to": "2026-04-23T08:00:00Z",
+              "from": "2026-04-23T07:00:00Z"
+            },
+            {
+              "to": "2026-04-23T08:30:00Z",
+              "from": "2026-04-23T07:30:00Z"
+            },
+            {
+              "to": "2026-04-23T09:00:00Z",
+              "from": "2026-04-23T08:00:00Z"
+            },
+            {
+              "to": "2026-04-23T09:30:00Z",
+              "from": "2026-04-23T08:30:00Z"
+            },
+            {
+              "to": "2026-04-23T10:00:00Z",
+              "from": "2026-04-23T09:00:00Z"
+            },
+            {
+              "to": "2026-04-23T10:30:00Z",
+              "from": "2026-04-23T09:30:00Z"
+            },
+            {
+              "to": "2026-04-23T11:00:00Z",
+              "from": "2026-04-23T10:00:00Z"
+            },
+            {
+              "to": "2026-04-23T11:30:00Z",
+              "from": "2026-04-23T10:30:00Z"
+            },
+            {
+              "to": "2026-04-23T12:00:00Z",
+              "from": "2026-04-23T11:00:00Z"
+            },
+            {
+              "to": "2026-04-23T12:30:00Z",
+              "from": "2026-04-23T11:30:00Z"
+            },
+            {
+              "to": "2026-04-23T13:00:00Z",
+              "from": "2026-04-23T12:00:00Z"
+            },
+            {
+              "to": "2026-04-23T13:30:00Z",
+              "from": "2026-04-23T12:30:00Z"
+            },
+            {
+              "to": "2026-04-23T14:00:00Z",
+              "from": "2026-04-23T13:00:00Z"
+            },
+            {
+              "to": "2026-04-23T14:30:00Z",
+              "from": "2026-04-23T13:30:00Z"
+            },
+            {
+              "to": "2026-04-23T15:00:00Z",
+              "from": "2026-04-23T14:00:00Z"
+            }
+          ]
+        },
+        {
+          "date": "2026-04-24",
+          "slots": [
+            {
+              "to": "2026-04-24T08:00:00Z",
+              "from": "2026-04-24T07:00:00Z"
+            },
+            {
+              "to": "2026-04-24T08:30:00Z",
+              "from": "2026-04-24T07:30:00Z"
+            },
+            {
+              "to": "2026-04-24T09:00:00Z",
+              "from": "2026-04-24T08:00:00Z"
+            },
+            {
+              "to": "2026-04-24T09:30:00Z",
+              "from": "2026-04-24T08:30:00Z"
+            },
+            {
+              "to": "2026-04-24T10:00:00Z",
+              "from": "2026-04-24T09:00:00Z"
+            },
+            {
+              "to": "2026-04-24T10:30:00Z",
+              "from": "2026-04-24T09:30:00Z"
+            },
+            {
+              "to": "2026-04-24T11:00:00Z",
+              "from": "2026-04-24T10:00:00Z"
+            },
+            {
+              "to": "2026-04-24T11:30:00Z",
+              "from": "2026-04-24T10:30:00Z"
+            },
+            {
+              "to": "2026-04-24T12:00:00Z",
+              "from": "2026-04-24T11:00:00Z"
+            },
+            {
+              "to": "2026-04-24T12:30:00Z",
+              "from": "2026-04-24T11:30:00Z"
+            },
+            {
+              "to": "2026-04-24T13:00:00Z",
+              "from": "2026-04-24T12:00:00Z"
+            },
+            {
+              "to": "2026-04-24T13:30:00Z",
+              "from": "2026-04-24T12:30:00Z"
+            },
+            {
+              "to": "2026-04-24T14:00:00Z",
+              "from": "2026-04-24T13:00:00Z"
+            },
+            {
+              "to": "2026-04-24T14:30:00Z",
+              "from": "2026-04-24T13:30:00Z"
+            },
+            {
+              "to": "2026-04-24T15:00:00Z",
+              "from": "2026-04-24T14:00:00Z"
+            }
+          ]
+        },
+        {
+          "date": "2026-04-25",
+          "slots": [
+            {
+              "to": "2026-04-25T08:00:00Z",
+              "from": "2026-04-25T07:00:00Z"
+            },
+            {
+              "to": "2026-04-25T08:30:00Z",
+              "from": "2026-04-25T07:30:00Z"
+            },
+            {
+              "to": "2026-04-25T09:00:00Z",
+              "from": "2026-04-25T08:00:00Z"
+            },
+            {
+              "to": "2026-04-25T09:30:00Z",
+              "from": "2026-04-25T08:30:00Z"
+            },
+            {
+              "to": "2026-04-25T10:00:00Z",
+              "from": "2026-04-25T09:00:00Z"
+            },
+            {
+              "to": "2026-04-25T10:30:00Z",
+              "from": "2026-04-25T09:30:00Z"
+            },
+            {
+              "to": "2026-04-25T11:00:00Z",
+              "from": "2026-04-25T10:00:00Z"
+            },
+            {
+              "to": "2026-04-25T11:30:00Z",
+              "from": "2026-04-25T10:30:00Z"
+            },
+            {
+              "to": "2026-04-25T12:00:00Z",
+              "from": "2026-04-25T11:00:00Z"
+            },
+            {
+              "to": "2026-04-25T12:30:00Z",
+              "from": "2026-04-25T11:30:00Z"
+            },
+            {
+              "to": "2026-04-25T13:00:00Z",
+              "from": "2026-04-25T12:00:00Z"
+            },
+            {
+              "to": "2026-04-25T13:30:00Z",
+              "from": "2026-04-25T12:30:00Z"
+            },
+            {
+              "to": "2026-04-25T14:00:00Z",
+              "from": "2026-04-25T13:00:00Z"
+            },
+            {
+              "to": "2026-04-25T14:30:00Z",
+              "from": "2026-04-25T13:30:00Z"
+            },
+            {
+              "to": "2026-04-25T15:00:00Z",
+              "from": "2026-04-25T14:00:00Z"
+            }
+          ]
+        },
+        {
+          "date": "2026-04-26",
+          "slots": [
+            {
+              "to": "2026-04-26T08:00:00Z",
+              "from": "2026-04-26T07:00:00Z"
+            },
+            {
+              "to": "2026-04-26T08:30:00Z",
+              "from": "2026-04-26T07:30:00Z"
+            },
+            {
+              "to": "2026-04-26T09:00:00Z",
+              "from": "2026-04-26T08:00:00Z"
+            },
+            {
+              "to": "2026-04-26T09:30:00Z",
+              "from": "2026-04-26T08:30:00Z"
+            },
+            {
+              "to": "2026-04-26T10:00:00Z",
+              "from": "2026-04-26T09:00:00Z"
+            },
+            {
+              "to": "2026-04-26T10:30:00Z",
+              "from": "2026-04-26T09:30:00Z"
+            },
+            {
+              "to": "2026-04-26T11:00:00Z",
+              "from": "2026-04-26T10:00:00Z"
+            },
+            {
+              "to": "2026-04-26T11:30:00Z",
+              "from": "2026-04-26T10:30:00Z"
+            },
+            {
+              "to": "2026-04-26T12:00:00Z",
+              "from": "2026-04-26T11:00:00Z"
+            },
+            {
+              "to": "2026-04-26T12:30:00Z",
+              "from": "2026-04-26T11:30:00Z"
+            },
+            {
+              "to": "2026-04-26T13:00:00Z",
+              "from": "2026-04-26T12:00:00Z"
+            },
+            {
+              "to": "2026-04-26T13:30:00Z",
+              "from": "2026-04-26T12:30:00Z"
+            },
+            {
+              "to": "2026-04-26T14:00:00Z",
+              "from": "2026-04-26T13:00:00Z"
+            },
+            {
+              "to": "2026-04-26T14:30:00Z",
+              "from": "2026-04-26T13:30:00Z"
+            },
+            {
+              "to": "2026-04-26T15:00:00Z",
+              "from": "2026-04-26T14:00:00Z"
+            }
+          ]
+        },
+        {
+          "date": "2026-04-27",
+          "slots": [
+            {
+              "to": "2026-04-27T08:00:00Z",
+              "from": "2026-04-27T07:00:00Z"
+            },
+            {
+              "to": "2026-04-27T08:30:00Z",
+              "from": "2026-04-27T07:30:00Z"
+            },
+            {
+              "to": "2026-04-27T09:00:00Z",
+              "from": "2026-04-27T08:00:00Z"
+            },
+            {
+              "to": "2026-04-27T09:30:00Z",
+              "from": "2026-04-27T08:30:00Z"
+            },
+            {
+              "to": "2026-04-27T10:00:00Z",
+              "from": "2026-04-27T09:00:00Z"
+            },
+            {
+              "to": "2026-04-27T10:30:00Z",
+              "from": "2026-04-27T09:30:00Z"
+            },
+            {
+              "to": "2026-04-27T11:00:00Z",
+              "from": "2026-04-27T10:00:00Z"
+            },
+            {
+              "to": "2026-04-27T11:30:00Z",
+              "from": "2026-04-27T10:30:00Z"
+            },
+            {
+              "to": "2026-04-27T12:00:00Z",
+              "from": "2026-04-27T11:00:00Z"
+            },
+            {
+              "to": "2026-04-27T12:30:00Z",
+              "from": "2026-04-27T11:30:00Z"
+            },
+            {
+              "to": "2026-04-27T13:00:00Z",
+              "from": "2026-04-27T12:00:00Z"
+            },
+            {
+              "to": "2026-04-27T13:30:00Z",
+              "from": "2026-04-27T12:30:00Z"
+            },
+            {
+              "to": "2026-04-27T14:00:00Z",
+              "from": "2026-04-27T13:00:00Z"
+            },
+            {
+              "to": "2026-04-27T14:30:00Z",
+              "from": "2026-04-27T13:30:00Z"
+            },
+            {
+              "to": "2026-04-27T15:00:00Z",
+              "from": "2026-04-27T14:00:00Z"
+            }
+          ]
+        },
+        {
+          "date": "2026-04-28",
+          "slots": [
+            {
+              "to": "2026-04-28T08:00:00Z",
+              "from": "2026-04-28T07:00:00Z"
+            },
+            {
+              "to": "2026-04-28T08:30:00Z",
+              "from": "2026-04-28T07:30:00Z"
+            },
+            {
+              "to": "2026-04-28T09:00:00Z",
+              "from": "2026-04-28T08:00:00Z"
+            },
+            {
+              "to": "2026-04-28T09:30:00Z",
+              "from": "2026-04-28T08:30:00Z"
+            },
+            {
+              "to": "2026-04-28T10:00:00Z",
+              "from": "2026-04-28T09:00:00Z"
+            },
+            {
+              "to": "2026-04-28T10:30:00Z",
+              "from": "2026-04-28T09:30:00Z"
+            },
+            {
+              "to": "2026-04-28T11:00:00Z",
+              "from": "2026-04-28T10:00:00Z"
+            },
+            {
+              "to": "2026-04-28T11:30:00Z",
+              "from": "2026-04-28T10:30:00Z"
+            },
+            {
+              "to": "2026-04-28T12:00:00Z",
+              "from": "2026-04-28T11:00:00Z"
+            },
+            {
+              "to": "2026-04-28T12:30:00Z",
+              "from": "2026-04-28T11:30:00Z"
+            },
+            {
+              "to": "2026-04-28T13:00:00Z",
+              "from": "2026-04-28T12:00:00Z"
+            },
+            {
+              "to": "2026-04-28T13:30:00Z",
+              "from": "2026-04-28T12:30:00Z"
+            },
+            {
+              "to": "2026-04-28T14:00:00Z",
+              "from": "2026-04-28T13:00:00Z"
+            },
+            {
+              "to": "2026-04-28T14:30:00Z",
+              "from": "2026-04-28T13:30:00Z"
+            },
+            {
+              "to": "2026-04-28T15:00:00Z",
+              "from": "2026-04-28T14:00:00Z"
+            }
+          ]
+        },
+        {
+          "date": "2026-04-29",
+          "slots": [
+            {
+              "to": "2026-04-29T08:00:00Z",
+              "from": "2026-04-29T07:00:00Z"
+            },
+            {
+              "to": "2026-04-29T08:30:00Z",
+              "from": "2026-04-29T07:30:00Z"
+            },
+            {
+              "to": "2026-04-29T09:00:00Z",
+              "from": "2026-04-29T08:00:00Z"
+            },
+            {
+              "to": "2026-04-29T09:30:00Z",
+              "from": "2026-04-29T08:30:00Z"
+            },
+            {
+              "to": "2026-04-29T10:00:00Z",
+              "from": "2026-04-29T09:00:00Z"
+            },
+            {
+              "to": "2026-04-29T10:30:00Z",
+              "from": "2026-04-29T09:30:00Z"
+            },
+            {
+              "to": "2026-04-29T11:00:00Z",
+              "from": "2026-04-29T10:00:00Z"
+            },
+            {
+              "to": "2026-04-29T11:30:00Z",
+              "from": "2026-04-29T10:30:00Z"
+            },
+            {
+              "to": "2026-04-29T12:00:00Z",
+              "from": "2026-04-29T11:00:00Z"
+            },
+            {
+              "to": "2026-04-29T12:30:00Z",
+              "from": "2026-04-29T11:30:00Z"
+            },
+            {
+              "to": "2026-04-29T13:00:00Z",
+              "from": "2026-04-29T12:00:00Z"
+            },
+            {
+              "to": "2026-04-29T13:30:00Z",
+              "from": "2026-04-29T12:30:00Z"
+            },
+            {
+              "to": "2026-04-29T14:00:00Z",
+              "from": "2026-04-29T13:00:00Z"
+            },
+            {
+              "to": "2026-04-29T14:30:00Z",
+              "from": "2026-04-29T13:30:00Z"
+            },
+            {
+              "to": "2026-04-29T15:00:00Z",
+              "from": "2026-04-29T14:00:00Z"
+            }
+          ]
+        },
+        {
+          "date": "2026-04-30",
+          "slots": [
+            {
+              "to": "2026-04-30T08:00:00Z",
+              "from": "2026-04-30T07:00:00Z"
+            },
+            {
+              "to": "2026-04-30T08:30:00Z",
+              "from": "2026-04-30T07:30:00Z"
+            },
+            {
+              "to": "2026-04-30T09:00:00Z",
+              "from": "2026-04-30T08:00:00Z"
+            },
+            {
+              "to": "2026-04-30T09:30:00Z",
+              "from": "2026-04-30T08:30:00Z"
+            },
+            {
+              "to": "2026-04-30T10:00:00Z",
+              "from": "2026-04-30T09:00:00Z"
+            },
+            {
+              "to": "2026-04-30T10:30:00Z",
+              "from": "2026-04-30T09:30:00Z"
+            },
+            {
+              "to": "2026-04-30T11:00:00Z",
+              "from": "2026-04-30T10:00:00Z"
+            },
+            {
+              "to": "2026-04-30T11:30:00Z",
+              "from": "2026-04-30T10:30:00Z"
+            },
+            {
+              "to": "2026-04-30T12:00:00Z",
+              "from": "2026-04-30T11:00:00Z"
+            },
+            {
+              "to": "2026-04-30T12:30:00Z",
+              "from": "2026-04-30T11:30:00Z"
+            },
+            {
+              "to": "2026-04-30T13:00:00Z",
+              "from": "2026-04-30T12:00:00Z"
+            },
+            {
+              "to": "2026-04-30T13:30:00Z",
+              "from": "2026-04-30T12:30:00Z"
+            },
+            {
+              "to": "2026-04-30T14:00:00Z",
+              "from": "2026-04-30T13:00:00Z"
+            },
+            {
+              "to": "2026-04-30T14:30:00Z",
+              "from": "2026-04-30T13:30:00Z"
+            },
+            {
+              "to": "2026-04-30T15:00:00Z",
+              "from": "2026-04-30T14:00:00Z"
+            }
+          ]
+        }
+      ],
+      "language": "en",
+      "admin": {
+        "name": "John Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      "timezone": "Europe/Warsaw",
+      "duration": 60,
+      "expires_at": "2026-05-01T07:31:21.508716Z",
+      "public_note": null,
+      "event_url": "http://company1076.recruitee.internal:3003/v/events/aBcDeFg123433",
+      "sync_url": "https://api.recruitee.internal:4000/share/interview/events/aBcDeFg123433/sync",
+      "google_calendar_url": "https://www.google.com/calendar/render?location=Poznan&text=Meeting+for+Best+Offer+-+John+Doe&action=TEMPLATE&details=%3Cb%3EEvent+link%3C%2Fb%3E%3A%0Ahttp%3A%2F%2Fcompany1076.recruitee.internal%3A3003%2Fv%2Fevents%2FaBcDeFg123433%0A%0A%3Cb%3EInformation+for+the+candidate%3C%2Fb%3E%3A%0AYou%27ve+been+invited+to+Meeting+about+the+Best+Offer+position+in+Test+Company.%0AInterviewers%3A+John+Doe%0A%0A%3Cb%3EInformation+for+the+interviewers%3C%2Fb%3E%3A%0AIf+you%27re+attending+this+meeting+as+an+interviewer%2C+you+can+view+the+candidate%27s+information+in+Recruitee.%0Ahttp%3A%2F%2Fapp.recruitee.internal%3A3003%2F%23candidates%3Fcandidate%3D368%26company%3D924%0A&dates=20260501T073121Z%2F20260501T083121Z",
+      "yahoo_calendar_url": "https://calendar.yahoo.com/?st=20260501T073121Z&title=Meeting+for+Best+Offer+-+John+Doe&desc=Event+link%3A%0Ahttp%3A%2F%2Fcompany1076.recruitee.internal%3A3003%2Fv%2Fevents%2FaBcDeFg123433%0A%0A---------------------%0AInformation+for+the+candidate%3A%0AYou%27ve+been+invited+to+Meeting+about+the+Best+Offer+position+in+Test+Company.%0AInterviewers%3A+John+Doe%0A%0A---------------------%0AInformation+for+the+interviewers%3A%0AIf+you%27re+attending+this+meeting+as+an+interviewer%2C+you+can+view+the+candidate%27s+information+in+Recruitee.%0Ahttp%3A%2F%2Fapp.recruitee.internal%3A3003%2F%23candidates%3Fcandidate%3D368%26company%3D924%0A&v=60&dur=0100&in_loc=Poznan",
+      "rescheduled_at": null
+    }
+  },
+  "tags": [
+    "interview",
+    "availability"
+  ]
+}

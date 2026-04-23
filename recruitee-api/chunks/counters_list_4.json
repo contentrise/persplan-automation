@@ -1,0 +1,22 @@
+{
+  "id": "counters_list_4",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/applications/counters",
+  "summary": "Number of applications in each claim status",
+  "description": "Number of applications in each claim status. Endpoint: GET /c/{company_id}/referral/applications/counters. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/applications/counters\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "referral",
+    "applications"
+  ]
+}

@@ -54,6 +54,27 @@ def _wait_for_frame(page: Page, name: str, timeout_seconds: int = 20) -> Frame:
     raise RuntimeError(f"[FEHLER] Frame '{name}' wurde nicht gefunden.")
 
 
+def _wait_for_network_idle(frame: Frame, timeout_ms: int = 10000) -> None:
+    try:
+        frame.wait_for_load_state("networkidle", timeout=timeout_ms)
+    except Exception:
+        pass
+
+
+def _read_input_value(frame: Frame, field_name: str) -> str:
+    locator = frame.locator(f"input[name='{field_name}']").first
+    try:
+        return locator.input_value().strip()
+    except Exception:
+        return ""
+
+
+def _log_filter_state(frame: Frame, prefix: str) -> None:
+    von_value = _read_input_value(frame, "timestamp_von") or "—"
+    bis_value = _read_input_value(frame, "timestamp_bis") or "—"
+    print(f"[DEBUG] {prefix}: timestamp_von='{von_value}' timestamp_bis='{bis_value}'")
+
+
 def _load_inhalt_url(page: Page, target_href: str, wait_selector: str | None = None) -> Frame:
     """Navigiert den 'inhalt'-Frame zu einer URL und wartet optional auf einen Selektor."""
     if not target_href:
@@ -62,6 +83,7 @@ def _load_inhalt_url(page: Page, target_href: str, wait_selector: str | None = N
     frame = _wait_for_frame(page, "inhalt", timeout_seconds=25)
     print(f"[INFO] Lade im Frame: {full_url}")
     frame.goto(full_url, wait_until="domcontentloaded", timeout=30000)
+    _wait_for_network_idle(frame)
     if wait_selector:
         frame.wait_for_selector(wait_selector, timeout=20000)
     return frame
@@ -107,23 +129,28 @@ def open_tagesplan_alt(page: Page) -> Frame:
 
 
 def _calc_fallback_date(frame: Frame, fallback_days: int) -> str:
-    """Berechnet timestamp_bis anhand timestamp_von + fallback_days."""
-    von_input = frame.locator("input[name='timestamp_von']")
-    von_value = ""
-    try:
-        von_value = von_input.input_value().strip()
-    except Exception:
-        pass
+    """Berechnet timestamp_bis anhand von heute; zukünftiges timestamp_von bleibt erhalten."""
+    von_value = _read_input_value(frame, "timestamp_von")
+    bis_value = _read_input_value(frame, "timestamp_bis")
+    today = datetime.now()
+    base = today
+    base_reason = "heute"
 
-    if not von_value:
-        von_value = datetime.now().strftime("%d.%m.%Y")
-
-    try:
-        base = datetime.strptime(von_value, "%d.%m.%Y")
-    except ValueError:
-        base = datetime.now()
+    if von_value:
+        try:
+            parsed_von = datetime.strptime(von_value, "%d.%m.%Y")
+            if parsed_von.date() > today.date():
+                base = parsed_von
+                base_reason = "timestamp_von (liegt in der Zukunft)"
+        except ValueError:
+            pass
 
     target = base + timedelta(days=fallback_days)
+    print(
+        f"[DEBUG] Datums-Fallback: heute='{today.strftime('%d.%m.%Y')}', "
+        f"von='{von_value or '—'}', bis='{bis_value or '—'}', "
+        f"basis='{base_reason}', ziel='{target.strftime('%d.%m.%Y')}'"
+    )
     return target.strftime("%d.%m.%Y")
 
 
@@ -132,6 +159,7 @@ def _set_in_x_tagen(page: Page, frame: Frame, days: int) -> None:
     bis_input.wait_for(state="visible", timeout=10000)
     bis_input.click()
     time.sleep(0.5)
+    _log_filter_state(frame, "Filter vor Datumsänderung")
 
     quick_locator = frame.locator(
         f"text=/in\\s+{days}\\s+tage?n/i"
@@ -145,7 +173,22 @@ def _set_in_x_tagen(page: Page, frame: Frame, days: int) -> None:
         print(f"[WARNUNG] Kein Quick-Link gefunden – setze Datum (heute + {days} Tage) manuell.")
         new_value = _calc_fallback_date(frame, days)
         bis_input.fill(new_value)
+        try:
+            frame.evaluate(
+                """
+                () => {
+                    const input = document.querySelector("input[name='timestamp_bis']");
+                    if (!input) return;
+                    input.dispatchEvent(new Event("input", { bubbles: true }));
+                    input.dispatchEvent(new Event("change", { bubbles: true }));
+                    input.blur();
+                }
+                """
+            )
+        except Exception:
+            pass
         time.sleep(0.2)
+    _log_filter_state(frame, "Filter nach Datumsänderung")
 
 
 def apply_filter(page: Page, frame: Frame) -> Frame:
@@ -158,15 +201,18 @@ def apply_filter(page: Page, frame: Frame) -> Frame:
     anzeigen_button.wait_for(state="visible", timeout=5000)
     anzeigen_button.click()
     print("[INFO] Filter angewendet – warte auf Aktualisierung …")
+    _wait_for_network_idle(frame, timeout_ms=20000)
     time.sleep(1.0)
 
     frame = _wait_for_frame(page, "inhalt", timeout_seconds=25)
+    _wait_for_network_idle(frame, timeout_ms=20000)
     frame.wait_for_selector("a[href*='planung_intraday.php']", timeout=20000)
     try:
         frame.evaluate("window.scrollTo(0, document.body.scrollHeight)")
         time.sleep(0.5)
     except Exception:
         pass
+    _log_filter_state(frame, "Filter nach Reload")
     print("[OK] Gefilterte Veranstaltungen geladen.")
     return frame
 
@@ -219,6 +265,10 @@ def collect_event_links(frame: Frame) -> list[dict[str, str]]:
         text = " ".join(link.inner_text().split())
         events.append({"href": href, "text": text})
     print(f"[INFO] Anzahl Veranstaltungen im Filter: {len(events)}")
+    for idx, event in enumerate(events, start=1):
+        print(
+            f"[DEBUG] Event-Link #{idx}: href='{event['href']}' text='{event['text']}'"
+        )
     return events
 
 
@@ -366,41 +416,155 @@ def _debug_phone_context(frame: Frame, name: str) -> None:
     return None
 
 
+def _extract_shift_rows(frame: Frame) -> list[dict[str, object]]:
+    try:
+        rows = frame.evaluate(
+            """
+            () => {
+                const tableRows = Array.from(document.querySelectorAll("#tblSchichtDaten tbody tr"));
+                return tableRows.map((row, index) => {
+                    const shiftCells = Array.from(row.querySelectorAll("td.schichtZeitZelle"));
+                    if (!shiftCells.length) return null;
+
+                    const mainCell =
+                        shiftCells.find((cell) => {
+                            const text = (cell.innerText || "").replace(/\\s+/g, " ").trim();
+                            return Boolean(text) || cell.hasAttribute("colspan");
+                        }) || shiftCells[0];
+
+                    if (!mainCell) return null;
+
+                    const checkbox = row.querySelector("td input[type='checkbox'][id^='cb_']");
+                    const roleCell = row.querySelectorAll("td")[1];
+                    const timeCell = row.querySelectorAll("td")[4];
+                    const clone = mainCell.cloneNode(true);
+                    clone.querySelectorAll("img,script,style").forEach((el) => el.remove());
+
+                    return {
+                        row_index: index + 1,
+                        row_id: row.id || "",
+                        confirmed: checkbox ? checkbox.checked : null,
+                        role: roleCell ? roleCell.innerText.replace(/\\s+/g, " ").trim() : "",
+                        shift_time: timeCell ? timeCell.innerText.replace(/\\s+/g, " ").trim() : "",
+                        text: clone.innerText.replace(/\\s+/g, " ").trim(),
+                        inline_style: mainCell.getAttribute("style") || "",
+                        computed_background: window.getComputedStyle(mainCell).backgroundColor || "",
+                        computed_color: window.getComputedStyle(mainCell).color || "",
+                        colspan: mainCell.getAttribute("colspan") || ""
+                    };
+                }).filter(Boolean);
+            }
+            """
+        )
+        return rows if isinstance(rows, list) else []
+    except Exception as exc:
+        print(f"[WARNUNG] Schichtzeilen konnten nicht extrahiert werden: {exc}")
+        return []
+
+
+def _style_contains_any(style: str, tokens: tuple[str, ...]) -> bool:
+    normalized = style.replace(" ", "").lower()
+    return any(token in normalized for token in tokens)
+
+
+def _parse_rgb_values(style: str) -> list[tuple[int, int, int]]:
+    matches = re.findall(r"rgba?\((\d+),(\d+),(\d+)(?:,[^)]+)?\)", style.replace(" ", "").lower())
+    return [(int(red), int(green), int(blue)) for red, green, blue in matches]
+
+
+def _looks_green_style(style: str) -> bool:
+    if not style:
+        return False
+    normalized = style.replace(" ", "").lower()
+    if _style_contains_any(
+        normalized,
+        ("green", "lightgreen", "#008000", "#00ff00", "#90ee90", "rgb(144,238,144)", "rgb(0,128,0)"),
+    ):
+        return True
+    for red, green, blue in _parse_rgb_values(normalized):
+        if green >= 120 and red <= 180 and blue <= 180:
+            return True
+    return False
+
+
+def _looks_red_style(style: str) -> bool:
+    if not style:
+        return False
+    normalized = style.replace(" ", "").lower()
+    if _style_contains_any(
+        normalized,
+        ("red", "#ff0000", "#f00", "#dc143c", "rgb(255,0,0)", "rgb(220,20,60)"),
+    ):
+        return True
+    for red, green, blue in _parse_rgb_values(normalized):
+        if red >= 180 and green <= 120 and blue <= 120:
+            return True
+    return False
+
+
+def _classify_shift_color(*styles: str) -> str:
+    combined = " ".join(style for style in styles if style).strip()
+    if not combined:
+        return "leer"
+    if _looks_orange_style(combined):
+        return "orange"
+    if _looks_green_style(combined):
+        return "green"
+    if _looks_red_style(combined):
+        return "red"
+    return "sonst"
+
+
 def find_orange_assignments(frame: Frame) -> list[str]:
-    """Sammelt alle Mitarbeiter-Namen, deren Schicht orange hinterlegt ist."""
-    cells = frame.locator("td.schichtZeitZelle")
+    """
+    Sammelt alle Mitarbeiter-Namen mit offener Schichtbestätigung.
+    Primärsignal ist die ungesetzte Checkbox bei gleichzeitig belegter Schicht.
+    """
+    rows = _extract_shift_rows(frame)
     names: list[str] = []
-    cell_count = cells.count()
-    orange_cells = 0
-    colored_samples: list[str] = []
-    for i in range(cell_count):
-        cell = cells.nth(i)
-        style = (cell.get_attribute("style") or "").lower()
-        if style and len(colored_samples) < 8 and ("background" in style or "color" in style):
-            try:
-                sample_text = " ".join(cell.inner_text().strip().split())[:120]
-            except Exception:
-                sample_text = ""
-            colored_samples.append(f"#{i+1}: style='{style[:160]}' text='{sample_text}'")
-        if not _looks_orange_style(style):
-            continue
-        orange_cells += 1
-        raw_text = cell.inner_text().strip()
-        if not raw_text:
-            continue
+    seen_names: set[str] = set()
+    orange_style_rows = 0
+    assigned_rows = 0
+    unconfirmed_assigned_rows = 0
+
+    for row in rows:
+        raw_text = str(row.get("text") or "").strip()
         name = raw_text.split("\n", 1)[0].strip()
+        confirmed = row.get("confirmed")
+        inline_style = str(row.get("inline_style") or "")
+        computed_background = str(row.get("computed_background") or "")
+        computed_color = str(row.get("computed_color") or "")
+        color = _classify_shift_color(inline_style, computed_background, computed_color)
+        if color == "orange":
+            orange_style_rows += 1
         if name:
+            assigned_rows += 1
+        checkbox_state = (
+            "checked" if confirmed is True else "unchecked" if confirmed is False else "—"
+        )
+        print(
+            f"[DEBUG] Schicht #{row.get('row_index')}: checkbox={checkbox_state} "
+            f"farbe={color} inline='{inline_style[:120]}' "
+            f"computed_bg='{computed_background}' text='{name}'"
+        )
+
+        should_flag = bool(name) and (
+            confirmed is False or (confirmed is None and color == "orange")
+        )
+        if not should_flag:
+            continue
+        unconfirmed_assigned_rows += 1
+        if name not in seen_names:
+            seen_names.add(name)
             names.append(name)
+
     print(
-        f"[DEBUG] Orange-Scan: schichtZeitZelle={cell_count}, "
-        f"orange_style={orange_cells}, namen={len(names)}"
+        f"[DEBUG] Orange-Scan: schicht_zeilen={len(rows)}, "
+        f"belegt={assigned_rows}, orange_style={orange_style_rows}, "
+        f"unconfirmed_assigned={unconfirmed_assigned_rows}, namen={len(names)}"
     )
     if names:
         print(f"[DEBUG] Orange-Namen: {', '.join(names)}")
-    elif colored_samples:
-        print("[DEBUG] Farbige Zell-Samples ohne Orange-Treffer:")
-        for sample in colored_samples:
-            print(f"[DEBUG]   {sample}")
     return names
 
 

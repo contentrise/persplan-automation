@@ -1,0 +1,31 @@
+{
+  "id": "term_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/terms",
+  "summary": "Update all terms for company's Referral program",
+  "description": "Update all terms for company's Referral program. Endpoint: PATCH /c/{company_id}/referral/terms. Required parameters: terms, company_id.",
+  "params": [
+    {
+      "name": "terms",
+      "type": "array",
+      "required": true,
+      "description": "Array of terms objects (parameters: kind(‘privacy_policy’|‘terms_and_conditions’), body_html, link_enabled, source_link",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"terms\": []\n}",
+  "example_response": {
+    "terms": []
+  },
+  "tags": [
+    "referral",
+    "terms"
+  ]
+}

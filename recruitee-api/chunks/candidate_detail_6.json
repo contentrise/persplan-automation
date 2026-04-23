@@ -1,0 +1,47 @@
+{
+  "id": "candidate_detail_6",
+  "method": "GET",
+  "path": "/c/{company_id}/texting/threads/candidate/",
+  "summary": "Show texting threads for candidate",
+  "description": "Show texting threads for candidate. Endpoint: GET /c/{company_id}/texting/threads/candidate/. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/texting/threads/candidate/\n\nRequired params: company_id",
+  "example_response": {
+    "is_anonymous": false,
+    "texting_threads": [
+      {
+        "id": 58,
+        "to": "+48123456789",
+        "company_id": 2067,
+        "candidate_id": 1183,
+        "updated_at": "2030-02-27T12:00:00.000000Z"
+      },
+      {
+        "id": 60,
+        "to": "+48111222333",
+        "company_id": 2067,
+        "candidate_id": 1183,
+        "updated_at": "2030-02-26T12:00:00.000000Z"
+      },
+      {
+        "id": 59,
+        "to": "+48987654321",
+        "company_id": 2067,
+        "candidate_id": 1183,
+        "updated_at": "2030-02-25T12:00:00.000000Z"
+      }
+    ]
+  },
+  "tags": [
+    "texting",
+    "threads"
+  ]
+}

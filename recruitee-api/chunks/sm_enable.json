@@ -1,0 +1,34 @@
+{
+  "id": "sm_enable",
+  "method": "PATCH",
+  "path": "/two_factor_authentication_settings/sms/enable",
+  "summary": "Enables 2FA by SMS for current admin",
+  "description": "Enables 2FA by SMS for current admin. Endpoint: PATCH /two_factor_authentication_settings/sms/enable. Required parameters: phone, totp_code.",
+  "params": [
+    {
+      "name": "phone",
+      "type": "string",
+      "required": true,
+      "description": "Phone number for 2FA SMSs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "totp_code",
+      "type": "string",
+      "required": true,
+      "description": "One time password for authorization",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /two_factor_authentication_settings/sms/enable\n\nRequired params: phone, totp_code",
+  "example_response": {
+    "error": [
+      "The code you entered is invalid or expired. Try again."
+    ]
+  },
+  "tags": [
+    "two_factor_authentication_settings",
+    "sms",
+    "admin"
+  ]
+}

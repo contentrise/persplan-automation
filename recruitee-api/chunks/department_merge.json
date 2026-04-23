@@ -1,0 +1,49 @@
+{
+  "id": "department_merge",
+  "method": "PATCH",
+  "path": "/c/{company_id}/departments/{id}/merge",
+  "summary": "Merge company departments",
+  "description": "Merge company departments. Endpoint: PATCH /c/{company_id}/departments/{id}/merge. Required parameters: company_id. Optional parameters include id, name, translations, ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Department ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "description": "New department name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "translations",
+      "type": "map",
+      "required": false,
+      "description": "New department translations",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ids",
+      "type": "array",
+      "required": false,
+      "description": "Department IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/departments/{id}/merge\n\nRequired params: company_id\n\nOptional params: id, name, translations, ids",
+  "example_response": {},
+  "tags": [
+    "departments"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "filter_detail",
+  "method": "GET",
+  "path": "/referral_portal/offers/filters",
+  "summary": "Returns all filter options for offer list",
+  "description": "Returns all filter options for offer list. Endpoint: GET /referral_portal/offers/filters.",
+  "params": [],
+  "example_request": "GET /referral_portal/offers/filters",
+  "example_response": {
+    "departments": [],
+    "countries": [
+      {
+        "code": "PL",
+        "name": "Poland"
+      },
+      {
+        "code": "DE",
+        "name": "Germany"
+      }
+    ],
+    "cities": [
+      "Poznań"
+    ]
+  },
+  "tags": [
+    "referral_portal",
+    "offers",
+    "referral"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "field_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/custom_fields/candidates/fields/{id}",
+  "summary": "Update candidate field",
+  "description": "Update candidate field. Endpoint: PATCH /c/{company_id}/custom_fields/candidates/fields/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Field ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"field\": {\n\"values\": [\n{\n\"text\": \"200k/y\"\n}\n]\n}\n}",
+  "example_response": {
+    "field": {
+      "id": 55,
+      "name": "Salary",
+      "visible": true,
+      "values": [
+        {
+          "text": "200k/y"
+        }
+      ],
+      "origin": "manual",
+      "kind": "single_line",
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      },
+      "fixed": null
+    }
+  },
+  "tags": [
+    "custom_fields",
+    "candidates"
+  ]
+}

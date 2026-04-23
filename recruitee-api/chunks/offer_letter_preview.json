@@ -1,0 +1,30 @@
+{
+  "id": "offer_letter_preview",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_letters/{id}/preview",
+  "summary": "Offer letter preview",
+  "description": "Offer letter preview. Endpoint: PATCH /c/{company_id}/offer_letters/{id}/preview. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer letter ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_letter\": {\n\"benefits\": {\n\"enabled\": true,\n\"heading\": \"Benefits for you\",\n\"items\": [\n{\n\"description\": \"Ferrari\",\n\"title\": \"Company car\"\n}\n]\n},\n\"lang_code\": \"de\",\n\"salary\": {\n\"currency\": \"EUR\",\n\"description\": \"To be confirmed\",\n\"enabled\": true,\n\"heading\": \"Salary\",\n\"period\": \"hour\",\n\"value\": 99\n},\n\"title\": \"Hello John Doe!\"\n}\n}",
+  "example_response": {
+    "preview_url": "http://company1054.recruitee.internal:3003/ol/previews/f3d6cd0c-5cf6-45a3-83bc-84edcde32fe1"
+  },
+  "tags": [
+    "offer_letters"
+  ]
+}

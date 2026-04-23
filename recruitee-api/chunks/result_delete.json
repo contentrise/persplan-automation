@@ -1,0 +1,67 @@
+{
+  "id": "result_delete",
+  "method": "DELETE",
+  "path": "/share/containers/{token}/results/{id}",
+  "summary": "Delete interview result for candidate",
+  "description": "Delete interview result for candidate. Endpoint: DELETE /share/containers/{token}/results/{id}. Required parameters: id, token.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview result ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /share/containers/{token}/results/{id}\n\nRequired params: id, token",
+  "example_response": {
+    "interview_result": {
+      "id": 52,
+      "kind": "rating",
+      "offer": {
+        "id": 1172,
+        "status": "draft",
+        "title": "Best Offer",
+        "kind": "job"
+      },
+      "admin": {
+        "id": 5591,
+        "name": "John Doe",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_thumb_url": "tmp/bow/admins/5591/thumb_avatar_1ggct3w2td6p.png",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      "stage": {
+        "id": 33198,
+        "name": "Applied"
+      },
+      "rating": "strong_yes",
+      "guest": {
+        "id": 57,
+        "name": "James Smith"
+      },
+      "created_at": "2026-04-21T07:32:51.776327Z",
+      "updated_at": "2026-04-21T07:32:51.776327Z",
+      "offer_id": 1172,
+      "talent_pool_id": null,
+      "stage_id": 33198,
+      "interview_template_name": null,
+      "rating_note": null
+    }
+  },
+  "tags": [
+    "containers",
+    "results"
+  ]
+}

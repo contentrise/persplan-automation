@@ -1,0 +1,31 @@
+{
+  "id": "profile_detail",
+  "method": "GET",
+  "path": "/referral_portal/profile",
+  "summary": "Returns data about currently logged referrer",
+  "description": "Returns data about currently logged referrer. Endpoint: GET /referral_portal/profile.",
+  "params": [],
+  "example_request": "GET /referral_portal/profile",
+  "example_response": {
+    "referrer": {
+      "id": 216,
+      "email": "audrey.halvorson@price.com",
+      "abilities": [],
+      "has_avatar": false,
+      "initials": "JN",
+      "first_name": "Jarrett",
+      "last_name": "Nikolaus",
+      "preferred_language": "qenya",
+      "anonymized_at": null,
+      "referral_intro_used": false,
+      "avatar_url": null,
+      "is_admin": false,
+      "avatar_thumb_url": null
+    }
+  },
+  "tags": [
+    "referral_portal",
+    "profile",
+    "referral"
+  ]
+}

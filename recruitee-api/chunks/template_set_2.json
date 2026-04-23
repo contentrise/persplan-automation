@@ -1,0 +1,52 @@
+{
+  "id": "template_set_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/templates/{id}/set_default",
+  "summary": "Set referral template as default",
+  "description": "Set referral template as default. Endpoint: PATCH /c/{company_id}/referral/templates/{id}/set_default. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Referral template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"referral_template\": {\n\"default\": false\n}\n}",
+  "example_response": {
+    "referral_template": {
+      "default": false,
+      "id": 128,
+      "name": "Default",
+      "position": 1,
+      "category": null,
+      "created_at": "2026-04-21T07:31:59.542252Z",
+      "updated_at": "2026-04-21T07:31:59.547150Z",
+      "custom": false,
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0,
+      "referral_questions": [
+        {
+          "id": 135,
+          "position": 68,
+          "options": [],
+          "title": "Default",
+          "required": false,
+          "kind": "string"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "referral",
+    "templates"
+  ]
+}

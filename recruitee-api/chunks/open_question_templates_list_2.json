@@ -1,0 +1,63 @@
+{
+  "id": "open_question_templates_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/open_question_templates",
+  "summary": "List open question templates available for offer template",
+  "description": "List open question templates available for offer template. Endpoint: GET /c/{company_id}/offer_templates/{offer_template_id}/open_question_templates. Required parameters: offer_template_id, company_id. Optional parameters include title.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": false,
+      "description": "Filter by title",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offer_templates/{offer_template_id}/open_question_templates\n\nRequired params: offer_template_id, company_id\n\nOptional params: title",
+  "example_response": {
+    "open_question_templates": [
+      {
+        "default": false,
+        "id": 56,
+        "position": 2,
+        "title": "Open Question Template",
+        "category": "Sample category",
+        "custom": false
+      },
+      {
+        "default": false,
+        "id": 57,
+        "position": 3,
+        "title": "Open Question Template",
+        "category": "Sample category",
+        "custom": false
+      },
+      {
+        "default": false,
+        "id": 58,
+        "position": 4,
+        "title": "Open Question Template",
+        "category": "Sample category",
+        "custom": false
+      }
+    ]
+  },
+  "tags": [
+    "offer_templates",
+    "open_question_templates"
+  ]
+}

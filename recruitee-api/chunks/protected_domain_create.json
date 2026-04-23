@@ -1,0 +1,29 @@
+{
+  "id": "protected_domain_create",
+  "method": "POST",
+  "path": "/c/{company_id}/mailbox/settings/protected_domains",
+  "summary": "Create new protected domain for company",
+  "description": "This endpoint allows to add a new protected domain to the company. Adding protected domain will do the following:",
+  "params": [
+    {
+      "name": "protected_domain",
+      "type": "string",
+      "required": true,
+      "description": "Protected domain to add without @ (ex. example.com)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/mailbox/settings/protected_domains\n\nRequired params: protected_domain, company_id",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "settings"
+  ]
+}

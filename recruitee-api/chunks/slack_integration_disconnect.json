@@ -1,0 +1,29 @@
+{
+  "id": "slack_integration_disconnect",
+  "method": "PATCH",
+  "path": "/c/{company_id}/tracking/slack_integrations/disconnect_all",
+  "summary": "Disconnect all company slack integrations",
+  "description": "Disconnect all company slack integrations. Endpoint: PATCH /c/{company_id}/tracking/slack_integrations/disconnect_all. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "SlackIntegration ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/tracking/slack_integrations/disconnect_all\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "tracking",
+    "slack_integrations"
+  ]
+}

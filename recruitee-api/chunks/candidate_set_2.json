@@ -1,0 +1,46 @@
+{
+  "id": "candidate_set_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/candidates/{id}/set_as_cv/{attachment_id}",
+  "summary": "Set attachment as candidate's CV",
+  "description": "Set attachment as candidate's CV. Endpoint: PATCH /c/{company_id}/candidates/{id}/set_as_cv/{attachment_id}. Required parameters: id, attachment_id, company_id. Optional parameters include parse.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "parse",
+      "type": "boolean",
+      "required": false,
+      "description": "Parse CV and replace data previously extracted from CV file (should be string ‘true’ or ‘1’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "attachment_id",
+      "type": "integer",
+      "required": true,
+      "description": "Attachment ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/candidates/{id}/set_as_cv/{attachment_id}\n\nRequired params: id, attachment_id, company_id\n\nOptional params: parse",
+  "example_response": {
+    "error": [
+      "Unprocessable entity"
+    ]
+  },
+  "tags": [
+    "candidates"
+  ]
+}

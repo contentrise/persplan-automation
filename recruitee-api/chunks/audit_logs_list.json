@@ -1,0 +1,35 @@
+{
+  "id": "audit_logs_list",
+  "method": "GET",
+  "path": "/c/{company_id}/audit_log/export",
+  "summary": "Audit logs CSV export",
+  "description": "Filter and sort params inherited from #index. Aggregates and pagination are omitted.",
+  "params": [
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Sort order: ‘created_at_desc’ or ‘created_at_asc’ (by default: ‘created_at_desc’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "filters_json",
+      "type": "string",
+      "required": false,
+      "description": "Array of filters ([FilterGroup, ...]), serialized to a JSON string",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/audit_log/export\n\nRequired params: company_id\n\nOptional params: sort_by, filters_json",
+  "example_response": "created_at;actor;actor_type;ip_address;event_name;admin;candidate;offer;data\n2026-04-21T07:32:22+00:00;Bender Bending Rodriguez;admin;192.168.0.0;Super adventure;John Doe;;;{}\n2026-04-21T07:32:22+00:00;Bender Bending Rodriguez;admin;192.168.0.0;Super adventure;John Doe;;;{}\n2026-04-21T07:32:22+00:00;Bender Bending Rodriguez;admin;192.168.0.0;Super adventure;John Doe;;;{}",
+  "tags": [
+    "audit_log"
+  ]
+}

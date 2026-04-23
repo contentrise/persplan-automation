@@ -1,0 +1,159 @@
+{
+  "id": "save_as_template_create_4",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/{offer_id}/pipeline_templates/save_as_template",
+  "summary": "Save a custom template as regular template",
+  "description": "Save a custom template as regular template. Endpoint: POST /c/{company_id}/offers/{offer_id}/pipeline_templates/save_as_template. Required parameters: title, offer_id, company_id. Optional parameters include category.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Name of the newly created template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "required": false,
+      "description": "Category of the newly created template (optional)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"pipeline_template\": {\n\"title\": \"New template\"\n}\n}",
+  "example_response": {
+    "pipeline_template": {
+      "default": false,
+      "id": 833,
+      "position": 59,
+      "title": "New template",
+      "category": "SAMPLE CATEGORY",
+      "custom": false,
+      "stages": [
+        {
+          "id": 6671,
+          "name": "Referred",
+          "position": -3,
+          "group": "applicants",
+          "category": "referred",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6672,
+          "name": "Sourced",
+          "position": -2,
+          "group": "applicants",
+          "category": "sourced",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6673,
+          "name": "Applied",
+          "position": -1,
+          "group": "applicants",
+          "category": "apply",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6674,
+          "name": "Phone interview",
+          "position": 1,
+          "group": "active",
+          "category": "phone_screen",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6675,
+          "name": "On-site interview",
+          "position": 2,
+          "group": "active",
+          "category": "interview",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6676,
+          "name": "Evaluation",
+          "position": 3,
+          "group": "active",
+          "category": "evaluation",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6677,
+          "name": "Offer",
+          "position": 4,
+          "group": "active",
+          "category": "offer",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6678,
+          "name": "Hired",
+          "position": 5,
+          "group": "hires",
+          "category": "hire",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        }
+      ],
+      "requires_adjustment": false
+    }
+  },
+  "tags": [
+    "offers",
+    "pipeline_templates"
+  ]
+}

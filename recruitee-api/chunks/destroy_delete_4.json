@@ -1,0 +1,29 @@
+{
+  "id": "destroy_delete_4",
+  "method": "PATCH",
+  "path": "/c/{company_id}/share/bulk/containers/destroy",
+  "summary": "Delete containers in bulk",
+  "description": "Delete containers in bulk. Endpoint: PATCH /c/{company_id}/share/bulk/containers/destroy. Required parameters: containers, company_id.",
+  "params": [
+    {
+      "name": "containers",
+      "type": "array",
+      "required": true,
+      "description": "Array of container IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/share/bulk/containers/destroy\n\nRequired params: containers, company_id",
+  "example_response": {},
+  "tags": [
+    "containers",
+    "destroy"
+  ]
+}

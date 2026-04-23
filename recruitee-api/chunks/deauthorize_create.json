@@ -1,0 +1,32 @@
+{
+  "id": "deauthorize_create",
+  "method": "POST",
+  "path": "/c/{company_id}/oauth/clients/{client_id}/deauthorize",
+  "summary": "Deauthorize the client from this admin account",
+  "description": "Deauthorize the client from this admin account. Endpoint: POST /c/{company_id}/oauth/clients/{client_id}/deauthorize. Required parameters: client_id, company_id.",
+  "params": [
+    {
+      "name": "client_id",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/oauth/clients/{client_id}/deauthorize\n\nRequired params: client_id, company_id",
+  "example_response": {
+    "ok": true
+  },
+  "tags": [
+    "clients",
+    "deauthorize",
+    "oauth"
+  ]
+}

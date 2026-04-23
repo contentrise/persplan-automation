@@ -1,0 +1,54 @@
+{
+  "id": "company_verification_request_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/company_verification_request",
+  "summary": "Update company verification request",
+  "description": "Update company verification request. Endpoint: PATCH /c/{company_id}/company_verification_request. Required parameters: company_name, company_website, company_address, company_tax_number, company_id.",
+  "params": [
+    {
+      "name": "company_name",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_website",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_address",
+      "type": "string",
+      "required": true,
+      "description": "Company physical address",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_tax_number",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"company_verification_request\": {}\n}",
+  "example_response": {
+    "error": [
+      "Page not found"
+    ]
+  },
+  "tags": [
+    "company_verification_request",
+    "company"
+  ]
+}

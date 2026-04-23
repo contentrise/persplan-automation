@@ -1,0 +1,48 @@
+{
+  "id": "fieldset_create",
+  "method": "POST",
+  "path": "/c/{company_id}/custom_fields/fieldsets",
+  "summary": "Create company fieldset",
+  "description": "Create company fieldset. Endpoint: POST /c/{company_id}/custom_fields/fieldsets. Required parameters: title, company_id. Optional parameters include category.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Name of the fieldset",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "required": false,
+      "description": "Fieldset category",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"fieldset\": {\n\"category\": \"NEW\",\n\"name\": \"Engineering\"\n}\n}",
+  "example_response": {
+    "fieldset": {
+      "default": false,
+      "id": 32,
+      "name": "Engineering",
+      "position": 1,
+      "fields": [],
+      "category": "NEW",
+      "updated_at": "2026-04-21T07:30:45.561794Z",
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0
+    }
+  },
+  "tags": [
+    "custom_fields",
+    "fieldsets"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "id": "device_create",
+  "method": "POST",
+  "path": "/c/{company_id}/devices",
+  "summary": "Create admin's device for push notifications",
+  "description": "If device with UID already exists we will overwrite it, request can be send multiple times and it won’t create multiple devices",
+  "params": [
+    {
+      "name": "kind",
+      "type": "string",
+      "required": false,
+      "description": "Device type, ‘ios’ / ‘android’ / ‘web’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "token",
+      "type": "string",
+      "required": false,
+      "description": "Push token received from callback",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "uid",
+      "type": "string",
+      "required": false,
+      "description": "Device UID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "app_type",
+      "type": "string",
+      "required": false,
+      "description": "Application type, ‘debug’ / ‘staging’ / ‘rc’ / ‘beta’ / ‘release’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"device\": {\n\"app_type\": \"release\",\n\"kind\": \"ios\",\n\"token\": \"new_token\",\n\"uid\": \"uid\"\n}\n}",
+  "example_response": {
+    "device": {
+      "id": 3,
+      "kind": "ios",
+      "token": "new_token",
+      "uid": "uid",
+      "app_type": "release"
+    }
+  },
+  "tags": [
+    "devices",
+    "admin"
+  ]
+}

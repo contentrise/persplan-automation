@@ -1,0 +1,152 @@
+{
+  "id": "quality_of_candidates_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/report/team_members/quality_of_candidates",
+  "summary": "Team members - Candidates by members",
+  "description": "DEPRECATED - This endpoint is deprecated and will be discontinued by the end of 2024.",
+  "params": [
+    {
+      "name": "format",
+      "type": "string",
+      "required": false,
+      "description": "Used for exporting in different format than json, can be: csv",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "filters",
+      "type": "string",
+      "required": false,
+      "description": "Filters in format type:value;type:value (example: job:hiring-manager-54;department:Engineering)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default is unlimited",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "group_by",
+      "type": "string",
+      "required": false,
+      "description": "Group by results by a field, can be: team_member, role",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Sort results by field, can be: group, total_candidates_count, moved_forward_count, disqualified_count, interviewed_count, offered_count, hired_count",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_start",
+      "type": "string",
+      "required": false,
+      "description": "Used when date_range is ‘range’. Date from which data should be fetched. Should be in format ‘2014-01-30’.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_end",
+      "type": "string",
+      "required": false,
+      "description": "Used when date_range is ‘range’. Date to which data should be fetched. Should be in format ‘2014-01-30’.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "Sort order, can be: asc, desc (default: desc)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number used for pagination, can be used only with the limit option (1, 2, 3, 4…)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_range",
+      "type": "string",
+      "required": false,
+      "description": "Date filter. Can be: range, today, yesterday, this_week, last_week, this_month, last_month, this_quarter, last_quarter, this_year, last_year, last_30_days, last_60_days. If value is range, additional parameters ‘date_start’ and ‘date_end’ must be provided.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/report/team_members/quality_of_candidates\n\nRequired params: company_id\n\nOptional params: format, filters, limit, group_by, sort_by, date_start, date_end, sort_order",
+  "example_response": {
+    "values": [
+      [
+        "John Doe",
+        5,
+        [
+          291,
+          292,
+          293,
+          294,
+          295
+        ],
+        4,
+        [
+          291,
+          292,
+          293,
+          294
+        ],
+        1,
+        [
+          295
+        ],
+        1,
+        [
+          291
+        ],
+        2,
+        [
+          292,
+          294
+        ],
+        1,
+        [
+          293
+        ]
+      ]
+    ],
+    "columns": [
+      "group",
+      "total_candidates_count",
+      "total_candidates_ids",
+      "moved_forward_count",
+      "moved_forward_ids",
+      "disqualified_count",
+      "disqualified_ids",
+      "interviewed_count",
+      "interviewed_ids",
+      "offered_count",
+      "offered_ids",
+      "hired_count",
+      "hired_ids"
+    ],
+    "total_count": 1,
+    "hired_count": 1,
+    "offered_count": 2,
+    "interviewed_count": 1,
+    "disqualified_count": 1,
+    "moved_forward_count": 4,
+    "total_candidates_count": 5
+  },
+  "tags": [
+    "report",
+    "team_members"
+  ]
+}

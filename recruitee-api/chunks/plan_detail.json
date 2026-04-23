@@ -1,0 +1,58 @@
+{
+  "id": "plan_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/billing/subscription/plan",
+  "summary": "Get billing plan",
+  "description": "Get billing plan. Endpoint: GET /c/{company_id}/billing/subscription/plan. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/billing/subscription/plan\n\nRequired params: company_id",
+  "example_response": {
+    "plan": {
+      "id": 242,
+      "unlimited": false,
+      "currency": "EUR",
+      "created_at": "2026-04-21T07:33:32.208295Z",
+      "base_slots": 10,
+      "tier": "optimize",
+      "pricing_model": "stairstep",
+      "base_price": 321,
+      "slot_price": null,
+      "billing_period": 1,
+      "custom": false,
+      "prices": [
+        {
+          "base_price": 62400,
+          "kiwihr_plus_price": 700,
+          "texting_price": 300,
+          "fte_range_start": 1,
+          "fte_range_end": 20,
+          "billing_period_months": 1,
+          "sso_price": 6300
+        },
+        {
+          "base_price": 87400,
+          "kiwihr_plus_price": 700,
+          "texting_price": 300,
+          "fte_range_start": 21,
+          "fte_range_end": 50,
+          "billing_period_months": 1,
+          "sso_price": 8800
+        }
+      ],
+      "pricing": {},
+      "company_size": null
+    }
+  },
+  "tags": [
+    "billing",
+    "subscription"
+  ]
+}

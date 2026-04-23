@@ -1,0 +1,92 @@
+{
+  "id": "stage_create",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/{offer_id}/pipeline_templates/stages",
+  "summary": "Create pipeline template stage",
+  "description": "Create pipeline template stage. Endpoint: POST /c/{company_id}/offers/{offer_id}/pipeline_templates/stages. Required parameters: stage, offer_id, source_template_id, company_id.",
+  "params": [
+    {
+      "name": "stage",
+      "type": "map",
+      "required": true,
+      "description": "Stage params: name (string, required) - stage name; category (string, required) - stage category; position (integer, required) - stage position; action_templates (array, optional) - stage automated actions; time_limit (integer, optional) - candidate time limit for stage; fair_evaluations_enabled (boolean, optional) - fair evaluation feature status",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"source_template_id\": 4400,\n\"stage\": {\n\"action_templates\": [\n{\n\"data\": {\n\"attachment_ids\": [],\n\"body_html\": \"<div>Testing</div>\",\n\"from\": null,\n\"from_kind\": \"admin_performing_action\",\n\"send_after_at_hour\": 8,\n\"send_after_at_minute\": 5,\n\"send_after_days\": 3,\n\"send_at_timezone\": \"Europe/Warsaw\",\n\"signature\": false,\n\"subject\": \"Testing subject\",\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n},\n\"kind\": \"send_email\",\n\"references\": []\n}\n],\n\"candidateAnonymizationEnabled\": false,\n\"category\": \"none\",\n\"fairEvaluationsEnabled\": false,\n\"group\": \"active\",\n\"locked\": false,\n\"name\": \"Luktuc\",\n\"placementsCount\": null,\n\"position\": \"1\",\n\"time_limit\": null\n}\n}",
+  "example_response": {
+    "stage": {
+      "id": 35417,
+      "name": "Luktuc",
+      "position": 1,
+      "group": "active",
+      "category": "none",
+      "fair_evaluations_enabled": false,
+      "action_templates": [
+        {
+          "data": {
+            "signature": false,
+            "from": null,
+            "to_recruiter": false,
+            "to_hiring_manager": false,
+            "subject": "Testing subject",
+            "visibility": {
+              "admin_ids": [],
+              "level": "public",
+              "role_ids": []
+            },
+            "body_html": "<div>Testing</div>",
+            "attachment_ids": [],
+            "send_at_timezone": "Europe/Warsaw",
+            "bcc_admin_ids": [],
+            "bcc_candidate": false,
+            "bcc_hiring_manager": false,
+            "bcc_recruiter": false,
+            "cc_admin_ids": [],
+            "cc_candidate": false,
+            "cc_hiring_manager": false,
+            "cc_recruiter": false,
+            "from_kind": "admin_performing_action",
+            "send_after_at_hour": 8,
+            "send_after_at_minute": 5,
+            "send_after_days": 3,
+            "to_admin_ids": [],
+            "to_candidate": true
+          },
+          "id": 270,
+          "kind": "send_email",
+          "references": []
+        }
+      ],
+      "locked": false,
+      "placements_count": null,
+      "time_limit": null,
+      "candidate_anonymization_enabled": false
+    }
+  },
+  "tags": [
+    "offers",
+    "pipeline_templates"
+  ]
+}

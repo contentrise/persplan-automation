@@ -1,0 +1,50 @@
+{
+  "id": "event_create",
+  "method": "POST",
+  "path": "/c/{company_id}/interview/candidates/{candidate_id}/events",
+  "summary": "Create interview event",
+  "description": "Create interview event. Endpoint: POST /c/{company_id}/interview/candidates/{candidate_id}/events. Required parameters: candidate_id, company_id.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_event\": {}\n}",
+  "example_response": {
+    "error": [
+      "Kind can't be blank",
+      "Starts at can't be blank",
+      "Duration can't be blank",
+      "Timezone can't be blank"
+    ],
+    "error_fields": {
+      "kind": [
+        "can't be blank"
+      ],
+      "timezone": [
+        "can't be blank"
+      ],
+      "duration": [
+        "can't be blank"
+      ],
+      "starts_at": [
+        "can't be blank"
+      ]
+    }
+  },
+  "tags": [
+    "interview",
+    "candidates"
+  ]
+}

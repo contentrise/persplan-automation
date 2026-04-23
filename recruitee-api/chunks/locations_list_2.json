@@ -1,0 +1,98 @@
+{
+  "id": "locations_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/locations",
+  "summary": "Lists locations",
+  "description": "Lists locations. Endpoint: GET /c/{company_id}/locations. Required parameters: company_id. Optional parameters include scope, limit, query, view_mode, page.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "‘active’, contains only active locations; archived contains only archived locations; ‘all’ (default) contains all locations",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "query",
+      "type": "string",
+      "required": false,
+      "description": "Search query - allows to search by name and full address",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "view_mode",
+      "type": "string",
+      "required": false,
+      "description": "‘brief’ default mode, contains location information without translations; ‘full’ contains all the information along with translations and active offer counters",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/locations\n\nRequired params: company_id\n\nOptional params: scope, limit, query, view_mode, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 2,
+      "page": 1
+    },
+    "locations": [
+      {
+        "id": 154,
+        "name": "Berlin HQ",
+        "is_valid": true,
+        "country_code": "DE",
+        "created_at": "2026-04-21T07:32:39.066974Z",
+        "updated_at": "2026-04-21T07:32:39.066974Z",
+        "note": "Office in Berlin",
+        "city": "Berlin",
+        "postal_code": "10115",
+        "state_code": "BE",
+        "lang_code": "en",
+        "street": "Straße",
+        "state_name": "Berlin",
+        "archived_at": null,
+        "full_address": "Germany, Berlin, Berlin, 10115, Straße"
+      },
+      {
+        "id": 153,
+        "name": "Poznań HQ",
+        "is_valid": true,
+        "country_code": "PL",
+        "created_at": "2026-04-21T07:32:39.066489Z",
+        "updated_at": "2026-04-21T07:32:39.066489Z",
+        "note": "Kupiec Poznański",
+        "city": "Poznań",
+        "postal_code": "60-001",
+        "state_code": "30",
+        "lang_code": "en",
+        "street": "ul. Wiosny Ludów 2",
+        "state_name": "Wielkopolskie",
+        "archived_at": null,
+        "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+      }
+    ]
+  },
+  "tags": [
+    "locations"
+  ]
+}

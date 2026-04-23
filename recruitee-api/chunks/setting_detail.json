@@ -1,0 +1,33 @@
+{
+  "id": "setting_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/careers/settings",
+  "summary": "Show current careers settings",
+  "description": "Show current careers settings. Endpoint: GET /c/{company_id}/careers/settings. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/careers/settings\n\nRequired params: company_id",
+  "example_response": {
+    "settings": {
+      "enabled": false,
+      "domain": "evil_corp",
+      "subdomain": "acme",
+      "indexing_enabled": false,
+      "applications_limit_per_single_offer": 3,
+      "applications_limit_per_single_offer_days": 30,
+      "applications_limit_per_candidate": 10,
+      "applications_limit_per_candidate_days": 30
+    }
+  },
+  "tags": [
+    "careers",
+    "settings"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "id": "filters_list",
+  "method": "GET",
+  "path": "/c/{company_id}/report/filters",
+  "summary": "Filters",
+  "description": "Filters. Endpoint: GET /c/{company_id}/report/filters. Required parameters: query, groups, company_id. Optional parameters include filters, careers_analytics, group_limit.",
+  "params": [
+    {
+      "name": "filters",
+      "type": "string",
+      "required": false,
+      "description": "Filters which should be included in the response.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "careers_analytics",
+      "type": "boolean",
+      "required": false,
+      "description": "Flag for including careers analytics filters in response.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "description": "Query string for searching.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "groups",
+      "type": "string",
+      "required": true,
+      "description": "List of groups, separated by comma.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "group_limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results per group, defaults to 60.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/report/filters\n\nRequired params: query, groups, company_id\n\nOptional params: filters, careers_analytics, group_limit",
+  "example_response": [
+    {
+      "group": "stage-category",
+      "id": "apply",
+      "label": "<em>Ap</em>ply"
+    },
+    {
+      "group": "stage",
+      "id": "Applied",
+      "label": "<em>Ap</em>plied"
+    },
+    {
+      "group": "job",
+      "id": "1223",
+      "label": "S<em>AP</em> developer #s<em>ap</em>guid",
+      "status": "draft"
+    }
+  ],
+  "tags": [
+    "report",
+    "filters"
+  ]
+}

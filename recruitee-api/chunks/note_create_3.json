@@ -1,0 +1,45 @@
+{
+  "id": "note_create_3",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/{offer_id}/notes",
+  "summary": "Create note for offer",
+  "description": "Create note for offer. Endpoint: POST /c/{company_id}/offers/{offer_id}/notes. Required parameters: offer_id, company_id. Optional parameters include attachments.",
+  "params": [
+    {
+      "name": "attachments",
+      "type": "array",
+      "required": false,
+      "description": "Attachments ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"attachments\": [],\n\"note\": {\n\"body\": null,\n\"body_json\": null,\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n}\n}",
+  "example_response": {
+    "error": [
+      "Body json can't be blank"
+    ],
+    "error_fields": {
+      "body_json": [
+        "can't be blank"
+      ]
+    }
+  },
+  "tags": [
+    "offers",
+    "notes"
+  ]
+}

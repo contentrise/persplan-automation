@@ -1,0 +1,38 @@
+{
+  "id": "open_question_template_set_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/open_question_templates/assign",
+  "summary": "Sets or unsets offer template open question template",
+  "description": "Sets or unsets offer template open question template. Endpoint: PATCH /c/{company_id}/offer_templates/{offer_template_id}/open_question_templates/assign. Required parameters: offer_template_id, open_question_template_id, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "open_question_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Open Question template ID; pass null to unset",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question_template_id\": null\n}",
+  "example_response": {
+    "open_question_template": null
+  },
+  "tags": [
+    "offer_templates",
+    "open_question_templates"
+  ]
+}

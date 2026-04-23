@@ -1,0 +1,38 @@
+{
+  "id": "article_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/intercom/articles/{id}",
+  "summary": "get single article",
+  "description": "get single article. Endpoint: GET /c/{company_id}/intercom/articles/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "article ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/intercom/articles/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "article": {
+      "body": "article body",
+      "id": "6998971",
+      "state": "published",
+      "title": "test article 1",
+      "updated_at": 1676628809
+    }
+  },
+  "tags": [
+    "intercom",
+    "articles",
+    "resource"
+  ]
+}

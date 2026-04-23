@@ -1,0 +1,37 @@
+{
+  "id": "reward_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/rewards/{id}",
+  "summary": "Show referral reward",
+  "description": "Show referral reward. Endpoint: GET /c/{company_id}/referral/rewards/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Referral reward id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/rewards/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "reward": {
+      "id": 42,
+      "name": "Great reward",
+      "photo_thumb_url": null,
+      "photo_url": null,
+      "body_html": "Reward description"
+    }
+  },
+  "tags": [
+    "referral",
+    "rewards"
+  ]
+}

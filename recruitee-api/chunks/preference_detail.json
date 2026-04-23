@@ -1,0 +1,21 @@
+{
+  "id": "preference_detail",
+  "method": "GET",
+  "path": "/admin/preferences",
+  "summary": "Show admin preferences",
+  "description": "Show admin preferences. Endpoint: GET /admin/preferences.",
+  "params": [],
+  "example_request": "GET /admin/preferences",
+  "example_response": {
+    "preferences": {
+      "theme": "light",
+      "pipeline_promote_banner_dismissed_offer_ids": [
+        1
+      ]
+    }
+  },
+  "tags": [
+    "admin",
+    "preferences"
+  ]
+}

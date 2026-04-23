@@ -1,0 +1,64 @@
+{
+  "id": "translation_counter_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/locations/translation_counters",
+  "summary": "Get location translation counters",
+  "description": "Get location translation counters. Endpoint: GET /c/{company_id}/locations/translation_counters. Required parameters: company_id. Optional parameters include scope.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "‘active’ default mode, contains only active locations; archived contains only archived locations",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/locations/translation_counters\n\nRequired params: company_id\n\nOptional params: scope",
+  "example_response": {
+    "translations_counters": [
+      {
+        "code": "de",
+        "default": false,
+        "name": "German",
+        "native_name": "Deutsch",
+        "filled_count": 4,
+        "total_count": 10
+      },
+      {
+        "code": "en",
+        "default": true,
+        "name": "English",
+        "native_name": "English",
+        "filled_count": 10,
+        "total_count": 10
+      },
+      {
+        "code": "it",
+        "default": false,
+        "name": "Italian",
+        "native_name": "Italiano",
+        "filled_count": 0,
+        "total_count": 10
+      },
+      {
+        "code": "pl",
+        "default": false,
+        "name": "Polish",
+        "native_name": "Polski",
+        "filled_count": 6,
+        "total_count": 10
+      }
+    ]
+  },
+  "tags": [
+    "locations",
+    "translation_counters"
+  ]
+}

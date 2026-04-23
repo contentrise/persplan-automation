@@ -1,0 +1,112 @@
+{
+  "id": "mailbox_schedule",
+  "method": "POST",
+  "path": "/c/{company_id}/mailbox/schedule",
+  "summary": "Schedule new message",
+  "description": "Schedule new message. Endpoint: POST /c/{company_id}/mailbox/schedule. Required parameters: to, subject, body_html, company_id. Optional parameters include cc, attachments, email_provider_id, send_at, offer_id, visibility, send_at_timezone, bcc, and more.",
+  "params": [
+    {
+      "name": "cc",
+      "type": "array",
+      "required": false,
+      "description": "List of CC-recipients - see below to item spec",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "to",
+      "type": "array",
+      "required": true,
+      "description": "List of TO-recipients - see below to item spec",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "attachments",
+      "type": "array",
+      "required": false,
+      "description": "Array of attachments IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email_provider_id",
+      "type": "integer",
+      "required": false,
+      "description": "Optional admin’s email provider",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "required": true,
+      "description": "Email subject",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "send_at",
+      "type": "datetime",
+      "required": false,
+      "description": "DateTime in ISO 8601 format",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Optional offer id from current context",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "visibility",
+      "type": "map",
+      "required": false,
+      "description": "Visibility params",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "body_html",
+      "type": "string",
+      "required": true,
+      "description": "Email body in HTML format",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "send_at_timezone",
+      "type": "string",
+      "required": false,
+      "description": "Timezone",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "bcc",
+      "type": "array",
+      "required": false,
+      "description": "List of BCC-recipients - see below to item spec",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_offer_mapping",
+      "type": "map",
+      "required": false,
+      "description": "Optional map with candidate_ids to offer_id relation. For bulk send.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "reply_to_message_id",
+      "type": "integer",
+      "required": false,
+      "description": "Optional message id, use when replying",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/mailbox/schedule\n\nRequired params: to, subject, body_html, company_id\n\nOptional params: cc, attachments, email_provider_id, send_at, offer_id, visibility, send_at_timezone, bcc",
+  "example_response": {},
+  "tags": [
+    "mailbox"
+  ]
+}

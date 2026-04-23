@@ -1,0 +1,76 @@
+{
+  "id": "client_authorize",
+  "method": "POST",
+  "path": "/c/{company_id}/oauth/clients/{client_id}/authorize",
+  "summary": "Authorize the client to this admin account",
+  "description": "Authorize the client to this admin account. Endpoint: POST /c/{company_id}/oauth/clients/{client_id}/authorize. Required parameters: scope, client_id, redirect_uri, response_type, company_id.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "client_id",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "redirect_uri",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "response_type",
+      "type": "string",
+      "required": true,
+      "description": "possible values: ‘code’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/oauth/clients/{client_id}/authorize\n\nRequired params: scope, client_id, redirect_uri, response_type, company_id",
+  "example_response": {
+    "code": "bHM1Qm5EQS9hUUJMbnJkMFhrL3pjdz09",
+    "company_id": 1068,
+    "email": "john2335@recruitee.com",
+    "tracking_data": {
+      "company": {
+        "created_at": 1776756687,
+        "id": 1068,
+        "name": "Test Company",
+        "tellent_application_guid": null,
+        "tellent_organization_guid": null
+      },
+      "company_id": 1068,
+      "company_name": "Test Company",
+      "email": "john2335@recruitee.com",
+      "first_name": "John",
+      "id": 2108,
+      "identity_hash": "837786ab5673bda47e473eab0e1f71e80b18e72fad43a1c642e2d490b419cc97",
+      "is_trial": true,
+      "last_name": "Doe",
+      "membership_id": 1058,
+      "name": "John Doe",
+      "phone": "321321322327",
+      "plan": "optimize",
+      "tellent_user_guid": null
+    }
+  },
+  "tags": [
+    "clients",
+    "oauth"
+  ]
+}

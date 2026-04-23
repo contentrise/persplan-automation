@@ -1,0 +1,205 @@
+{
+  "id": "placement_change",
+  "method": "PATCH",
+  "path": "/c/{company_id}/placements/{id}/change_stage",
+  "summary": "Change stage in placement",
+  "description": "Change stage in placement. Endpoint: PATCH /c/{company_id}/placements/{id}/change_stage. Required parameters: id, opening_id, stage_id, company_id. Optional parameters include proceed, hired_at, work_location_id, job_starts_at, disqualify_reason_id, run_actions, remove_from_sharing_containers, disqualify_run_actions.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Placement ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "proceed",
+      "type": "boolean",
+      "required": false,
+      "description": "Placement will be placed at the top of the stage placements list if true (optional)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "hired_at",
+      "type": "datetime",
+      "required": false,
+      "description": "When candidate was hired in the job (optional)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "work_location_id",
+      "type": "integer",
+      "required": false,
+      "description": "Location ID (required when marking a candidate as hired)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "opening_id",
+      "type": "integer",
+      "required": true,
+      "description": "Opening ID (required when requisitions are enabled and marking a candidate as hired)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stage_id",
+      "type": "integer",
+      "required": true,
+      "description": "Stage ID (change to stage sourced if ‘sourced’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "job_starts_at",
+      "type": "datetime",
+      "required": false,
+      "description": "When candidate starts the job (optional)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "disqualify_reason_id",
+      "type": "boolean",
+      "required": false,
+      "description": "Disqualify other placements if the param exists. Set the disqualify reason (optional)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "run_actions",
+      "type": "boolean",
+      "required": false,
+      "description": "Automated actions should be triggered if true (optional)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "remove_from_sharing_containers",
+      "type": "boolean",
+      "required": false,
+      "description": "Remove from all public links (sharing containers) if it’s true (optional)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "disqualify_run_actions",
+      "type": "boolean",
+      "required": false,
+      "description": "Run automated actions for the disqualified placements if it’s true (optional)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/placements/{id}/change_stage\n\nRequired params: id, opening_id, stage_id, company_id\n\nOptional params: proceed, hired_at, work_location_id, job_starts_at, disqualify_reason_id, run_actions, remove_from_sharing_containers, disqualify_run_actions",
+  "example_response": {
+    "references": [
+      {
+        "id": 2346,
+        "position": 490,
+        "status": "draft",
+        "type": "Offer",
+        "remote": false,
+        "description": "<p>Elixir</p>\n",
+        "title": "Best Offer",
+        "location": "",
+        "kind": "job",
+        "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+        "url": null,
+        "created_at": "2026-04-21T07:34:02.983554Z",
+        "department": null,
+        "lang_code": "en",
+        "department_id": null,
+        "slug": "best-offer585",
+        "hybrid": false,
+        "on_site": true,
+        "guid": "guid489",
+        "recruiter_id": null,
+        "hiring_manager_id": null,
+        "wysiwyg_editor": "redactor",
+        "pipeline_template_id": 6834,
+        "careers_job_page_layout_id": null,
+        "job_position_id": null,
+        "mailbox_email": null,
+        "highlight_html": "<p>Elixir</p>\n"
+      },
+      {
+        "id": 55246,
+        "name": "Offer",
+        "position": 8715,
+        "type": "Stage",
+        "group": "active",
+        "category": "none",
+        "created_at": "2026-04-21T07:34:02.985784Z",
+        "updated_at": "2026-04-21T07:34:02.985784Z",
+        "fair_evaluations_enabled": false,
+        "pipeline_template_id": 6834,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 2736,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:34:02.984074Z",
+        "updated_at": "2026-04-21T07:34:02.984074Z",
+        "is_hired": false,
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=2736&company=4821",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      }
+    ],
+    "placement": {
+      "id": 1535,
+      "position": 354,
+      "candidate_id": 2736,
+      "language": null,
+      "disqualify_reason": null,
+      "created_at": "2026-04-21T07:34:02.985024Z",
+      "updated_at": "2026-04-21T07:34:02.988289Z",
+      "offer_id": 2346,
+      "talent_pool_id": null,
+      "positive_ratings": null,
+      "ratings": {},
+      "hired_at": null,
+      "hired_by_id": null,
+      "location_ids": [],
+      "work_location_id": null,
+      "opening_id": null,
+      "overdue_diff": null,
+      "overdue_at": null,
+      "disqualify_kind": null,
+      "stage_id": 55246,
+      "job_starts_at": null,
+      "time_to_hire": null
+    }
+  },
+  "tags": [
+    "placements",
+    "pipeline"
+  ]
+}

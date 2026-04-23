@@ -1,0 +1,29 @@
+{
+  "id": "meeting_room_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/interview/meeting_rooms/{id}",
+  "summary": "Delete meeting room",
+  "description": "Delete meeting room. Endpoint: DELETE /c/{company_id}/interview/meeting_rooms/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Meeting room ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/interview/meeting_rooms/{id}\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "interview",
+    "meeting_rooms"
+  ]
+}

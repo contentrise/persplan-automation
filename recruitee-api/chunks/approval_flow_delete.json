@@ -1,0 +1,39 @@
+{
+  "id": "approval_flow_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/requisitions/settings/approval_flows/{approval_flow_id}",
+  "summary": "Delete approval flow",
+  "description": "Delete approval flow. Endpoint: DELETE /c/{company_id}/requisitions/settings/approval_flows/{approval_flow_id}. Required parameters: approval_flow_id, company_id.",
+  "params": [
+    {
+      "name": "approval_flow_id",
+      "type": "integer",
+      "required": true,
+      "description": "Approval Flow ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/requisitions/settings/approval_flows/{approval_flow_id}\n\nRequired params: approval_flow_id, company_id",
+  "example_response": {
+    "approval_flow": {
+      "default": false,
+      "id": 65,
+      "position": 21,
+      "title": "Approval Flow",
+      "steps": [],
+      "department_ids": [],
+      "steps_count": 0
+    }
+  },
+  "tags": [
+    "requisitions",
+    "settings"
+  ]
+}

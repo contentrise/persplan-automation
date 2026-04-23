@@ -1,0 +1,17 @@
+{
+  "id": "deletion_requests_list",
+  "method": "GET",
+  "path": "/deletion_requests",
+  "summary": "Lists companies with no other admins",
+  "description": "Lists companies with no other admins. Endpoint: GET /deletion_requests.",
+  "params": [],
+  "example_request": "GET /deletion_requests",
+  "example_response": {
+    "message": "Following companies have only one admin and should be removed first.",
+    "companies_with_no_other_admins": []
+  },
+  "tags": [
+    "deletion_requests",
+    "admin"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "id": "setting_register",
+  "method": "PATCH",
+  "path": "/c/{company_id}/texting/settings/register_campaign",
+  "summary": "Register texting campaign at provider for current company",
+  "description": "Register texting campaign at provider for current company. Endpoint: PATCH /c/{company_id}/texting/settings/register_campaign. Required parameters: address, campaign, representative, customer_profile, company_id.",
+  "params": [
+    {
+      "name": "address",
+      "type": "map",
+      "required": true,
+      "description": "Contains company address:",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "campaign",
+      "type": "map",
+      "required": true,
+      "description": "Contains data about the campaign:",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "representative",
+      "type": "map",
+      "required": true,
+      "description": "Contains data about the company representative:",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "customer_profile",
+      "type": "map",
+      "required": true,
+      "description": "Contains data about the company:",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"address\": {\n\"city\": \"Wessyr\",\n\"iso_country\": \"PL\",\n\"postal_code\": \"66\",\n\"region\": \"NORTH\",\n\"street\": null\n},\n\"campaign\": {\n\"company_type\": \"private\"\n},\n\"customer_profile\": {\n\"business_industry\": \"WAR\",\n\"business_name\": null,\n\"business_regions_of_operation\": \"OTHER\",\n\"business_registration_identifier\": \"EIN\",\n\"business_registration_number\": \"666666666\",\n\"business_type\": \"Regiment\",\n\"website_url\": \"www.red-six.com\"\n},\n\"errors\": []\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "required_validation",
+        "data": {},
+        "message": "Street can't be blank",
+        "source": "business_information/address/street"
+      },
+      {
+        "code": "required_validation",
+        "data": {},
+        "message": "Representative can't be blank",
+        "source": "business_information/representative"
+      },
+      {
+        "code": "required_validation",
+        "data": {},
+        "message": "Business name can't be blank",
+        "source": "business_information/customer_profile/business_name"
+      }
+    ],
+    "resources": {
+      "address": {
+        "street": [
+          {
+            "code": "required_validation",
+            "data": {},
+            "message": "can't be blank"
+          }
+        ]
+      },
+      "representative": [
+        {
+          "code": "required_validation",
+          "data": {},
+          "message": "can't be blank"
+        }
+      ],
+      "customer_profile": {
+        "business_name": [
+          {
+            "code": "required_validation",
+            "data": {},
+            "message": "can't be blank"
+          }
+        ]
+      }
+    }
+  },
+  "tags": [
+    "texting",
+    "settings"
+  ]
+}

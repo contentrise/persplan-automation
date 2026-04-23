@@ -1,0 +1,68 @@
+{
+  "id": "event_invitation_template_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/event_invitation_templates/update_positions",
+  "summary": "Update email templates positions",
+  "description": "Update email templates positions. Endpoint: PATCH /c/{company_id}/event_invitation_templates/update_positions. Required parameters: company_id. Optional parameters include ids.",
+  "params": [
+    {
+      "name": "ids",
+      "type": "array",
+      "required": false,
+      "description": "Ordered array of template ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"event_invitation_templates\": [\n10,\n9,\n11\n]\n}",
+  "example_response": {
+    "event_invitation_templates": [
+      {
+        "id": 10,
+        "position": 1,
+        "title": "Template",
+        "admin_id": 551,
+        "subject": "You have an interview scheduled",
+        "created_at": "2026-04-21T07:30:35.028263Z",
+        "updated_at": "2026-04-21T07:30:35.028263Z",
+        "body_html": "You have an interview scheduled, Regards",
+        "template_attachment_assignments": [],
+        "last_used": null
+      },
+      {
+        "id": 9,
+        "position": 2,
+        "title": "Template",
+        "admin_id": 550,
+        "subject": "You have an interview scheduled",
+        "created_at": "2026-04-21T07:30:35.027203Z",
+        "updated_at": "2026-04-21T07:30:35.027203Z",
+        "body_html": "You have an interview scheduled, Regards",
+        "template_attachment_assignments": [],
+        "last_used": null
+      },
+      {
+        "id": 11,
+        "position": 3,
+        "title": "Template",
+        "admin_id": 552,
+        "subject": "You have an interview scheduled",
+        "created_at": "2026-04-21T07:30:35.028968Z",
+        "updated_at": "2026-04-21T07:30:35.028968Z",
+        "body_html": "You have an interview scheduled, Regards",
+        "template_attachment_assignments": [],
+        "last_used": null
+      }
+    ]
+  },
+  "tags": [
+    "event_invitation_templates",
+    "mailbox"
+  ]
+}

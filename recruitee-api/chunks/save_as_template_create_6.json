@@ -1,0 +1,68 @@
+{
+  "id": "save_as_template_create_6",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/auto_reply_templates/save_as_template",
+  "summary": "Save a custom template as regular template",
+  "description": "Save a custom template as regular template. Endpoint: POST /c/{company_id}/offer_templates/{offer_template_id}/auto_reply_templates/save_as_template. Required parameters: title, offer_template_id, company_id. Optional parameters include translations, template_attachment_assignments.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Name of the newly created template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "translations",
+      "type": "map",
+      "required": false,
+      "description": "Fields: [‘lang_code’, ‘subject’, ‘body_html’]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_attachment_assignments",
+      "type": "array",
+      "required": false,
+      "description": "Array of template attachment assignments, parameters: (id attachment_id)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"auto_reply_template\": {\n\"title\": \"\"\n}\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "required_validation",
+        "data": {},
+        "message": "Title can't be blank",
+        "source": "auto_reply_template/title"
+      }
+    ],
+    "resources": {
+      "title": [
+        {
+          "code": "required_validation",
+          "data": {},
+          "message": "can't be blank"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "auto_reply_templates"
+  ]
+}

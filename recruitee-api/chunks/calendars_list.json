@@ -1,0 +1,159 @@
+{
+  "id": "calendars_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/calendars",
+  "summary": "List of admin's interview calendars",
+  "description": "List of admin's interview calendars. Endpoint: GET /c/{company_id}/interview/calendars. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/calendars\n\nRequired params: company_id",
+  "example_response": {
+    "interview_calendars": [
+      {
+        "access": "public",
+        "id": 2,
+        "name": null,
+        "status": "pending",
+        "kind": "personal",
+        "admin_id": 1995,
+        "provider": "google",
+        "external_calendars": [
+          {
+            "access": true,
+            "id": "primary@calendar.google.com",
+            "name": "Primary calendar",
+            "already_synced": true,
+            "already_synced_by": null,
+            "is_primary": null
+          },
+          {
+            "access": true,
+            "id": "n0pd37gkckrd0i41stjg@calendar.google.com",
+            "name": "Holidays",
+            "already_synced": false,
+            "already_synced_by": null,
+            "is_primary": null
+          },
+          {
+            "access": false,
+            "id": "obcol8eiejgbrbs0vp@calendar.google.com",
+            "name": "Company events",
+            "already_synced": false,
+            "already_synced_by": null,
+            "is_primary": null
+          }
+        ],
+        "external_calendar_id": "primary@calendar.google.com",
+        "synced_at": null,
+        "sync_email": null,
+        "subscription_active": true
+      },
+      {
+        "access": "public",
+        "id": 3,
+        "name": "Primary Calendar",
+        "status": "connected",
+        "kind": "personal",
+        "admin_id": 1995,
+        "provider": "google",
+        "external_calendars": null,
+        "external_calendar_id": "primary@calendar.google.com",
+        "synced_at": "2026-04-21T00:22:24.405051Z",
+        "sync_email": null,
+        "subscription_active": true
+      },
+      {
+        "access": "public",
+        "id": 4,
+        "name": "Primary Calendar",
+        "status": "disconnected",
+        "kind": "personal",
+        "admin_id": 1995,
+        "provider": "google",
+        "external_calendars": null,
+        "external_calendar_id": "primary@calendar.google.com",
+        "synced_at": "2026-04-21T05:44:24.405888Z",
+        "sync_email": null,
+        "subscription_active": true
+      },
+      {
+        "access": "public",
+        "id": 5,
+        "name": "Primary Calendar",
+        "status": "connected",
+        "kind": "team",
+        "admin_id": 1995,
+        "provider": "google",
+        "external_calendars": null,
+        "external_calendar_id": "primary@calendar.google.com",
+        "synced_at": "2026-04-21T00:20:24.406682Z",
+        "sync_email": null,
+        "subscription_active": true
+      },
+      {
+        "access": "public",
+        "id": 6,
+        "name": "Primary Calendar",
+        "status": "pending",
+        "kind": "team",
+        "admin_id": 1995,
+        "provider": "google",
+        "external_calendars": [
+          {
+            "access": true,
+            "id": "primary@calendar.google.com",
+            "name": "Primary calendar",
+            "already_synced": true,
+            "already_synced_by": null,
+            "is_primary": null
+          },
+          {
+            "access": true,
+            "id": "n0pd37gkckrd0i41stjg@calendar.google.com",
+            "name": "Holidays",
+            "already_synced": false,
+            "already_synced_by": null,
+            "is_primary": null
+          },
+          {
+            "access": false,
+            "id": "obcol8eiejgbrbs0vp@calendar.google.com",
+            "name": "Company events",
+            "already_synced": false,
+            "already_synced_by": null,
+            "is_primary": null
+          }
+        ],
+        "external_calendar_id": "primary@calendar.google.com",
+        "synced_at": "2026-04-21T02:14:24.407320Z",
+        "sync_email": null,
+        "subscription_active": true
+      },
+      {
+        "access": "public",
+        "id": 7,
+        "name": "Primary Calendar",
+        "status": "connected",
+        "kind": "team",
+        "admin_id": 1996,
+        "provider": "google",
+        "external_calendars": null,
+        "external_calendar_id": "primary@calendar.google.com",
+        "synced_at": "2026-04-21T05:10:24.407940Z",
+        "sync_email": null,
+        "subscription_active": true
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "calendars"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "id": "counters_list_3",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/events/counters",
+  "summary": "Count interview events in a given range and group by date",
+  "description": "Count interview events in a given range and group by date. Endpoint: GET /c/{company_id}/interview/events/counters. Required parameters: start_date, end_date, company_id. Optional parameters include scope, timezone.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Limit by request scope, can be: ‘my’, ‘all’ (default ‘all’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "timezone",
+      "type": "string",
+      "required": false,
+      "description": "Date range timezone, format: Europe/Amsterdam",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "description": "Range start date, format: 2017-01-17",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "description": "Range end date, format: 2017-01-17",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/events/counters\n\nRequired params: start_date, end_date, company_id\n\nOptional params: scope, timezone",
+  "example_response": {
+    "counters": [
+      {
+        "count": 3,
+        "date": "2017-01-05"
+      },
+      {
+        "count": 1,
+        "date": "2017-01-10"
+      },
+      {
+        "count": 2,
+        "date": "2017-01-15"
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "events"
+  ]
+}

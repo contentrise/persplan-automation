@@ -1,0 +1,61 @@
+{
+  "id": "thread_search",
+  "method": "GET",
+  "path": "/c/{company_id}/mailbox/threads",
+  "summary": "Search threads",
+  "description": "Search threads. Endpoint: GET /c/{company_id}/mailbox/threads. Required parameters: company_id. Optional parameters include scope, read, q, limit, page.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "One of: [my, sent, candidates, followed, followed_candidates, followed_jobs, not_converted, general, jobs]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "read",
+      "type": "boolean",
+      "required": false,
+      "description": "Limit threads to read(true) or unread(false) only",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search query",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default is 60",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, …)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/mailbox/threads\n\nRequired params: company_id\n\nOptional params: scope, read, q, limit, page",
+  "example_response": {
+    "error": [
+      "Page not found"
+    ]
+  },
+  "tags": [
+    "mailbox",
+    "threads"
+  ]
+}

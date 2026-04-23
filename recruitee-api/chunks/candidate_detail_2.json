@@ -1,0 +1,104 @@
+{
+  "id": "candidate_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/candidates/share",
+  "summary": "Show candidate share data",
+  "description": "Show candidate share data. Endpoint: GET /c/{company_id}/candidates/share. Required parameters: candidate_id, company_id.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/candidates/share\n\nRequired params: candidate_id, company_id",
+  "example_response": {
+    "shared_container_count": 2,
+    "shared_admin_count": 1,
+    "containers": [
+      {
+        "active": true,
+        "id": 69,
+        "name": "Test Container",
+        "candidates_count": 2,
+        "created_at": "2026-04-21T07:31:51.641254Z",
+        "share_url": "http://company343.recruitee.internal:3003/v/share/aBcDeFg12340"
+      },
+      {
+        "active": true,
+        "id": 70,
+        "name": null,
+        "candidates_count": 1,
+        "created_at": "2026-04-21T07:31:51.642087Z",
+        "share_url": "http://company343.recruitee.internal:3003/v/share/aBcDeFg12341"
+      },
+      {
+        "active": false,
+        "id": 71,
+        "name": null,
+        "candidates_count": 2,
+        "created_at": "2026-04-21T07:31:51.642799Z",
+        "share_url": "http://company343.recruitee.internal:3003/v/share/aBcDeFg12342"
+      }
+    ],
+    "already_have_access": [
+      {
+        "count": 1,
+        "id": 1437,
+        "name": "Corporate Recruiter",
+        "kind": "role",
+        "admins": [
+          {
+            "admin_id": 2752,
+            "role_name": "Corporate Recruiter",
+            "has_avatar": false,
+            "initials": "JD",
+            "photo_thumb_url": "tmp/bow/admins/2752/thumb_avatar_r92npyoprb4r.png",
+            "first_name": "John",
+            "last_name": "Doe"
+          }
+        ]
+      },
+      {
+        "count": 1,
+        "id": 1439,
+        "name": "Corporate Recruiter",
+        "kind": "role",
+        "admins": [
+          {
+            "admin_id": 2758,
+            "role_name": "Corporate Recruiter",
+            "has_avatar": false,
+            "initials": "JD",
+            "photo_thumb_url": "tmp/bow/admins/2758/thumb_avatar_un3uru5a9kdo.png",
+            "first_name": "John",
+            "last_name": "Doe"
+          }
+        ]
+      }
+    ],
+    "shared_with": [
+      {
+        "admin_id": 2758,
+        "role_name": "Corporate Recruiter",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_thumb_url": "tmp/bow/admins/2758/thumb_avatar_un3uru5a9kdo.png",
+        "first_name": "John",
+        "last_name": "Doe"
+      }
+    ]
+  },
+  "tags": [
+    "candidates"
+  ]
+}

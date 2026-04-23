@@ -1,0 +1,18 @@
+{
+  "id": "deletion_request_create",
+  "method": "POST",
+  "path": "/deletion_requests",
+  "summary": "Create admin deletion request",
+  "description": "Create admin deletion request. Endpoint: POST /deletion_requests.",
+  "params": [],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"secure_change_token\": \"invalid_secure_change_token\"\n}",
+  "example_response": {
+    "error": [
+      "Forbidden"
+    ]
+  },
+  "tags": [
+    "deletion_requests",
+    "admin"
+  ]
+}

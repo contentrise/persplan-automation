@@ -1,0 +1,75 @@
+{
+  "id": "conditions_list",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/conditions",
+  "summary": "List conditions for company's Referral program",
+  "description": "List conditions for company's Referral program. Endpoint: GET /c/{company_id}/referral/conditions. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/conditions\n\nRequired params: company_id",
+  "example_response": {
+    "conditions": [
+      {
+        "id": 37,
+        "position": 31,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 38,
+        "position": 32,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 39,
+        "position": 33,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 40,
+        "position": 34,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 41,
+        "position": 35,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 42,
+        "position": 36,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 43,
+        "position": 37,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 44,
+        "position": 38,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 45,
+        "position": 39,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 46,
+        "position": 40,
+        "body_html": "<p> Condition description </p>"
+      }
+    ]
+  },
+  "tags": [
+    "referral",
+    "conditions"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "offer_disable",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/offers/disable_referral_program",
+  "summary": "Disable referral program for selected jobs (offers)",
+  "description": "Disable referral program for selected jobs (offers). Endpoint: PATCH /c/{company_id}/bulk/offers/disable_referral_program. Required parameters: company_id. Optional parameters include offers_ids.",
+  "params": [
+    {
+      "name": "offers_ids",
+      "type": "array",
+      "required": false,
+      "description": "Offer IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/bulk/offers/disable_referral_program\n\nRequired params: company_id\n\nOptional params: offers_ids",
+  "example_response": {},
+  "tags": [
+    "offers"
+  ]
+}

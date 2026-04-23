@@ -1,0 +1,105 @@
+{
+  "id": "result_update",
+  "method": "PATCH",
+  "path": "/share/containers/{token}/results/{id}",
+  "summary": "Update interview result for candidate",
+  "description": "Update interview result for candidate. Endpoint: PATCH /share/containers/{token}/results/{id}. Required parameters: id, kind, token, auth_token, rating. Optional parameters include offer_id, stage_id, rating_note.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview result ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "kind",
+      "type": "optional",
+      "required": true,
+      "description": "Result kind, only: ‘rating’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auth_token",
+      "type": "string",
+      "required": true,
+      "description": "Guest auth token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "rating",
+      "type": "string",
+      "required": true,
+      "description": "Rating, can be: ‘strong_yes’, ‘yes’, ‘neutral’, ‘no’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stage_id",
+      "type": "integer",
+      "required": false,
+      "description": "Stage ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "rating_note",
+      "type": "string",
+      "required": false,
+      "description": "Rating note",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_result\": {\n\"rating\": \"neutral\",\n\"rating_note\": \"Average skills\"\n}\n}",
+  "example_response": {
+    "interview_result": {
+      "id": 43,
+      "kind": "rating",
+      "offer": {
+        "id": 1156,
+        "status": "draft",
+        "title": "Best Offer",
+        "kind": "job"
+      },
+      "admin": {
+        "id": 5552,
+        "name": "John Doe",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_thumb_url": "tmp/bow/admins/5552/thumb_avatar_gn2lomc2sb5d.png",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      "rating": "neutral",
+      "guest": {
+        "id": 43,
+        "name": "James Smith"
+      },
+      "created_at": "2026-04-21T07:32:51.536895Z",
+      "updated_at": "2026-04-21T07:32:51.539244Z",
+      "offer_id": 1156,
+      "talent_pool_id": null,
+      "stage_id": null,
+      "interview_template_name": null,
+      "rating_note": "Average skills"
+    }
+  },
+  "tags": [
+    "containers",
+    "results"
+  ]
+}

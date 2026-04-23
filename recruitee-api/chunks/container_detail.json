@@ -1,0 +1,28 @@
+{
+  "id": "container_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/share/containers/{id}",
+  "summary": "Show container",
+  "description": "Show container. Endpoint: GET /c/{company_id}/share/containers/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Container ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/share/containers/{id}\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "containers"
+  ]
+}

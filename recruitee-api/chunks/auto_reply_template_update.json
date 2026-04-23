@@ -1,0 +1,80 @@
+{
+  "id": "auto_reply_template_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/auto_reply_templates/",
+  "summary": "Update auto-reply template",
+  "description": "Update auto-reply template. Endpoint: PATCH /c/{company_id}/auto_reply_templates/. Required parameters: title, company_id. Optional parameters include translations, template_attachment_assignments.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "translations",
+      "type": "map",
+      "required": false,
+      "description": "Fields: [‘lang_code’, ‘subject’, ‘body_html’]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_attachment_assignments",
+      "type": "array",
+      "required": false,
+      "description": "Array of template attachment assignments, parameters: (id attachment_id)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"auto_reply_template\": {\n\"template_attachment_assignments\": [\n{\n\"attachment_id\": 149,\n\"id\": 10\n}\n]\n}\n}",
+  "example_response": {
+    "auto_reply_template": {
+      "default": false,
+      "id": 73,
+      "position": 20,
+      "title": "Template19",
+      "created_at": "2026-04-21T07:32:25.674580Z",
+      "updated_at": "2026-04-21T07:32:25.680986Z",
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0,
+      "translations": [],
+      "template_attachment_assignments": [
+        {
+          "id": 10,
+          "attachment": {
+            "id": 149,
+            "status": "ok",
+            "filename": "avatar.png",
+            "extension": "png",
+            "source": "default",
+            "kind": "image",
+            "admin_id": 4186,
+            "candidate_id": null,
+            "file_size": null,
+            "created_at": "2026-04-21T07:32:25.676723Z",
+            "image_thumbnail_url": "tmp/bow/attachments/149/image_thumbnail_avatar.png",
+            "image_url": "tmp/bow/attachments/149/image_avatar.png",
+            "file_url": "tmp/bow/attachments/149/avatar.png",
+            "offer_id": null,
+            "talent_pool_id": null,
+            "requisition_id": null,
+            "guest_id": null,
+            "uploader": null
+          }
+        }
+      ]
+    }
+  },
+  "tags": [
+    "auto_reply_templates",
+    "mailbox"
+  ]
+}

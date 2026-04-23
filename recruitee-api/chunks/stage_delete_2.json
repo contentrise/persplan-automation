@@ -1,0 +1,49 @@
+{
+  "id": "stage_delete_2",
+  "method": "DELETE",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/stages/",
+  "summary": "Delete pipeline template stage and move placements to given destination stage",
+  "description": "Delete pipeline template stage and move placements to given destination stage. Endpoint: DELETE /c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/stages/. Required parameters: offer_template_id, source_template_id, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/stages/\n\nRequired params: offer_template_id, source_template_id, company_id",
+  "example_response": {
+    "stage": {
+      "id": 27015,
+      "name": "Interview",
+      "position": 6,
+      "group": "active",
+      "category": "none",
+      "fair_evaluations_enabled": false,
+      "action_templates": [],
+      "locked": false,
+      "time_limit": null,
+      "candidate_anonymization_enabled": false
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "pipeline_templates"
+  ]
+}

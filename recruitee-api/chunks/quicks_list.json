@@ -1,0 +1,94 @@
+{
+  "id": "quicks_list",
+  "method": "GET",
+  "path": "/c/{company_id}/search/new/quick",
+  "summary": "Quick Search",
+  "description": "Searches candidates, jobs, talent pools, saved searches and requisitions",
+  "params": [
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit per each results’ type (by default: 1000)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "only",
+      "type": "string",
+      "required": false,
+      "description": "Limit results’ type (‘all’ | ‘candidates’ | ‘jobs’ | ‘talent_pools’ | ‘requisitions’) (by default: ‘all’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "description": "Search query",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "deleted",
+      "type": "boolean",
+      "required": false,
+      "description": "Show only deleted candidates (by default: false)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_emails",
+      "type": "boolean",
+      "required": false,
+      "description": "Limit candidates to those that have at least 1 email (by default: false)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/search/new/quick\n\nRequired params: query, company_id\n\nOptional params: limit, only, deleted, with_emails",
+  "example_response": {
+    "candidates": {
+      "total": 1,
+      "hits": [
+        {
+          "id": 2187,
+          "name": "My candidate",
+          "title": null,
+          "company_id": 4364,
+          "emails": [
+            "john_doe@acme.com"
+          ],
+          "has_avatar": true,
+          "initials": "MC",
+          "photo_thumb_url": null,
+          "offers": [],
+          "highlight": {
+            "name": [
+              "<em>My</em> candidate"
+            ]
+          },
+          "is_hired": false,
+          "salutation": null,
+          "last_activity_at": "2026-04-21T07:33:49Z",
+          "is_anonymous": false,
+          "phones": [],
+          "viewed": false,
+          "assigned_admins_ids": [],
+          "deleted": false,
+          "importance": 1,
+          "score": 1002.1621
+        }
+      ]
+    },
+    "talent_pools": null,
+    "jobs": null,
+    "requisitions": null
+  },
+  "tags": [
+    "quick",
+    "search"
+  ]
+}

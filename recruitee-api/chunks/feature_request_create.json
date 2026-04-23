@@ -1,0 +1,40 @@
+{
+  "id": "feature_request_create",
+  "method": "POST",
+  "path": "/c/{company_id}/marketplace/feature_request",
+  "summary": "Creates a feature request",
+  "description": "Creates a feature request. Endpoint: POST /c/{company_id}/marketplace/feature_request. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"approver_id\": 2141,\n\"data\": {\n\"name\": \"Amazon Redshift\",\n\"slug\": \"amazon-redshift\"\n},\n\"feature_codename\": null,\n\"feature_kind\": \"integration\",\n\"note\": \"Some note\"\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "required_validation",
+        "data": {},
+        "message": "Feature codename can't be blank",
+        "source": "feature_request/feature_codename"
+      }
+    ],
+    "resources": {
+      "feature_codename": [
+        {
+          "code": "required_validation",
+          "data": {},
+          "message": "can't be blank"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "marketplace",
+    "feature_request"
+  ]
+}

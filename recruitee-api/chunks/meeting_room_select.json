@@ -1,0 +1,78 @@
+{
+  "id": "meeting_room_select",
+  "method": "POST",
+  "path": "/c/{company_id}/interview/meeting_rooms/select",
+  "summary": "Select calendars to sync as meeting rooms",
+  "description": "Select calendars to sync as meeting rooms. Endpoint: POST /c/{company_id}/interview/meeting_rooms/select. Required parameters: calendar_id, external_calendar_ids, company_id.",
+  "params": [
+    {
+      "name": "calendar_id",
+      "type": "integer",
+      "required": true,
+      "description": "Temporary interview calendar ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "external_calendar_ids",
+      "type": "array",
+      "required": true,
+      "description": "External calendar IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"external_calendar_ids\": [\n\"room 0@onmicrosoft.com\",\n\"room 1@onmicrosoft.com\",\n\"room 2@onmicrosoft.com\"\n]\n}",
+  "example_response": {
+    "meeting_rooms": [
+      {
+        "enabled": true,
+        "id": 69,
+        "name": "room 0",
+        "status": "connected",
+        "floor": null,
+        "available": null,
+        "provider": "microsoft",
+        "external_id": "room 0@onmicrosoft.com",
+        "synced_at": "2026-04-21T07:33:39.000000Z",
+        "building": null,
+        "capacity": null
+      },
+      {
+        "enabled": true,
+        "id": 70,
+        "name": "room 1",
+        "status": "connected",
+        "floor": null,
+        "available": null,
+        "provider": "microsoft",
+        "external_id": "room 1@onmicrosoft.com",
+        "synced_at": "2026-04-21T07:33:39.000000Z",
+        "building": null,
+        "capacity": null
+      },
+      {
+        "enabled": true,
+        "id": 71,
+        "name": "room 2",
+        "status": "connected",
+        "floor": null,
+        "available": null,
+        "provider": "microsoft",
+        "external_id": "room 2@onmicrosoft.com",
+        "synced_at": "2026-04-21T07:33:39.000000Z",
+        "building": null,
+        "capacity": null
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "meeting_rooms"
+  ]
+}

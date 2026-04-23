@@ -1,0 +1,43 @@
+{
+  "id": "thread_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/mailbox/threads/{id}",
+  "summary": "Update thread settings",
+  "description": "Update thread settings. Endpoint: PATCH /c/{company_id}/mailbox/threads/{id}. Required parameters: company_id. Optional parameters include id, candidate_id, visibility.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Thread ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": false,
+      "description": "Pin thread to candidate",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "visibility",
+      "type": "map",
+      "required": false,
+      "description": "Visibility params",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/mailbox/threads/{id}\n\nRequired params: company_id\n\nOptional params: id, candidate_id, visibility",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "threads"
+  ]
+}

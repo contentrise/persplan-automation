@@ -1,0 +1,43 @@
+{
+  "id": "datas_list",
+  "method": "GET",
+  "path": "/c/{company_id}/eeo/data/export",
+  "summary": "Export EEO report",
+  "description": "Export EEO report. Endpoint: GET /c/{company_id}/eeo/data/export. Required parameters: date_from, date_to, include_contact_information, company_id.",
+  "params": [
+    {
+      "name": "date_from",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_to",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "include_contact_information",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/eeo/data/export\n\nRequired params: date_from, date_to, include_contact_information, company_id",
+  "example_response": "Name;Job ID;Job Title;Job Status;Job Category;Job City;Job State;Job Country;Job Postal Code;Work model;Status;Work location;Stage name;Race;Gender;Veteran Status;Disability Status;Applied at;Hired at;Disqualified at;Disqualify reason;Completed at;Created at;Updated at",
+  "tags": [
+    "eeo",
+    "data"
+  ]
+}

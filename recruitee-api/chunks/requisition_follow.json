@@ -1,0 +1,30 @@
+{
+  "id": "requisition_follow",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/requisitions/follow",
+  "summary": "Follows requisitions",
+  "description": "Follows requisitions. Endpoint: PATCH /c/{company_id}/bulk/requisitions/follow. Required parameters: company_id. Optional parameters include requisition_ids.",
+  "params": [
+    {
+      "name": "requisition_ids",
+      "type": "array",
+      "required": false,
+      "description": "Requisition IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"requisition_ids\": [\n1,\n2,\n3\n]\n}",
+  "example_response": {
+    "uuid": "1d51e9a7-8da3-4e03-b217-0c8b1baf7529"
+  },
+  "tags": [
+    "requisitions"
+  ]
+}

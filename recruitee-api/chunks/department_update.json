@@ -1,0 +1,51 @@
+{
+  "id": "department_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/departments/{id}",
+  "summary": "Update company department",
+  "description": "Update company department. Endpoint: PATCH /c/{company_id}/departments/{id}. Required parameters: id, company_id. Optional parameters include name, translations.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Department ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "description": "Department name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "translations",
+      "type": "map",
+      "required": false,
+      "description": "Department name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"department\": {\n\"name\": \"\"\n}\n}",
+  "example_response": {
+    "error": [
+      "Name can't be blank"
+    ],
+    "error_fields": {
+      "name": [
+        "can't be blank"
+      ]
+    }
+  },
+  "tags": [
+    "departments"
+  ]
+}

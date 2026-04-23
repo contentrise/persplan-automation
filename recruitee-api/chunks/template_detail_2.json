@@ -1,0 +1,75 @@
+{
+  "id": "template_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/open_questions/template/{id}",
+  "summary": "Show Open Question template",
+  "description": "Show Open Question template. Endpoint: GET /c/{company_id}/open_questions/template/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Open Question template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/open_questions/template/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "open_question_template": {
+      "default": false,
+      "id": 185,
+      "position": 44,
+      "title": "First template",
+      "category": "Some category",
+      "created_at": "2026-04-21T07:33:31.438833Z",
+      "updated_at": "2026-04-21T07:33:31.438833Z",
+      "custom": false,
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0,
+      "open_questions": [
+        {
+          "id": 176,
+          "position": 31,
+          "visible": true,
+          "options": null,
+          "required": false,
+          "kind": "multi_choice",
+          "visibility": null,
+          "open_question_options": [
+            {
+              "id": 200,
+              "position": 31,
+              "options": {},
+              "translations": [
+                {
+                  "body": "Das Open Question Option Translation",
+                  "lang_code": "de"
+                }
+              ],
+              "disqualify_reason_id": null
+            }
+          ],
+          "translations": [
+            {
+              "body": "Warum?",
+              "lang_code": "de"
+            }
+          ],
+          "open_question_template_id": 185,
+          "is_knockout_question": false
+        }
+      ]
+    }
+  },
+  "tags": [
+    "open_questions",
+    "template"
+  ]
+}

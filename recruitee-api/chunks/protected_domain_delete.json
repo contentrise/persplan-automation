@@ -1,0 +1,29 @@
+{
+  "id": "protected_domain_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/mailbox/settings/protected_domains",
+  "summary": "Delete protected domain from company",
+  "description": "This endpoint allows to delete a protected domain from the company. Allows to use emails with that domain in candidates profiles. This will not bring back emails from candidates profiles which has been previously removed due to adding the protected domain.",
+  "params": [
+    {
+      "name": "protected_domain",
+      "type": "string",
+      "required": true,
+      "description": "Protected domain to delete without @ (ex. example.com)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/mailbox/settings/protected_domains\n\nRequired params: protected_domain, company_id",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "settings"
+  ]
+}

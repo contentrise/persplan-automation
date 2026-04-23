@@ -1,0 +1,27 @@
+{
+  "id": "job_category_detail",
+  "method": "GET",
+  "path": "/eeo/job_categories",
+  "summary": "Show available EEO job categories",
+  "description": "Show available EEO job categories. Endpoint: GET /eeo/job_categories.",
+  "params": [],
+  "example_request": "GET /eeo/job_categories",
+  "example_response": {
+    "job_categories": [
+      "Executive/Senior Level Officials and Managers",
+      "First/Mid Level Officials and Managers",
+      "Professionals",
+      "Technicians",
+      "Sales Workers",
+      "Administrative Support Workers",
+      "Craft Workers",
+      "Operatives",
+      "Laborers and Helpers",
+      "Service Workers"
+    ]
+  },
+  "tags": [
+    "eeo",
+    "job_categories"
+  ]
+}

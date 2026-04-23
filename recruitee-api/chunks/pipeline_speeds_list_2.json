@@ -1,0 +1,172 @@
+{
+  "id": "pipeline_speeds_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/report/jobs/pipeline_speed",
+  "summary": "Jobs Report - Pipeline speed",
+  "description": "DEPRECATED - This endpoint is deprecated and will be discontinued by the end of 2024.",
+  "params": [
+    {
+      "name": "format",
+      "type": "string",
+      "required": false,
+      "description": "Used for exporting in different format than json, can be: csv",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "filters",
+      "type": "string",
+      "required": false,
+      "description": "Filters in format type:value;type:value (example: job:hiring-manager-54;department:Engineering)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default is unlimited",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Sort results by field, can be: title, status, date",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_start",
+      "type": "string",
+      "required": false,
+      "description": "Used when date_range is ‘range’. Date from which data should be fetched. Should be in format ‘2014-01-30’.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_end",
+      "type": "string",
+      "required": false,
+      "description": "Used when date_range is ‘range’. Date to which data should be fetched. Should be in format ‘2014-01-30’.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "Sort order, can be: asc, desc (default: desc)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number used for pagination, can be used only with the limit option (1, 2, 3, 4…)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_range",
+      "type": "string",
+      "required": false,
+      "description": "Date filter. Can be: range, today, yesterday, this_week, last_week, this_month, last_month, this_quarter, last_quarter, this_year, last_year, last_30_days, last_60_days. If value is range, additional parameters ‘date_start’ and ‘date_end’ must be provided.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/report/jobs/pipeline_speed\n\nRequired params: company_id\n\nOptional params: format, filters, limit, sort_by, date_start, date_end, sort_order, page",
+  "example_response": {
+    "values": [
+      [
+        642,
+        "best-offer156",
+        "Elixir Developer",
+        "draft",
+        3,
+        10286,
+        [
+          {
+            "id": 17605,
+            "name": "Referred",
+            "category": "referred",
+            "avg_minutes": 0,
+            "max_minutes": 0,
+            "min_minutes": 0
+          },
+          {
+            "id": 17606,
+            "name": "Sourced",
+            "category": "sourced",
+            "avg_minutes": 0,
+            "max_minutes": 0,
+            "min_minutes": 0
+          },
+          {
+            "id": 17607,
+            "name": "Applied",
+            "category": "apply",
+            "avg_minutes": 12000,
+            "max_minutes": 14400,
+            "min_minutes": 7200
+          },
+          {
+            "id": 17608,
+            "name": "Phone interview",
+            "category": "phone_screen",
+            "avg_minutes": 0,
+            "max_minutes": 0,
+            "min_minutes": 0
+          },
+          {
+            "id": 17609,
+            "name": "On-site interview",
+            "category": "interview",
+            "avg_minutes": 9600,
+            "max_minutes": 14400,
+            "min_minutes": 7200
+          },
+          {
+            "id": 17610,
+            "name": "Evaluation",
+            "category": "evaluation",
+            "avg_minutes": 0,
+            "max_minutes": 0,
+            "min_minutes": 0
+          },
+          {
+            "id": 17611,
+            "name": "Offer",
+            "category": "offer",
+            "avg_minutes": 7200,
+            "max_minutes": 7200,
+            "min_minutes": 7200
+          },
+          {
+            "id": 17612,
+            "name": "Hired",
+            "category": "hire",
+            "avg_minutes": 0,
+            "max_minutes": 0,
+            "min_minutes": 0
+          }
+        ]
+      ]
+    ],
+    "columns": [
+      "id",
+      "slug",
+      "title",
+      "status",
+      "total_candidates_count",
+      "average_proceed_time",
+      "stages"
+    ],
+    "total_count": 1
+  },
+  "tags": [
+    "report",
+    "jobs"
+  ]
+}

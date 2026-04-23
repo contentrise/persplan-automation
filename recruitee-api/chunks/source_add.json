@@ -1,0 +1,38 @@
+{
+  "id": "source_add",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/sources",
+  "summary": "Add sources to candidates",
+  "description": "Add sources to candidates. Endpoint: PATCH /c/{company_id}/bulk/candidates/sources. Required parameters: company_id. Optional parameters include sources, candidates.",
+  "params": [
+    {
+      "name": "sources",
+      "type": "array",
+      "required": false,
+      "description": "Array of sources",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n416,\n417,\n418\n],\n\"sources\": [\n\"fb\",\n\"tw\"\n]\n}",
+  "example_response": {
+    "uuid": "f4776684-2d14-4156-843f-0d804a05774d"
+  },
+  "tags": [
+    "candidates",
+    "sources"
+  ]
+}

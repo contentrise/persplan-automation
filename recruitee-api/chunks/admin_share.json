@@ -1,0 +1,38 @@
+{
+  "id": "admin_share",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/share/admins",
+  "summary": "Share candidates",
+  "description": "Share candidates. Endpoint: PATCH /c/{company_id}/bulk/candidates/share/admins. Required parameters: admin_ids, placement_ids, company_id.",
+  "params": [
+    {
+      "name": "admin_ids",
+      "type": "array",
+      "required": true,
+      "description": "List of Admin IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "placement_ids",
+      "type": "array",
+      "required": true,
+      "description": "List of Placement IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"admin_ids\": [\n7369,\n7370\n],\n\"placement_ids\": [\n1109,\n1110\n]\n}",
+  "example_response": {
+    "uuid": "3806e73b-b6b2-4066-bc86-a3048b9c9289"
+  },
+  "tags": [
+    "candidates",
+    "admins"
+  ]
+}

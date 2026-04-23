@@ -1,0 +1,50 @@
+{
+  "id": "registration_register",
+  "method": "POST",
+  "path": "/referral_portal/registration",
+  "summary": "Registers a referrer",
+  "description": "Registers a referrer. Endpoint: POST /referral_portal/registration. Required parameters: email, password, first_name, last_name.",
+  "params": [
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "password",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "first_name",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "last_name",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"company_id\": 1598,\n\"g-recaptcha-response\": \"RECAPTCHA_TOKEN\",\n\"registration\": {\n\"email\": \"tony@stark.com\",\n\"email_code\": \"123456\",\n\"first_name\": \"Tony<evil>\",\n\"last_name\": \"Stark<evil>\",\n\"password\": \"Jarvis123\",\n\"token\": \"m68wbolta69l\"\n}\n}",
+  "example_response": {
+    "scope": "read,write",
+    "access_token": "OFJ5L2lGanVQaHVCL2NMSldoZGtsQT09",
+    "refresh_token": null,
+    "expires_at": 1779348715,
+    "token_type": "bearer"
+  },
+  "tags": [
+    "referral_portal",
+    "registration",
+    "referral"
+  ]
+}

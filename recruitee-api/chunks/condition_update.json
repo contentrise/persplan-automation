@@ -1,0 +1,80 @@
+{
+  "id": "condition_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/conditions",
+  "summary": "Update condition list for company's Referral program",
+  "description": "Update condition list for company's Referral program. Endpoint: PATCH /c/{company_id}/referral/conditions. Required parameters: conditions, company_id.",
+  "params": [
+    {
+      "name": "conditions",
+      "type": "array",
+      "required": true,
+      "description": "Array of conditions objects (parameters: position, body_html)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"conditions\": [\n{\n\"body_html\": null,\n\"position\": null\n}\n]\n}",
+  "example_response": [
+    {
+      "error": [],
+      "error_fields": {}
+    },
+    {
+      "error": [],
+      "error_fields": {}
+    },
+    {
+      "error": [],
+      "error_fields": {}
+    },
+    {
+      "error": [],
+      "error_fields": {}
+    },
+    {
+      "error": [],
+      "error_fields": {}
+    },
+    {
+      "error": [],
+      "error_fields": {}
+    },
+    {
+      "error": [],
+      "error_fields": {}
+    },
+    {
+      "error": [],
+      "error_fields": {}
+    },
+    {
+      "error": [],
+      "error_fields": {}
+    },
+    {
+      "error": [],
+      "error_fields": {}
+    },
+    {
+      "error": [
+        "Position can't be blank"
+      ],
+      "error_fields": {
+        "position": [
+          "can't be blank"
+        ]
+      }
+    }
+  ],
+  "tags": [
+    "referral",
+    "conditions"
+  ]
+}

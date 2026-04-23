@@ -1,0 +1,54 @@
+{
+  "id": "candidates_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/imports/candidates",
+  "summary": "List import candidates",
+  "description": "List import candidates. Endpoint: GET /c/{company_id}/imports/candidates. Required parameters: company_id. Optional parameters include query.",
+  "params": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": false,
+      "description": "Search query for candidate’s name or email",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/imports/candidates\n\nRequired params: company_id\n\nOptional params: query",
+  "example_response": {
+    "candidates": [
+      {
+        "id": 14,
+        "name": "Bruce Banner",
+        "emails": [
+          "bruce@marvel.com",
+          "hulk@marvel.com"
+        ]
+      },
+      {
+        "id": 12,
+        "name": "Natasha Romanova",
+        "emails": [
+          "black@widow.io"
+        ]
+      },
+      {
+        "id": 13,
+        "name": "Wanda Maximoff",
+        "emails": [
+          "wanda@marvel.com"
+        ]
+      }
+    ]
+  },
+  "tags": [
+    "imports",
+    "candidates"
+  ]
+}

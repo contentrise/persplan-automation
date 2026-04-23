@@ -1,0 +1,29 @@
+{
+  "id": "role_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/roles/{id}",
+  "summary": "Get role",
+  "description": "Get role. Endpoint: GET /c/{company_id}/roles/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Role ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/roles/{id}\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "roles",
+    "company"
+  ]
+}

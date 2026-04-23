@@ -1,0 +1,13 @@
+{
+  "id": "account_recovery_request_detail",
+  "method": "GET",
+  "path": "/account-recovery-request",
+  "summary": "Show 2FA empty recovery form for current admin",
+  "description": "Show 2FA empty recovery form for current admin. Endpoint: GET /account-recovery-request.",
+  "params": [],
+  "example_request": "GET /account-recovery-request",
+  "example_response": {},
+  "tags": [
+    "account_recovery_request"
+  ]
+}

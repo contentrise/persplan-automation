@@ -1,0 +1,29 @@
+{
+  "id": "automation_update_4",
+  "method": "PATCH",
+  "path": "/c/{company_id}/workflow_automations/pipeline_templates/automations/{automation_id}",
+  "summary": "Update automation",
+  "description": "Update automation. Endpoint: PATCH /c/{company_id}/workflow_automations/pipeline_templates/automations/{automation_id}. Required parameters: automation_id, company_id.",
+  "params": [
+    {
+      "name": "automation_id",
+      "type": "integer",
+      "required": true,
+      "description": "Automation ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/workflow_automations/pipeline_templates/automations/{automation_id}\n\nRequired params: automation_id, company_id",
+  "example_response": {},
+  "tags": [
+    "workflow_automations",
+    "pipeline_templates"
+  ]
+}

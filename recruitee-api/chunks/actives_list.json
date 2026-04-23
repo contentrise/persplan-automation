@@ -1,0 +1,86 @@
+{
+  "id": "actives_list",
+  "method": "GET",
+  "path": "/referral_portal/offers/active",
+  "summary": "List offers active for referring",
+  "description": "List offers active for referring. Endpoint: GET /referral_portal/offers/active. Optional parameters include title, limit, country_code, city, department_id, page.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": false,
+      "description": "Filter by offer title",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "country_code",
+      "type": "string",
+      "required": false,
+      "description": "Filter by offer country",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "city",
+      "type": "string",
+      "required": false,
+      "description": "Filter by offer city",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "department_id",
+      "type": "string",
+      "required": false,
+      "description": "Filter by offer department (‘none’ for no department)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /referral_portal/offers/active\n\nOptional params: title, limit, country_code, city, department_id, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 1,
+      "page": 1
+    },
+    "references": [],
+    "offer_assignments": [
+      {
+        "id": 26,
+        "offer": {
+          "id": 625,
+          "status": "published",
+          "remote": false,
+          "description": "<p>Elixir</p>\n",
+          "title": "Best Offer",
+          "location": null,
+          "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+          "department": null,
+          "location_ids": [],
+          "locations": [],
+          "hybrid": false,
+          "on_site": true
+        },
+        "referral_reward_id": null,
+        "referral_template_id": null
+      }
+    ]
+  },
+  "tags": [
+    "referral_portal",
+    "offers",
+    "referral"
+  ]
+}

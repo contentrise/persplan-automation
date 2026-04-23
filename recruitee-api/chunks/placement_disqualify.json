@@ -1,0 +1,141 @@
+{
+  "id": "placement_disqualify",
+  "method": "PATCH",
+  "path": "/c/{company_id}/placements/{id}/disqualify",
+  "summary": "Disqualify candidate in placement",
+  "description": "Disqualify candidate in placement. Endpoint: PATCH /c/{company_id}/placements/{id}/disqualify. Required parameters: id, disqualify_reason_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Placement ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "disqualify_reason_id",
+      "type": "integer",
+      "required": true,
+      "description": "Disqualify reason ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/placements/{id}/disqualify\n\nRequired params: id, disqualify_reason_id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 2188,
+        "position": 334,
+        "status": "draft",
+        "type": "Offer",
+        "remote": false,
+        "description": "<p>Elixir</p>\n",
+        "title": "Best Offer",
+        "location": "",
+        "kind": "job",
+        "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+        "url": null,
+        "created_at": "2026-04-21T07:34:01.124646Z",
+        "department": null,
+        "lang_code": "en",
+        "department_id": null,
+        "slug": "best-offer427",
+        "hybrid": false,
+        "on_site": true,
+        "guid": "guid333",
+        "recruiter_id": null,
+        "hiring_manager_id": null,
+        "wysiwyg_editor": "redactor",
+        "pipeline_template_id": 6611,
+        "careers_job_page_layout_id": null,
+        "job_position_id": null,
+        "mailbox_email": null,
+        "highlight_html": "<p>Elixir</p>\n"
+      },
+      {
+        "id": 53397,
+        "name": "Referred",
+        "position": -3,
+        "type": "Stage",
+        "group": "applicants",
+        "category": "referred",
+        "created_at": "2026-04-21T07:34:01.123607Z",
+        "updated_at": "2026-04-21T07:34:01.123607Z",
+        "fair_evaluations_enabled": false,
+        "pipeline_template_id": 6611,
+        "locked": true,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 2567,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:34:01.125228Z",
+        "updated_at": "2026-04-21T07:34:01.125228Z",
+        "is_hired": false,
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=2567&company=4732",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      }
+    ],
+    "placement": {
+      "id": 1399,
+      "position": 224,
+      "candidate_id": 2567,
+      "language": null,
+      "disqualify_reason": "Not a fit",
+      "created_at": "2026-04-21T07:34:01.125794Z",
+      "updated_at": "2026-04-21T07:34:01.130267Z",
+      "offer_id": 2188,
+      "talent_pool_id": null,
+      "positive_ratings": null,
+      "ratings": {},
+      "hired_at": null,
+      "hired_by_id": null,
+      "location_ids": [],
+      "work_location_id": null,
+      "overdue_diff": null,
+      "overdue_at": null,
+      "disqualify_kind": "admin",
+      "stage_id": 53397,
+      "job_starts_at": null,
+      "time_to_hire": null
+    }
+  },
+  "tags": [
+    "placements",
+    "pipeline"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "id": "questionnaire_create",
+  "method": "POST",
+  "path": "/share/interview/questionnaire/{template_token}/{request_link_token}",
+  "summary": "Create interview result for a given request link",
+  "description": "Create interview result for a given request link. Endpoint: POST /share/interview/questionnaire/{template_token}/{request_link_token}. Required parameters: request_link_token, template_token.",
+  "params": [
+    {
+      "name": "request_link_token",
+      "type": "string",
+      "required": true,
+      "description": "Result link token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_token",
+      "type": "string",
+      "required": true,
+      "description": "Template token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_result\": {\n\"interview_result_answers\": [\n{\n\"content\": \"\",\n\"question_hint\": \"String question hint\",\n\"question_kind\": \"string\",\n\"question_required\": true,\n\"question_title\": \"String question?\"\n},\n{\n\"content\": \"\",\n\"question_hint\": \"Text question hint\",\n\"question_kind\": \"text\",\n\"question_required\": true,\n\"question_title\": \"Text question?\"\n},\n{\n\"content\": \"\",\n\"question_hint\": \"Boolean question hint\",\n\"question_kind\": \"boolean\",\n\"question_required\": true,\n\"question_title\": \"Boolean question?\"\n},\n{\n\"content\": \"\",\n\"options\": [\n{\n\"title\": \"Choice 1\"\n},\n{\n\"title\": \"Choice 2\"\n},\n{\n\"title\": \"Choice 3\"\n}\n],\n\"question_hint\": \"Single question hint\",\n\"question_kind\": \"single_choice\",\n\"question_required\": true,\n\"question_title\": \"Single choice question?\"\n},\n{\n\"content\": \"\",\n\"options\": [\n{\n\"title\": \"Choice 1\"\n},\n{\n\"title\": \"Choice 2\"\n},\n{\n\"title\": \"Choice 3\"\n}\n],\n\"question_hint\": \"Dropdown question hint\",\n\"question_kind\": \"dropdown\",\n\"question_required\": true,\n\"question_title\": \"Dropdown question?\"\n},\n{\n\"contents\": [\nnull,\nnull,\nnull\n],\n\"options\": [\n{\n\"title\": \"Choice 1\"\n},\n{\n\"title\": \"Choice 2\"\n},\n{\n\"title\": \"Choice 3\"\n}\n],\n\"question_hint\": \"Multi question hint\",\n\"question_kind\": \"multi_choice\",\n\"question_required\": true,\n\"question_title\": \"Multi choice question?\"\n},\n{\n\"attachment_ids\": [],\n\"question_hint\": \"File question hint\",\n\"question_kind\": \"file\",\n\"question_required\": true,\n\"question_title\": \"File question?\"\n},\n{\n\"content\": \"\",\n\"question_hint\": \"Video question hint\",\n\"question_kind\": \"video\",\n\"question_required\": true,\n\"question_title\": \"Video question?\"\n}\n],\n\"interview_template_name\": \"Developer test\",\n\"kind\": \"questionnaire\",\n\"offer_id\": 1753,\n\"rating\": \"strong_yes\",\n\"rating_note\": \"Note test\",\n\"stage_id\": 45710\n}\n}",
+  "example_response": {
+    "error": [],
+    "error_fields": {
+      "interview_result_answers": [
+        {
+          "content": [
+            "can't be blank"
+          ]
+        },
+        {
+          "content": [
+            "can't be blank"
+          ]
+        },
+        {
+          "content": [
+            "can't be blank"
+          ]
+        },
+        {
+          "content": [
+            "can't be blank"
+          ]
+        },
+        {
+          "content": [
+            "can't be blank"
+          ]
+        },
+        {
+          "contents": [
+            "can't be blank"
+          ]
+        },
+        {
+          "attachment_ids": [
+            "can't be blank"
+          ]
+        },
+        {
+          "content": [
+            "can't be blank"
+          ]
+        }
+      ]
+    }
+  },
+  "tags": [
+    "interview",
+    "questionnaire"
+  ]
+}

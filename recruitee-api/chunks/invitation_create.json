@@ -1,0 +1,40 @@
+{
+  "id": "invitation_create",
+  "method": "POST",
+  "path": "/c/{company_id}/bulk/invitations",
+  "summary": "Create invitations in bulk",
+  "description": "Create invitations in bulk. Endpoint: POST /c/{company_id}/bulk/invitations. Required parameters: company_id. Optional parameters include invitations, email_body_json.",
+  "params": [
+    {
+      "name": "invitations",
+      "type": "array",
+      "required": false,
+      "description": "Array of invitations (parameters: email, role_id, offer_ids)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email_body_json",
+      "type": "string",
+      "required": false,
+      "description": "Email body in JSON format",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"email_body_json\": {\n\"document\": \"inValiD Js0N\"\n},\n\"invitations\": [\n{\n\"email\": \"alice@example.com\",\n\"role_id\": 228\n}\n]\n}",
+  "example_response": {
+    "error": [
+      "Email body json is invalid"
+    ]
+  },
+  "tags": [
+    "invitations",
+    "company"
+  ]
+}

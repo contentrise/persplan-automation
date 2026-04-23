@@ -1,0 +1,108 @@
+{
+  "id": "memberships_list",
+  "method": "GET",
+  "path": "/c/{company_id}/memberships",
+  "summary": "List memberships",
+  "description": "List memberships. Endpoint: GET /c/{company_id}/memberships. Required parameters: company_id. Optional parameters include limit, sort_by, query, role_id, sort_order, page.",
+  "params": [
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "One of: [name role email], default: name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "query",
+      "type": "string",
+      "required": false,
+      "description": "Search query",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "role_id",
+      "type": "integer",
+      "required": false,
+      "description": "Role",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "One of: [desc asc], default: asc",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/memberships\n\nRequired params: company_id\n\nOptional params: limit, sort_by, query, role_id, sort_order, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 1,
+      "page": 1
+    },
+    "references": [
+      {
+        "id": 7755,
+        "type": "Admin",
+        "email": "john9781@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/7755/normal_avatar_k4gtwv4fbsdc.png",
+        "photo_thumb_url": "tmp/bow/admins/7755/thumb_avatar_k4gtwv4fbsdc.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "memberships": [
+      {
+        "id": 3771,
+        "admin_id": 7755,
+        "role": "Corporate Recruiter",
+        "role_admin": true,
+        "role_id": 3888,
+        "created_at": "2026-04-21T07:33:30.668662Z",
+        "show_academy_button": true,
+        "offer_ids": [],
+        "talent_pool_ids": [
+          1654
+        ],
+        "requisition_ids": [],
+        "is_active": true,
+        "accessible_placement_ids": [],
+        "is_approver": false,
+        "is_hiring_manager": false,
+        "is_recruiter": false,
+        "two_factor_auth_enabled": false
+      }
+    ]
+  },
+  "tags": [
+    "memberships",
+    "company"
+  ]
+}

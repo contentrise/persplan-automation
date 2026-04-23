@@ -1,0 +1,29 @@
+{
+  "id": "auto_reply_templates_list",
+  "method": "GET",
+  "path": "/c/{company_id}/auto_reply_templates",
+  "summary": "List auto-reply templates",
+  "description": "List auto-reply templates. Endpoint: GET /c/{company_id}/auto_reply_templates. Required parameters: company_id. Optional parameters include title.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": false,
+      "description": "Filter by title",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/auto_reply_templates\n\nRequired params: company_id\n\nOptional params: title",
+  "example_response": {},
+  "tags": [
+    "auto_reply_templates",
+    "mailbox"
+  ]
+}

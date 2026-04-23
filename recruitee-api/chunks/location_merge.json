@@ -1,0 +1,37 @@
+{
+  "id": "location_merge",
+  "method": "PATCH",
+  "path": "/c/{company_id}/locations/{id}/merge",
+  "summary": "Merge locations",
+  "description": "Merge locations. Endpoint: PATCH /c/{company_id}/locations/{id}/merge. Required parameters: id, location_ids, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Location ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "location_ids",
+      "type": "integer",
+      "required": true,
+      "description": "Locations ids to be replaced",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"location_ids\": [\n30,\n31\n]\n}",
+  "example_response": {
+    "uuid": "36463e49-4846-4cc7-8bd2-8feaaf400fc5"
+  },
+  "tags": [
+    "locations"
+  ]
+}

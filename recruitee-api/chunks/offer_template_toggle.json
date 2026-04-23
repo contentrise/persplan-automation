@@ -1,0 +1,44 @@
+{
+  "id": "offer_template_toggle",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/offer_templates/{offer_template_id}/toggle",
+  "summary": "Toggle referring for given offer template",
+  "description": "Toggle referring for given offer template. Endpoint: PATCH /c/{company_id}/referral/offer_templates/{offer_template_id}/toggle. Required parameters: offer_template_id, offer_assignment, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_assignment",
+      "type": "map",
+      "required": true,
+      "description": "Offer template assignment params (only: enable::boolean)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_template_assignment\": {\n\"enabled\": true\n}\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "forbidden",
+        "data": {},
+        "message": "Forbidden"
+      }
+    ]
+  },
+  "tags": [
+    "referral",
+    "offer_templates"
+  ]
+}

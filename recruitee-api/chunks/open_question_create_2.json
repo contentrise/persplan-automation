@@ -1,0 +1,54 @@
+{
+  "id": "open_question_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/open_question_templates/open_questions",
+  "summary": "Create open question",
+  "description": "Create open question. Endpoint: POST /c/{company_id}/offer_templates/{offer_template_id}/open_question_templates/open_questions. Required parameters: offer_template_id, company_id. Optional parameters include source_template_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": false,
+      "description": "Open Question template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question\": {\n\"kind\": \"single_choice\",\n\"open_question_options\": [\n{\n\"disqualify_reason_id\": 127,\n\"translations\": [\n{\n\"body\": \"Open Question Option Translation\",\n\"lang_code\": \"en\"\n}\n]\n},\n{\n\"disqualify_reason_id\": 127,\n\"translations\": [\n{\n\"body\": \"Open Question Option Translation\",\n\"lang_code\": \"en\"\n}\n]\n}\n],\n\"required\": false,\n\"translations\": [\n{\n\"body\": \"What does OTP mean?\",\n\"lang_code\": \"en\"\n}\n],\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n},\n\"source_template_id\": 227\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": null,
+        "data": {},
+        "message": "Open question options At least one option must be not disqualifying",
+        "source": "open_question/open_question_options"
+      }
+    ],
+    "resources": {
+      "open_question_options": [
+        {
+          "code": null,
+          "data": {},
+          "message": "At least one option must be not disqualifying"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "open_question_templates"
+  ]
+}

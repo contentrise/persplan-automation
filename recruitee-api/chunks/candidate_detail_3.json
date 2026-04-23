@@ -1,0 +1,97 @@
+{
+  "id": "candidate_detail_3",
+  "method": "GET",
+  "path": "/share/containers/{token}/candidates/{id}",
+  "summary": "Show candidate",
+  "description": "Show candidate. Endpoint: GET /share/containers/{token}/candidates/{id}. Required parameters: id, token.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/containers/{token}/candidates/{id}\n\nRequired params: id, token",
+  "example_response": {
+    "candidate": {
+      "id": 1993,
+      "name": "John Doe",
+      "source": null,
+      "admin": null,
+      "has_avatar": true,
+      "initials": "JD",
+      "referrer": null,
+      "created_at": "2026-04-21T07:33:27.270429Z",
+      "placements": [
+        {
+          "id": 1129,
+          "offer": {
+            "id": 1625,
+            "status": "draft",
+            "title": "Best Offer",
+            "kind": "job"
+          },
+          "stage": {
+            "id": 41569,
+            "name": "Applied"
+          },
+          "candidate_position": 674,
+          "location_ids": [
+            245,
+            246
+          ],
+          "locations": [
+            {
+              "id": 245,
+              "name": "Poznań HQ",
+              "is_valid": true,
+              "country_code": "PL",
+              "created_at": "2026-04-21T07:33:27.268924Z",
+              "updated_at": "2026-04-21T07:33:27.268924Z",
+              "note": "Kupiec Poznański",
+              "city": "Poznań",
+              "postal_code": "60-001",
+              "state_code": "30",
+              "lang_code": "en",
+              "street": "ul. Wiosny Ludów 2",
+              "state_name": "Wielkopolskie",
+              "archived_at": null,
+              "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+            },
+            {
+              "id": 246,
+              "name": "Poznań HQ",
+              "is_valid": true,
+              "country_code": "PL",
+              "created_at": "2026-04-21T07:33:27.269375Z",
+              "updated_at": "2026-04-21T07:33:27.269375Z",
+              "note": "Kupiec Poznański",
+              "city": "Poznań",
+              "postal_code": "60-001",
+              "state_code": "30",
+              "lang_code": "en",
+              "street": "ul. Wiosny Ludów 2",
+              "state_name": "Wielkopolskie",
+              "archived_at": "2026-04-21T07:33:27.269293Z",
+              "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+            }
+          ]
+        }
+      ],
+      "is_anonymous": false
+    }
+  },
+  "tags": [
+    "containers",
+    "candidates"
+  ]
+}

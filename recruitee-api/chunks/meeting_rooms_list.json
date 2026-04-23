@@ -1,0 +1,45 @@
+{
+  "id": "meeting_rooms_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/meeting_rooms",
+  "summary": "List meeting rooms",
+  "description": "List meeting rooms. Endpoint: GET /c/{company_id}/interview/meeting_rooms. Required parameters: company_id. Optional parameters include name.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "description": "Search by room name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/meeting_rooms\n\nRequired params: company_id\n\nOptional params: name",
+  "example_response": {
+    "meeting_rooms": [
+      {
+        "enabled": true,
+        "id": 57,
+        "name": "REDRUM",
+        "status": "disconnected",
+        "floor": 1,
+        "available": null,
+        "provider": "google",
+        "external_id": "room_45@provider.com",
+        "synced_at": null,
+        "building": "Kupiec Poznanski",
+        "capacity": 10
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "meeting_rooms"
+  ]
+}

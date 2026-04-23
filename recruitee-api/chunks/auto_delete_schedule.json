@@ -1,0 +1,24 @@
+{
+  "id": "auto_delete_schedule",
+  "method": "POST",
+  "path": "/c/{company_id}/gdpr/auto_delete",
+  "summary": "Schedule AutoDelete of candidates",
+  "description": "Schedule AutoDelete of candidates. Endpoint: POST /c/{company_id}/gdpr/auto_delete. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/gdpr/auto_delete\n\nRequired params: company_id",
+  "example_response": {
+    "uuid": "bd5fb9d7-33e1-44b4-a37f-5dc5fd842617"
+  },
+  "tags": [
+    "gdpr",
+    "auto_delete"
+  ]
+}

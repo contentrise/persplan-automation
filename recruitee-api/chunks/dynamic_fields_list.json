@@ -1,0 +1,21 @@
+{
+  "id": "dynamic_fields_list",
+  "method": "GET",
+  "path": "/c/{company_id}/dynamic_fields",
+  "summary": "List fields",
+  "description": "List fields. Endpoint: GET /c/{company_id}/dynamic_fields. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/dynamic_fields\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "dynamic_fields"
+  ]
+}

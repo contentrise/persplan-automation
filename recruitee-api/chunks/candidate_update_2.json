@@ -1,0 +1,28 @@
+{
+  "id": "candidate_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/candidates/{id}/update_cover_letter",
+  "summary": "Update candidate's cover letter file",
+  "description": "Update candidate's cover letter file. Endpoint: PATCH /c/{company_id}/candidates/{id}/update_cover_letter. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/candidates/{id}/update_cover_letter\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "candidates"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "id": "guest_create",
+  "method": "POST",
+  "path": "/c/{company_id}/share/guests",
+  "summary": "Create guest",
+  "description": "Create guest. Endpoint: POST /c/{company_id}/share/guests. Required parameters: name, email, company_id. Optional parameters include recruiter.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "Email",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "recruiter",
+      "type": "boolean",
+      "required": false,
+      "description": "Guest type (default: ‘false’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"guest\": {\n\"email\": \"robert.gonzalez@example.com\",\n\"name\": \"Robert Gonzalez\",\n\"recruiter\": true\n}\n}",
+  "example_response": {
+    "references": [],
+    "guest": {
+      "id": 21,
+      "name": "Robert Gonzalez",
+      "email": "robert.gonzalez@example.com",
+      "auth_token": "6h4pt6rfr8c6",
+      "has_avatar": false,
+      "initials": "RG",
+      "photo_thumb_url": "tmp/bow/guests/21/thumb_initials_vhgffwrep66n.png",
+      "created_at": "2026-04-21T07:31:49.669022Z",
+      "updated_at": "2026-04-21T07:31:49.669022Z",
+      "recruiter": true,
+      "container_ids": []
+    }
+  },
+  "tags": [
+    "guests",
+    "container"
+  ]
+}

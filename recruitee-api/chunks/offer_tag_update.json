@@ -1,0 +1,44 @@
+{
+  "id": "offer_tag_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_tags/{id}",
+  "summary": "Update offer tag",
+  "description": "Update offer tag. Endpoint: PATCH /c/{company_id}/offer_tags/{id}. Required parameters: id, name, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer tag ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Offer tag name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_tag\": {\n\"name\": \"On-Site\"\n}\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "conflict",
+        "data": {},
+        "message": "Other tag with this name exists"
+      }
+    ]
+  },
+  "tags": [
+    "offer_tags",
+    "tagging"
+  ]
+}

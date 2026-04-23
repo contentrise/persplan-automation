@@ -1,0 +1,46 @@
+{
+  "id": "open_question_template_set",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{offer_id}/open_question_templates/assign",
+  "summary": "Sets or unsets offer's open question template",
+  "description": "Sets or unsets offer's open question template. Endpoint: PATCH /c/{company_id}/offers/{offer_id}/open_question_templates/assign. Required parameters: offer_id, open_question_template_id, company_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "open_question_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Open Question template ID; pass null to unset",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question_template_id\": 81\n}",
+  "example_response": {
+    "open_question_template": {
+      "default": false,
+      "id": 81,
+      "position": 27,
+      "title": "Open Question Template",
+      "category": "Sample category",
+      "custom": true,
+      "open_questions": []
+    }
+  },
+  "tags": [
+    "offers",
+    "open_question_templates"
+  ]
+}

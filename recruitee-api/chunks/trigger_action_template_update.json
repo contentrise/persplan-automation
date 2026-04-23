@@ -1,0 +1,44 @@
+{
+  "id": "trigger_action_template_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/shared_email_providers/{shared_email_provider_id}/trigger_action_templates",
+  "summary": "Update send_email trigger action templates from shared email provider in question to new one",
+  "description": "For given existing shared email provider, update all send_email trigger action templates (automated actions & disqualify reasons) to use new shared email provider.\n\nExample body:\n\n{ “trigger_action_templates”: { “from”: 12 } }\n\nValue of “from” is the id of another shared email provider which will be used in action templates",
+  "params": [
+    {
+      "name": "shared_email_provider_id",
+      "type": "integer",
+      "required": true,
+      "description": "Current Shared Email Provider ID to update trigger action templates (path param))",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "automation_actions",
+      "type": "map",
+      "required": true,
+      "description": "Automation actions params (body param, json {“from”: …, “from_kind”: …}})",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "trigger_action_templates",
+      "type": "map",
+      "required": true,
+      "description": "Trigger action templates params (body param, json {“from”: …, “from_kind”: …}})",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/shared_email_providers/{shared_email_provider_id}/trigger_action_templates\n\nRequired params: shared_email_provider_id, automation_actions, trigger_action_templates, company_id",
+  "example_response": {},
+  "tags": [
+    "shared_email_providers",
+    "trigger_action_templates",
+    "mailbox"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "dashboards_list",
+  "method": "GET",
+  "path": "/c/{company_id}/report/dashboards",
+  "summary": "List dashboards",
+  "description": "List dashboards. Endpoint: GET /c/{company_id}/report/dashboards. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/report/dashboards\n\nRequired params: company_id",
+  "example_response": {
+    "error": [
+      "Forbidden"
+    ]
+  },
+  "tags": [
+    "report",
+    "dashboards"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "id": "personal_tokens_list",
+  "method": "GET",
+  "path": "/c/{company_id}/oauth/personal_tokens",
+  "summary": "List admin's personal tokens. Value of the token is not returned and must be retrieved individually with :show action",
+  "description": "List admin's personal tokens. Value of the token is not returned and must be retrieved individually with :show action. Endpoint: GET /c/{company_id}/oauth/personal_tokens. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/oauth/personal_tokens\n\nRequired params: company_id",
+  "example_response": {
+    "personal_tokens": [
+      {
+        "id": "4c74acee-84af-43f6-b4ff-4ae62a4226f7",
+        "meta": null,
+        "created_at": "2026-04-21T07:33:25.421276Z"
+      },
+      {
+        "id": "d6a71bd6-b5b5-45cc-ad9d-fb0bcb2d0818",
+        "meta": null,
+        "created_at": "2026-04-21T07:33:25.421607Z"
+      },
+      {
+        "id": "d10877d0-b5b5-4ad5-a7f4-9c565a647ad9",
+        "meta": {
+          "name": "Personal Token 1 name"
+        },
+        "created_at": "2026-04-22T07:33:25.420185Z"
+      }
+    ]
+  },
+  "tags": [
+    "personal_tokens",
+    "oauth"
+  ]
+}

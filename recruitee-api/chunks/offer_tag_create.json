@@ -1,0 +1,56 @@
+{
+  "id": "offer_tag_create",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_tags",
+  "summary": "Create offer tags",
+  "description": "Create offer tags. Endpoint: POST /c/{company_id}/offer_tags. Required parameters: company_id. Optional parameters include offer_id, offer_tags, offer_tag.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_tags",
+      "type": "array",
+      "required": false,
+      "description": "Array of offer tags",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_tag",
+      "type": "string",
+      "required": false,
+      "description": "Offer tag",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_tag\": \"Facebook\"\n}",
+  "example_response": {
+    "offer_tags": [
+      {
+        "id": 51,
+        "name": "Facebook",
+        "status": "created",
+        "context": "offer_tags",
+        "taggings_count": 0,
+        "searchable_name": "facebook",
+        "offer_taggings_count": 0,
+        "offer_template_taggings_count": 0
+      }
+    ]
+  },
+  "tags": [
+    "offer_tags",
+    "tagging"
+  ]
+}

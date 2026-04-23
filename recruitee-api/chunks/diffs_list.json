@@ -1,0 +1,73 @@
+{
+  "id": "diffs_list",
+  "method": "GET",
+  "path": "/c/{company_id}/offers/{offer_id}/requisitions/{requisition_id}/diff",
+  "summary": "Compare offer fields with requisition fields",
+  "description": "Compare offer fields with requisition fields. Endpoint: GET /c/{company_id}/offers/{offer_id}/requisitions/{requisition_id}/diff. Required parameters: offer_id, requisition_id, company_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers/{offer_id}/requisitions/{requisition_id}/diff\n\nRequired params: offer_id, requisition_id, company_id",
+  "example_response": {
+    "fields": [
+      {
+        "is_equal": true,
+        "field": "category",
+        "offer": "administrative",
+        "requisition": "administrative"
+      },
+      {
+        "is_equal": false,
+        "field": "education",
+        "offer": "vocational",
+        "requisition": "high_school"
+      }
+    ],
+    "dynamic_fields": [
+      {
+        "is_equal": false,
+        "field": {
+          "id": 106,
+          "name": "Single line",
+          "type": "single_line"
+        },
+        "offer": null,
+        "requisition": "B"
+      },
+      {
+        "is_equal": false,
+        "field": {
+          "id": 107,
+          "name": "single choice",
+          "type": "single_choice"
+        },
+        "offer": "A",
+        "requisition": "B"
+      }
+    ]
+  },
+  "tags": [
+    "offers",
+    "requisitions"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "translate_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/offers/{offer_id}/translate",
+  "summary": "Show translatable offer",
+  "description": "Show translatable offer. Endpoint: GET /c/{company_id}/offers/{offer_id}/translate. Required parameters: offer_id, company_id. Optional parameters include target_lang_code.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "target_lang_code",
+      "type": "string",
+      "required": false,
+      "description": "Target language code - if provided only fields without translation will be returned",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers/{offer_id}/translate\n\nRequired params: offer_id, company_id\n\nOptional params: target_lang_code",
+  "example_response": {},
+  "tags": [
+    "offers",
+    "translate"
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "id": "configuration_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/gdpr/configuration",
+  "summary": "Update company's GDPR configuration",
+  "description": "Update company's GDPR configuration. Endpoint: PATCH /c/{company_id}/gdpr/configuration. Required parameters: enabled, expiration_days, hide_candidates_names, company_id. Optional parameters include admin_ids, translations.",
+  "params": [
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "admin_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of admins IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "translations",
+      "type": "array",
+      "required": false,
+      "description": "Array of translations",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "expiration_days",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "hide_candidates_names",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"auto_delete\": {\n\"delete_candidates_without_consent_requests\": false,\n\"enabled\": true\n},\n\"enabled\": true,\n\"expiration_days\": 11\n}",
+  "example_response": {
+    "references": [],
+    "configuration": {
+      "enabled": true,
+      "id": 19,
+      "offers": [],
+      "admin_ids": [],
+      "auto_consent": {
+        "enabled": false,
+        "email_subject": "Test Company - GDPR consent request",
+        "email_body_html": "Hi!<br />Because of data protection laws and regulations, in 30 days we'll have to delete your personal data from our database. If you would like us to continue to store your personal data to match you with future job opportunities, then please click \"View request\" and provide consent.",
+        "email_button_text": "View request",
+        "email_p1": "Click \"View request\" to review terms and accept or decline to provide consent.",
+        "email_p2_html": "We want you to be in control of your personal data. You can <a href='#'>request a data correction</a> or <a href='#'>request to be deleted</a> from our database.",
+        "email_title": "Consent request",
+        "extend_period_for_days": null,
+        "send_to_qualified": true,
+        "send_to_disqualified": false,
+        "send_to_candidates_in_talent_pools": true,
+        "send_to_candidates_without_email_activity_in_days": null,
+        "send_to_hired": true
+      },
+      "consent_privacy_link": null,
+      "translations": [
+        {
+          "primary": true,
+          "language": {
+            "code": "en",
+            "name": "English",
+            "native_name": "English"
+          },
+          "email_confirmation_footer_html": "<p>Hi!</p>",
+          "default_email_confirmation_footer_html": "<p><span style=\"font-size: 12px;\">——</span><br /></p><p><span style=\"font-size: 12px;\">We want you to be in control of your personal data. You can <a href=\"[gdpr_request_change_url]\">request a data correction</a> or <a href=\"[gdpr_request_removal_url]\">request to be deleted</a> from our database.</span></p>"
+        },
+        {
+          "primary": false,
+          "language": {
+            "code": "de",
+            "name": "German",
+            "native_name": "Deutsch"
+          },
+          "email_confirmation_footer_html": null,
+          "default_email_confirmation_footer_html": "<p><span style=\"font-size: 12px;\">——</span><br /></p><p><span style=\"font-size: 12px;\">common.gdpr_email_confirmation_footer_1 common.gdpr_email_confirmation_footer_2</span></p>"
+        },
+        {
+          "primary": false,
+          "language": {
+            "code": "nl",
+            "name": "Dutch",
+            "native_name": "Nederlands"
+          },
+          "email_confirmation_footer_html": null,
+          "default_email_confirmation_footer_html": "<p><span style=\"font-size: 12px;\">——</span><br /></p><p><span style=\"font-size: 12px;\">common.gdpr_email_confirmation_footer_1 common.gdpr_email_confirmation_footer_2</span></p>"
+        },
+        {
+          "primary": false,
+          "language": {
+            "code": "fr",
+            "name": "French",
+            "native_name": "français"
+          },
+          "email_confirmation_footer_html": null,
+          "default_email_confirmation_footer_html": "<p><span style=\"font-size: 12px;\">——</span><br /></p><p><span style=\"font-size: 12px;\">common.gdpr_email_confirmation_footer_1 common.gdpr_email_confirmation_footer_2</span></p>"
+        }
+      ],
+      "auto_delete": {
+        "enabled": true,
+        "delete_qualified_in_jobs": true,
+        "delete_in_talent_pools": true,
+        "delete_without_email_activity_in_days": null,
+        "delete_requested_candidates_in_days": null,
+        "delete_candidates_without_consent_requests": false,
+        "delete_hired": true
+      },
+      "expiration_days": 11,
+      "hide_candidates_names": false
+    }
+  },
+  "tags": [
+    "gdpr",
+    "configuration"
+  ]
+}

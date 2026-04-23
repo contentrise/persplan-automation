@@ -1,0 +1,48 @@
+{
+  "id": "field_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/custom_fields/candidates/fields",
+  "summary": "Remove candidate field",
+  "description": "Remove candidate field. Endpoint: DELETE /c/{company_id}/custom_fields/candidates/fields. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Field ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/custom_fields/candidates/fields\n\nRequired params: company_id\n\nOptional params: id",
+  "example_response": {
+    "field": {
+      "id": 57,
+      "name": "Field 19",
+      "visible": true,
+      "values": [
+        {
+          "text": "Text..."
+        }
+      ],
+      "origin": "manual",
+      "kind": "single_line",
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      },
+      "fixed": null
+    }
+  },
+  "tags": [
+    "custom_fields",
+    "candidates"
+  ]
+}

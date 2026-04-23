@@ -1,0 +1,44 @@
+{
+  "id": "application_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/linkedin/application",
+  "summary": "Receive company's LinkedIn application",
+  "description": "Receive company's LinkedIn application. Endpoint: GET /c/{company_id}/linkedin/application. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/linkedin/application\n\nRequired params: company_id",
+  "example_response": {
+    "application": {
+      "data": {
+        "apply_connect_company_enabled": false
+      },
+      "id": 7,
+      "integrations": [],
+      "client_id": null,
+      "domains": [
+        "http://app.recruitee.internal:3003",
+        "http://app.tellent.internal:3003",
+        "http://company2398.recruitee.internal:3003",
+        "http://example.com",
+        "https://example.com"
+      ],
+      "rsc_enabled_at": null,
+      "rsc_initial_sync_finished_at": null,
+      "linkedin_organization_urn": null,
+      "supported_integration_types": [
+        "APPLY_WITH_LINKEDIN"
+      ]
+    }
+  },
+  "tags": [
+    "linkedin",
+    "application"
+  ]
+}

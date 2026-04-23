@@ -1,0 +1,37 @@
+{
+  "id": "candidate_add",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/set_gdpr_custom_expires_at",
+  "summary": "Add gdpr_custom_expires_at to candidates",
+  "description": "Add gdpr_custom_expires_at to candidates. Endpoint: PATCH /c/{company_id}/bulk/candidates/set_gdpr_custom_expires_at. Required parameters: company_id. Optional parameters include candidates, gdpr_custom_expires_at.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "gdpr_custom_expires_at",
+      "type": "datetime",
+      "required": false,
+      "description": "Datetime for gdpr_custom_expires_at",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n529,\n530,\n531\n],\n\"gdpr_custom_expires_at\": \"2026-04-21T08:31:23.644808+00:00\"\n}",
+  "example_response": {
+    "uuid": "37aa4457-3fc5-4638-ac1d-a62c82b4dd00"
+  },
+  "tags": [
+    "candidates"
+  ]
+}

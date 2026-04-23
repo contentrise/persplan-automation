@@ -1,0 +1,42 @@
+{
+  "id": "auto_reply_template_duplicate",
+  "method": "POST",
+  "path": "/c/{company_id}/auto_reply_templates/{source_id}",
+  "summary": "Duplicate auto-reply template",
+  "description": "Duplicate auto-reply template. Endpoint: POST /c/{company_id}/auto_reply_templates/{source_id}. Required parameters: source_id, company_id.",
+  "params": [
+    {
+      "name": "source_id",
+      "type": "integer",
+      "required": true,
+      "description": "Auto-reply template id to duplicate",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/auto_reply_templates/{source_id}\n\nRequired params: source_id, company_id",
+  "example_response": {
+    "auto_reply_template": {
+      "default": false,
+      "id": 80,
+      "position": 27,
+      "title": "Template25 (2)",
+      "created_at": "2026-04-21T07:32:25.727847Z",
+      "updated_at": "2026-04-21T07:32:25.727847Z",
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0,
+      "translations": [],
+      "template_attachment_assignments": []
+    }
+  },
+  "tags": [
+    "auto_reply_templates",
+    "mailbox"
+  ]
+}

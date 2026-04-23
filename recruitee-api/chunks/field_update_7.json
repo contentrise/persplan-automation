@@ -1,0 +1,43 @@
+{
+  "id": "field_update_7",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/fieldsets/fields/update_positions",
+  "summary": "Update fields' positions",
+  "description": "Update fields' positions. Endpoint: PATCH /c/{company_id}/offer_templates/{offer_template_id}/fieldsets/fields/update_positions. Required parameters: offer_template_id, field_ids, source_fieldset_id, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "field_ids",
+      "type": "array",
+      "required": true,
+      "description": "Array of fields IDs in requested order",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_fieldset_id",
+      "type": "integer",
+      "required": true,
+      "description": "Source fieldset ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"field_ids\": [\n320,\n319,\n318\n],\n\"source_fieldset_id\": 174\n}",
+  "example_response": {},
+  "tags": [
+    "offer_templates",
+    "fieldsets"
+  ]
+}

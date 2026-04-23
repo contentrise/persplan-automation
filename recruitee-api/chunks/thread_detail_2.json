@@ -1,0 +1,39 @@
+{
+  "id": "thread_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/texting/threads",
+  "summary": "Show texting threads for given company",
+  "description": "Show texting threads for given company. Endpoint: GET /c/{company_id}/texting/threads. Required parameters: company_id. Optional parameters include non_candidates.",
+  "params": [
+    {
+      "name": "non_candidates",
+      "type": "boolean",
+      "required": false,
+      "description": "Pass true to have non candidates threads",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/texting/threads\n\nRequired params: company_id\n\nOptional params: non_candidates",
+  "example_response": {
+    "texting_threads": [
+      {
+        "id": 52,
+        "to": "+48123456789",
+        "company_id": 2059,
+        "candidate_id": null,
+        "updated_at": "2026-04-21T07:32:24.473430Z"
+      }
+    ]
+  },
+  "tags": [
+    "texting",
+    "threads"
+  ]
+}

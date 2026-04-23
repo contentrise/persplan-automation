@@ -1,0 +1,93 @@
+{
+  "id": "note_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/candidates/{candidate_id}/notes",
+  "summary": "Create note for candidate",
+  "description": "Create note for candidate. Endpoint: POST /c/{company_id}/candidates/{candidate_id}/notes. Required parameters: candidate_id, company_id. Optional parameters include attachments.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "attachments",
+      "type": "array",
+      "required": false,
+      "description": "Attachments ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"note\": {\n\"body\": \"Text note\",\n\"body_json\": {\n\"doc\": {\n\"content\": [\n{\n\"content\": [\n{\n\"text\": \"Json note\",\n\"type\": \"text\"\n}\n],\n\"type\": \"paragraph\"\n}\n],\n\"type\": \"doc\"\n}\n},\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 9419,
+        "type": "Admin",
+        "email": "john1275@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9419/normal_avatar_amg1hvc3tr4a.png",
+        "photo_thumb_url": "tmp/bow/admins/9419/thumb_avatar_amg1hvc3tr4a.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "note": {
+      "id": 162,
+      "text": null,
+      "replies": [],
+      "body": "<p>Json note</p>",
+      "admin_id": 9419,
+      "candidate_id": 2337,
+      "attachments": [],
+      "created_at": "2026-04-21T07:33:57.022483Z",
+      "updated_at": "2026-04-21T07:33:57.022483Z",
+      "offer_id": null,
+      "talent_pool_id": null,
+      "requisition_id": null,
+      "guest_id": null,
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      },
+      "body_html": "<p>Json note</p>",
+      "reply_to_id": null,
+      "body_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Json note",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "triggered": false,
+      "pinned_at": null
+    }
+  },
+  "tags": [
+    "candidates",
+    "notes"
+  ]
+}

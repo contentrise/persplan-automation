@@ -1,0 +1,36 @@
+{
+  "id": "candidate_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/{offer_id}/candidates",
+  "summary": "Create candidate",
+  "description": "Create candidate. Endpoint: POST /c/{company_id}/offers/{offer_id}/candidates. Required parameters: company_id. Optional parameters include offers, offer_id.",
+  "params": [
+    {
+      "name": "offers",
+      "type": "array",
+      "required": false,
+      "description": "Array of offer IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "string",
+      "required": false,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/offers/{offer_id}/candidates\n\nRequired params: company_id\n\nOptional params: offers, offer_id",
+  "example_response": {},
+  "tags": [
+    "offers",
+    "candidates"
+  ]
+}

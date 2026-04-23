@@ -1,0 +1,62 @@
+{
+  "id": "requisition_follow_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/follow",
+  "summary": "Follow requisition",
+  "description": "Follow requisition. Endpoint: PATCH /c/{company_id}/requisitions/{requisition_id}/follow. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/requisitions/{requisition_id}/follow\n\nRequired params: requisition_id, company_id",
+  "example_response": {
+    "requisition": {
+      "id": 298,
+      "status": "draft",
+      "title": "Backend Developer",
+      "form": {
+        "fields": [
+          "department"
+        ],
+        "dynamic_field_ids": []
+      },
+      "dynamic_fields": [],
+      "openings_count": 0,
+      "offers": [],
+      "offers_count": 0,
+      "created_at": "2026-04-21T07:34:06.497237Z",
+      "updated_at": "2026-04-21T07:34:06.497237Z",
+      "notes_count": 0,
+      "followed": true,
+      "attachments_count": 0,
+      "department_id": null,
+      "guid": "guid84",
+      "archived_at": null,
+      "follower_ids": [
+        10809
+      ],
+      "openings": [],
+      "approval_request": null,
+      "openings_with_deleted_candidate_count": 0,
+      "hires_count": 0,
+      "approval_flow_id": 363,
+      "rejection_reason": null,
+      "rejected_by_id": null
+    }
+  },
+  "tags": [
+    "requisitions"
+  ]
+}

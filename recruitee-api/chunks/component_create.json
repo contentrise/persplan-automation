@@ -1,0 +1,213 @@
+{
+  "id": "component_create",
+  "method": "POST",
+  "path": "/c/{company_id}/report/dashboards/{dashboard_id}/components",
+  "summary": "Create component within a dashboard",
+  "description": "Create component within a dashboard. Endpoint: POST /c/{company_id}/report/dashboards/{dashboard_id}/components. Required parameters: name, description, kind, grid, metric, view_mode, dashboard_id, company_id. Optional parameters include origin, filters, sort_by, settings, date_filter, chart_type, local_id, template_id, and more.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Component name.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "origin",
+      "type": "string",
+      "required": false,
+      "description": "Component origin. Can be: blank, template, duplicate.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "required": true,
+      "description": "Component description.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "filters",
+      "type": "array",
+      "required": false,
+      "description": "List of applied filters.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Sort results by field.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "required": true,
+      "description": "Component type. Can be: trend, breakdown, single_metric, funnel.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "settings",
+      "type": "map",
+      "required": false,
+      "description": "Component custom settings.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "grid",
+      "type": "map",
+      "required": true,
+      "description": "Position on a dashboard.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_filter",
+      "type": "map",
+      "required": false,
+      "description": "Date filter.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "chart_type",
+      "type": "string",
+      "required": false,
+      "description": "Chart type. Can be: bar, column, line, pie.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "local_id",
+      "type": "string",
+      "required": false,
+      "description": "Additional identifier.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "metric",
+      "type": "string",
+      "required": true,
+      "description": "Metric type.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_id",
+      "type": "string",
+      "required": false,
+      "description": "Id of the template the component was created with.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "primary_group",
+      "type": "string",
+      "required": false,
+      "description": "Attribute used to aggregate results.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "secondary_group",
+      "type": "string",
+      "required": false,
+      "description": "Attribute used for additional, secondary grouping of the results.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "Sort order. Can be: asc, desc (default: desc).",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "view_mode",
+      "type": "string",
+      "required": true,
+      "description": "Visualization type. Can be: chart, table, summary.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "dashboard_id",
+      "type": "string",
+      "required": true,
+      "description": "Id of the dashboard the component belongs to.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"component\": {\n\"description\": \"This report shows number of hires per job\",\n\"filters\": [\n{\n\"group\": \"admin\",\n\"value\": \"6039\"\n},\n{\n\"group\": \"job\",\n\"value\": \"Offer #1\"\n},\n{\n\"group\": \"job\",\n\"value\": \"Offer #2\"\n}\n],\n\"grid\": {\n\"cols\": 2,\n\"rows\": 1,\n\"x\": 0,\n\"y\": 0\n},\n\"kind\": \"breakdown\",\n\"metric\": \"hires\",\n\"name\": \"Number of hires\",\n\"options\": {\n\"include_deleted_candidates\": false,\n\"show_all_data\": true\n},\n\"origin\": \"template\",\n\"settings\": {\n\"amount_of_data_displayed\": 10,\n\"custom\": {}\n},\n\"template_id\": \"123\",\n\"view_mode\": \"table\"\n}\n}",
+  "example_response": {
+    "references": [],
+    "component": {
+      "id": 1,
+      "name": "Number of hires",
+      "options": {
+        "include_deleted_candidates": false,
+        "include_archived_jobs": true,
+        "include_archived_requisitions": true,
+        "show_all_data": true
+      },
+      "origin": "template",
+      "description": "This report shows number of hires per job",
+      "filters": [
+        {
+          "value": "6039",
+          "group": "admin"
+        },
+        {
+          "value": "Offer #1",
+          "group": "job"
+        },
+        {
+          "value": "Offer #2",
+          "group": "job"
+        }
+      ],
+      "generated": false,
+      "sort_by": null,
+      "kind": "breakdown",
+      "updated_at": "2026-04-21T07:33:00.182324Z",
+      "settings": {
+        "custom": {},
+        "amount_of_data_displayed": 10,
+        "local_sort_by": null,
+        "local_sort_order": null
+      },
+      "grid": {
+        "rows": 1,
+        "cols": 2,
+        "y": 0,
+        "x": 0
+      },
+      "date_field": {
+        "resource": null,
+        "field": null
+      },
+      "date_filter": {},
+      "include_deleted_candidates": false,
+      "chart_type": null,
+      "end_point": null,
+      "include_archived_jobs": true,
+      "include_archived_requisitions": true,
+      "is_available": true,
+      "local_id": "4c610368-bce3-4f0d-b4e2-291c99270ef9",
+      "metric": "hires",
+      "template_id": "123",
+      "primary_group": null,
+      "secondary_group": null,
+      "show_all_data": true,
+      "sort_order": null,
+      "start_point": null,
+      "unavailable_reason": null,
+      "view_mode": "table"
+    }
+  },
+  "tags": [
+    "report",
+    "dashboards"
+  ]
+}

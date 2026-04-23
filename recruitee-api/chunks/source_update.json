@@ -1,0 +1,45 @@
+{
+  "id": "source_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/sources/{id}",
+  "summary": "Update candidate source",
+  "description": "Update candidate source. Endpoint: PATCH /c/{company_id}/sources/{id}. Required parameters: id, name, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Source ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Source name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"source\": {\n\"name\": \"Recruitee\"\n}\n}",
+  "example_response": {
+    "source": {
+      "id": 148,
+      "name": "Recruitee",
+      "status": null,
+      "context": "sources",
+      "taggings_count": 0,
+      "searchable_name": "recruitee"
+    }
+  },
+  "tags": [
+    "sources",
+    "tagging"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "id": "pipeline_templates_list",
+  "method": "GET",
+  "path": "/c/{company_id}/offers/{offer_id}/pipeline_templates",
+  "summary": "List pipeline templates available for offer",
+  "description": "List pipeline templates available for offer. Endpoint: GET /c/{company_id}/offers/{offer_id}/pipeline_templates. Required parameters: offer_id, company_id. Optional parameters include title.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": false,
+      "description": "Filter by title",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers/{offer_id}/pipeline_templates\n\nRequired params: offer_id, company_id\n\nOptional params: title",
+  "example_response": {
+    "pipeline_templates": [
+      {
+        "default": true,
+        "id": 785,
+        "position": 11,
+        "title": "Pipeline Template",
+        "category": "SAMPLE CATEGORY",
+        "custom": false,
+        "requires_adjustment": false
+      },
+      {
+        "default": false,
+        "id": 786,
+        "position": 12,
+        "title": "Pipeline Template",
+        "category": "SAMPLE CATEGORY",
+        "custom": false,
+        "requires_adjustment": false
+      },
+      {
+        "default": false,
+        "id": 787,
+        "position": 13,
+        "title": "Pipeline Template",
+        "category": "SAMPLE CATEGORY",
+        "custom": false,
+        "requires_adjustment": false
+      },
+      {
+        "default": false,
+        "id": 788,
+        "position": 14,
+        "title": "Pipeline Template",
+        "category": "SAMPLE CATEGORY",
+        "custom": false,
+        "requires_adjustment": false
+      },
+      {
+        "default": false,
+        "id": 789,
+        "position": 15,
+        "title": "Pipeline Template",
+        "category": "SAMPLE CATEGORY",
+        "custom": false,
+        "requires_adjustment": false
+      }
+    ]
+  },
+  "tags": [
+    "offers",
+    "pipeline_templates"
+  ]
+}

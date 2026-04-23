@@ -1,0 +1,50 @@
+{
+  "id": "shared_email_provider_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/shared_email_providers/{id}",
+  "summary": "Update Shared Email Provider",
+  "description": "Update Shared Email Provider. Endpoint: PATCH /c/{company_id}/shared_email_providers/{id}. Required parameters: id, company_id. Optional parameters include name, signature, visibility.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Shared Email Provider ID to update",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "description": "New name of Shared Email Provider",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "signature",
+      "type": "string",
+      "required": false,
+      "description": "New signature of Shared Email Provider",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "visibility",
+      "type": "map",
+      "required": false,
+      "description": "Visibility params",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/shared_email_providers/{id}\n\nRequired params: id, company_id\n\nOptional params: name, signature, visibility",
+  "example_response": {},
+  "tags": [
+    "shared_email_providers",
+    "mailbox"
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "id": "rewards_list",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/rewards",
+  "summary": "List referral rewards",
+  "description": "List referral rewards. Endpoint: GET /c/{company_id}/referral/rewards. Required parameters: company_id. Optional parameters include q, limit, sort_by, sort_order, page.",
+  "params": [
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search query",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "One of: [name]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "One of: [desc asc], default: asc",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/rewards\n\nRequired params: company_id\n\nOptional params: q, limit, sort_by, sort_order, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 2,
+      "page": 1
+    },
+    "rewards": [
+      {
+        "id": 44,
+        "name": "Great reward",
+        "photo_thumb_url": null,
+        "photo_url": null,
+        "body_html": "Reward description",
+        "referral_offer_template_assignments": [],
+        "referral_offer_assignments": [],
+        "referral_offer_assignments_ids": [],
+        "referral_offer_template_assignments_ids": []
+      },
+      {
+        "id": 43,
+        "name": "Great reward",
+        "photo_thumb_url": null,
+        "photo_url": null,
+        "body_html": "Reward description",
+        "referral_offer_template_assignments": [
+          {
+            "enabled": true,
+            "id": 41,
+            "offer_template": {
+              "id": 347,
+              "name": "Backend Developer Template",
+              "remote": false,
+              "created_at": "2026-04-21T07:33:35.180508Z",
+              "updated_at": "2026-04-21T07:33:35.180508Z",
+              "department": null,
+              "location_ids": [],
+              "hybrid": false,
+              "on_site": false
+            },
+            "referral_reward_id": 43,
+            "referral_template_id": null,
+            "custom_template_id": null
+          }
+        ],
+        "referral_offer_assignments": [
+          {
+            "enabled": true,
+            "id": 95,
+            "offer": {
+              "id": 1737,
+              "status": "internal",
+              "title": "Best Offer",
+              "location": "",
+              "kind": "job",
+              "department": null,
+              "lang_code": "en",
+              "slug": "best-offer1300",
+              "guid": "guid1237"
+            },
+            "referral_reward_id": 43,
+            "referral_template_id": null,
+            "custom_template_id": null
+          }
+        ],
+        "referral_offer_assignments_ids": [
+          95
+        ],
+        "referral_offer_template_assignments_ids": [
+          41
+        ]
+      }
+    ]
+  },
+  "tags": [
+    "referral",
+    "rewards"
+  ]
+}

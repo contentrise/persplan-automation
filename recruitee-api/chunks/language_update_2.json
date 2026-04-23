@@ -1,0 +1,29 @@
+{
+  "id": "language_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/lang/languages/",
+  "summary": "Update language",
+  "description": "Update language. Endpoint: PATCH /c/{company_id}/lang/languages/. Required parameters: enabled, company_id.",
+  "params": [
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/lang/languages/\n\nRequired params: enabled, company_id",
+  "example_response": {},
+  "tags": [
+    "lang",
+    "languages"
+  ]
+}

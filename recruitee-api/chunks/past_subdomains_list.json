@@ -1,0 +1,74 @@
+{
+  "id": "past_subdomains_list",
+  "method": "GET",
+  "path": "/c/{company_id}/past_subdomains",
+  "summary": "List past subdomains",
+  "description": "List past subdomains. Endpoint: GET /c/{company_id}/past_subdomains. Required parameters: company_id. Optional parameters include limit, page.",
+  "params": [
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (default: 1)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/past_subdomains\n\nRequired params: company_id\n\nOptional params: limit, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 5,
+      "page": 1
+    },
+    "past_subdomains": [
+      {
+        "id": 5,
+        "created_at": "2026-04-21T07:32:33.381349Z",
+        "updated_at": "2026-04-21T07:32:33.381349Z",
+        "subdomain": "past-subdomain4"
+      },
+      {
+        "id": 4,
+        "created_at": "2026-04-21T07:32:33.381174Z",
+        "updated_at": "2026-04-21T07:32:33.381174Z",
+        "subdomain": "past-subdomain3"
+      },
+      {
+        "id": 3,
+        "created_at": "2026-04-21T07:32:33.380963Z",
+        "updated_at": "2026-04-21T07:32:33.380963Z",
+        "subdomain": "past-subdomain2"
+      },
+      {
+        "id": 2,
+        "created_at": "2026-04-21T07:32:33.380721Z",
+        "updated_at": "2026-04-21T07:32:33.380721Z",
+        "subdomain": "past-subdomain1"
+      },
+      {
+        "id": 1,
+        "created_at": "2026-04-21T07:32:33.380121Z",
+        "updated_at": "2026-04-21T07:32:33.380121Z",
+        "subdomain": "past-subdomain0"
+      }
+    ]
+  },
+  "tags": [
+    "past_subdomains",
+    "company"
+  ]
+}

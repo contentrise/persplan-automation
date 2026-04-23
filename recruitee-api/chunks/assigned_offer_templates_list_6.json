@@ -1,0 +1,69 @@
+{
+  "id": "assigned_offer_templates_list_6",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/templates/{id}/assigned_offer_templates",
+  "summary": "List given referral template's assigned offer templates",
+  "description": "List given referral template's assigned offer templates. Endpoint: GET /c/{company_id}/referral/templates/{id}/assigned_offer_templates. Required parameters: id, company_id. Optional parameters include q, limit, page.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Referral template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search offer template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/templates/{id}/assigned_offer_templates\n\nRequired params: id, company_id\n\nOptional params: q, limit, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 1,
+      "page": 1
+    },
+    "assigned_offer_templates": [
+      {
+        "id": 209,
+        "name": "Dream job",
+        "remote": false,
+        "created_at": "2026-04-21T07:31:59.525960Z",
+        "updated_at": "2026-04-21T07:31:59.525960Z",
+        "department": null,
+        "location_ids": [],
+        "hybrid": false,
+        "on_site": false
+      }
+    ]
+  },
+  "tags": [
+    "referral",
+    "templates"
+  ]
+}

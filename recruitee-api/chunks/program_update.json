@@ -1,0 +1,80 @@
+{
+  "id": "program_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/program",
+  "summary": "Update company's Referral program settings",
+  "description": "Update company's Referral program settings. Endpoint: PATCH /c/{company_id}/referral/program. Required parameters: subdomain, cv_upload_enabled, referral_status_visible, rewards_visible, signup_domains_enabled, company_id. Optional parameters include form_settings, signup_domains.",
+  "params": [
+    {
+      "name": "subdomain",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "form_settings",
+      "type": "map",
+      "required": false,
+      "description": "{ “email”: required | optional | hidden, “phone”: required | optional | hidden, “social_links”: required | optional | hidden, “cv”: required | optional | hidden, “salutation”: required | optional | hidden, “title”: required | optional | hidden }",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "cv_upload_enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "referral_status_visible",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "rewards_visible",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "signup_domains",
+      "type": "array",
+      "required": false,
+      "description": "Array of sign up domains",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "signup_domains_enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"cv_upload_enabled\": false,\n\"form_settings\": {\n\"email\": \"required\",\n\"phone\": \"hidden\"\n},\n\"referral_status_visible\": true,\n\"rewards_visible\": true,\n\"signup_domains\": [\n\"test-signup-domain.com\",\n\"-#$%^&\"\n],\n\"signup_domains_enabled\": true,\n\"subdomain\": \"testsubdomain\"\n}",
+  "example_response": {
+    "error": [
+      "Signup domains has invalid format"
+    ],
+    "error_fields": {
+      "signup_domains": [
+        "has invalid format"
+      ]
+    }
+  },
+  "tags": [
+    "referral",
+    "program"
+  ]
+}

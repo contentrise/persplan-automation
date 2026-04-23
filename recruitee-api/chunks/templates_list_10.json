@@ -1,0 +1,29 @@
+{
+  "id": "templates_list_10",
+  "method": "GET",
+  "path": "/c/{company_id}/workflow_automations/pipeline_templates/{id}/templates",
+  "summary": "Lists automation templates for context",
+  "description": "Lists automation templates for context. Endpoint: GET /c/{company_id}/workflow_automations/pipeline_templates/{id}/templates. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Context related resource ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/workflow_automations/pipeline_templates/{id}/templates\n\nRequired params: company_id\n\nOptional params: id",
+  "example_response": {},
+  "tags": [
+    "workflow_automations",
+    "pipeline_templates"
+  ]
+}

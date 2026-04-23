@@ -1,0 +1,82 @@
+{
+  "id": "open_question_template_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/open_question_templates/{id}",
+  "summary": "Show open question template",
+  "description": "Show open question template. Endpoint: GET /c/{company_id}/offer_templates/{offer_template_id}/open_question_templates/{id}. Required parameters: id, offer_template_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Open Question template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offer_templates/{offer_template_id}/open_question_templates/{id}\n\nRequired params: id, offer_template_id, company_id",
+  "example_response": {
+    "open_question_template": {
+      "default": false,
+      "id": 66,
+      "position": 12,
+      "title": "Open Question Template",
+      "category": "Sample category",
+      "custom": false,
+      "open_questions": [
+        {
+          "id": 73,
+          "position": 12,
+          "visible": true,
+          "options": null,
+          "required": false,
+          "kind": "string",
+          "visibility": {
+            "level": "public",
+            "admin_ids": [],
+            "role_ids": []
+          },
+          "open_question_options": [
+            {
+              "id": 75,
+              "position": 17,
+              "options": {},
+              "translations": [
+                {
+                  "body": "Choice 33",
+                  "lang_code": "en"
+                }
+              ],
+              "disqualify_reason_id": 14
+            }
+          ],
+          "translations": [
+            {
+              "body": "What does OTP mean?",
+              "lang_code": "en"
+            }
+          ],
+          "open_question_template_id": 66,
+          "is_knockout_question": true
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "open_question_templates"
+  ]
+}

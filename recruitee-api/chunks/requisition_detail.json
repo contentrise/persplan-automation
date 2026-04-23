@@ -1,0 +1,67 @@
+{
+  "id": "requisition_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions/{requisition_id}",
+  "summary": "Show requisition",
+  "description": "Show requisition. Endpoint: GET /c/{company_id}/requisitions/{requisition_id}. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions/{requisition_id}\n\nRequired params: requisition_id, company_id",
+  "example_response": {
+    "requisition": {
+      "id": 371,
+      "status": "draft",
+      "title": "Amazing requisition",
+      "form": {
+        "fields": [
+          "locations"
+        ],
+        "dynamic_field_ids": []
+      },
+      "dynamic_fields": [],
+      "country_code": "PL",
+      "openings_count": 0,
+      "offers": [],
+      "offers_count": 0,
+      "created_at": "2026-04-21T07:34:07.179959Z",
+      "updated_at": "2026-04-21T07:34:07.179959Z",
+      "city": "Poznań",
+      "state_code": "30",
+      "notes_count": 0,
+      "followed": false,
+      "attachments_count": 0,
+      "location_ids": [
+        334,
+        335
+      ],
+      "street": "ul. Wiosny Ludów 2",
+      "guid": "guid157",
+      "archived_at": null,
+      "follower_ids": [],
+      "openings": [],
+      "approval_request": null,
+      "openings_with_deleted_candidate_count": 0,
+      "hires_count": 0,
+      "approval_flow_id": 445,
+      "rejection_reason": null,
+      "rejected_by_id": null
+    }
+  },
+  "tags": [
+    "requisitions"
+  ]
+}

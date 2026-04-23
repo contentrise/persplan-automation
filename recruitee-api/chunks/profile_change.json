@@ -1,0 +1,46 @@
+{
+  "id": "profile_change",
+  "method": "PATCH",
+  "path": "/referral_portal/profile/change_password",
+  "summary": "Change referrer password",
+  "description": "Change referrer password. Endpoint: PATCH /referral_portal/profile/change_password. Required parameters: password, password_confirmation. Optional parameters include secure_change_token.",
+  "params": [
+    {
+      "name": "password",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "password_confirmation",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "secure_change_token",
+      "type": "string",
+      "required": false,
+      "description": "Note: unscoped by profile field",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"profile\": {\n\"password\": \"weak_password\",\n\"password_confirmation\": \"weak_password\"\n},\n\"secure_change_token\": \"SFMyNTY.g2gDYcZuBgBXX_WunQFiAAFRgA.CZ3d-1ap06oByvu9eAqSBaz3lPsbhmH3zpzHxVAJwgw\"\n}",
+  "example_response": {
+    "error": [
+      "Password must contain number, upper and lower case letters"
+    ],
+    "error_fields": {
+      "password": [
+        "must contain number, upper and lower case letters"
+      ]
+    }
+  },
+  "tags": [
+    "referral_portal",
+    "profile",
+    "referral"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "id": "program_enable",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/program/toggle",
+  "summary": "Enable/disable referral program for that company",
+  "description": "Enable/disable referral program for that company. Endpoint: PATCH /c/{company_id}/referral/program/toggle. Required parameters: enabled, company_id.",
+  "params": [
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"program\": {\n\"enabled\": \"what?\"\n}\n}",
+  "example_response": {
+    "error": [
+      "Enabled is invalid"
+    ],
+    "error_fields": {
+      "enabled": [
+        "is invalid"
+      ]
+    }
+  },
+  "tags": [
+    "referral",
+    "program"
+  ]
+}

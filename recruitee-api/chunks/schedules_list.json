@@ -1,0 +1,103 @@
+{
+  "id": "schedules_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/schedules",
+  "summary": "List interview schedules",
+  "description": "List interview schedules. Endpoint: GET /c/{company_id}/interview/schedules. Required parameters: company_id. Optional parameters include limit, sort_by, sort_order, page.",
+  "params": [
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "One of: [name interview_schedule_assignments_count request_links_scheduled_count request_links_pending_count created_at], default: created_at",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "One of: [desc asc], default: desc",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (default: 1)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/schedules\n\nRequired params: company_id\n\nOptional params: limit, sort_by, sort_order, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 2,
+      "page": 1
+    },
+    "references": [],
+    "interview_schedules": [
+      {
+        "id": 56,
+        "name": "ZZZ",
+        "private": false,
+        "kind": "meeting",
+        "token": "aBcDeFg123461",
+        "created_at": "2026-04-21T07:32:26.859190Z",
+        "updated_at": "2026-04-21T07:32:26.859190Z",
+        "admin_ids": [],
+        "note": null,
+        "custom_name": null,
+        "public_note": null,
+        "video_provider": null,
+        "hide_candidates_names": false,
+        "exclude_candidate_from_attendees": false,
+        "video": null,
+        "organizer_id": null,
+        "request_links_pending_count": 0,
+        "request_links_scheduled_count": 0,
+        "reschedule_enabled": true,
+        "assign_any_interviewer": false
+      },
+      {
+        "id": 55,
+        "name": "AAA",
+        "private": false,
+        "kind": "meeting",
+        "token": "aBcDeFg123460",
+        "created_at": "2026-04-21T07:32:26.858521Z",
+        "updated_at": "2026-04-21T07:32:26.858521Z",
+        "admin_ids": [],
+        "note": null,
+        "custom_name": null,
+        "public_note": null,
+        "video_provider": null,
+        "hide_candidates_names": false,
+        "exclude_candidate_from_attendees": false,
+        "video": null,
+        "organizer_id": null,
+        "request_links_pending_count": 0,
+        "request_links_scheduled_count": 0,
+        "reschedule_enabled": true,
+        "assign_any_interviewer": false
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "schedules"
+  ]
+}

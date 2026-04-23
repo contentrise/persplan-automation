@@ -1,0 +1,22 @@
+{
+  "id": "inboxes_list",
+  "method": "GET",
+  "path": "/c/{company_id}/mailbox/inboxes",
+  "summary": "List inboxes for search",
+  "description": "Return the list of connected/errored inboxes that admin can search emails against. This list will contain their own personal mailbox + all connected/errored shared mailboxes",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/mailbox/inboxes\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "inboxes"
+  ]
+}

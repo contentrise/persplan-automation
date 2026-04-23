@@ -1,0 +1,22 @@
+{
+  "id": "events_list_2",
+  "method": "GET",
+  "path": "/share/interview/events/sync",
+  "summary": "Sync event",
+  "description": "Sync event. Endpoint: GET /share/interview/events/sync. Required parameters: token.",
+  "params": [
+    {
+      "name": "token",
+      "type": "string",
+      "required": true,
+      "description": "Event token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/interview/events/sync\n\nRequired params: token",
+  "example_response": "BEGIN:VCALENDAR\nMETHOD:PUBLISH\nVERSION:2.0\nPRODID:-//Recruitee//Recruitee Events//EN\nCALSCALE:GREGORIAN\nBEGIN:VEVENT\nCLASS:PUBLIC\nDTSTART:20260421T073210Z\nDTEND:20260421T083210Z\nCREATED:20260421T073210Z\nDTSTAMP:20260421T073210Z\nORGANIZER;CN=John Doe:MAILTO:john2327@recruitee.com\nSUMMARY:Meeting for Elixir Developer EN - Harvey Dent\nDESCRIPTION:Event link:\\nhttp://company1121.recruitee.internal:3003/v/even\nts/aBcDeFg123412\\n\\n---------------------\\nInformation for the candidate:\\\nnYou've been invited to Meeting about the Elixir Developer EN position in\nTest Company.\\nInterviewers: John Doe\\, Bruce Wayne\\, James Gordon\\n\\n----\n-----------------\\nInformation for the interviewers:\\nIf you're attending\nthis meeting as an interviewer\\, you can view the candidate's information\nin Recruitee.\\nhttp://app.recruitee.internal:3003/#candidates?candidate=10\n73&company=1844\\n\nLOCATION:Amsterdam\nURL:http://company1121.recruitee.internal:3003/v/events/aBcDeFg123412\nUID:aBcDeFg123412@recruitee.com\nEND:VEVENT\nEND:VCALENDAR",
+  "tags": [
+    "interview",
+    "events"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "questionnaire_detail",
+  "method": "GET",
+  "path": "/share/interview/questionnaire/{template_token}/{request_link_token}",
+  "summary": "Show questionnaire for a given request link",
+  "description": "Show questionnaire for a given request link. Endpoint: GET /share/interview/questionnaire/{template_token}/{request_link_token}. Required parameters: request_link_token, template_token.",
+  "params": [
+    {
+      "name": "request_link_token",
+      "type": "string",
+      "required": true,
+      "description": "Result link token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_token",
+      "type": "string",
+      "required": true,
+      "description": "Template token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/interview/questionnaire/{template_token}/{request_link_token}\n\nRequired params: request_link_token, template_token",
+  "example_response": {
+    "questionnaire": {
+      "name": "Ruby developer",
+      "kind": "questionnaire",
+      "language": "en",
+      "company": {
+        "name": "Test Company"
+      },
+      "created_at": "2026-04-21T07:33:36.527841Z",
+      "completed_at": "2026-04-20T07:33:36.527058Z",
+      "interview_questions": [
+        {
+          "position": 2,
+          "options": null,
+          "title": "How would you rate your Elixir knowledge?",
+          "required": true,
+          "kind": "single_choice",
+          "hint": "Ask how the candidate would rate himself",
+          "interview_question_options": [
+            {
+              "position": 1,
+              "title": "Poor",
+              "hint": null
+            },
+            {
+              "position": 2,
+              "title": "Excellent",
+              "hint": null
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "tags": [
+    "interview",
+    "questionnaire"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "candidate_detail_5",
+  "method": "GET",
+  "path": "/c/{company_id}/mailbox/candidate/{id}",
+  "summary": "Get threads for candidate",
+  "description": "Get threads for candidate. Endpoint: GET /c/{company_id}/mailbox/candidate/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/mailbox/candidate/{id}\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "candidate"
+  ]
+}

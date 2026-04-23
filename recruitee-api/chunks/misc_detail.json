@@ -1,0 +1,14 @@
+{
+  "id": "misc_detail",
+  "method": "GET",
+  "path": "/",
+  "summary": "Returns 'unauthorized' error",
+  "description": "Returns 'unauthorized' error. Endpoint: GET /.",
+  "params": [],
+  "example_request": "GET /",
+  "example_response": {},
+  "tags": [
+    "misc",
+    "home"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "hiring_detail_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/placements/{id}/hiring_details",
+  "summary": "Update hiring details for hired placement",
+  "description": "Update hiring details for hired placement. Endpoint: PATCH /c/{company_id}/placements/{id}/hiring_details. Required parameters: id, placement, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Placement ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "placement",
+      "type": "map",
+      "required": true,
+      "description": "Placement params: hired_at (datetime, optional) - date when candidate was hired; job_starts_at (datetime, optional) - date when candidate starts job; opening_id (integer, required when requisitions are enabled); work_location_id (active Locations assigned to placement or job, required)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"placement\": {\n\"work_location_id\": 291\n}\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "active_work_location_not_found",
+        "data": {},
+        "message": "Active work_location not found."
+      }
+    ]
+  },
+  "tags": [
+    "placements",
+    "hiring_details",
+    "pipeline"
+  ]
+}

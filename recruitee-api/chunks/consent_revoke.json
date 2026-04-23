@@ -1,0 +1,21 @@
+{
+  "id": "consent_revoke",
+  "method": "POST",
+  "path": "/c/{company_id}/consent/sign_in/revoke",
+  "summary": "Revokes sign in consent",
+  "description": "Revokes sign in consent. Endpoint: POST /c/{company_id}/consent/sign_in/revoke. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/consent/sign_in/revoke\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "consent"
+  ]
+}

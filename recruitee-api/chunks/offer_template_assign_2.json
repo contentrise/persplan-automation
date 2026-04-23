@@ -1,0 +1,54 @@
+{
+  "id": "offer_template_assign_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/offer_templates/{offer_template_id}/assign_template",
+  "summary": "Assign referral template for given offer template",
+  "description": "Assign referral template for given offer template. Endpoint: PATCH /c/{company_id}/referral/offer_templates/{offer_template_id}/assign_template. Required parameters: offer_template_id, offer_template_assignment, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_assignment",
+      "type": "map",
+      "required": true,
+      "description": "Offer template assignment params (only: referral_template_id::integer)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_template_assignment\": {\n\"referral_template_id\": \"wrong\"\n}\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "cast_validation",
+        "data": {},
+        "message": "Referral template id is invalid",
+        "source": "offer_template_assignment/referral_template_id"
+      }
+    ],
+    "resources": {
+      "referral_template_id": [
+        {
+          "code": "cast_validation",
+          "data": {},
+          "message": "is invalid"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "referral",
+    "offer_templates"
+  ]
+}

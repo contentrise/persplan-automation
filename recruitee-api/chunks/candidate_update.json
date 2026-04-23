@@ -1,0 +1,157 @@
+{
+  "id": "candidate_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/candidates/{id}",
+  "summary": "Update candidate",
+  "description": "Update candidate. Endpoint: PATCH /c/{company_id}/candidates/{id}. Required parameters: id, company_id. Optional parameters include parse.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "parse",
+      "type": "boolean",
+      "required": false,
+      "description": "Parse CV and replace data previously extracted from CV file (should be string ‘true’ or ‘1’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidate\": {\n\"emails\": [\n\" jw@example.com \",\n\" watt@example.com\"\n],\n\"links\": [\n\" https://github.com \"\n],\n\"name\": \" James Watt \",\n\"phones\": [\n\" +5011234234 \",\n\" +32023920 \"\n],\n\"social_links\": [\n\" https://facebook.com \"\n]\n}\n}",
+  "example_response": {
+    "references": [],
+    "candidate": {
+      "photo_thumb_url": null,
+      "custom_fields": [],
+      "cover_letter_file_url": null,
+      "linkedin_job_application_id": null,
+      "positive_ratings": null,
+      "cv_processing_status": "ok",
+      "admin_id": null,
+      "has_cover_letter": false,
+      "initials": "JW",
+      "my_pending_result_request": false,
+      "rating_visible": true,
+      "mailbox_messages_count": 0,
+      "notes_count": 0,
+      "sourcing_origin": null,
+      "upcoming_event": false,
+      "ever_revealed_for_ids": [],
+      "social_links": [
+        "https://facebook.com"
+      ],
+      "title": null,
+      "shared_admin_count": 0,
+      "created_at": "2026-04-21T07:34:29.440618Z",
+      "cover_letter_file_original_url": null,
+      "my_last_rating": null,
+      "emails": [
+        "jw@example.com",
+        "watt@example.com"
+      ],
+      "ratings_count": 0,
+      "updated_at": "2026-04-21T07:34:29.443717Z",
+      "online_data": null,
+      "is_revealed": false,
+      "pending_result_request": false,
+      "cover_letter_file_processing_status": "ok",
+      "last_message_at": null,
+      "unread_notifications": false,
+      "cv_url": null,
+      "tasks_count": 0,
+      "attachments_count": 0,
+      "placements": [],
+      "example": false,
+      "is_hired": false,
+      "photo_url": null,
+      "in_active_share": false,
+      "is_anonymous": false,
+      "gdpr_expires_at": null,
+      "ratings": {},
+      "invalid_emails": [],
+      "my_upcoming_event": false,
+      "grouped_open_question_answers": [],
+      "gdpr_status": "no_consent",
+      "gdpr_scheduled_to_delete_at": null,
+      "open_question_answers": [],
+      "links": [
+        "https://github.com"
+      ],
+      "referrer": null,
+      "source": null,
+      "tags": [],
+      "viewed": false,
+      "shared_container_count": 0,
+      "referral_referrers_ids": [],
+      "last_activity_at": "2026-04-21T07:34:29.440618Z",
+      "fields": [
+        {
+          "id": null,
+          "visible": true,
+          "values": [],
+          "origin": "manual",
+          "kind": "education",
+          "visibility": {
+            "level": "public",
+            "admin_ids": [],
+            "role_ids": []
+          },
+          "is_anonymous": false,
+          "fixed": true
+        },
+        {
+          "id": null,
+          "visible": true,
+          "values": [],
+          "origin": "manual",
+          "kind": "experience",
+          "visibility": {
+            "level": "public",
+            "admin_ids": [],
+            "role_ids": []
+          },
+          "is_anonymous": false,
+          "fixed": true
+        }
+      ],
+      "cover_letter": null,
+      "gdpr_consent_request_type": null,
+      "pending_request_link": false,
+      "id": 3373,
+      "name": "James Watt",
+      "gdpr_consent_ever_given": false,
+      "events_count": 0,
+      "sourcing_data": null,
+      "gdpr_consent_request_sent_at": null,
+      "phones": [
+        "+5011234234",
+        "+32023920"
+      ],
+      "cv_original_url": null,
+      "admin_ids": [],
+      "salutation": null,
+      "duplicates": [
+        3373
+      ],
+      "gdpr_consent_request_completed_at": null,
+      "has_avatar": true,
+      "sources": [],
+      "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=3373&company=5620",
+      "followed": false,
+      "cv_parse_status": null
+    }
+  },
+  "tags": [
+    "candidates"
+  ]
+}

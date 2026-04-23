@@ -1,0 +1,84 @@
+{
+  "id": "location_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/locations/{id}",
+  "summary": "Update location",
+  "description": "Update location. Endpoint: PATCH /c/{company_id}/locations/{id}. Required parameters: id, country_code, company_id. Optional parameters include state_code, translations.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Location ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "country_code",
+      "type": "integer",
+      "required": true,
+      "description": "Country code",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "state_code",
+      "type": "integer",
+      "required": false,
+      "description": "State code",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "translations",
+      "type": "array",
+      "required": false,
+      "description": "Translations",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"location\": {\n\"country_code\": \"PL\",\n\"state_code\": \"30\",\n\"translations\": [\n{\n\"city\": \"Poznań\",\n\"lang_code\": \"en\",\n\"name\": \"Poznań HQ\",\n\"note\": \"Kupiec Poznański\",\n\"postal_code\": \"60-001\",\n\"street\": \"ul. Wiosny Ludów 2\"\n}\n]\n}\n}",
+  "example_response": {
+    "location": {
+      "id": 134,
+      "name": "Poznań HQ",
+      "is_valid": true,
+      "country_code": "PL",
+      "created_at": "2026-04-21T07:32:38.959134Z",
+      "updated_at": "2026-04-21T07:32:38.963547Z",
+      "note": "Kupiec Poznański",
+      "city": "Poznań",
+      "postal_code": "60-001",
+      "state_code": "30",
+      "lang_code": "en",
+      "street": "ul. Wiosny Ludów 2",
+      "translations": [
+        {
+          "default": true,
+          "name": "Poznań HQ",
+          "note": "Kupiec Poznański",
+          "city": "Poznań",
+          "postal_code": "60-001",
+          "lang_code": "en",
+          "street": "ul. Wiosny Ludów 2",
+          "filled_count": 5,
+          "total_count": 5,
+          "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+        }
+      ],
+      "state_name": "Wielkopolskie",
+      "active_offers_count": 0,
+      "active_requisitions_count": 0,
+      "is_deletable": true,
+      "archived_at": null,
+      "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+    }
+  },
+  "tags": [
+    "locations"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "possible_languages_list",
+  "method": "GET",
+  "path": "/c/{company_id}/lang/possible_languages",
+  "summary": "List of possible languages",
+  "description": "List of possible languages. Endpoint: GET /c/{company_id}/lang/possible_languages. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/lang/possible_languages\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "lang",
+    "possible_languages"
+  ]
+}

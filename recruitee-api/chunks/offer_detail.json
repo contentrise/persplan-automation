@@ -1,0 +1,61 @@
+{
+  "id": "offer_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/locations/{id}/offers",
+  "summary": "Get offers assigned to location",
+  "description": "Get offers assigned to location. Endpoint: GET /c/{company_id}/locations/{id}/offers. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Location ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/locations/{id}/offers\n\nRequired params: id, company_id",
+  "example_response": {
+    "offers": [
+      {
+        "id": 965,
+        "status": "published",
+        "title": "Best Offer",
+        "location_ids": [
+          118,
+          119,
+          120
+        ],
+        "slug": "best-offer511"
+      },
+      {
+        "id": 966,
+        "status": "draft",
+        "title": "Best Offer",
+        "location_ids": [
+          118
+        ],
+        "slug": "best-offer512"
+      },
+      {
+        "id": 967,
+        "status": "internal",
+        "title": "Best Offer",
+        "location_ids": [
+          118
+        ],
+        "slug": "best-offer513"
+      }
+    ]
+  },
+  "tags": [
+    "locations",
+    "offers"
+  ]
+}

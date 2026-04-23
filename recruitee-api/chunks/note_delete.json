@@ -1,0 +1,71 @@
+{
+  "id": "note_delete",
+  "method": "DELETE",
+  "path": "/share/containers/{token}/notes/{id}",
+  "summary": "Delete note",
+  "description": "Delete note. Endpoint: DELETE /share/containers/{token}/notes/{id}. Required parameters: id, token, auth_token.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Note ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auth_token",
+      "type": "string",
+      "required": true,
+      "description": "Guest token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /share/containers/{token}/notes/{id}\n\nRequired params: id, token, auth_token",
+  "example_response": {
+    "note": {
+      "id": 68,
+      "text": "Test comment",
+      "body": "<p>Test comment</p>",
+      "admin_id": null,
+      "candidate_id": 1270,
+      "attachments": [],
+      "admin": null,
+      "guest": {
+        "id": 29,
+        "name": "James Smith"
+      },
+      "created_at": "2026-04-21T07:32:44.969451Z",
+      "guest_id": 29,
+      "body_html": "<p>Test comment</p>",
+      "reply_to_id": null,
+      "body_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Test comment",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "triggered": false
+    }
+  },
+  "tags": [
+    "containers",
+    "notes"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "follower_add",
+  "method": "POST",
+  "path": "/c/{company_id}/candidates/{id}/followers",
+  "summary": "Add followers to candidate",
+  "description": "Add followers to candidate. Endpoint: POST /c/{company_id}/candidates/{id}/followers. Required parameters: id, company_id. Optional parameters include admin_ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "admin_ids",
+      "type": "array",
+      "required": false,
+      "description": "List of admin IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"admin_ids\": [\n11885\n]\n}",
+  "example_response": {
+    "candidate": {
+      "id": 2957,
+      "admin_ids": [
+        11885
+      ],
+      "followed": false
+    }
+  },
+  "tags": [
+    "candidates",
+    "followers"
+  ]
+}

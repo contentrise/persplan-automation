@@ -1,0 +1,21 @@
+{
+  "id": "offer_assign",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/update_positions",
+  "summary": "Assign new positions to offers",
+  "description": "Assign new positions to offers. Endpoint: PATCH /c/{company_id}/offers/update_positions. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offers\": [\n{\n\"id\": 2824,\n\"position\": 1\n},\n{\n\"id\": 2823,\n\"position\": 2\n}\n]\n}",
+  "example_response": {},
+  "tags": [
+    "offers"
+  ]
+}

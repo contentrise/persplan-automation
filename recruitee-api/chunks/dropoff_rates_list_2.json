@@ -1,0 +1,174 @@
+{
+  "id": "dropoff_rates_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/report/jobs/dropoff_rate",
+  "summary": "Jobs Report - Drop-off rate",
+  "description": "DEPRECATED - This endpoint is deprecated and will be discontinued by the end of 2024.",
+  "params": [
+    {
+      "name": "format",
+      "type": "string",
+      "required": false,
+      "description": "Used for exporting in different format than json, can be: csv",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "filters",
+      "type": "string",
+      "required": false,
+      "description": "Filters in format type:value;type:value (example: job:hiring-manager-54;department:Engineering)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default is unlimited",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Sort results by field, can be: title, status, date",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_start",
+      "type": "string",
+      "required": false,
+      "description": "Used when date_range is ‘range’. Date from which data should be fetched. Should be in format ‘2014-01-30’.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_end",
+      "type": "string",
+      "required": false,
+      "description": "Used when date_range is ‘range’. Date to which data should be fetched. Should be in format ‘2014-01-30’.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "Sort order, can be: asc, desc (default: desc)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number used for pagination, can be used only with the limit option (1, 2, 3, 4…)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_range",
+      "type": "string",
+      "required": false,
+      "description": "Date filter. Can be: range, today, yesterday, this_week, last_week, this_month, last_month, this_quarter, last_quarter, this_year, last_year, last_30_days, last_60_days. If value is range, additional parameters ‘date_start’ and ‘date_end’ must be provided.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/report/jobs/dropoff_rate\n\nRequired params: company_id\n\nOptional params: format, filters, limit, sort_by, date_start, date_end, sort_order, page",
+  "example_response": {
+    "values": [
+      [
+        641,
+        "best-offer155",
+        "Elixir Developer",
+        "draft",
+        3,
+        1,
+        [
+          {
+            "id": 17565,
+            "name": "Referred",
+            "category": "referred",
+            "total_count": 0,
+            "disqualified_count": 0,
+            "disqualified_ids": []
+          },
+          {
+            "id": 17566,
+            "name": "Sourced",
+            "category": "sourced",
+            "total_count": 0,
+            "disqualified_count": 0,
+            "disqualified_ids": []
+          },
+          {
+            "id": 17567,
+            "name": "Applied",
+            "category": "apply",
+            "total_count": 3,
+            "disqualified_count": 0,
+            "disqualified_ids": []
+          },
+          {
+            "id": 17568,
+            "name": "Phone interview",
+            "category": "phone_screen",
+            "total_count": 0,
+            "disqualified_count": 0,
+            "disqualified_ids": []
+          },
+          {
+            "id": 17569,
+            "name": "On-site interview",
+            "category": "interview",
+            "total_count": 3,
+            "disqualified_count": 0,
+            "disqualified_ids": []
+          },
+          {
+            "id": 17570,
+            "name": "Evaluation",
+            "category": "evaluation",
+            "total_count": 0,
+            "disqualified_count": 0,
+            "disqualified_ids": []
+          },
+          {
+            "id": 17571,
+            "name": "Offer",
+            "category": "offer",
+            "total_count": 2,
+            "disqualified_count": 1,
+            "disqualified_ids": [
+              746
+            ]
+          },
+          {
+            "id": 17572,
+            "name": "Hired",
+            "category": "hire",
+            "total_count": 1,
+            "disqualified_count": 0,
+            "disqualified_ids": []
+          }
+        ]
+      ]
+    ],
+    "columns": [
+      "id",
+      "slug",
+      "title",
+      "status",
+      "total_candidates_count",
+      "total_disqualified_count",
+      "stages"
+    ],
+    "total_count": 1
+  },
+  "tags": [
+    "report",
+    "jobs"
+  ]
+}

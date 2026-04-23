@@ -1,0 +1,34 @@
+{
+  "id": "teams_list",
+  "method": "GET",
+  "path": "/c/{company_id}/teams",
+  "summary": "List company teams",
+  "description": "List company teams. Endpoint: GET /c/{company_id}/teams. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/teams\n\nRequired params: company_id",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 1,
+      "page": 1
+    },
+    "teams": [
+      {
+        "id": 6,
+        "name": "Engineering",
+        "guid": null
+      }
+    ]
+  },
+  "tags": [
+    "teams"
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "candidate_copy",
+  "method": "PATCH",
+  "path": "/c/{company_id}/candidates/{id}/copy_to_company",
+  "summary": "Copy candidate to company",
+  "description": "Copy candidate to company. Endpoint: PATCH /c/{company_id}/candidates/{id}/copy_to_company. Required parameters: id, to_company_id, company_id. Optional parameters include offer_id, location_ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "string",
+      "required": false,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "location_ids",
+      "type": "array",
+      "required": false,
+      "description": "Location IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "to_company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Target company ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_id\": 3423,\n\"to_company_id\": 5640\n}",
+  "example_response": {
+    "error": [
+      "Forbidden"
+    ]
+  },
+  "tags": [
+    "candidates"
+  ]
+}

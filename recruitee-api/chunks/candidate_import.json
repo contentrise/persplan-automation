@@ -1,0 +1,130 @@
+{
+  "id": "candidate_import",
+  "method": "POST",
+  "path": "/c/{company_id}/candidates/import",
+  "summary": "Import candidate from file",
+  "description": "Import candidate from file. Endpoint: POST /c/{company_id}/candidates/import. Required parameters: file, company_id. Optional parameters include offers, offer_id.",
+  "params": [
+    {
+      "name": "file",
+      "type": "file",
+      "required": true,
+      "description": "CV/resume file",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offers",
+      "type": "array",
+      "required": false,
+      "description": "Array of offer IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "string",
+      "required": false,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"file\": {\n\"filename\": \"cv.en.docx\",\n\"path\": \"test/files/cv_parser/cvs/cv.en.docx\",\n\"content_type\": null\n},\n\"offer_id\": 3196\n}",
+  "example_response": {
+    "candidate": {
+      "id": 3229,
+      "links": [
+        "http://adamnowak.example.com"
+      ],
+      "name": "Adam Nowak",
+      "sources": [],
+      "fields": [
+        {
+          "id": null,
+          "visible": true,
+          "values": [],
+          "origin": "manual",
+          "kind": "education",
+          "visibility": {
+            "level": "public",
+            "admin_ids": [],
+            "role_ids": []
+          },
+          "is_anonymous": false,
+          "fixed": true
+        },
+        {
+          "id": null,
+          "visible": true,
+          "values": [],
+          "origin": "manual",
+          "kind": "experience",
+          "visibility": {
+            "level": "public",
+            "admin_ids": [],
+            "role_ids": []
+          },
+          "is_anonymous": false,
+          "fixed": true
+        }
+      ],
+      "emails": [
+        "adam.nowak@example.com"
+      ],
+      "tags": [],
+      "has_avatar": true,
+      "initials": "AN",
+      "photo_thumb_url": "tmp/bow/candidates/3229/thumb_photo_f3tva5kdm5c8.jpg",
+      "cv_original_url": "tmp/bow/candidates/3229/cv_b6bcgg683mo7.docx",
+      "cv_url": "tmp/bow/candidates/3229/pdf_cv_b6bcgg683mo7.pdf",
+      "cv_processing_status": "ok",
+      "cover_letter": null,
+      "placements": [
+        {
+          "id": 1703,
+          "position": 1,
+          "candidate_id": 3229,
+          "language": null,
+          "created_at": "2026-04-21T07:34:22.869755Z",
+          "updated_at": "2026-04-21T07:34:22.869755Z",
+          "offer_id": 3196,
+          "talent_pool_id": null,
+          "positive_ratings": null,
+          "ratings": {},
+          "hired_at": null,
+          "hired_by_id": null,
+          "hired_in_other_placement": false,
+          "hired_in_this_placement": false,
+          "location_ids": [],
+          "department_id": null,
+          "department_name": null,
+          "overdue_diff": null,
+          "overdue_at": null,
+          "stage_id": 66695,
+          "job_starts_at": null
+        }
+      ],
+      "photo_url": "tmp/bow/candidates/3229/normal_photo_f3tva5kdm5c8.jpg",
+      "custom_fields": [],
+      "is_anonymous": false,
+      "phones": [
+        "+48555555100"
+      ],
+      "social_links": [
+        "http://twitter.com/adamnowak",
+        "http://dribbble.com/adamnowak",
+        "http://facebook.com/adam.nowak",
+        "http://github.com/adamnowak"
+      ],
+      "cv_parse_status": "pending"
+    }
+  },
+  "tags": [
+    "candidates"
+  ]
+}

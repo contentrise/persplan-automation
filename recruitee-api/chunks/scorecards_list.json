@@ -1,0 +1,185 @@
+{
+  "id": "scorecards_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/candidates/{candidate_id}/results/scorecards",
+  "summary": "Results scorecards summary",
+  "description": "Results scorecards summary. Endpoint: GET /c/{company_id}/interview/candidates/{candidate_id}/results/scorecards. Required parameters: candidate_id, company_id. Optional parameters include offer_id.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/candidates/{candidate_id}/results/scorecards\n\nRequired params: candidate_id, company_id\n\nOptional params: offer_id",
+  "example_response": {
+    "scorecards": [
+      {
+        "options": [
+          {
+            "title": "C#",
+            "ratings": [
+              {
+                "no": 1
+              },
+              {
+                "neutral": 0
+              },
+              {
+                "yes": 0
+              },
+              {
+                "strong_yes": 0
+              }
+            ]
+          },
+          {
+            "title": "C++",
+            "ratings": [
+              {
+                "no": 0
+              },
+              {
+                "neutral": 0
+              },
+              {
+                "yes": 0
+              },
+              {
+                "strong_yes": 1
+              }
+            ]
+          },
+          {
+            "title": "Elixir",
+            "ratings": [
+              {
+                "no": 0
+              },
+              {
+                "neutral": 0
+              },
+              {
+                "yes": 0
+              },
+              {
+                "strong_yes": 0
+              }
+            ]
+          },
+          {
+            "title": "JavaScript",
+            "ratings": [
+              {
+                "no": 1
+              },
+              {
+                "neutral": 0
+              },
+              {
+                "yes": 1
+              },
+              {
+                "strong_yes": 0
+              }
+            ]
+          },
+          {
+            "title": "Python",
+            "ratings": [
+              {
+                "no": 1
+              },
+              {
+                "neutral": 0
+              },
+              {
+                "yes": 0
+              },
+              {
+                "strong_yes": 0
+              }
+            ]
+          },
+          {
+            "title": "Ruby",
+            "ratings": [
+              {
+                "no": 0
+              },
+              {
+                "neutral": 0
+              },
+              {
+                "yes": 1
+              },
+              {
+                "strong_yes": 2
+              }
+            ]
+          }
+        ],
+        "title": "Programming"
+      },
+      {
+        "options": [
+          {
+            "title": "Teamwork",
+            "ratings": [
+              {
+                "no": 1
+              },
+              {
+                "neutral": 1
+              },
+              {
+                "yes": 0
+              },
+              {
+                "strong_yes": 0
+              }
+            ]
+          },
+          {
+            "title": "Work ethic",
+            "ratings": [
+              {
+                "no": 1
+              },
+              {
+                "neutral": 1
+              },
+              {
+                "yes": 0
+              },
+              {
+                "strong_yes": 0
+              }
+            ]
+          }
+        ],
+        "title": "Soft skills"
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "candidates"
+  ]
+}

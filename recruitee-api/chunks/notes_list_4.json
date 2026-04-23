@@ -1,0 +1,171 @@
+{
+  "id": "notes_list_4",
+  "method": "GET",
+  "path": "/c/{company_id}/talent_pools/{talent_pool_id}/notes",
+  "summary": "List notes for talent pool",
+  "description": "List notes for talent pool. Endpoint: GET /c/{company_id}/talent_pools/{talent_pool_id}/notes. Required parameters: talent_pool_id, company_id.",
+  "params": [
+    {
+      "name": "talent_pool_id",
+      "type": "integer",
+      "required": true,
+      "description": "Talent Pool ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/talent_pools/{talent_pool_id}/notes\n\nRequired params: talent_pool_id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 9450,
+        "type": "Admin",
+        "email": "john1331@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9450/normal_avatar_dk9t9sluo1b5.png",
+        "photo_thumb_url": "tmp/bow/admins/9450/thumb_avatar_dk9t9sluo1b5.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "notes": [
+      {
+        "id": 180,
+        "text": "Test comment",
+        "replies": [
+          {
+            "id": 181,
+            "text": "Test comment",
+            "replies": [
+              {
+                "id": 182,
+                "text": "Test comment",
+                "replies": [],
+                "body": "<p>Test comment</p>",
+                "admin_id": 9450,
+                "candidate_id": 2351,
+                "attachments": [],
+                "created_at": "2026-04-21T07:33:57.250444Z",
+                "updated_at": "2026-04-21T07:33:57.250444Z",
+                "offer_id": null,
+                "talent_pool_id": 1986,
+                "requisition_id": null,
+                "guest_id": null,
+                "visibility": {
+                  "level": "public",
+                  "admin_ids": [],
+                  "role_ids": []
+                },
+                "body_html": "<p>Test comment</p>",
+                "reply_to_id": 181,
+                "body_json": {
+                  "doc": {
+                    "content": [
+                      {
+                        "content": [
+                          {
+                            "text": "Test comment",
+                            "type": "text"
+                          }
+                        ],
+                        "type": "paragraph"
+                      }
+                    ],
+                    "type": "doc"
+                  }
+                },
+                "triggered": false,
+                "reactions": []
+              }
+            ],
+            "body": "<p>Test comment</p>",
+            "admin_id": 9450,
+            "candidate_id": 2350,
+            "attachments": [],
+            "created_at": "2026-04-21T07:33:57.249451Z",
+            "updated_at": "2026-04-21T07:33:57.249451Z",
+            "offer_id": null,
+            "talent_pool_id": 1986,
+            "requisition_id": null,
+            "guest_id": null,
+            "visibility": {
+              "level": "public",
+              "admin_ids": [],
+              "role_ids": []
+            },
+            "body_html": "<p>Test comment</p>",
+            "reply_to_id": 180,
+            "body_json": {
+              "doc": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "text": "Test comment",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  }
+                ],
+                "type": "doc"
+              }
+            },
+            "triggered": false,
+            "reactions": []
+          }
+        ],
+        "body": "<p>Test comment</p>",
+        "admin_id": 9450,
+        "candidate_id": 2349,
+        "attachments": [],
+        "created_at": "2026-04-21T07:33:57.248335Z",
+        "updated_at": "2026-04-21T07:33:57.248335Z",
+        "offer_id": null,
+        "talent_pool_id": 1986,
+        "requisition_id": null,
+        "guest_id": null,
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        },
+        "body_html": "<p>Test comment</p>",
+        "reply_to_id": null,
+        "body_json": {
+          "doc": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "Test comment",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          }
+        },
+        "triggered": false,
+        "pinned_at": null,
+        "reactions": []
+      }
+    ]
+  },
+  "tags": [
+    "talent_pools",
+    "notes"
+  ]
+}

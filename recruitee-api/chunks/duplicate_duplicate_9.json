@@ -1,0 +1,118 @@
+{
+  "id": "duplicate_duplicate_9",
+  "method": "POST",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/duplicate",
+  "summary": "Duplicate requisition",
+  "description": "Duplicate requisition. Endpoint: POST /c/{company_id}/requisitions/{requisition_id}/duplicate. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/requisitions/{requisition_id}/duplicate\n\nRequired params: requisition_id, company_id",
+  "example_response": {
+    "requisition": {
+      "city": "Poznań",
+      "department_id": 174,
+      "form": {
+        "fields": [
+          "department",
+          "recruiter",
+          "hiring_manager",
+          "locations",
+          "hours",
+          "category",
+          "education",
+          "employment_type",
+          "experience",
+          "salary",
+          "hiring_budget",
+          "general_context"
+        ],
+        "dynamic_field_ids": []
+      },
+      "openings": [],
+      "notes_count": 0,
+      "rejected_by_id": null,
+      "offers": [],
+      "dynamic_fields": [],
+      "education": "High",
+      "country_code": "PL",
+      "title": "Backend requisition (2)",
+      "created_at": "2026-04-21T07:34:06.147910Z",
+      "updated_at": "2026-04-21T07:34:06.149315Z",
+      "hiring_manager_id": 10756,
+      "category": "Programming",
+      "state_code": "22",
+      "approval_request": null,
+      "status": "draft",
+      "rejection_reason": null,
+      "offers_count": 0,
+      "street": "ul. Wiosny Ludów 2",
+      "attachments_count": 0,
+      "hires_count": 0,
+      "employment_type": "Full-time",
+      "follower_ids": [
+        10755,
+        10756,
+        10754
+      ],
+      "general_context_html": "</p>General context<p>",
+      "recruiter_id": 10755,
+      "openings_with_deleted_candidate_count": 0,
+      "openings_count": 0,
+      "max_hours_per_week": "40",
+      "hiring_budget": "10000",
+      "max_hours": 40,
+      "approval_flow_id": 328,
+      "experience": "Expert",
+      "id": 266,
+      "hiring_budget_currency": "PLN",
+      "min_hours_per_week": "20",
+      "location_ids": [
+        317
+      ],
+      "min_hours": 20,
+      "general_context_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "General context",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "archived_at": null,
+      "followed": true,
+      "salary": {
+        "max": "200",
+        "min": "100",
+        "period": "hour",
+        "currency": "PLN"
+      },
+      "guid": "8kath"
+    }
+  },
+  "tags": [
+    "requisitions",
+    "duplicate"
+  ]
+}

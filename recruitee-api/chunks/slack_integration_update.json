@@ -1,0 +1,43 @@
+{
+  "id": "slack_integration_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/tracking/slack_integrations/{id}/update_activity_subscriptions",
+  "summary": "Update update slack activity subscription",
+  "description": "Update update slack activity subscription. Endpoint: PATCH /c/{company_id}/tracking/slack_integrations/{id}/update_activity_subscriptions. Required parameters: id, value, events, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "SlackIntegration ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "required": true,
+      "description": "Possible values: ‘true’, ‘false’, (or 1, 0)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "events",
+      "type": "array",
+      "required": true,
+      "description": "List of events group to update",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/tracking/slack_integrations/{id}/update_activity_subscriptions\n\nRequired params: id, value, events, company_id",
+  "example_response": {},
+  "tags": [
+    "tracking",
+    "slack_integrations"
+  ]
+}

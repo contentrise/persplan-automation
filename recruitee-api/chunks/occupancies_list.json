@@ -1,0 +1,180 @@
+{
+  "id": "occupancies_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/occupancy",
+  "summary": "Event occupancy time",
+  "description": "Event occupancy time. Endpoint: GET /c/{company_id}/interview/occupancy. Required parameters: start_date, end_date, company_id. Optional parameters include timezone, admin_ids, meeting_room_ids.",
+  "params": [
+    {
+      "name": "timezone",
+      "type": "string",
+      "required": false,
+      "description": "Date range timezone, format: Europe/Amsterdam",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "admin_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of admins IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "start_date",
+      "type": "string",
+      "required": true,
+      "description": "Range start date, format: 2017-02-28",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "end_date",
+      "type": "string",
+      "required": true,
+      "description": "Range end date, format: 2017-02-28",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "meeting_room_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of meeting room IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/occupancy\n\nRequired params: start_date, end_date, company_id\n\nOptional params: timezone, admin_ids, meeting_room_ids",
+  "example_response": {
+    "days": [
+      {
+        "date": "2017-01-01",
+        "admins": [
+          {
+            "admin_id": 5697,
+            "groups": [
+              {
+                "events": [
+                  {
+                    "busy": true,
+                    "id": 132,
+                    "internal": true,
+                    "title": "Meeting - John Doe",
+                    "kind": "my",
+                    "timezone": "Europe/Amsterdam",
+                    "duration": 30,
+                    "admin_ids": [
+                      5697
+                    ],
+                    "starts_at": "2017-01-01T12:00:00.000000Z",
+                    "ends_at": "2017-01-01T12:30:00.000000Z",
+                    "all_day": false
+                  }
+                ],
+                "duration": 30,
+                "starts_at": "2017-01-01T12:00:00.000000Z",
+                "ends_at": "2017-01-01T12:30:00.000000Z",
+                "all_day": false
+              }
+            ],
+            "team": false
+          },
+          {
+            "admin_id": 5698,
+            "groups": [
+              {
+                "events": [
+                  {
+                    "busy": true,
+                    "id": 133,
+                    "internal": true,
+                    "title": "Meeting - John Doe",
+                    "kind": "recruitee",
+                    "timezone": "Europe/Amsterdam",
+                    "duration": 60,
+                    "admin_ids": [
+                      5698
+                    ],
+                    "starts_at": "2017-01-01T13:00:00.000000Z",
+                    "ends_at": "2017-01-01T14:00:00.000000Z",
+                    "all_day": false
+                  }
+                ],
+                "duration": 60,
+                "starts_at": "2017-01-01T13:00:00.000000Z",
+                "ends_at": "2017-01-01T14:00:00.000000Z",
+                "all_day": false
+              }
+            ],
+            "team": false
+          }
+        ],
+        "meeting_rooms": [
+          {
+            "groups": [
+              {
+                "events": [
+                  {
+                    "busy": true,
+                    "id": 46,
+                    "internal": false,
+                    "title": "External event",
+                    "kind": "room",
+                    "admin_id": 5697,
+                    "timezone": "Europe/Warsaw",
+                    "duration": 60,
+                    "starts_at": "2017-01-01T14:00:00.000000Z",
+                    "ends_at": "2017-01-01T15:00:00.000000Z",
+                    "all_day": false,
+                    "room_id": 9
+                  }
+                ],
+                "duration": 60,
+                "starts_at": "2017-01-01T14:00:00.000000Z",
+                "ends_at": "2017-01-01T15:00:00.000000Z",
+                "all_day": false
+              }
+            ],
+            "meeting_room_id": 9
+          },
+          {
+            "groups": [
+              {
+                "events": [
+                  {
+                    "busy": true,
+                    "id": 47,
+                    "internal": false,
+                    "title": "External event",
+                    "kind": "room",
+                    "admin_id": 5697,
+                    "timezone": "Europe/Warsaw",
+                    "duration": 240,
+                    "starts_at": "2017-01-01T11:00:00.000000Z",
+                    "ends_at": "2017-01-01T15:00:00.000000Z",
+                    "all_day": false,
+                    "room_id": 10
+                  }
+                ],
+                "duration": 240,
+                "starts_at": "2017-01-01T11:00:00.000000Z",
+                "ends_at": "2017-01-01T15:00:00.000000Z",
+                "all_day": false
+              }
+            ],
+            "meeting_room_id": 10
+          }
+        ],
+        "team": {}
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "occupancy"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "socket_token_detail",
+  "method": "GET",
+  "path": "/referral_portal/socket_token",
+  "summary": "Returns a token for websocket connection",
+  "description": "Returns a token for websocket connection. Endpoint: GET /referral_portal/socket_token.",
+  "params": [],
+  "example_request": "GET /referral_portal/socket_token",
+  "example_response": {
+    "token": "SFMyNTY.g2gDdAAAAAJ3CmNvbXBhbnlfaWRiAAAKMncLcmVmZXJyZXJfaWRhlG4GALiy9K6dAWIAAVGA.bOdzQ_72Atczez6YsLtXgapcLrxNVN_QUiXnss5qNI8"
+  },
+  "tags": [
+    "referral_portal",
+    "socket_token",
+    "referral"
+  ]
+}

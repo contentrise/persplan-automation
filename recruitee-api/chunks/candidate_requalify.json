@@ -1,0 +1,37 @@
+{
+  "id": "candidate_requalify",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/requalify",
+  "summary": "Requalify candidates in bulk",
+  "description": "Requalify candidates in bulk. Endpoint: PATCH /c/{company_id}/bulk/candidates/requalify. Required parameters: company_id. Optional parameters include candidates, offer_id.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n411,\n412,\n413\n],\n\"offer_id\": 377\n}",
+  "example_response": {
+    "uuid": "6bb7fc07-4eca-424e-ab4a-08149c05cc4f"
+  },
+  "tags": [
+    "candidates"
+  ]
+}

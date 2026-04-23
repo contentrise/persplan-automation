@@ -1,0 +1,47 @@
+{
+  "id": "unbiased_hiring_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/candidates/settings/unbiased_hiring",
+  "summary": "Update company's candidate settings",
+  "description": "Update company's candidate settings. Endpoint: PATCH /c/{company_id}/candidates/settings/unbiased_hiring. Required parameters: company_id. Optional parameters include anonymous_candidates, fair_evaluations.",
+  "params": [
+    {
+      "name": "anonymous_candidates",
+      "type": "map",
+      "required": false,
+      "description": "Contains data about Anonymous Candidates feature - (enabled: boolean; required)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "fair_evaluations",
+      "type": "map",
+      "required": false,
+      "description": "Contains data about Fair Evaluations feature - (enabled: boolean; required)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/candidates/settings/unbiased_hiring\n\nRequired params: company_id\n\nOptional params: anonymous_candidates, fair_evaluations",
+  "example_response": {
+    "anonymous_candidates": {
+      "enabled": true,
+      "all_jobs_count": 0,
+      "enabled_jobs_count": 0
+    },
+    "fair_evaluations": {
+      "enabled": null,
+      "all_jobs_count": 0,
+      "enabled_jobs_count": 0
+    }
+  },
+  "tags": [
+    "candidates",
+    "settings"
+  ]
+}

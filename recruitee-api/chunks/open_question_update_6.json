@@ -1,0 +1,36 @@
+{
+  "id": "open_question_update_6",
+  "method": "PATCH",
+  "path": "/c/{company_id}/open_questions/template/{template_id}/open_questions/update_positions",
+  "summary": "Update open questions positions in a given template",
+  "description": "Update open questions positions in a given template. Endpoint: PATCH /c/{company_id}/open_questions/template/{template_id}/open_questions/update_positions. Required parameters: open_question_ids, template_id, company_id.",
+  "params": [
+    {
+      "name": "open_question_ids",
+      "type": "array",
+      "required": true,
+      "description": "Array of Open Question IDs in requested order",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question_ids\": [\n143,\n142\n]\n}",
+  "example_response": {},
+  "tags": [
+    "open_questions",
+    "template"
+  ]
+}

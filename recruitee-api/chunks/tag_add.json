@@ -1,0 +1,38 @@
+{
+  "id": "tag_add",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/tags",
+  "summary": "Add tags to candidates",
+  "description": "Add tags to candidates. Endpoint: PATCH /c/{company_id}/bulk/candidates/tags. Required parameters: company_id. Optional parameters include candidates, tags.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "tags",
+      "type": "array",
+      "required": false,
+      "description": "Array of tags",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n442,\n443,\n444\n],\n\"tags\": [\n\"foo\",\n\"bar\"\n]\n}",
+  "example_response": {
+    "uuid": "0a1e2edf-667f-4b8b-a229-3d1c511b9063"
+  },
+  "tags": [
+    "candidates",
+    "tags"
+  ]
+}

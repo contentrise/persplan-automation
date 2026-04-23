@@ -1,0 +1,122 @@
+{
+  "id": "import_create",
+  "method": "POST",
+  "path": "/c/{company_id}/imports",
+  "summary": "Upload CSV file",
+  "description": "Upload CSV file. Endpoint: POST /c/{company_id}/imports. Required parameters: file, company_id.",
+  "params": [
+    {
+      "name": "file",
+      "type": "file",
+      "required": true,
+      "description": "CSV file",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"import\": {\n\"file\": {\n\"filename\": \"import3.csv\",\n\"path\": \"test/files/imports/import3.csv\",\n\"content_type\": null\n}\n}\n}",
+  "example_response": {
+    "import": {
+      "id": 24,
+      "name": "Import 21/04/2026",
+      "status": "uploaded",
+      "merge": false,
+      "sources": [
+        "Import 21/04/2026"
+      ],
+      "file_name": "import3.csv",
+      "columns": [
+        {
+          "match": null,
+          "name": "id",
+          "value": "347"
+        },
+        {
+          "match": null,
+          "name": "name",
+          "value": "David Hugo-Fernandez"
+        },
+        {
+          "match": null,
+          "name": "created_at",
+          "value": "2017-02-07T09:21:04.000000Z"
+        },
+        {
+          "match": null,
+          "name": "emails",
+          "value": "dave@example.com;hugo@example.com"
+        },
+        {
+          "match": null,
+          "name": "phones",
+          "value": "+243 3232 231;+321 212 334;+03213-2323"
+        },
+        {
+          "match": null,
+          "name": "tags",
+          "value": "black;polish;english;yellow;blue"
+        },
+        {
+          "match": null,
+          "name": "sources",
+          "value": "linkedin;facebook;"
+        },
+        {
+          "match": null,
+          "name": "offer",
+          "value": "Elixir Developer"
+        },
+        {
+          "match": null,
+          "name": "stage",
+          "value": "Interview"
+        },
+        {
+          "match": null,
+          "name": "status",
+          "value": "qualified"
+        },
+        {
+          "match": null,
+          "name": "disqualify_reason",
+          "value": "Nationality"
+        },
+        {
+          "match": null,
+          "name": "questions",
+          "value": ""
+        }
+      ],
+      "delimiter": ";",
+      "admin_id": 1124,
+      "offers": [],
+      "file_url": "tmp/bow/imports/24/import3.csv",
+      "talent_pools": []
+    },
+    "references": [
+      {
+        "id": 1124,
+        "type": "Admin",
+        "email": "john524@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1124/normal_avatar_hdag5m57gs3w.png",
+        "photo_thumb_url": "tmp/bow/admins/1124/thumb_avatar_hdag5m57gs3w.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ]
+  },
+  "tags": [
+    "imports"
+  ]
+}

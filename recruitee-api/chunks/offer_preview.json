@@ -1,0 +1,30 @@
+{
+  "id": "offer_preview",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{id}/preview",
+  "summary": "Existing offer preview",
+  "description": "Existing offer preview. Endpoint: PATCH /c/{company_id}/offers/{id}/preview. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer\": {\n\"job_scheduler\": null,\n\"title\": \"New title\"\n}\n}",
+  "example_response": {
+    "preview_url": "http://company784.recruitee.internal:3003/o/previews/guid251"
+  },
+  "tags": [
+    "offers"
+  ]
+}

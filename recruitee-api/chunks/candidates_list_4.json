@@ -1,0 +1,122 @@
+{
+  "id": "candidates_list_4",
+  "method": "GET",
+  "path": "/c/{company_id}/search/new/candidates",
+  "summary": "Full Candidates Search",
+  "description": "Full search on candidates with pagination, sorting, highlight and advanced filtering.\n\nPossible FilterGroups:",
+  "params": [
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of candidates (default: 60)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Sort order (default: ‘created_at_desc’; possible values: ‘[relevance | created_at | candidate_name | candidate_rating | candidate_positive_ratings | candidate_job_title | candidate_stage_name | disqualified_at | gdpr_expires_at | gdpr_uncompleted_change_request_created_at | gdpr_uncompleted_removal_request_created_at | screening_score | updated_at | last_activity_at]_[asc | desc]’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "hits",
+      "type": "boolean",
+      "required": false,
+      "description": "Return search hits? (default: true)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "aggs",
+      "type": "array",
+      "required": false,
+      "description": "Array of aggregations names that we should return (by default: none)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "highlight",
+      "type": "boolean",
+      "required": false,
+      "description": "Highlight searched phrase? (default: false)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "deleted",
+      "type": "boolean",
+      "required": false,
+      "description": "Show only deleted candidates? (default: false)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (default: 1)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "filters_json",
+      "type": "string",
+      "required": false,
+      "description": "Array of filters ([FilterGroup, ...]), serialized to a JSON string",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"aggs\": false,\n\"filters_json\": \"[{\\\"filter\\\":\\\"gdpr_consent_ever_given\\\",\\\"eq\\\":false}]\",\n\"highlight\": true,\n\"hits\": true\n}",
+  "example_response": {
+    "total": 1,
+    "hits": [
+      {
+        "photo_thumb_url": null,
+        "new": true,
+        "linkedin_job_application_id": null,
+        "positive_ratings": null,
+        "admin_id": null,
+        "initials": "MC",
+        "rating_visible": true,
+        "soft_deleted_at": null,
+        "company_id": 4374,
+        "created_at": "2026-04-21T07:33:51Z",
+        "deleted": false,
+        "assigned_admins_ids": [],
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "updated_at": "2026-04-21T07:33:51Z",
+        "unread_notifications": false,
+        "placements": [],
+        "example": false,
+        "is_anonymous": false,
+        "gdpr_expires_at": null,
+        "gdpr_status": "no_consent",
+        "gdpr_uncompleted_change_request_created_at": null,
+        "source": null,
+        "gdpr_uncompleted_removal_request_created_at": null,
+        "tags": [],
+        "last_activity_at": "2026-04-21T07:33:51Z",
+        "deleted_at": null,
+        "id": 2203,
+        "name": "My candidate",
+        "gdpr_consent_ever_given": false,
+        "phones": [],
+        "deleted_by_name": null,
+        "has_avatar": true,
+        "sources": [],
+        "deleted_by": null,
+        "highlight": null
+      }
+    ],
+    "aggregations": null
+  },
+  "tags": [
+    "candidates",
+    "search"
+  ]
+}

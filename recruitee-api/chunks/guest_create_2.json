@@ -1,0 +1,47 @@
+{
+  "id": "guest_create_2",
+  "method": "POST",
+  "path": "/share/containers/{token}/guests",
+  "summary": "Create guest",
+  "description": "Create guest. Endpoint: POST /share/containers/{token}/guests. Required parameters: name, token, email.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "Email",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"guest\": {\n\"email\": \"henry.watson@example.com\",\n\"name\": \"Henry Watson\"\n}\n}",
+  "example_response": {
+    "guest": {
+      "id": 101,
+      "name": "Henry Watson",
+      "email": "henry.watson@example.com",
+      "auth_token": "1kb1wbhneug1",
+      "photo_thumb_url": "tmp/bow/guests/101/thumb_initials_2rr9rof9nffn.png",
+      "created_at": "2026-04-21T07:33:32.966817Z",
+      "updated_at": "2026-04-21T07:33:32.966817Z",
+      "recruiter": false
+    }
+  },
+  "tags": [
+    "containers",
+    "guests"
+  ]
+}

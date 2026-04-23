@@ -1,0 +1,27 @@
+{
+  "id": "counter_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/locations/counters",
+  "summary": "Get location counters",
+  "description": "Get location counters. Endpoint: GET /c/{company_id}/locations/counters. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/locations/counters\n\nRequired params: company_id",
+  "example_response": {
+    "counters": {
+      "active": 3,
+      "archived": 2
+    }
+  },
+  "tags": [
+    "locations",
+    "counters"
+  ]
+}

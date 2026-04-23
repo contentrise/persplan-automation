@@ -1,0 +1,41 @@
+{
+  "id": "admin_revoke",
+  "method": "DELETE",
+  "path": "/c/{company_id}/candidates/share/admins",
+  "summary": "Revoke access",
+  "description": "Revoke access. Endpoint: DELETE /c/{company_id}/candidates/share/admins. Required parameters: admin_id, candidate_id, company_id.",
+  "params": [
+    {
+      "name": "admin_id",
+      "type": "integer",
+      "required": true,
+      "description": "Admin ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"admin_id\": 2773\n}",
+  "example_response": {
+    "candidate": {
+      "shared_container_count": 0,
+      "shared_admin_count": 1
+    }
+  },
+  "tags": [
+    "candidates",
+    "admins"
+  ]
+}

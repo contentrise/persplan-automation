@@ -1,0 +1,51 @@
+{
+  "id": "event_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/interview/events/{id}",
+  "summary": "Delete interview event & send notification to candidate",
+  "description": "Delete interview event & send notification to candidate. Endpoint: DELETE /c/{company_id}/interview/events/{id}. Required parameters: id, company_id. Optional parameters include message, notify_candidate.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview event ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "required": false,
+      "description": "Message to be sent to candidate after e-mail deleteion",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "notify_candidate",
+      "type": "boolean",
+      "required": false,
+      "description": "Notify candidate",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"message\": {\n\"body_html\": \"<b>Phone Interview</b>\",\n\"subject\": \"Phone Interview\"\n},\n\"notify_candidate\": true\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "forbidden",
+        "data": {},
+        "message": "Forbidden"
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "events"
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "id": "pipeline_template_set",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{offer_id}/pipeline_templates/assign_and_move_placements",
+  "summary": "Sets offer's pipeline template and moves assignment placements",
+  "description": "Sets offer's pipeline template and moves assignment placements. Endpoint: PATCH /c/{company_id}/offers/{offer_id}/pipeline_templates/assign_and_move_placements. Required parameters: offer_id, pipeline_template_id, company_id. Optional parameters include placements_movements.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "pipeline_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID (not null)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "placements_movements",
+      "type": "array",
+      "required": false,
+      "description": "Array of objects, example: [ { “source_stage_id”: 123, “destination_stage_id”: 124 }, { “source_stage_id”: 125, “destination_stage_id”: 126 }, { “source_stage_id”: 127, “destination_stage_id”: 128 } ]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_id\": 285,\n\"pipeline_template_id\": 840,\n\"placements_movements\": [\n{\n\"destination_stage_id\": 6727,\n\"source_stage_id\": 6719\n},\n{\n\"destination_stage_id\": 6728,\n\"source_stage_id\": 6720\n},\n{\n\"destination_stage_id\": 6729,\n\"source_stage_id\": 6721\n},\n{\n\"destination_stage_id\": 6730,\n\"source_stage_id\": 6722\n},\n{\n\"destination_stage_id\": 6731,\n\"source_stage_id\": 6723\n},\n{\n\"destination_stage_id\": 6732,\n\"source_stage_id\": 6724\n},\n{\n\"destination_stage_id\": 6733,\n\"source_stage_id\": 6725\n},\n{\n\"destination_stage_id\": 6734,\n\"source_stage_id\": 6726\n}\n]\n}",
+  "example_response": {
+    "pipeline_template": {
+      "default": false,
+      "id": 840,
+      "position": 66,
+      "title": "Pipeline Template",
+      "category": "SAMPLE CATEGORY",
+      "custom": false,
+      "stages": [
+        {
+          "id": 6727,
+          "name": "Referred",
+          "position": -3,
+          "group": "applicants",
+          "category": "referred",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6728,
+          "name": "Sourced",
+          "position": -2,
+          "group": "applicants",
+          "category": "sourced",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6729,
+          "name": "Applied",
+          "position": -1,
+          "group": "applicants",
+          "category": "apply",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6730,
+          "name": "Phone interview",
+          "position": 1,
+          "group": "active",
+          "category": "phone_screen",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6731,
+          "name": "On-site interview",
+          "position": 2,
+          "group": "active",
+          "category": "interview",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6732,
+          "name": "Evaluation",
+          "position": 3,
+          "group": "active",
+          "category": "evaluation",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6733,
+          "name": "Offer",
+          "position": 4,
+          "group": "active",
+          "category": "offer",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 6734,
+          "name": "Hired",
+          "position": 5,
+          "group": "hires",
+          "category": "hire",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "placements_count": null,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        }
+      ],
+      "requires_adjustment": false
+    }
+  },
+  "tags": [
+    "offers",
+    "pipeline_templates"
+  ]
+}

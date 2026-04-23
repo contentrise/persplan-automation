@@ -1,0 +1,45 @@
+{
+  "id": "identity_provider_create",
+  "method": "POST",
+  "path": "/c/{company_id}/sso/identity_provider",
+  "summary": "Create SSO Identity Provider for a company",
+  "description": "Create SSO Identity Provider for a company. Endpoint: POST /c/{company_id}/sso/identity_provider. Required parameters: role_id, company_id. Optional parameters include metadata.",
+  "params": [
+    {
+      "name": "metadata",
+      "type": "file",
+      "required": false,
+      "description": "Metadata XML file",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "role_id",
+      "type": "integer",
+      "required": true,
+      "description": "Can’t be admin",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"secure_change_token\": \"SFMyNTY.g2gDYgAAIS5uBgDSfPWunQFiAAFRgA.JUq2D2BzMZ9HKmeAOHjOnaNtM_r0220sU62pUONmpyk\",\n\"sso_identity_provider\": {\n\"metadata\": {\n\"filename\": \"metadata.xml\",\n\"path\": \"test/files/sso_identity_provider_metadata.xml\",\n\"content_type\": null\n},\n\"role_id\": 4286\n}\n}",
+  "example_response": {
+    "error": [
+      "Company id is already in use"
+    ],
+    "error_fields": {
+      "company_id": [
+        "is already in use"
+      ]
+    }
+  },
+  "tags": [
+    "sso",
+    "identity_provider"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": "conditions_list_2",
+  "method": "GET",
+  "path": "/referral_portal/conditions",
+  "summary": "List conditions for company's Referral program",
+  "description": "List conditions for company's Referral program. Endpoint: GET /referral_portal/conditions.",
+  "params": [],
+  "example_request": "GET /referral_portal/conditions",
+  "example_response": {
+    "conditions": [
+      {
+        "id": 1,
+        "position": 1,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 2,
+        "position": 2,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 3,
+        "position": 3,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 4,
+        "position": 4,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 5,
+        "position": 5,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 6,
+        "position": 6,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 7,
+        "position": 7,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 8,
+        "position": 8,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 9,
+        "position": 9,
+        "body_html": "<p> Condition description </p>"
+      },
+      {
+        "id": 10,
+        "position": 10,
+        "body_html": "<p> Condition description </p>"
+      }
+    ]
+  },
+  "tags": [
+    "referral_portal",
+    "conditions",
+    "referral"
+  ]
+}

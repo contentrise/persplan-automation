@@ -1,0 +1,69 @@
+{
+  "id": "fieldsets_list_3",
+  "method": "GET",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/fieldsets",
+  "summary": "List fieldsets available for offer template",
+  "description": "List fieldsets available for offer template. Endpoint: GET /c/{company_id}/offer_templates/{offer_template_id}/fieldsets. Required parameters: offer_template_id, company_id. Optional parameters include name.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "description": "Filter by name (not title!)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offer_templates/{offer_template_id}/fieldsets\n\nRequired params: offer_template_id, company_id\n\nOptional params: name",
+  "example_response": {
+    "fieldsets": [
+      {
+        "default": false,
+        "id": 70,
+        "name": "Fieldset 1",
+        "position": 2,
+        "category": "CATEGORY",
+        "created_at": "2026-04-21T07:32:48.119920Z",
+        "updated_at": "2026-04-21T07:32:48.119920Z",
+        "custom": false
+      },
+      {
+        "default": false,
+        "id": 71,
+        "name": "Fieldset 2",
+        "position": 3,
+        "category": "CATEGORY",
+        "created_at": "2026-04-21T07:32:48.120795Z",
+        "updated_at": "2026-04-21T07:32:48.120795Z",
+        "custom": false
+      },
+      {
+        "default": false,
+        "id": 72,
+        "name": "Fieldset 3",
+        "position": 4,
+        "category": "CATEGORY",
+        "created_at": "2026-04-21T07:32:48.121343Z",
+        "updated_at": "2026-04-21T07:32:48.121343Z",
+        "custom": false
+      }
+    ]
+  },
+  "tags": [
+    "offer_templates",
+    "fieldsets"
+  ]
+}

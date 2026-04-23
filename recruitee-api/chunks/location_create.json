@@ -1,0 +1,77 @@
+{
+  "id": "location_create",
+  "method": "POST",
+  "path": "/c/{company_id}/locations",
+  "summary": "Create location",
+  "description": "Create location. Endpoint: POST /c/{company_id}/locations. Required parameters: country_code, company_id. Optional parameters include state_code, translations.",
+  "params": [
+    {
+      "name": "country_code",
+      "type": "integer",
+      "required": true,
+      "description": "Country code",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "state_code",
+      "type": "integer",
+      "required": false,
+      "description": "State code",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "translations",
+      "type": "array",
+      "required": false,
+      "description": "Translations",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"location\": {\n\"country_code\": \"PL\",\n\"state_code\": \"30\",\n\"translations\": [\n{\n\"city\": \"<b>Poznań</b>\",\n\"lang_code\": \"en\",\n\"name\": \"<b>Poznań HQ</b>\",\n\"note\": \"<b>Kupiec Poznański</b>\",\n\"postal_code\": \"<b>60-001</b>\",\n\"street\": \"<b>ul. Wiosny Ludów 2</b>\"\n}\n]\n}\n}",
+  "example_response": {
+    "location": {
+      "id": 194,
+      "name": "Poznań HQ",
+      "is_valid": true,
+      "country_code": "PL",
+      "created_at": "2026-04-21T07:32:39.582675Z",
+      "updated_at": "2026-04-21T07:32:39.584025Z",
+      "note": "Kupiec Poznański",
+      "city": "Poznań",
+      "postal_code": "60-001",
+      "state_code": "30",
+      "lang_code": "en",
+      "street": "ul. Wiosny Ludów 2",
+      "translations": [
+        {
+          "default": true,
+          "name": "Poznań HQ",
+          "note": "Kupiec Poznański",
+          "city": "Poznań",
+          "postal_code": "60-001",
+          "lang_code": "en",
+          "street": "ul. Wiosny Ludów 2",
+          "filled_count": 5,
+          "total_count": 5,
+          "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+        }
+      ],
+      "state_name": "Wielkopolskie",
+      "active_offers_count": 0,
+      "active_requisitions_count": 0,
+      "is_deletable": true,
+      "archived_at": null,
+      "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+    }
+  },
+  "tags": [
+    "locations"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "id": "container_detail_2",
+  "method": "GET",
+  "path": "/share/containers/{token}",
+  "summary": "Show public link (sharing container)",
+  "description": "Show public link (sharing container). Endpoint: GET /share/containers/{token}. Required parameters: token.",
+  "params": [
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/containers/{token}\n\nRequired params: token",
+  "example_response": {
+    "container": {
+      "id": 100,
+      "name": null,
+      "features": [
+        "dynamic_fields",
+        "manual_plan_change",
+        "job_page_layouts",
+        "offer_templates",
+        "app_shell",
+        "calendars_new_rooms_api",
+        "candidate_salutation_fields",
+        "manage_locations_flag",
+        "manage_locations_in_reports",
+        "manage_locations_search_filters_flag",
+        "new_feature_flags",
+        "new_job_details_flag",
+        "new_job_editor",
+        "new_promote_tab",
+        "new_talent_pools",
+        "oban_gdpr_send_reminders_flag"
+      ],
+      "token": "aBcDeFg1234170",
+      "candidates": [
+        {
+          "id": 1342,
+          "name": "John Doe",
+          "has_avatar": true,
+          "initials": "JD",
+          "is_anonymous": false
+        }
+      ],
+      "language": "en",
+      "admin": {
+        "id": 5376,
+        "name": "John Doe",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_thumb_url": "tmp/bow/admins/5376/thumb_avatar_14f9w6nt2t9l.png",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      "expiration_date": "2026-05-21T07:32:49.631191Z",
+      "visibility_options": [],
+      "access_options": [
+        "notes",
+        "results",
+        "attachments"
+      ]
+    }
+  },
+  "tags": [
+    "containers"
+  ]
+}

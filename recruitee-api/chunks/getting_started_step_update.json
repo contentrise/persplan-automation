@@ -1,0 +1,190 @@
+{
+  "id": "getting_started_step_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/getting_started_steps",
+  "summary": "Update admin's getting started steps",
+  "description": "Update admin's getting started steps. Endpoint: PATCH /c/{company_id}/getting_started_steps. Required parameters: show_academy_button, add_admin, adjust_notifications, browse_published_jobs, build_hiring_pipeline, collaborative_hiring, connect_your_tools, create_email_templates, create_job, create_website_address, customize_your_site, discover_new_apps, evaluate_candidates, invite_your_team, navigation_tour, pipeline_overview, proceed_or_disqualify, publish_job, schedule_candidate_interview, see_how_disqualify_reasons_work, set_up_roles, sync_calendar_and_email, welcome_video, write_job_descriptions, company_id.",
+  "params": [
+    {
+      "name": "show_academy_button",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "add_admin",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "adjust_notifications",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "browse_published_jobs",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "build_hiring_pipeline",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "collaborative_hiring",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "connect_your_tools",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "create_email_templates",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "create_job",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "create_website_address",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "customize_your_site",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "discover_new_apps",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "evaluate_candidates",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "invite_your_team",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "navigation_tour",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "pipeline_overview",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "proceed_or_disqualify",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "publish_job",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "schedule_candidate_interview",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "see_how_disqualify_reasons_work",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "set_up_roles",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sync_calendar_and_email",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "welcome_video",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "write_job_descriptions",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/getting_started_steps\n\nRequired params: show_academy_button, add_admin, adjust_notifications, browse_published_jobs, build_hiring_pipeline, collaborative_hiring, connect_your_tools, create_email_templates, create_job, create_website_address, customize_your_site, discover_new_apps, evaluate_candidates, invite_your_team, navigation_tour, pipeline_overview, proceed_or_disqualify, publish_job, schedule_candidate_interview, see_how_disqualify_reasons_work, set_up_roles, sync_calendar_and_email, welcome_video, write_job_descriptions, company_id",
+  "example_response": {},
+  "tags": [
+    "getting_started_steps",
+    "admin"
+  ]
+}

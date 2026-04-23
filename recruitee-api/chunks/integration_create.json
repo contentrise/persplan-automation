@@ -1,0 +1,43 @@
+{
+  "id": "integration_create",
+  "method": "POST",
+  "path": "/c/{company_id}/linkedin/integration",
+  "summary": "Create company's LinkedIn integration",
+  "description": "Create company's LinkedIn integration. Endpoint: POST /c/{company_id}/linkedin/integration. Required parameters: integration_type, integration_context, tenant_type, company_id.",
+  "params": [
+    {
+      "name": "integration_type",
+      "type": "string",
+      "required": true,
+      "description": "Integration type",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "integration_context",
+      "type": "string",
+      "required": true,
+      "description": "Integration context",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "tenant_type",
+      "type": "string",
+      "required": true,
+      "description": "Tenant type",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/linkedin/integration\n\nRequired params: integration_type, integration_context, tenant_type, company_id",
+  "example_response": {},
+  "tags": [
+    "linkedin",
+    "integration"
+  ]
+}

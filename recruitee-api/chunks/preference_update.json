@@ -1,0 +1,27 @@
+{
+  "id": "preference_update",
+  "method": "PATCH",
+  "path": "/admin/preferences",
+  "summary": "Update admin preferences",
+  "description": "Update admin preferences. Endpoint: PATCH /admin/preferences. Optional parameters include theme.",
+  "params": [
+    {
+      "name": "theme",
+      "type": "string",
+      "required": false,
+      "description": "Admins theme",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"preferences\": {\n\"theme\": \"dark\"\n}\n}",
+  "example_response": {
+    "preferences": {
+      "theme": "dark",
+      "pipeline_promote_banner_dismissed_offer_ids": []
+    }
+  },
+  "tags": [
+    "admin",
+    "preferences"
+  ]
+}

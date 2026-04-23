@@ -1,0 +1,166 @@
+{
+  "id": "result_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/interview/results/{id}",
+  "summary": "Update interview result",
+  "description": "Update interview result. Endpoint: PATCH /c/{company_id}/interview/results/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview result ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_result\": {\n\"interview_result_answers\": [\n{\n\"id\": 52,\n\"options\": [\n{\n\"hint\": null,\n\"title\": \"Choice 1\"\n},\n{\n\"hint\": null,\n\"title\": \"Choice 2\"\n}\n]\n}\n],\n\"interview_template_name\": \"Template 2\",\n\"kind\": \"template_form\"\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 6342,
+        "type": "Admin",
+        "email": "john7053@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/6342/normal_avatar_f15l35cmfdgh.png",
+        "photo_thumb_url": "tmp/bow/admins/6342/thumb_avatar_f15l35cmfdgh.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 1564,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:33:02.749971Z",
+        "updated_at": "2026-04-21T07:33:02.760791Z",
+        "is_hired": false,
+        "positive_ratings": 100,
+        "ratings": {
+          "strong_yes": 1
+        },
+        "ratings_count": 1,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=1564&company=3214",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      },
+      {
+        "id": 1411,
+        "position": 84,
+        "status": "draft",
+        "type": "Offer",
+        "remote": false,
+        "description": "<p>Elixir</p>\n",
+        "title": "Best Offer",
+        "location": "",
+        "kind": "job",
+        "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+        "url": null,
+        "created_at": "2026-04-21T07:33:02.749423Z",
+        "department": null,
+        "lang_code": "en",
+        "department_id": null,
+        "slug": "best-offer974",
+        "hybrid": false,
+        "on_site": true,
+        "guid": "guid933",
+        "recruiter_id": null,
+        "hiring_manager_id": null,
+        "wysiwyg_editor": "redactor",
+        "pipeline_template_id": 4639,
+        "careers_job_page_layout_id": null,
+        "job_position_id": null,
+        "mailbox_email": null,
+        "highlight_html": "<p>Elixir</p>\n"
+      },
+      {
+        "id": 37253,
+        "name": "Applied",
+        "position": 23471,
+        "type": "Stage",
+        "group": "active",
+        "category": "none",
+        "created_at": "2026-04-21T07:33:02.746171Z",
+        "updated_at": "2026-04-21T07:33:02.747223Z",
+        "fair_evaluations_enabled": false,
+        "pipeline_template_id": 4638,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      }
+    ],
+    "interview_result": {
+      "id": 141,
+      "kind": "template_form",
+      "admin_id": 6342,
+      "candidate_id": 1564,
+      "rating": "strong_yes",
+      "created_at": "2026-04-21T07:33:02.750271Z",
+      "updated_at": "2026-04-21T07:33:02.753648Z",
+      "offer_id": 1411,
+      "talent_pool_id": null,
+      "guest_id": null,
+      "stage_id": 37253,
+      "interview_result_answers": [
+        {
+          "id": 52,
+          "options": [
+            {
+              "title": "Choice 1",
+              "hint": null
+            },
+            {
+              "title": "Choice 2",
+              "hint": null
+            }
+          ],
+          "content": "Choice 1",
+          "question_kind": "single_choice",
+          "question_hint": "Question hint",
+          "question_title": "Question title",
+          "question_options": {},
+          "question_required": false
+        }
+      ],
+      "interview_template_name": "Template 2",
+      "rating_note": null,
+      "interview_template_info_title": null,
+      "interview_template_info_description": null,
+      "rating_required": false
+    }
+  },
+  "tags": [
+    "interview",
+    "results"
+  ]
+}

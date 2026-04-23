@@ -1,0 +1,345 @@
+{
+  "id": "offers_list",
+  "method": "GET",
+  "path": "/c/{company_id}/offers",
+  "summary": "List offers",
+  "description": "List offers. Endpoint: GET /c/{company_id}/offers. Required parameters: company_id. Optional parameters include scope, include, limit, kind, statuses, offer_ids, location_ids, hiring_manager_ids, and more.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "[DEPRECATED] If no scope is given list all job offers, if scope is ‘archived’ than list archived job offers, if scope is ‘active’ list published and closed job offers, if scope is ‘not_archived’ list all but archived jobs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "include",
+      "type": "array",
+      "required": false,
+      "description": "List of includes, available: ‘description’, ‘requirements’, ‘highlight’, ‘work_models’, ‘salary’, ‘dynamic_fields’, ‘follower_ids’, ‘location_ids’, ‘requisition_ids’, ‘tags’, ‘job_scheduler’, ‘issues’, ‘counters’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "required": false,
+      "description": "[DEPRECATED] If no kind is given list all job offers, if kind is ‘job’ than list only jobs, if scope is ‘talent_pool’ list only talent pools",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "statuses",
+      "type": "array",
+      "required": false,
+      "description": "List of offer statuses to filter by, available: ‘draft’, ‘published’, ‘internal’, ‘closed’, ‘archived’, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_ids",
+      "type": "array",
+      "required": false,
+      "description": "List of offer IDs to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "location_ids",
+      "type": "array",
+      "required": false,
+      "description": "List of location IDs to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "hiring_manager_ids",
+      "type": "array",
+      "required": false,
+      "description": "List of hiring manager IDs to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "recruiter_ids",
+      "type": "array",
+      "required": false,
+      "description": "List of recruiter IDs to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "lang_codes",
+      "type": "array",
+      "required": false,
+      "description": "List of lang codes to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "categories",
+      "type": "array",
+      "required": false,
+      "description": "List of categories to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "view_mode",
+      "type": "string",
+      "required": false,
+      "description": "[DEPRECATED] ‘default’ (default mode, includes most of offer details); ‘brief’ (only offer’s id, title, status and kind)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "department_ids",
+      "type": "array",
+      "required": false,
+      "description": "List of department IDs to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "educations",
+      "type": "array",
+      "required": false,
+      "description": "List of educations to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "tag_ids",
+      "type": "array",
+      "required": false,
+      "description": "List of tag IDs to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "priorities",
+      "type": "array",
+      "required": false,
+      "description": "List of priorities to filter by, available: urgent, high, normal, low, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "employment_types",
+      "type": "array",
+      "required": false,
+      "description": "List of employment types to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "experiences",
+      "type": "array",
+      "required": false,
+      "description": "List of experiences to filter by, if not given all offers will be listed",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers\n\nRequired params: company_id\n\nOptional params: scope, include, limit, kind, statuses, offer_ids, location_ids, hiring_manager_ids",
+  "example_response": {
+    "offers": [
+      {
+        "city": null,
+        "hired_candidates_without_openings_count": null,
+        "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+        "pipeline_template": {
+          "default": false,
+          "id": 7360,
+          "position": 475,
+          "title": "Pipeline Template",
+          "category": "SAMPLE CATEGORY",
+          "custom": false,
+          "stages": [
+            {
+              "id": 59553,
+              "name": "Referred",
+              "position": -3,
+              "group": "applicants",
+              "category": "referred",
+              "fair_evaluations_enabled": false,
+              "action_templates": [],
+              "locked": true,
+              "placements_count": null,
+              "time_limit": null,
+              "candidate_anonymization_enabled": false
+            },
+            {
+              "id": 59554,
+              "name": "Sourced",
+              "position": -2,
+              "group": "applicants",
+              "category": "sourced",
+              "fair_evaluations_enabled": false,
+              "action_templates": [],
+              "locked": true,
+              "placements_count": null,
+              "time_limit": null,
+              "candidate_anonymization_enabled": false
+            },
+            {
+              "id": 59555,
+              "name": "Applied",
+              "position": -1,
+              "group": "applicants",
+              "category": "apply",
+              "fair_evaluations_enabled": false,
+              "action_templates": [],
+              "locked": true,
+              "placements_count": null,
+              "time_limit": null,
+              "candidate_anonymization_enabled": false
+            },
+            {
+              "id": 59556,
+              "name": "Phone interview",
+              "position": 1,
+              "group": "active",
+              "category": "phone_screen",
+              "fair_evaluations_enabled": false,
+              "action_templates": [],
+              "locked": false,
+              "placements_count": null,
+              "time_limit": null,
+              "candidate_anonymization_enabled": false
+            },
+            {
+              "id": 59557,
+              "name": "On-site interview",
+              "position": 2,
+              "group": "active",
+              "category": "interview",
+              "fair_evaluations_enabled": false,
+              "action_templates": [],
+              "locked": false,
+              "placements_count": null,
+              "time_limit": null,
+              "candidate_anonymization_enabled": false
+            },
+            {
+              "id": 59558,
+              "name": "Evaluation",
+              "position": 3,
+              "group": "active",
+              "category": "evaluation",
+              "fair_evaluations_enabled": false,
+              "action_templates": [],
+              "locked": false,
+              "placements_count": null,
+              "time_limit": null,
+              "candidate_anonymization_enabled": false
+            },
+            {
+              "id": 59559,
+              "name": "Offer",
+              "position": 4,
+              "group": "active",
+              "category": "offer",
+              "fair_evaluations_enabled": false,
+              "action_templates": [],
+              "locked": false,
+              "placements_count": null,
+              "time_limit": null,
+              "candidate_anonymization_enabled": false
+            },
+            {
+              "id": 59560,
+              "name": "Hired",
+              "position": 5,
+              "group": "hires",
+              "category": "hire",
+              "fair_evaluations_enabled": false,
+              "action_templates": [],
+              "locked": false,
+              "placements_count": null,
+              "time_limit": null,
+              "candidate_anonymization_enabled": false
+            }
+          ],
+          "requires_adjustment": false
+        },
+        "department_id": null,
+        "enabled_languages": [
+          {
+            "code": "en",
+            "name": "English",
+            "native_name": "English"
+          }
+        ],
+        "followers": [],
+        "enabled_for_referrals": false,
+        "position": 225,
+        "shared_openings_count": null,
+        "country_code": null,
+        "title": "Best Offer",
+        "created_at": "2026-04-21T07:34:08.878109Z",
+        "number_of_openings": null,
+        "description": "<p>Elixir</p>\n",
+        "updated_at": "2026-04-21T07:34:08.878109Z",
+        "hiring_manager_id": null,
+        "wysiwyg_editor": "redactor",
+        "mailbox_email": "job.guid224@company622.test.recruitee.com",
+        "state_code": null,
+        "on_site": true,
+        "slug": "best-offer228",
+        "disqualified_candidates_count": 0,
+        "closed_at": null,
+        "careers_job_page_layout_id": null,
+        "hired_candidates_count": 0,
+        "careers_url": "http://company622.recruitee.internal:3003/o/best-offer228",
+        "status": "draft",
+        "street": null,
+        "example": false,
+        "dynamic_fields_count": 0,
+        "employment_type": "fulltime",
+        "kind": "job",
+        "job_scheduler": null,
+        "published_at": null,
+        "recruiter_id": null,
+        "tags": [],
+        "candidates_count": 0,
+        "remote": false,
+        "state_name": null,
+        "pipeline_template_id": 7360,
+        "hybrid": false,
+        "id": 2577,
+        "location_ids": [],
+        "priority": null,
+        "url": "http://company622.recruitee.internal:3003/o/best-offer228",
+        "eeo_settings": null,
+        "highlight_html": "<p>Elixir</p>\n",
+        "job_position_id": null,
+        "qualified_candidates_count": 0,
+        "postal_code": null,
+        "location": null,
+        "has_active_campaign": false,
+        "lang_code": "en",
+        "issues": {
+          "is_requisition_missing": true,
+          "is_required_data_missing": true,
+          "is_migrated_html_equal": null,
+          "is_dynamic_fields_limit_exceeded": false
+        },
+        "adminapp_url": "http://app.recruitee.internal:3003/#/offers/best-offer228",
+        "pipeline": false,
+        "followed": false,
+        "department": null,
+        "guid": "guid224",
+        "offer_tags": []
+      }
+    ]
+  },
+  "tags": [
+    "offers"
+  ]
+}

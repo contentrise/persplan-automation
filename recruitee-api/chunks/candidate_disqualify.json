@@ -1,0 +1,51 @@
+{
+  "id": "candidate_disqualify",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/disqualify",
+  "summary": "Disqualify candidates in bulk",
+  "description": "Disqualify candidates in bulk. Endpoint: PATCH /c/{company_id}/bulk/candidates/disqualify. Required parameters: company_id. Optional parameters include candidates, offer_id, disqualify_reason_id, run_actions.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "disqualify_reason_id",
+      "type": "integer",
+      "required": false,
+      "description": "Disqualify reason ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "run_actions",
+      "type": "boolean",
+      "required": false,
+      "description": "Run automated actions",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n514,\n515,\n516\n],\n\"disqualify_reason_id\": 43,\n\"offer_id\": 458\n}",
+  "example_response": {
+    "uuid": "bcca77e6-a3bc-4097-8754-de9e40a179fa"
+  },
+  "tags": [
+    "candidates"
+  ]
+}

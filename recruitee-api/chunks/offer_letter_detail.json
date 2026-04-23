@@ -1,0 +1,115 @@
+{
+  "id": "offer_letter_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/offer_letters/{id}",
+  "summary": "Show offer letter",
+  "description": "Show offer letter. Endpoint: GET /c/{company_id}/offer_letters/{id}. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer letter ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offer_letters/{id}\n\nRequired params: company_id\n\nOptional params: id",
+  "example_response": {
+    "offer_letter": {
+      "id": 4,
+      "status": "draft",
+      "title": "Offer Letter for John Doe",
+      "token": "d8444a8b-1344-49a3-9214-60f306615aa9",
+      "details": [
+        {
+          "description": "Best Offer",
+          "title": "Position"
+        }
+      ],
+      "admin_id": 9638,
+      "candidate_id": 2402,
+      "created_at": "2026-04-21T07:33:58.691759Z",
+      "updated_at": "2026-04-21T07:33:58.691759Z",
+      "offer_id": 2019,
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          9638
+        ],
+        "role_ids": [
+          4913
+        ]
+      },
+      "lang_code": "en",
+      "email_subject": "Default subject",
+      "email_body_html": "<p>Default body</p>",
+      "sent_at": null,
+      "salary": {
+        "enabled": true,
+        "value": "10000",
+        "description": null,
+        "period": "month",
+        "currency": "EUR",
+        "heading": null
+      },
+      "published_at": null,
+      "email_attachment_assignments": [],
+      "disclaimer": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "heading": {
+        "enabled": true,
+        "description_html": null,
+        "description_json": null,
+        "heading": "Welcome to the team, John Doe!"
+      },
+      "intro": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "role_description": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "summary": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "benefits": {
+        "enabled": true,
+        "items": [
+          {
+            "description": "Fully paid",
+            "title": "Insurance"
+          }
+        ],
+        "heading": "Benefits"
+      },
+      "start_date": {
+        "date": null,
+        "description": null,
+        "title": null
+      },
+      "link_deactivated": false
+    }
+  },
+  "tags": [
+    "offer_letters"
+  ]
+}

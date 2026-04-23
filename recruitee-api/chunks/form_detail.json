@@ -1,0 +1,31 @@
+{
+  "id": "form_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions/settings/form",
+  "summary": "Show company's non-custom form",
+  "description": "Show company's non-custom form. Endpoint: GET /c/{company_id}/requisitions/settings/form. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions/settings/form\n\nRequired params: company_id",
+  "example_response": {
+    "form": {
+      "fields": [
+        "department",
+        "salary"
+      ],
+      "dynamic_fields": [],
+      "pristine": true
+    }
+  },
+  "tags": [
+    "requisitions",
+    "settings"
+  ]
+}

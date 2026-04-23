@@ -1,0 +1,61 @@
+{
+  "id": "synceds_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/calendars/synced",
+  "summary": "List of company's synced interview calendars",
+  "description": "List of company's synced interview calendars. Endpoint: GET /c/{company_id}/interview/calendars/synced. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/calendars/synced\n\nRequired params: company_id",
+  "example_response": {
+    "interview_calendars": [
+      {
+        "id": 12,
+        "name": "Primary Calendar",
+        "status": "connected",
+        "kind": "team",
+        "admin_id": 1998,
+        "provider": "google",
+        "synced_by": "John Doe"
+      },
+      {
+        "id": 13,
+        "name": "Primary Calendar",
+        "status": "disconnected",
+        "kind": "my",
+        "admin_id": 1998,
+        "provider": "google",
+        "synced_by": "John Doe"
+      },
+      {
+        "id": 14,
+        "name": "Primary Calendar",
+        "status": "connected",
+        "kind": "team",
+        "admin_id": 1999,
+        "provider": "google",
+        "synced_by": "John Doe"
+      },
+      {
+        "id": 15,
+        "name": "Primary Calendar",
+        "status": "connected",
+        "kind": "other",
+        "admin_id": 2000,
+        "provider": "google",
+        "synced_by": "John Doe"
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "calendars"
+  ]
+}

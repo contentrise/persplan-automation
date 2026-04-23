@@ -1,0 +1,29 @@
+{
+  "id": "invitation_resend",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/invitations/resend",
+  "summary": "Resend invitations in bulk",
+  "description": "Resend invitations in bulk. Endpoint: PATCH /c/{company_id}/bulk/invitations/resend. Required parameters: company_id. Optional parameters include invitations.",
+  "params": [
+    {
+      "name": "invitations",
+      "type": "array",
+      "required": false,
+      "description": "Array of invitations IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/bulk/invitations/resend\n\nRequired params: company_id\n\nOptional params: invitations",
+  "example_response": {},
+  "tags": [
+    "invitations",
+    "company"
+  ]
+}

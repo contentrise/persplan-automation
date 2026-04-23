@@ -1,0 +1,43 @@
+{
+  "id": "tag_merge_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/tags/merge",
+  "summary": "Merge candidate tags",
+  "description": "Merge candidate tags. Endpoint: PATCH /c/{company_id}/tags/merge. Required parameters: name, company_id. Optional parameters include id, ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Tag ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "New Tag name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ids",
+      "type": "array",
+      "required": false,
+      "description": "Tag IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/tags/merge\n\nRequired params: name, company_id\n\nOptional params: id, ids",
+  "example_response": {},
+  "tags": [
+    "tags",
+    "tagging"
+  ]
+}

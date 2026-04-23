@@ -1,0 +1,58 @@
+{
+  "id": "payment_intent_create",
+  "method": "POST",
+  "path": "/c/{company_id}/billing/payment_intent",
+  "summary": "Creates a payment intent",
+  "description": "Creates a payment intent. Endpoint: POST /c/{company_id}/billing/payment_intent. Required parameters: company_id. Optional parameters include addons, billing_period, billing_plan_id, fte_range.",
+  "params": [
+    {
+      "name": "addons",
+      "type": "array",
+      "required": false,
+      "description": "List of addons",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "billing_period",
+      "type": "integer",
+      "required": false,
+      "description": "Billing period in months; one of 1, 3, 6, 12, 24, 36",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "billing_plan_id",
+      "type": "integer",
+      "required": false,
+      "description": "Billing plan ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "fte_range",
+      "type": "string",
+      "required": false,
+      "description": "Optional bracket with number of employees. Example: 1-20",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"addons\": [\n{\n\"quantity\": 10,\n\"type\": \"slots\"\n}\n],\n\"billing_period\": 1,\n\"billing_plan_id\": 90\n}",
+  "example_response": {
+    "metadata": {
+      "currency": "EUR",
+      "company_id": 2323,
+      "country_code": "GB"
+    },
+    "error_code": "invalid_currency_for_selected_country_code",
+    "error_message": "Cannot use selected currency EUR in your country."
+  },
+  "tags": [
+    "billing",
+    "payment_intent"
+  ]
+}

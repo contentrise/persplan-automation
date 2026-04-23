@@ -1,0 +1,82 @@
+{
+  "id": "offer_template_assign",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/offer_templates/{offer_template_id}/assign_reward",
+  "summary": "Assign referral reward for given offer template",
+  "description": "Assign referral reward for given offer template. Endpoint: PATCH /c/{company_id}/referral/offer_templates/{offer_template_id}/assign_reward. Required parameters: offer_template_id, offer_template_assignment, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_assignment",
+      "type": "map",
+      "required": true,
+      "description": "Offer template assignment params (only: referral_reward_id::integer)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_template_assignment\": {\n\"referral_reward_id\": 9\n}\n}",
+  "example_response": {
+    "offer_template_assignment": {
+      "enabled": false,
+      "id": 29,
+      "offer_template": {
+        "id": 120,
+        "name": "Backend Developer Template",
+        "remote": false,
+        "created_at": "2026-04-21T07:30:32.388130Z",
+        "updated_at": "2026-04-21T07:30:32.388130Z",
+        "department": null,
+        "location_ids": [],
+        "hybrid": false,
+        "on_site": false
+      },
+      "referral_template": {
+        "default": true,
+        "id": 54,
+        "name": "Default",
+        "position": 1,
+        "category": null,
+        "created_at": "2026-04-21T07:30:32.384303Z",
+        "updated_at": "2026-04-21T07:30:32.384303Z",
+        "custom": false,
+        "referral_questions": [
+          {
+            "id": 56,
+            "position": 54,
+            "options": [],
+            "title": "Default",
+            "required": false,
+            "kind": "string"
+          }
+        ]
+      },
+      "referral_reward": {
+        "id": 9,
+        "name": "Great reward",
+        "photo_thumb_url": null,
+        "photo_url": null,
+        "body_html": "Reward description"
+      },
+      "referral_reward_id": 9,
+      "referral_template_id": 54,
+      "custom_template_id": null
+    }
+  },
+  "tags": [
+    "referral",
+    "offer_templates"
+  ]
+}

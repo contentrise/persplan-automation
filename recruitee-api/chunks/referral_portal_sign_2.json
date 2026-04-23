@@ -1,0 +1,14 @@
+{
+  "id": "referral_portal_sign_2",
+  "method": "GET",
+  "path": "/referral_portal/sign_out",
+  "summary": "Sign out external user from referral portal",
+  "description": "Sign out external user from referral portal. Endpoint: GET /referral_portal/sign_out.",
+  "params": [],
+  "example_request": "GET /referral_portal/sign_out",
+  "example_response": {},
+  "tags": [
+    "referral_portal",
+    "referral"
+  ]
+}

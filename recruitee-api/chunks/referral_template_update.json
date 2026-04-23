@@ -1,0 +1,65 @@
+{
+  "id": "referral_template_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{offer_id}/referral_templates",
+  "summary": "Update custom referral template for offer",
+  "description": "Update custom referral template for offer. Endpoint: PATCH /c/{company_id}/offers/{offer_id}/referral_templates. Required parameters: offer_id, referral_template, company_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "referral_template",
+      "type": "map",
+      "required": true,
+      "description": "Custom template params",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"referral_template\": {\n\"referral_questions\": [\n{\n\"id\": 191,\n\"position\": 1,\n\"title\": \"Updated question title\"\n},\n{\n\"kind\": \"text\",\n\"position\": 2,\n\"title\": \"New question title\"\n},\n{\n\"_destroy\": true,\n\"id\": 192\n}\n]\n}\n}",
+  "example_response": {
+    "referral_template": {
+      "default": false,
+      "id": 184,
+      "name": "Default",
+      "position": 116,
+      "category": null,
+      "created_at": "2026-04-21T07:32:24.334333Z",
+      "updated_at": "2026-04-21T07:32:24.339775Z",
+      "custom": true,
+      "referral_questions": [
+        {
+          "id": 191,
+          "position": 1,
+          "options": [],
+          "title": "Updated question title",
+          "required": false,
+          "kind": "string"
+        },
+        {
+          "id": 193,
+          "position": 2,
+          "options": [],
+          "title": "New question title",
+          "required": false,
+          "kind": "text"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offers",
+    "referral_templates"
+  ]
+}

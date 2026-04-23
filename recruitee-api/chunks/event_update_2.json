@@ -1,0 +1,77 @@
+{
+  "id": "event_update_2",
+  "method": "PATCH",
+  "path": "/share/interview/events/{event_token}/{rsvp_token}",
+  "summary": "Update rsvp response in event",
+  "description": "Update rsvp response in event. Endpoint: PATCH /share/interview/events/{event_token}/{rsvp_token}. Required parameters: response_status, rsvp_token, event_token.",
+  "params": [
+    {
+      "name": "response_status",
+      "type": "string",
+      "required": true,
+      "description": "User RSVP response",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "rsvp_token",
+      "type": "string",
+      "required": true,
+      "description": "User rsvp_token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "event_token",
+      "type": "string",
+      "required": true,
+      "description": "Event token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"response_status\": \"accepted\"\n}",
+  "example_response": {
+    "event": {
+      "scheduler": "Admin",
+      "location": "Poznan",
+      "kind": "meeting",
+      "offer": {
+        "title": "Best Offer"
+      },
+      "language": "en",
+      "admin": {
+        "name": "John Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      "company": {
+        "name": "Test Company"
+      },
+      "candidate": {
+        "name": "John Doe"
+      },
+      "admins": [
+        {
+          "name": "John Doe",
+          "time_format24": true,
+          "anonymized_at": null
+        }
+      ],
+      "timezone": "Europe/Amsterdam",
+      "created_at": "2026-04-21T07:32:10.560389Z",
+      "duration": 60,
+      "public_note": null,
+      "starts_at": "2026-04-21T07:32:10.557374Z",
+      "video_provider": null,
+      "video_url": null,
+      "sync_url": "https://api.recruitee.internal:4000/share/interview/events/aBcDeFg123442/sync",
+      "google_calendar_url": "https://www.google.com/calendar/render?location=Poznan&text=Meeting+for+Best+Offer+-+John+Doe&action=TEMPLATE&details=%3Cb%3EEvent+link%3C%2Fb%3E%3A%0Ahttp%3A%2F%2Fcompany1151.recruitee.internal%3A3003%2Fv%2Fevents%2FaBcDeFg123442%0A%0A%3Cb%3EInformation+for+the+candidate%3C%2Fb%3E%3A%0AYou%27ve+been+invited+to+Meeting+about+the+Best+Offer+position+in+Test+Company.%0AInterviewers%3A+John+Doe%0A%0A%3Cb%3EInformation+for+the+interviewers%3C%2Fb%3E%3A%0AIf+you%27re+attending+this+meeting+as+an+interviewer%2C+you+can+view+the+candidate%27s+information+in+Recruitee.%0Ahttp%3A%2F%2Fapp.recruitee.internal%3A3003%2F%23candidates%3Fcandidate%3D1103%26company%3D1872%0A&dates=20260421T073210Z%2F20260421T083210Z",
+      "yahoo_calendar_url": "https://calendar.yahoo.com/?st=20260421T073210Z&title=Meeting+for+Best+Offer+-+John+Doe&desc=Event+link%3A%0Ahttp%3A%2F%2Fcompany1151.recruitee.internal%3A3003%2Fv%2Fevents%2FaBcDeFg123442%0A%0A---------------------%0AInformation+for+the+candidate%3A%0AYou%27ve+been+invited+to+Meeting+about+the+Best+Offer+position+in+Test+Company.%0AInterviewers%3A+John+Doe%0A%0A---------------------%0AInformation+for+the+interviewers%3A%0AIf+you%27re+attending+this+meeting+as+an+interviewer%2C+you+can+view+the+candidate%27s+information+in+Recruitee.%0Ahttp%3A%2F%2Fapp.recruitee.internal%3A3003%2F%23candidates%3Fcandidate%3D1103%26company%3D1872%0A&v=60&dur=0100&in_loc=Poznan",
+      "rescheduled": false,
+      "reschedule_enabled": false,
+      "candidate_timezone": null
+    }
+  },
+  "tags": [
+    "interview",
+    "events"
+  ]
+}

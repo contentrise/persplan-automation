@@ -1,0 +1,130 @@
+{
+  "id": "attachments_list",
+  "method": "GET",
+  "path": "/c/{company_id}/candidates/{candidate_id}/attachments",
+  "summary": "List attachments for candidate",
+  "description": "List attachments for candidate. Endpoint: GET /c/{company_id}/candidates/{candidate_id}/attachments. Required parameters: candidate_id, company_id. Optional parameters include source, kind.",
+  "params": [
+    {
+      "name": "source",
+      "type": "string",
+      "required": false,
+      "description": "Filter by attachment source (note, result, open_question, offer, requisition, requisition_approval_request, talent_pool, guest, candidate, mailbox)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "required": false,
+      "description": "Filter by attachment kind (document, image, other)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/candidates/{candidate_id}/attachments\n\nRequired params: candidate_id, company_id\n\nOptional params: source, kind",
+  "example_response": {
+    "references": [
+      {
+        "id": 2402,
+        "type": "Admin",
+        "email": "john168@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2402/normal_avatar_e75wv2u9mw77.png",
+        "photo_thumb_url": "tmp/bow/admins/2402/thumb_avatar_e75wv2u9mw77.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 2400,
+        "type": "Admin",
+        "email": "john166@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2400/normal_avatar_y7bf7hpnrrhc.png",
+        "photo_thumb_url": "tmp/bow/admins/2400/thumb_avatar_y7bf7hpnrrhc.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "attachments": [
+      {
+        "id": 38,
+        "status": "ok",
+        "filename": "avatar.png",
+        "extension": "png",
+        "source": "mailbox",
+        "kind": "image",
+        "admin_id": 2402,
+        "candidate_id": null,
+        "file_size": null,
+        "created_at": "2026-04-21T07:31:47.654077Z",
+        "image_thumbnail_url": "tmp/bow/attachments/38/image_thumbnail_avatar.png",
+        "image_url": "tmp/bow/attachments/38/image_avatar.png",
+        "file_url": "tmp/bow/attachments/38/avatar.png",
+        "offer_id": null,
+        "talent_pool_id": null,
+        "requisition_id": null,
+        "guest_id": null,
+        "uploader": null,
+        "visibility": {
+          "level": "protected",
+          "admin_ids": [
+            2394,
+            2395
+          ],
+          "role_ids": []
+        }
+      },
+      {
+        "id": 36,
+        "status": "ok",
+        "filename": "avatar.png",
+        "extension": "png",
+        "source": "mailbox",
+        "kind": "image",
+        "admin_id": 2400,
+        "candidate_id": null,
+        "file_size": null,
+        "created_at": "2026-04-21T07:31:47.652589Z",
+        "image_thumbnail_url": "tmp/bow/attachments/36/image_thumbnail_avatar.png",
+        "image_url": "tmp/bow/attachments/36/image_avatar.png",
+        "file_url": "tmp/bow/attachments/36/avatar.png",
+        "offer_id": null,
+        "talent_pool_id": null,
+        "requisition_id": null,
+        "guest_id": null,
+        "uploader": null,
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        }
+      }
+    ],
+    "hidden_attachments_exist": false
+  },
+  "tags": [
+    "candidates",
+    "attachments"
+  ]
+}

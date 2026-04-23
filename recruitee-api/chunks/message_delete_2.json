@@ -1,0 +1,42 @@
+{
+  "id": "message_delete_2",
+  "method": "DELETE",
+  "path": "/c/{company_id}/texting/messages/",
+  "summary": "Delete failed or scheduled message",
+  "description": "Delete failed or scheduled message. Endpoint: DELETE /c/{company_id}/texting/messages/. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/texting/messages/\n\nRequired params: company_id",
+  "example_response": {
+    "message": {
+      "id": 12,
+      "status": "scheduled",
+      "text": "text",
+      "to": "receiver",
+      "admin_id": 2980,
+      "from": "sender",
+      "created_at": "2026-04-21T07:31:52.849461Z",
+      "send_at": null,
+      "updated_at": "2026-04-21T07:31:52.849461Z",
+      "send_at_timezone": null,
+      "thread_id": 12,
+      "aspect": "sent",
+      "status_details": null,
+      "status_error_code": null,
+      "text_json": null,
+      "unread_ids": [],
+      "segments_count": 1
+    }
+  },
+  "tags": [
+    "texting",
+    "messages"
+  ]
+}

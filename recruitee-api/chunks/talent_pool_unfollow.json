@@ -1,0 +1,52 @@
+{
+  "id": "talent_pool_unfollow",
+  "method": "PATCH",
+  "path": "/c/{company_id}/talent_pools/{id}/unfollow",
+  "summary": "Unfollow talent pool (leave talent pool)",
+  "description": "Unfollow talent pool (leave talent pool). Endpoint: PATCH /c/{company_id}/talent_pools/{id}/unfollow. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Talent Pool ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/talent_pools/{id}/unfollow\n\nRequired params: id, company_id",
+  "example_response": {
+    "talent_pool": {
+      "id": 1895,
+      "position": 66,
+      "status": "draft",
+      "description": "<p>What a description!</p>",
+      "title": "Best Talent Pool",
+      "admins": [],
+      "candidates_count": 0,
+      "created_at": "2026-04-21T07:33:55.038120Z",
+      "updated_at": "2026-04-21T07:33:55.038120Z",
+      "admin_ids": [],
+      "notes_count": 0,
+      "followed": false,
+      "attachments_count": 0,
+      "adminapp_url": "http://app.recruitee.internal:3003/#/talent_pools/best-talent-pool127",
+      "example": false,
+      "department_id": null,
+      "slug": "best-talent-pool127",
+      "guid": "talent-pool-guid65",
+      "mailbox_email": "tp.talent-pool-guid65@company726.test.recruitee.com",
+      "followers": [],
+      "follower_ids": []
+    }
+  },
+  "tags": [
+    "talent_pools"
+  ]
+}

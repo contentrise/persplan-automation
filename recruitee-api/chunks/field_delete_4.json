@@ -1,0 +1,43 @@
+{
+  "id": "field_delete_4",
+  "method": "DELETE",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/fieldsets/fields/{id}",
+  "summary": "Delete Field from fieldset",
+  "description": "Delete Field from fieldset. Endpoint: DELETE /c/{company_id}/offer_templates/{offer_template_id}/fieldsets/fields/{id}. Required parameters: offer_template_id, fieldset_id, company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Field ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "fieldset_id",
+      "type": "integer",
+      "required": true,
+      "description": "Fieldset ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"source_fieldset_id\": 148\n}",
+  "example_response": {},
+  "tags": [
+    "offer_templates",
+    "fieldsets"
+  ]
+}

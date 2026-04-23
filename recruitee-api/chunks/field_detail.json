@@ -1,0 +1,49 @@
+{
+  "id": "field_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/offers/{offer_id}/fieldsets/fields/{id}",
+  "summary": "Show field",
+  "description": "Show field. Endpoint: GET /c/{company_id}/offers/{offer_id}/fieldsets/fields/{id}. Required parameters: id, offer_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Field ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers/{offer_id}/fieldsets/fields/{id}\n\nRequired params: id, offer_id, company_id",
+  "example_response": {
+    "field": {
+      "id": 68,
+      "name": "Field 33",
+      "position": 1,
+      "visible": true,
+      "kind": "single_line",
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      }
+    }
+  },
+  "tags": [
+    "offers",
+    "fieldsets"
+  ]
+}

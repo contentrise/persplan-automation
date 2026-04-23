@@ -1,0 +1,45 @@
+{
+  "id": "reaction_create",
+  "method": "POST",
+  "path": "/c/{company_id}/reactions",
+  "summary": "Create reaction",
+  "description": "Create reaction. Endpoint: POST /c/{company_id}/reactions. Required parameters: company_id. Optional parameters include unicode, note_id.",
+  "params": [
+    {
+      "name": "unicode",
+      "type": "string",
+      "required": false,
+      "description": "Emoji",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "note_id",
+      "type": "integer",
+      "required": false,
+      "description": "Note ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"reaction\": {\n\"note_id\": 1,\n\"unicode\": \"🧑🏿‍🚀\"\n}\n}",
+  "example_response": {
+    "reaction": {
+      "id": 1,
+      "unicode": "🧑🏿‍🚀",
+      "base": "🧑‍🚀",
+      "admin_id": 525,
+      "company_id": 263,
+      "created_at": "2026-04-21T07:30:34.782947Z",
+      "note_id": 1
+    }
+  },
+  "tags": [
+    "reactions"
+  ]
+}

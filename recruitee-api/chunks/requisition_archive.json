@@ -1,0 +1,30 @@
+{
+  "id": "requisition_archive",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/requisitions/archive",
+  "summary": "Archives requisitions",
+  "description": "Archives requisitions. Endpoint: PATCH /c/{company_id}/bulk/requisitions/archive. Required parameters: company_id. Optional parameters include requisition_ids.",
+  "params": [
+    {
+      "name": "requisition_ids",
+      "type": "array",
+      "required": false,
+      "description": "Requisition IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"requisition_ids\": [\n1,\n2,\n3\n]\n}",
+  "example_response": {
+    "uuid": "5cb039c4-7914-48c9-9095-1809a820bb70"
+  },
+  "tags": [
+    "requisitions"
+  ]
+}

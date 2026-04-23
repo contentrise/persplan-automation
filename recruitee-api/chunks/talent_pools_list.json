@@ -1,0 +1,67 @@
+{
+  "id": "talent_pools_list",
+  "method": "GET",
+  "path": "/c/{company_id}/talent_pools",
+  "summary": "List talent pools",
+  "description": "List talent pools. Endpoint: GET /c/{company_id}/talent_pools. Required parameters: company_id. Optional parameters include offset, scope, limit.",
+  "params": [
+    {
+      "name": "offset",
+      "type": "string",
+      "required": false,
+      "description": "Skip number of talent pools from the beginning, used for ‘load more’, offset for next page should be current offset + limit",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "If no scope is given list all talent pools, if scope is ‘archived’ than list archived talent pools, if scope is ‘not_archived’ list all but archived talent_pools",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "string",
+      "required": false,
+      "description": "Limit number of talent pools, default is unlimited",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/talent_pools\n\nRequired params: company_id\n\nOptional params: offset, scope, limit",
+  "example_response": {
+    "meta": {
+      "limit": 1,
+      "total_count": 1,
+      "page": 1
+    },
+    "talent_pools": [
+      {
+        "id": 1892,
+        "position": 65,
+        "status": "draft",
+        "title": "Best Talent Pool",
+        "candidates_count": 0,
+        "created_at": "2026-04-21T07:33:55.001472Z",
+        "updated_at": "2026-04-21T07:33:55.001472Z",
+        "followed": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/talent_pools/best-talent-pool125",
+        "example": false,
+        "department_id": null,
+        "slug": "best-talent-pool125",
+        "guid": "talent-pool-guid64",
+        "followers": [],
+        "follower_ids": []
+      }
+    ]
+  },
+  "tags": [
+    "talent_pools"
+  ]
+}

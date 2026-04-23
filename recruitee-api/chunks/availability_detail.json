@@ -1,0 +1,57 @@
+{
+  "id": "availability_detail",
+  "method": "GET",
+  "path": "/share/interview/availability/{schedule_token}/{request_link_token}",
+  "summary": "Show availability for a given request link",
+  "description": "Show availability for a given request link. Endpoint: GET /share/interview/availability/{schedule_token}/{request_link_token}. Required parameters: request_link_token, schedule_token. Optional parameters include candidate_timezone.",
+  "params": [
+    {
+      "name": "request_link_token",
+      "type": "string",
+      "required": true,
+      "description": "Result link token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "schedule_token",
+      "type": "string",
+      "required": true,
+      "description": "Schedule token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_timezone",
+      "type": "string",
+      "required": false,
+      "description": "Candidate timezone",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/interview/availability/{schedule_token}/{request_link_token}\n\nRequired params: request_link_token, schedule_token\n\nOptional params: candidate_timezone",
+  "example_response": {
+    "availability": {
+      "location": "Poznań",
+      "kind": "meeting",
+      "days": [],
+      "language": "en",
+      "admin": {
+        "name": "John Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      "timezone": "Europe/Warsaw",
+      "duration": 60,
+      "expires_at": "2026-04-23T07:32:40.512621Z",
+      "completed_at": "2026-04-20T07:32:40.507679Z",
+      "public_note": null,
+      "event_url": "http://company2103.recruitee.internal:3003/v/events/aBcDeFg123446",
+      "sync_url": "https://api.recruitee.internal:4000/share/interview/events/aBcDeFg123446/sync",
+      "google_calendar_url": "https://www.google.com/calendar/render?location=Poznan&text=Meeting+for+Best+Offer+-+John+Doe&action=TEMPLATE&details=%3Cb%3EEvent+link%3C%2Fb%3E%3A%0Ahttp%3A%2F%2Fcompany2103.recruitee.internal%3A3003%2Fv%2Fevents%2FaBcDeFg123446%0A%0A%3Cb%3EInformation+for+the+candidate%3C%2Fb%3E%3A%0AYou%27ve+been+invited+to+Meeting+about+the+Best+Offer+position+in+Test+Company.%0AInterviewers%3A+John+Doe%0A%0A%3Cb%3EInformation+for+the+interviewers%3C%2Fb%3E%3A%0AIf+you%27re+attending+this+meeting+as+an+interviewer%2C+you+can+view+the+candidate%27s+information+in+Recruitee.%0Ahttp%3A%2F%2Fapp.recruitee.internal%3A3003%2F%23candidates%3Fcandidate%3D1244%26company%3D2509%0A&dates=20260421T073240Z%2F20260421T083240Z",
+      "yahoo_calendar_url": "https://calendar.yahoo.com/?st=20260421T073240Z&title=Meeting+for+Best+Offer+-+John+Doe&desc=Event+link%3A%0Ahttp%3A%2F%2Fcompany2103.recruitee.internal%3A3003%2Fv%2Fevents%2FaBcDeFg123446%0A%0A---------------------%0AInformation+for+the+candidate%3A%0AYou%27ve+been+invited+to+Meeting+about+the+Best+Offer+position+in+Test+Company.%0AInterviewers%3A+John+Doe%0A%0A---------------------%0AInformation+for+the+interviewers%3A%0AIf+you%27re+attending+this+meeting+as+an+interviewer%2C+you+can+view+the+candidate%27s+information+in+Recruitee.%0Ahttp%3A%2F%2Fapp.recruitee.internal%3A3003%2F%23candidates%3Fcandidate%3D1244%26company%3D2509%0A&v=60&dur=0100&in_loc=Poznan"
+    }
+  },
+  "tags": [
+    "interview",
+    "availability"
+  ]
+}

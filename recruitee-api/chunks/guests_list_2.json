@@ -1,0 +1,39 @@
+{
+  "id": "guests_list_2",
+  "method": "GET",
+  "path": "/share/containers/{token}/guests",
+  "summary": "List guests",
+  "description": "List guests. Endpoint: GET /share/containers/{token}/guests. Required parameters: token, auth_token.",
+  "params": [
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auth_token",
+      "type": "integer",
+      "required": true,
+      "description": "Guest token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/containers/{token}/guests\n\nRequired params: token, auth_token",
+  "example_response": {
+    "guest": {
+      "id": 100,
+      "name": "James Smith",
+      "email": "james10272@example.com",
+      "auth_token": "zXyuWv987390",
+      "created_at": "2026-04-21T07:33:32.948425Z",
+      "updated_at": "2026-04-21T07:33:32.948425Z",
+      "recruiter": false
+    }
+  },
+  "tags": [
+    "containers",
+    "guests"
+  ]
+}

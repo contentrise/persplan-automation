@@ -1,0 +1,59 @@
+{
+  "id": "reward_delete",
+  "method": "POST",
+  "path": "/c/{company_id}/referral/rewards/delete_all",
+  "summary": "Delete company's rewards",
+  "description": "Delete company's rewards. Endpoint: POST /c/{company_id}/referral/rewards/delete_all. Required parameters: rewards_ids, company_id.",
+  "params": [
+    {
+      "name": "rewards_ids",
+      "type": "array",
+      "required": true,
+      "description": "Referral rewards ids to delete",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"rewards_ids\": [\n61,\n62\n]\n}",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 2,
+      "page": 1
+    },
+    "rewards": [
+      {
+        "id": 62,
+        "name": "Great reward",
+        "photo_thumb_url": null,
+        "photo_url": null,
+        "body_html": "Reward description",
+        "referral_offer_template_assignments": [],
+        "referral_offer_assignments": [],
+        "referral_offer_assignments_ids": [],
+        "referral_offer_template_assignments_ids": []
+      },
+      {
+        "id": 61,
+        "name": "Great reward",
+        "photo_thumb_url": null,
+        "photo_url": null,
+        "body_html": "Reward description",
+        "referral_offer_template_assignments": [],
+        "referral_offer_assignments": [],
+        "referral_offer_assignments_ids": [],
+        "referral_offer_template_assignments_ids": []
+      }
+    ]
+  },
+  "tags": [
+    "referral",
+    "rewards"
+  ]
+}

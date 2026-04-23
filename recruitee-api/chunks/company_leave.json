@@ -1,0 +1,28 @@
+{
+  "id": "company_leave",
+  "method": "PATCH",
+  "path": "/c/{company_id}/companies/{id}/leave",
+  "summary": "Leave company",
+  "description": "Leave company. Endpoint: PATCH /c/{company_id}/companies/{id}/leave. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Company to leave ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/companies/{id}/leave\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "companies"
+  ]
+}

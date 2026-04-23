@@ -1,0 +1,99 @@
+{
+  "id": "checklist_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/notes/{id}/checklist",
+  "summary": "Update note checklist",
+  "description": "Update note checklist. Endpoint: PATCH /c/{company_id}/notes/{id}/checklist. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Note ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"note\": {\n\"body_json\": {\n\"doc\": {\n\"content\": [\n{\n\"content\": [\n{\n\"attrs\": {\n\"checked\": true\n},\n\"content\": [\n{\n\"content\": [\n{\n\"text\": \"close this job\",\n\"type\": \"text\"\n}\n],\n\"type\": \"paragraph\"\n}\n],\n\"type\": \"checklist_item\"\n}\n],\n\"type\": \"checklist\"\n}\n],\n\"type\": \"doc\"\n}\n}\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 9474,
+        "type": "Admin",
+        "email": "john1372@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9474/normal_avatar_u4r6br4klykh.png",
+        "photo_thumb_url": "tmp/bow/admins/9474/thumb_avatar_u4r6br4klykh.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "note": {
+      "id": 193,
+      "text": null,
+      "replies": [],
+      "body": "<p>HTML</p>",
+      "admin_id": 9474,
+      "candidate_id": null,
+      "attachments": [],
+      "created_at": "2026-04-21T07:33:57.393995Z",
+      "updated_at": "2026-04-21T07:33:57.396485Z",
+      "offer_id": 1991,
+      "talent_pool_id": null,
+      "requisition_id": null,
+      "guest_id": null,
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      },
+      "body_html": "<p>HTML</p>",
+      "reply_to_id": null,
+      "body_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "attrs": {
+                    "checked": true
+                  },
+                  "content": [
+                    {
+                      "content": [
+                        {
+                          "text": "close this job",
+                          "type": "text"
+                        }
+                      ],
+                      "type": "paragraph"
+                    }
+                  ],
+                  "type": "checklist_item"
+                }
+              ],
+              "type": "checklist"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "triggered": false,
+      "pinned_at": null
+    }
+  },
+  "tags": [
+    "notes",
+    "checklist"
+  ]
+}

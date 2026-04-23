@@ -1,0 +1,174 @@
+{
+  "id": "applications_list",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/applications",
+  "summary": "List of applications with meta",
+  "description": "List of applications with meta. Endpoint: GET /c/{company_id}/referral/applications. Required parameters: company_id. Optional parameters include status, q, limit, sort_by, claim_status, sort_order, page, referrer_type, and more.",
+  "params": [
+    {
+      "name": "status",
+      "type": "string",
+      "required": false,
+      "description": "One of: [in_review, process_complete, claimed]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search by: external user name, candidate name, offer title, reward name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "One of: [referrer_name, candidate_name, offer_title, reward_name, referred_at], default: referred_at desc;",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "claim_status",
+      "type": "string",
+      "required": false,
+      "description": "Filter by claim status",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "One of: [desc, asc], default: asc",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "referrer_type",
+      "type": "string",
+      "required": false,
+      "description": "One of: [admin, external_user]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "with_reward",
+      "type": "string",
+      "required": false,
+      "description": "true -> only applications with rewards; otherwise -> all",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/applications\n\nRequired params: company_id\n\nOptional params: status, q, limit, sort_by, claim_status, sort_order, page, referrer_type",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 3,
+      "page": 1
+    },
+    "applications": [
+      {
+        "id": 48,
+        "candidate": {
+          "id": 807,
+          "name": "John Doe",
+          "has_avatar": true,
+          "initials": "JD",
+          "photo_thumb_url": null
+        },
+        "created_at": "2026-04-21T07:31:53.715675Z",
+        "offer_title": "Best Offer",
+        "referral_referrer": {
+          "id": 74,
+          "email": "john1272@recruitee.com",
+          "has_avatar": false,
+          "initials": "JD",
+          "first_name": "John",
+          "last_name": "Doe",
+          "anonymized_at": null,
+          "avatar_url": "tmp/bow/admins/3089/normal_avatar_k89rnw9gf4yl.png",
+          "avatar_thumb_url": "tmp/bow/admins/3089/thumb_avatar_k89rnw9gf4yl.png",
+          "claimed_applications_count": null
+        },
+        "reward_name": null,
+        "reward_snapshot": null,
+        "claim_status": "open"
+      },
+      {
+        "id": 47,
+        "candidate": {
+          "id": 806,
+          "name": "John Doe",
+          "has_avatar": true,
+          "initials": "JD",
+          "photo_thumb_url": null
+        },
+        "created_at": "2026-04-21T07:31:53.709964Z",
+        "offer_title": "Best Offer",
+        "referral_referrer": {
+          "id": 73,
+          "email": "judge1998@hahn.biz",
+          "has_avatar": false,
+          "initials": "CG",
+          "first_name": "Chester",
+          "last_name": "Goyette",
+          "anonymized_at": null,
+          "avatar_url": null,
+          "avatar_thumb_url": null,
+          "claimed_applications_count": null
+        },
+        "reward_name": null,
+        "reward_snapshot": null,
+        "claim_status": "open"
+      },
+      {
+        "id": 46,
+        "candidate": {
+          "id": 805,
+          "name": "John Doe",
+          "has_avatar": true,
+          "initials": "JD",
+          "photo_thumb_url": null
+        },
+        "created_at": "2026-04-21T07:31:53.704916Z",
+        "offer_title": "Best Offer",
+        "referral_referrer": {
+          "id": 72,
+          "email": "amya_hoppe@blanda.name",
+          "has_avatar": false,
+          "initials": "LB",
+          "first_name": "Lesley",
+          "last_name": "Botsford",
+          "anonymized_at": null,
+          "avatar_url": null,
+          "avatar_thumb_url": null,
+          "claimed_applications_count": null
+        },
+        "reward_name": null,
+        "reward_snapshot": null,
+        "claim_status": "open"
+      }
+    ]
+  },
+  "tags": [
+    "referral",
+    "applications"
+  ]
+}

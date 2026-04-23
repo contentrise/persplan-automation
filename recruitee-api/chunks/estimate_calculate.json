@@ -1,0 +1,50 @@
+{
+  "id": "estimate_calculate",
+  "method": "POST",
+  "path": "/c/{company_id}/billing/estimate",
+  "summary": "Calculates an estimate for a subscription",
+  "description": "Calculates an estimate for a subscription. Endpoint: POST /c/{company_id}/billing/estimate. Required parameters: company_id. Optional parameters include addons, billing_period, billing_plan_id, fte_range.",
+  "params": [
+    {
+      "name": "addons",
+      "type": "array",
+      "required": false,
+      "description": "List of addons",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "billing_period",
+      "type": "integer",
+      "required": false,
+      "description": "New billing period",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "billing_plan_id",
+      "type": "integer",
+      "required": false,
+      "description": "New billing plan id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "fte_range",
+      "type": "string",
+      "required": false,
+      "description": "Optional bracket with number of employees. Example: 1-20",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/billing/estimate\n\nRequired params: company_id\n\nOptional params: addons, billing_period, billing_plan_id, fte_range",
+  "example_response": {},
+  "tags": [
+    "billing",
+    "estimate"
+  ]
+}

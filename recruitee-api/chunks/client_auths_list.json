@@ -1,0 +1,38 @@
+{
+  "id": "client_auths_list",
+  "method": "GET",
+  "path": "/c/{company_id}/oauth/client_auths",
+  "summary": "List authorized clients",
+  "description": "List authorized clients. Endpoint: GET /c/{company_id}/oauth/client_auths. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/oauth/client_auths\n\nRequired params: company_id",
+  "example_response": {
+    "client_auths": [
+      {
+        "id": "1e63dcea-e946-4464-bafc-12c1ce7d33b1",
+        "scope": null,
+        "client": {
+          "id": "97fccf23-511f-4f26-9308-25a82a550920",
+          "name": "zapier",
+          "description": null,
+          "display_name": null,
+          "icon": null
+        },
+        "created_at": "2026-04-21T07:31:50.512079Z",
+        "updated_at": "2026-04-21T07:31:50.512079Z"
+      }
+    ]
+  },
+  "tags": [
+    "client_auths",
+    "oauth"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "registration_create",
+  "method": "POST",
+  "path": "/referral_portal/registration/authorize_confirmation",
+  "summary": "Authorize referrers registration confirmation email",
+  "description": "Authorize referrers registration confirmation email. Endpoint: POST /referral_portal/registration/authorize_confirmation. Required parameters: token, email_code.",
+  "params": [
+    {
+      "name": "token",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email_code",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"confirmation\": {\n\"email_code\": \"wrong_email_code\",\n\"token\": \"token19\"\n}\n}",
+  "example_response": {
+    "error": [
+      "Email code The code doesn't match. Try again."
+    ],
+    "error_fields": {
+      "email_code": [
+        "The code doesn't match. Try again."
+      ]
+    }
+  },
+  "tags": [
+    "referral_portal",
+    "registration",
+    "referral"
+  ]
+}

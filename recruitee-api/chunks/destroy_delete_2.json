@@ -1,0 +1,32 @@
+{
+  "id": "destroy_delete_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/invitations/destroy",
+  "summary": "Delete invitations in bulk",
+  "description": "Delete invitations in bulk. Endpoint: PATCH /c/{company_id}/bulk/invitations/destroy. Required parameters: company_id. Optional parameters include invitations.",
+  "params": [
+    {
+      "name": "invitations",
+      "type": "array",
+      "required": false,
+      "description": "Array of invitations IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"invitations\": [\n1,\n2\n]\n}",
+  "example_response": {
+    "uuid": "81e68ed1-64a0-4e30-9760-9ecadbd9b937"
+  },
+  "tags": [
+    "invitations",
+    "destroy",
+    "company"
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "id": "applications_list_3",
+  "method": "GET",
+  "path": "/referral_portal/applications/{offer_id}",
+  "summary": "List of referrer's applications in offer",
+  "description": "List of referrer's applications in offer. Endpoint: GET /referral_portal/applications/{offer_id}. Required parameters: offer_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer id",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /referral_portal/applications/{offer_id}\n\nRequired params: offer_id",
+  "example_response": {
+    "applications": [
+      {
+        "id": 113,
+        "name": "John Mclane 61",
+        "status": "in_review",
+        "photo_thumb_url": null,
+        "created_at": "2026-04-21T07:32:50.462811Z",
+        "offer_title": "Best Offer",
+        "updated_at": "2026-04-21T07:32:50.462811Z",
+        "referral_reward": {
+          "id": 34,
+          "name": "Great reward",
+          "photo_thumb_url": null,
+          "photo_url": null,
+          "body_html": "Reward description"
+        },
+        "claim_status": "open"
+      },
+      {
+        "id": 112,
+        "name": "John Mclane 60",
+        "status": "in_review",
+        "photo_thumb_url": null,
+        "created_at": "2026-04-21T07:32:50.462186Z",
+        "offer_title": "Best Offer",
+        "updated_at": "2026-04-21T07:32:50.462186Z",
+        "referral_reward": {
+          "id": 34,
+          "name": "Great reward",
+          "photo_thumb_url": null,
+          "photo_url": null,
+          "body_html": "Reward description"
+        },
+        "claim_status": "open"
+      },
+      {
+        "id": 111,
+        "name": "John Mclane 59",
+        "status": "in_review",
+        "photo_thumb_url": null,
+        "created_at": "2026-04-21T07:32:50.461553Z",
+        "offer_title": "Best Offer",
+        "updated_at": "2026-04-21T07:32:50.461553Z",
+        "referral_reward": {
+          "id": 34,
+          "name": "Great reward",
+          "photo_thumb_url": null,
+          "photo_url": null,
+          "body_html": "Reward description"
+        },
+        "claim_status": "open"
+      },
+      {
+        "id": 110,
+        "name": "John Mclane 58",
+        "status": "in_review",
+        "photo_thumb_url": null,
+        "created_at": "2026-04-21T07:32:50.460935Z",
+        "offer_title": "Best Offer",
+        "updated_at": "2026-04-21T07:32:50.460935Z",
+        "referral_reward": {
+          "id": 34,
+          "name": "Great reward",
+          "photo_thumb_url": null,
+          "photo_url": null,
+          "body_html": "Reward description"
+        },
+        "claim_status": "open"
+      },
+      {
+        "id": 109,
+        "name": "John Mclane 57",
+        "status": "in_review",
+        "photo_thumb_url": null,
+        "created_at": "2026-04-21T07:32:50.460249Z",
+        "offer_title": "Best Offer",
+        "updated_at": "2026-04-21T07:32:50.460249Z",
+        "referral_reward": {
+          "id": 34,
+          "name": "Great reward",
+          "photo_thumb_url": null,
+          "photo_url": null,
+          "body_html": "Reward description"
+        },
+        "claim_status": "open"
+      },
+      {
+        "id": 108,
+        "name": "John Mclane 56",
+        "status": "in_review",
+        "photo_thumb_url": null,
+        "created_at": "2026-04-21T07:32:50.459582Z",
+        "offer_title": "Best Offer",
+        "updated_at": "2026-04-21T07:32:50.459582Z",
+        "referral_reward": {
+          "id": 34,
+          "name": "Great reward",
+          "photo_thumb_url": null,
+          "photo_url": null,
+          "body_html": "Reward description"
+        },
+        "claim_status": "open"
+      },
+      {
+        "id": 107,
+        "name": "John Mclane 55",
+        "status": "in_review",
+        "photo_thumb_url": null,
+        "created_at": "2026-04-21T07:32:50.458912Z",
+        "offer_title": "Best Offer",
+        "updated_at": "2026-04-21T07:32:50.458912Z",
+        "referral_reward": {
+          "id": 34,
+          "name": "Great reward",
+          "photo_thumb_url": null,
+          "photo_url": null,
+          "body_html": "Reward description"
+        },
+        "claim_status": "open"
+      },
+      {
+        "id": 106,
+        "name": "John Mclane 54",
+        "status": "in_review",
+        "photo_thumb_url": null,
+        "created_at": "2026-04-21T07:32:50.458214Z",
+        "offer_title": "Best Offer",
+        "updated_at": "2026-04-21T07:32:50.458214Z",
+        "referral_reward": {
+          "id": 34,
+          "name": "Great reward",
+          "photo_thumb_url": null,
+          "photo_url": null,
+          "body_html": "Reward description"
+        },
+        "claim_status": "open"
+      },
+      {
+        "id": 105,
+        "name": "John Mclane 53",
+        "status": "in_review",
+        "photo_thumb_url": null,
+        "created_at": "2026-04-21T07:32:50.457484Z",
+        "offer_title": "Best Offer",
+        "updated_at": "2026-04-21T07:32:50.457484Z",
+        "referral_reward": {
+          "id": 34,
+          "name": "Great reward",
+          "photo_thumb_url": null,
+          "photo_url": null,
+          "body_html": "Reward description"
+        },
+        "claim_status": "open"
+      },
+      {
+        "id": 104,
+        "name": "John Mclane 52",
+        "status": "in_review",
+        "photo_thumb_url": null,
+        "created_at": "2026-04-21T07:32:50.456572Z",
+        "offer_title": "Best Offer",
+        "updated_at": "2026-04-21T07:32:50.456572Z",
+        "referral_reward": {
+          "id": 34,
+          "name": "Great reward",
+          "photo_thumb_url": null,
+          "photo_url": null,
+          "body_html": "Reward description"
+        },
+        "claim_status": "open"
+      }
+    ]
+  },
+  "tags": [
+    "referral_portal",
+    "applications",
+    "referral"
+  ]
+}

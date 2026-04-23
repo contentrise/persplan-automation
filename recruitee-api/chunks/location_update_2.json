@@ -1,0 +1,40 @@
+{
+  "id": "location_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/placements/locations",
+  "summary": "Update existing placement's locations",
+  "description": "Update existing placement's locations. Endpoint: PATCH /c/{company_id}/placements/locations. Required parameters: id, company_id. Optional parameters include location_ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Placement ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "location_ids",
+      "type": "array",
+      "required": false,
+      "description": "Location IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/placements/locations\n\nRequired params: id, company_id\n\nOptional params: location_ids",
+  "example_response": {
+    "error": [
+      "Forbidden"
+    ]
+  },
+  "tags": [
+    "placements",
+    "locations"
+  ]
+}

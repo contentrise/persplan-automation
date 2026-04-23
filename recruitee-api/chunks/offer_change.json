@@ -1,0 +1,53 @@
+{
+  "id": "offer_change",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{id}/change_slug",
+  "summary": "Change slug",
+  "description": "Change slug. Endpoint: PATCH /c/{company_id}/offers/{id}/change_slug. Required parameters: id, slug, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "required": true,
+      "description": "New slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"slug\": \"Frontend developer\"\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "url_already_in_use",
+        "data": {},
+        "message": "Slug URL already in use",
+        "source": "offer/slug"
+      }
+    ],
+    "resources": {
+      "slug": [
+        {
+          "code": "url_already_in_use",
+          "data": {},
+          "message": "URL already in use"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offers"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "reactivate_reactivate_2",
+  "method": "POST",
+  "path": "/c/{company_id}/payment/subscription/reactivate",
+  "summary": "Reactivates subscription",
+  "description": "Reactivates subscription. Endpoint: POST /c/{company_id}/payment/subscription/reactivate. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/payment/subscription/reactivate\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "payment",
+    "subscription",
+    "billing"
+  ]
+}

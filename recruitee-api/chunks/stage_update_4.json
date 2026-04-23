@@ -1,0 +1,106 @@
+{
+  "id": "stage_update_4",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/stages/update_positions",
+  "summary": "Update stage positions",
+  "description": "Update stage positions. Endpoint: PATCH /c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/stages/update_positions. Required parameters: offer_template_id, source_template_id, stages_ids, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stages_ids",
+      "type": "array",
+      "required": true,
+      "description": "Array of Stage IDs in requested order",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"source_template_id\": 3356,\n\"stages_ids\": [\n26986,\n26984,\n26985,\n26987,\n26988\n]\n}",
+  "example_response": {
+    "stages": [
+      {
+        "id": 26986,
+        "name": "Evaluation",
+        "position": 1,
+        "group": "active",
+        "category": "evaluation",
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "locked": false,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 26984,
+        "name": "Phone interview",
+        "position": 2,
+        "group": "active",
+        "category": "phone_screen",
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "locked": false,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 26985,
+        "name": "On-site interview",
+        "position": 3,
+        "group": "active",
+        "category": "interview",
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "locked": false,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 26987,
+        "name": "Offer",
+        "position": 4,
+        "group": "active",
+        "category": "offer",
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "locked": false,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 26988,
+        "name": "Hired",
+        "position": 5,
+        "group": "hires",
+        "category": "hire",
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "locked": false,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      }
+    ]
+  },
+  "tags": [
+    "offer_templates",
+    "pipeline_templates"
+  ]
+}

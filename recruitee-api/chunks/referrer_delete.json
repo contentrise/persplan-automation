@@ -1,0 +1,29 @@
+{
+  "id": "referrer_delete",
+  "method": "POST",
+  "path": "/c/{company_id}/referral/referrers/delete_all",
+  "summary": "Delete company's referrers",
+  "description": "Delete company's referrers. Endpoint: POST /c/{company_id}/referral/referrers/delete_all. Required parameters: referrers_ids, company_id.",
+  "params": [
+    {
+      "name": "referrers_ids",
+      "type": "array",
+      "required": true,
+      "description": "Referral referrers ids to delete",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"referrers_ids\": [\n180,\n181\n]\n}",
+  "example_response": {},
+  "tags": [
+    "referral",
+    "referrers"
+  ]
+}

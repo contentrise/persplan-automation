@@ -1,0 +1,36 @@
+{
+  "id": "tag_delete_2",
+  "method": "DELETE",
+  "path": "/c/{company_id}/tags",
+  "summary": "Remove candidate tags from company",
+  "description": "Remove candidate tags from company. Endpoint: DELETE /c/{company_id}/tags. Required parameters: company_id. Optional parameters include id, ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Tag ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ids",
+      "type": "array",
+      "required": false,
+      "description": "Tag IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"ids\": [\n75\n]\n}",
+  "example_response": {},
+  "tags": [
+    "tags",
+    "tagging"
+  ]
+}

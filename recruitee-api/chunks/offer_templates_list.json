@@ -1,0 +1,38 @@
+{
+  "id": "offer_templates_list",
+  "method": "GET",
+  "path": "/c/{company_id}/offer_templates",
+  "summary": "List offer templates",
+  "description": "List offer templates. Endpoint: GET /c/{company_id}/offer_templates. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offer_templates\n\nRequired params: company_id",
+  "example_response": {
+    "offer_templates": [
+      {
+        "id": 80,
+        "name": "Backend Developer Template",
+        "priority": null,
+        "remote": false,
+        "title": "Backend Developer pl",
+        "admin_id": null,
+        "created_at": "2026-04-21T07:30:28.158594Z",
+        "updated_at": "2026-04-21T07:30:28.158594Z",
+        "location_ids": [],
+        "department_id": null,
+        "hybrid": false,
+        "on_site": false
+      }
+    ]
+  },
+  "tags": [
+    "offer_templates"
+  ]
+}

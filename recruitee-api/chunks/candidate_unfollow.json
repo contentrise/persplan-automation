@@ -1,0 +1,30 @@
+{
+  "id": "candidate_unfollow",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/unfollow",
+  "summary": "Unfollow candidates in bulk",
+  "description": "Unfollow candidates in bulk. Endpoint: PATCH /c/{company_id}/bulk/candidates/unfollow. Required parameters: company_id. Optional parameters include candidates.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n540,\n541,\n542\n]\n}",
+  "example_response": {
+    "uuid": "a090282e-68a6-432d-89ac-f85611ae1dde"
+  },
+  "tags": [
+    "candidates"
+  ]
+}

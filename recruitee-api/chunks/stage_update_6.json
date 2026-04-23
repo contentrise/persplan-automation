@@ -1,0 +1,125 @@
+{
+  "id": "stage_update_6",
+  "method": "PATCH",
+  "path": "/c/{company_id}/pipeline_templates/{pipeline_template_id}/stages/update_positions",
+  "summary": "Update stages positions",
+  "description": "Update stages positions. Endpoint: PATCH /c/{company_id}/pipeline_templates/{pipeline_template_id}/stages/update_positions. Required parameters: pipeline_template_id, stages_ids, company_id.",
+  "params": [
+    {
+      "name": "pipeline_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stages_ids",
+      "type": "array",
+      "required": true,
+      "description": "Array of Stage IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"stages_ids\": [\n25713,\n25714,\n25716,\n25715,\n25717\n]\n}",
+  "example_response": {
+    "stages": [
+      {
+        "id": 25713,
+        "name": "Phone interview",
+        "position": 1,
+        "group": "active",
+        "category": "phone_screen",
+        "created_at": "2026-04-21T07:32:28.072659Z",
+        "updated_at": "2026-04-21T07:32:28.072659Z",
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 3199,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false,
+        "automation_ids": []
+      },
+      {
+        "id": 25714,
+        "name": "On-site interview",
+        "position": 2,
+        "group": "active",
+        "category": "interview",
+        "created_at": "2026-04-21T07:32:28.072752Z",
+        "updated_at": "2026-04-21T07:32:28.072752Z",
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 3199,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false,
+        "automation_ids": []
+      },
+      {
+        "id": 25716,
+        "name": "Offer",
+        "position": 3,
+        "group": "active",
+        "category": "offer",
+        "created_at": "2026-04-21T07:32:28.072921Z",
+        "updated_at": "2026-04-21T07:32:28.072921Z",
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 3199,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false,
+        "automation_ids": []
+      },
+      {
+        "id": 25715,
+        "name": "Evaluation",
+        "position": 4,
+        "group": "active",
+        "category": "evaluation",
+        "created_at": "2026-04-21T07:32:28.072844Z",
+        "updated_at": "2026-04-21T07:32:28.072844Z",
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 3199,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false,
+        "automation_ids": []
+      },
+      {
+        "id": 25717,
+        "name": "Hired",
+        "position": 5,
+        "group": "hires",
+        "category": "hire",
+        "created_at": "2026-04-21T07:32:28.073009Z",
+        "updated_at": "2026-04-21T07:32:28.073009Z",
+        "fair_evaluations_enabled": false,
+        "action_templates": [],
+        "pipeline_template_id": 3199,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false,
+        "automation_ids": []
+      }
+    ]
+  },
+  "tags": [
+    "pipeline_templates",
+    "stages",
+    "pipeline"
+  ]
+}

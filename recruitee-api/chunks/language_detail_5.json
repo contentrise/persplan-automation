@@ -1,0 +1,108 @@
+{
+  "id": "language_detail_5",
+  "method": "GET",
+  "path": "/c/{company_id}/offers/{offer_id}/languages",
+  "summary": "Show offer languages with translation completeness data",
+  "description": "Show offer languages with translation completeness data. Endpoint: GET /c/{company_id}/offers/{offer_id}/languages. Required parameters: offer_id, company_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers/{offer_id}/languages\n\nRequired params: offer_id, company_id",
+  "example_response": {
+    "languages": [
+      {
+        "code": "en",
+        "enabled": true,
+        "name": "English",
+        "primary": true,
+        "offer_id": 1144,
+        "native_name": "English",
+        "translation_fields_count": 11,
+        "missing_translation_fields": {
+          "auto_reply_template_fields": [],
+          "dynamic_field_ids": [],
+          "open_question_ids": [],
+          "offer_fields": []
+        }
+      },
+      {
+        "code": "de",
+        "enabled": true,
+        "name": "German",
+        "primary": false,
+        "offer_id": 1144,
+        "native_name": "Deutsch",
+        "translation_fields_count": 11,
+        "missing_translation_fields": {
+          "auto_reply_template_fields": [],
+          "dynamic_field_ids": [],
+          "open_question_ids": [],
+          "offer_fields": []
+        }
+      },
+      {
+        "code": "nl",
+        "enabled": false,
+        "name": "Dutch",
+        "primary": false,
+        "offer_id": 1144,
+        "native_name": "Nederlands",
+        "translation_fields_count": 0,
+        "missing_translation_fields": {
+          "auto_reply_template_fields": [
+            "body_html",
+            "subject"
+          ],
+          "dynamic_field_ids": [],
+          "open_question_ids": [
+            155
+          ],
+          "offer_fields": [
+            "description",
+            "requirements",
+            "sharing_description",
+            "sharing_image",
+            "sharing_title",
+            "title"
+          ]
+        }
+      }
+    ],
+    "translation_fields_count": 11,
+    "translation_fields": {
+      "auto_reply_template_fields": [
+        "subject",
+        "body_html"
+      ],
+      "dynamic_field_ids": [],
+      "open_question_ids": [
+        155
+      ],
+      "offer_fields": [
+        "title",
+        "description",
+        "requirements",
+        "sharing_title",
+        "sharing_description",
+        "sharing_image"
+      ]
+    }
+  },
+  "tags": [
+    "offers",
+    "languages"
+  ]
+}

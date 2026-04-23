@@ -1,0 +1,64 @@
+{
+  "id": "setting_update_7",
+  "method": "PATCH",
+  "path": "/c/{company_id}/requisitions/settings",
+  "summary": "Update company's requisition settings",
+  "description": "Update company's requisition settings. Endpoint: PATCH /c/{company_id}/requisitions/settings. Required parameters: enabled, departments_required_for_approval_flows, requisitions_required_for_offers, auto_create_job_after_approval, default_approval_flow_id, company_id.",
+  "params": [
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "departments_required_for_approval_flows",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "requisitions_required_for_offers",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auto_create_job_after_approval",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "default_approval_flow_id",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/requisitions/settings\n\nRequired params: enabled, departments_required_for_approval_flows, requisitions_required_for_offers, auto_create_job_after_approval, default_approval_flow_id, company_id",
+  "example_response": {
+    "settings": {
+      "enabled": true,
+      "departments_required_for_approval_flows": true,
+      "requisitions_required_for_offers": false,
+      "auto_create_job_after_approval": false
+    }
+  },
+  "tags": [
+    "requisitions",
+    "settings"
+  ]
+}

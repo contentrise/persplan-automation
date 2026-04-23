@@ -1,0 +1,31 @@
+{
+  "id": "role_create",
+  "method": "POST",
+  "path": "/c/{company_id}/roles",
+  "summary": "Create role",
+  "description": "Create role. Endpoint: POST /c/{company_id}/roles. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"role\": {}\n}",
+  "example_response": {
+    "error": [
+      "Name can't be blank"
+    ],
+    "error_fields": {
+      "name": [
+        "can't be blank"
+      ]
+    }
+  },
+  "tags": [
+    "roles",
+    "company"
+  ]
+}

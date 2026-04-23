@@ -1,0 +1,25 @@
+{
+  "id": "attachment_create_3",
+  "method": "POST",
+  "path": "/share/interview/questionnaire/attachments",
+  "summary": "Create attachment",
+  "description": "Create attachment. Endpoint: POST /share/interview/questionnaire/attachments.",
+  "params": [],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"attachment\": {\n\"file\": {\n\"filename\": \"cv1.pdf\",\n\"path\": \"test/files/cvs/cv1.pdf\",\n\"content_type\": null\n}\n}\n}",
+  "example_response": {
+    "attachment": {
+      "id": 138,
+      "status": "ok",
+      "filename": "cv1.pdf",
+      "extension": "pdf",
+      "created_at": "2026-04-21T07:31:58.262893Z",
+      "pdf_thumbnail_url": "tmp/bow/attachments/138/pdf_thumbnail_cv1.png",
+      "pdf_url": "tmp/bow/attachments/138/pdf_cv1.pdf",
+      "file_url": "tmp/bow/attachments/138/cv1.pdf"
+    }
+  },
+  "tags": [
+    "interview",
+    "questionnaire"
+  ]
+}

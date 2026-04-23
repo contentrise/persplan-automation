@@ -1,0 +1,45 @@
+{
+  "id": "candidate_add_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/add_locations",
+  "summary": "Adds preferred locations to candidates in the given offer",
+  "description": "Adds preferred locations to candidates in the given offer. Endpoint: PATCH /c/{company_id}/bulk/candidates/add_locations. Required parameters: company_id. Optional parameters include offer_id, location_ids, candidate_ids.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "location_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of location IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidate_ids\": [\n2037\n],\n\"location_ids\": [\n253,\n254\n],\n\"offer_id\": 1708\n}",
+  "example_response": {
+    "uuid": "90d80f13-3435-4046-a977-f2116dfcf538"
+  },
+  "tags": [
+    "candidates",
+    "location"
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": "message_schedule",
+  "method": "POST",
+  "path": "/c/{company_id}/texting/messages/schedule",
+  "summary": "Schedule new meesage",
+  "description": "Schedule new meesage. Endpoint: POST /c/{company_id}/texting/messages/schedule. Required parameters: text, to, from, candidate_id, text_json, company_id. Optional parameters include send_at, send_at_timezone, thread_id.",
+  "params": [
+    {
+      "name": "text",
+      "type": "string",
+      "required": true,
+      "description": "Message body",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "to",
+      "type": "string",
+      "required": true,
+      "description": "Candiate phone number, i.e. +48123456789",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "from",
+      "type": "string",
+      "required": true,
+      "description": "Company phone number, i.e. +48123456789",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate Id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "send_at",
+      "type": "datetime",
+      "required": false,
+      "description": "DateTime in ISO 8601 format",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "send_at_timezone",
+      "type": "string",
+      "required": false,
+      "description": "Timezone",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "thread_id",
+      "type": "integer",
+      "required": false,
+      "description": "Thread Id. For new conversation it is nil",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "text_json",
+      "type": "map",
+      "required": true,
+      "description": "Message body",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/texting/messages/schedule\n\nRequired params: text, to, from, candidate_id, text_json, company_id\n\nOptional params: send_at, send_at_timezone, thread_id",
+  "example_response": {
+    "message": {
+      "id": 9,
+      "status": "scheduled",
+      "text": "Message content",
+      "to": "+48999999999",
+      "admin_id": 2974,
+      "from": "+48111111111",
+      "created_at": "2026-04-21T07:31:52.806750Z",
+      "send_at": "2099-01-01T23:30:00.000000Z",
+      "updated_at": "2026-04-21T07:31:52.806750Z",
+      "send_at_timezone": "Asia/Tokyo",
+      "thread_id": 9,
+      "aspect": "sent",
+      "sent_by": "John Doe",
+      "status_details": null,
+      "status_error_code": null,
+      "text_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Message content",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "unread_ids": [],
+      "segments_count": 1
+    }
+  },
+  "tags": [
+    "texting",
+    "messages"
+  ]
+}

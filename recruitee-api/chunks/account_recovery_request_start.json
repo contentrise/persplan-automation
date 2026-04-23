@@ -1,0 +1,35 @@
+{
+  "id": "account_recovery_request_start",
+  "method": "POST",
+  "path": "/account-recovery-request",
+  "summary": "Starts 2FA recovery process for current admin",
+  "description": "Starts 2FA recovery process for current admin. Endpoint: POST /account-recovery-request. Required parameters: role, phone, last_login.",
+  "params": [
+    {
+      "name": "role",
+      "type": "string",
+      "required": true,
+      "description": "Role - filled by user",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "phone",
+      "type": "string",
+      "required": true,
+      "description": "Phone - filled by user",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "last_login",
+      "type": "string",
+      "required": true,
+      "description": "Last login - filled by user",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /account-recovery-request\n\nRequired params: role, phone, last_login",
+  "example_response": {},
+  "tags": [
+    "account_recovery_request"
+  ]
+}

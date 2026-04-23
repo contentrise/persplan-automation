@@ -1,0 +1,40 @@
+{
+  "id": "assignment_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/assignments/{assignment_id}",
+  "summary": "Delete requisition assignment",
+  "description": "Delete requisition assignment. Endpoint: DELETE /c/{company_id}/requisitions/{requisition_id}/assignments/{assignment_id}. Required parameters: requisition_id, assignment_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "assignment_id",
+      "type": "integer",
+      "required": true,
+      "description": "Assignment ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/requisitions/{requisition_id}/assignments/{assignment_id}\n\nRequired params: requisition_id, assignment_id, company_id",
+  "example_response": {
+    "error": [
+      "action is not allowed"
+    ]
+  },
+  "tags": [
+    "requisitions",
+    "assignments"
+  ]
+}

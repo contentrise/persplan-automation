@@ -1,0 +1,63 @@
+{
+  "id": "event_invitation_templates_list",
+  "method": "GET",
+  "path": "/c/{company_id}/event_invitation_templates",
+  "summary": "List event invitation templates",
+  "description": "List event invitation templates. Endpoint: GET /c/{company_id}/event_invitation_templates. Required parameters: title, company_id. Optional parameters include include_last_used.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "include_last_used",
+      "type": "string",
+      "required": false,
+      "description": "One of [‘candidate’, ‘interviewer’]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/event_invitation_templates\n\nRequired params: title, company_id\n\nOptional params: include_last_used",
+  "example_response": {
+    "event_invitation_templates": [
+      {
+        "id": 3,
+        "position": 1,
+        "title": "Template",
+        "admin_id": 540,
+        "subject": "You have an interview scheduled",
+        "created_at": "2026-04-21T07:30:34.942800Z",
+        "updated_at": "2026-04-21T07:30:34.942800Z",
+        "body_html": "You have an interview scheduled, Regards",
+        "template_attachment_assignments": [],
+        "last_used": null
+      },
+      {
+        "id": 1,
+        "position": 2,
+        "title": "Template",
+        "admin_id": 538,
+        "subject": "You have an interview scheduled",
+        "created_at": "2026-04-21T07:30:34.939216Z",
+        "updated_at": "2026-04-21T07:30:34.939216Z",
+        "body_html": "You have an interview scheduled, Regards",
+        "template_attachment_assignments": [],
+        "last_used": null
+      }
+    ]
+  },
+  "tags": [
+    "event_invitation_templates",
+    "mailbox"
+  ]
+}

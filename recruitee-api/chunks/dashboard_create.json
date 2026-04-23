@@ -1,0 +1,82 @@
+{
+  "id": "dashboard_create",
+  "method": "POST",
+  "path": "/c/{company_id}/report/dashboards",
+  "summary": "Create dashboard",
+  "description": "Create dashboard. Endpoint: POST /c/{company_id}/report/dashboards. Required parameters: name, components, visibility, company_id. Optional parameters include origin, template_id.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Name of a dashboard.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "origin",
+      "type": "string",
+      "required": false,
+      "description": "Dashboard origin. Can be: blank, template, duplicate.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "components",
+      "type": "array",
+      "required": true,
+      "description": "Array of component params.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "visibility",
+      "type": "map",
+      "required": true,
+      "description": "Dashboard visibility settings.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_id",
+      "type": "string",
+      "required": false,
+      "description": "Id of the template the dashboard was created with.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"dashboard\": {\n\"name\": \"Sample dashboard\",\n\"symbol\": {\n\"base\": \"🧑‍🚀\",\n\"type\": \"emoji\",\n\"unicode\": \"🧑🏿‍🚀\"\n},\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n}\n}",
+  "example_response": {
+    "references": [],
+    "dashboard": {
+      "id": 19,
+      "name": "Sample dashboard",
+      "origin": null,
+      "filters": [],
+      "generated": false,
+      "symbol": {
+        "type": "emoji",
+        "unicode": "🧑🏿‍🚀",
+        "base": "🧑‍🚀"
+      },
+      "components": [],
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      },
+      "date_filter": {},
+      "is_available": true,
+      "template_id": null,
+      "unavailable_reason": null,
+      "show_banner": false
+    }
+  },
+  "tags": [
+    "report",
+    "dashboards"
+  ]
+}

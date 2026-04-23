@@ -1,0 +1,77 @@
+{
+  "id": "note_create",
+  "method": "POST",
+  "path": "/share/containers/{token}/candidates/{candidate_id}/notes",
+  "summary": "Create note for candidate",
+  "description": "Create note for candidate. Endpoint: POST /share/containers/{token}/candidates/{candidate_id}/notes. Required parameters: body, token, candidate_id, auth_token.",
+  "params": [
+    {
+      "name": "body",
+      "type": "string",
+      "required": true,
+      "description": "Note body",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auth_token",
+      "type": "string",
+      "required": true,
+      "description": "Guest token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"note\": {\n\"body_json\": {\n\"doc\": {\n\"content\": [\n{\n\"content\": [\n{\n\"text\": \"Perfect candidate\",\n\"type\": \"text\"\n}\n],\n\"type\": \"paragraph\"\n}\n],\n\"type\": \"doc\"\n}\n}\n}\n}",
+  "example_response": {
+    "note": {
+      "id": 71,
+      "body": "<p>Perfect candidate</p>",
+      "admin_id": null,
+      "candidate_id": 1273,
+      "attachments": [],
+      "admin": null,
+      "guest": {
+        "id": 32,
+        "name": "James Smith"
+      },
+      "created_at": "2026-04-21T07:32:45.062097Z",
+      "guest_id": 32,
+      "body_html": "<p>Perfect candidate</p>",
+      "reply_to_id": null,
+      "body_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Perfect candidate",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "triggered": false
+    }
+  },
+  "tags": [
+    "containers",
+    "candidates"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "fieldset_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/custom_fields/fieldsets/",
+  "summary": "Show company fieldset",
+  "description": "Show company fieldset. Endpoint: GET /c/{company_id}/custom_fields/fieldsets/. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/custom_fields/fieldsets/\n\nRequired params: company_id",
+  "example_response": {
+    "fieldset": {
+      "default": true,
+      "id": 39,
+      "name": "Engineering",
+      "position": 1,
+      "fields": [],
+      "category": null,
+      "updated_at": "2026-04-21T07:30:45.714062Z",
+      "assigned_offers_count": 3,
+      "assigned_offer_templates_count": 0
+    }
+  },
+  "tags": [
+    "custom_fields",
+    "fieldsets"
+  ]
+}

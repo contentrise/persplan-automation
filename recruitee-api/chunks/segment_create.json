@@ -1,0 +1,75 @@
+{
+  "id": "segment_create",
+  "method": "POST",
+  "path": "/c/{company_id}/search/segments",
+  "summary": "Create search segment",
+  "description": "Create search segment. Endpoint: POST /c/{company_id}/search/segments. Required parameters: segment_name, segment_private, segment_query_params, company_id.",
+  "params": [
+    {
+      "name": "segment_name",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "segment_private",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "segment_query_params",
+      "type": "search query params",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"segment\": {\n\"name\": \"Segment 1\",\n\"private\": true,\n\"query_params\": {\n\"filter\": [\n\"foo\",\n\"bar\",\n\"\"\n]\n}\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 2846,
+        "type": "Admin",
+        "email": "john912@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2846/normal_avatar_131plpkerfv7.png",
+        "photo_thumb_url": "tmp/bow/admins/2846/thumb_avatar_131plpkerfv7.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "segment": {
+      "id": 5,
+      "name": "Segment 1",
+      "position": null,
+      "private": true,
+      "admin_id": 2846,
+      "query_params": {
+        "filter": [
+          "foo",
+          "bar",
+          ""
+        ]
+      },
+      "segment_type": "custom"
+    }
+  },
+  "tags": [
+    "segments",
+    "search"
+  ]
+}

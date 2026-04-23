@@ -1,0 +1,76 @@
+{
+  "id": "assigned_offers_list_6",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/templates/{id}/assigned_offers",
+  "summary": "List given referral template's assigned offers",
+  "description": "List given referral template's assigned offers. Endpoint: GET /c/{company_id}/referral/templates/{id}/assigned_offers. Required parameters: id, company_id. Optional parameters include q, limit, page.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Referral template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search offers",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/templates/{id}/assigned_offers\n\nRequired params: id, company_id\n\nOptional params: q, limit, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 1,
+      "page": 1
+    },
+    "assigned_offers": [
+      {
+        "id": 738,
+        "status": "draft",
+        "remote": false,
+        "title": "Best Offer",
+        "country_code": "PL",
+        "created_at": "2026-04-21T07:31:58.973306Z",
+        "updated_at": "2026-04-21T07:31:58.973306Z",
+        "city": "Poznań",
+        "state_code": "30",
+        "department": null,
+        "location_ids": [
+          81
+        ],
+        "slug": "best-offer252",
+        "hybrid": true,
+        "on_site": true
+      }
+    ]
+  },
+  "tags": [
+    "referral",
+    "templates"
+  ]
+}

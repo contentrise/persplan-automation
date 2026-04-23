@@ -1,0 +1,25 @@
+{
+  "id": "sm_disable",
+  "method": "PATCH",
+  "path": "/two_factor_authentication_settings/sms/disable",
+  "summary": "Disables 2FA by sms for current admin",
+  "description": "Disables 2FA by sms for current admin. Endpoint: PATCH /two_factor_authentication_settings/sms/disable.",
+  "params": [],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"secure_change_token\": \"SFMyNTY.g2gDYgAAE_BuBgBvs_SunQFiAAFRgA.jtnJv3JOgN6JbKrF312mxVticoHTcCi4LznywLRdqyg\"\n}",
+  "example_response": {
+    "two_factor_authentication_settings": {
+      "phone": null,
+      "app_enabled": false,
+      "sms_enabled": false,
+      "otp_secret": "NN3DO5LUM44XM3TNOY2A====",
+      "otpauth_uri": "otpauth://totp/Recruitee:john4728@recruitee.com?secret=NN3DO5LUM44XM3TNOY2A%3D%3D%3D%3D&issuer=Recruitee&digits=6&period=30",
+      "show_account_recovered": false,
+      "updated_at": "2026-04-21T07:32:45.552823Z"
+    }
+  },
+  "tags": [
+    "two_factor_authentication_settings",
+    "sms",
+    "admin"
+  ]
+}

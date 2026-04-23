@@ -1,0 +1,89 @@
+{
+  "id": "component_move",
+  "method": "PATCH",
+  "path": "/c/{company_id}/report/dashboards/{dashboard_id}/components/move",
+  "summary": "Move component to a different dashboard",
+  "description": "Move component to a different dashboard. Endpoint: PATCH /c/{company_id}/report/dashboards/{dashboard_id}/components/move. Required parameters: id, dashboard_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Id of a component.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "dashboard_id",
+      "type": "integer",
+      "required": true,
+      "description": "Id of a target dashboard.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"component\": {\n\"dashboard_id\": 5,\n\"id\": 5\n}\n}",
+  "example_response": {
+    "references": [],
+    "component": {
+      "id": 5,
+      "name": "Fill rate",
+      "options": {
+        "include_deleted_candidates": null,
+        "include_archived_jobs": true,
+        "include_archived_requisitions": true,
+        "show_all_data": null
+      },
+      "origin": null,
+      "description": "Fill rate",
+      "filters": [],
+      "generated": false,
+      "sort_by": null,
+      "kind": "single_metric",
+      "updated_at": "2026-04-21T07:33:00.284657Z",
+      "settings": {
+        "functions": [],
+        "custom": {},
+        "amount_of_data_displayed": null,
+        "local_sort_by": null,
+        "local_sort_order": null
+      },
+      "grid": {
+        "rows": 1,
+        "cols": 2,
+        "y": 0,
+        "x": 0
+      },
+      "date_field": {
+        "resource": null,
+        "field": null
+      },
+      "date_filter": {},
+      "include_deleted_candidates": null,
+      "chart_type": null,
+      "end_point": null,
+      "include_archived_jobs": true,
+      "include_archived_requisitions": true,
+      "is_available": true,
+      "local_id": "603f50fa-2478-40bb-ab7d-01c2d9bbe4b8",
+      "metric": "fill_rate",
+      "template_id": null,
+      "primary_group": null,
+      "secondary_group": null,
+      "show_all_data": null,
+      "sort_order": null,
+      "start_point": null,
+      "unavailable_reason": null,
+      "view_mode": null
+    }
+  },
+  "tags": [
+    "report",
+    "dashboards"
+  ]
+}

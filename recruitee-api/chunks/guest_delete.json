@@ -1,0 +1,43 @@
+{
+  "id": "guest_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/share/guests/{id}",
+  "summary": "Delete guest",
+  "description": "Delete guest. Endpoint: DELETE /c/{company_id}/share/guests/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Guest ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/share/guests/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "references": [],
+    "guest": {
+      "id": 19,
+      "name": "James Smith",
+      "email": "james529@example.com",
+      "auth_token": "zXyuWv987310",
+      "has_avatar": false,
+      "initials": "JS",
+      "created_at": "2026-04-21T07:31:49.582602Z",
+      "updated_at": "2026-04-21T07:31:49.582602Z",
+      "recruiter": true,
+      "container_ids": []
+    }
+  },
+  "tags": [
+    "guests",
+    "container"
+  ]
+}

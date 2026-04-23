@@ -1,0 +1,53 @@
+{
+  "id": "save_as_template_create_3",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/{offer_id}/open_question_templates/save_as_template",
+  "summary": "Save a custom template as regular template",
+  "description": "Save a custom template as regular template. Endpoint: POST /c/{company_id}/offers/{offer_id}/open_question_templates/save_as_template. Required parameters: title, offer_id, company_id. Optional parameters include category.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Name of the newly created template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "required": false,
+      "description": "Category of the newly created template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question_template\": {\n\"category\": \"GOT NEW CATEGORY\",\n\"title\": \"Got new title\"\n}\n}",
+  "example_response": {
+    "open_question_template": {
+      "default": false,
+      "id": 96,
+      "position": 1,
+      "title": "Got new title",
+      "category": "GOT NEW CATEGORY",
+      "custom": false,
+      "open_questions": []
+    }
+  },
+  "tags": [
+    "offers",
+    "open_question_templates"
+  ]
+}

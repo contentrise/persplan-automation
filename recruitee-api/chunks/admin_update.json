@@ -1,0 +1,25 @@
+{
+  "id": "admin_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/admin/update_password",
+  "summary": "Update admin password",
+  "description": "Update admin password. Endpoint: PATCH /c/{company_id}/admin/update_password. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"admin\": {\n\"password\": \"Newpassword2\",\n\"password_confirmation\": \"Newpassword2\",\n\"secure_change_token\": \"SFMyNTY.g2gDYgAABoluBgB9UPOunQFiAAFRgA.qwmRBFBeUV95YVVo0RqXVPRPM9BWAmDSuxBnAXHakb4\"\n}\n}",
+  "example_response": {
+    "error": [
+      "Forbidden with SSO"
+    ]
+  },
+  "tags": [
+    "admin"
+  ]
+}

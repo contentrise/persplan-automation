@@ -1,0 +1,56 @@
+{
+  "id": "assignment_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/assignments",
+  "summary": "Updates requisition assignments",
+  "description": "Updates requisition assignments. Endpoint: PATCH /c/{company_id}/requisitions/{requisition_id}/assignments. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"assignments\": [\n{\n\"id\": 50\n},\n{\n\"id\": 51\n},\n{\n\"id\": 52\n},\n{\n\"admin_id\": 8183\n}\n]\n}",
+  "example_response": {
+    "assignments": [
+      {
+        "id": 50,
+        "admin_id": 8179,
+        "followed": true,
+        "is_approver": true,
+        "is_hiring_manager": false,
+        "is_recruiter": false
+      },
+      {
+        "id": 51,
+        "admin_id": 8180,
+        "followed": true,
+        "is_approver": false,
+        "is_hiring_manager": false,
+        "is_recruiter": true
+      },
+      {
+        "id": 52,
+        "admin_id": 8181,
+        "followed": true,
+        "is_approver": false,
+        "is_hiring_manager": true,
+        "is_recruiter": false
+      }
+    ]
+  },
+  "tags": [
+    "requisitions",
+    "assignments"
+  ]
+}

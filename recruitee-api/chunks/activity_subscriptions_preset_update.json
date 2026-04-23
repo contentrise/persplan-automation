@@ -1,0 +1,50 @@
+{
+  "id": "activity_subscriptions_preset_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/tracking/activity_subscriptions_preset/{role_id}",
+  "summary": "Update activity subscription presets for a given role",
+  "description": "Update activity subscription presets for a given role. Endpoint: PATCH /c/{company_id}/tracking/activity_subscriptions_preset/{role_id}. Required parameters: type, value, events, role_id, company_id.",
+  "params": [
+    {
+      "name": "type",
+      "type": "string",
+      "required": true,
+      "description": "One of: [‘web’, ‘mobile’, ‘email’]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "required": true,
+      "description": "Possible values: ‘true’, ‘false’, (or 1, 0)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "events",
+      "type": "array",
+      "required": true,
+      "description": "List of events to update",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "role_id",
+      "type": "integer",
+      "required": true,
+      "description": "Role ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"events\": [\n\"assignment_add\",\n\"assignment_remove\"\n],\n\"type\": \"web\",\n\"value\": \"false\"\n}",
+  "example_response": {},
+  "tags": [
+    "tracking",
+    "activity_subscriptions_preset"
+  ]
+}

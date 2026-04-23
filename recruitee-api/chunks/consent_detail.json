@@ -1,0 +1,35 @@
+{
+  "id": "consent_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/consent/sign_in",
+  "summary": "Gets all sign in consents",
+  "description": "Gets all sign in consents. Endpoint: GET /c/{company_id}/consent/sign_in. Required parameters: company_id. Optional parameters include limit, page.",
+  "params": [
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/consent/sign_in\n\nRequired params: company_id\n\nOptional params: limit, page",
+  "example_response": {},
+  "tags": [
+    "consent"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "offer_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/preview",
+  "summary": "New offer preview",
+  "description": "New offer preview. Endpoint: POST /c/{company_id}/offers/preview. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer\": {\n\"description\": \"<p>Elixir/Phoenix developer with Ruby/Rails</p>\",\n\"hybrid\": true,\n\"location_ids\": [\n360,\n361\n],\n\"locations_question\": \"What is your preferred work location?\",\n\"locations_question_required\": true,\n\"locations_question_type\": \"single_choice\",\n\"on_site\": true,\n\"remote\": true,\n\"requirements\": \"<ul><li>Phoenix</li><li>Angular</li><li>Phoenix</li></ul>\",\n\"title\": \"Elixir Developer\",\n\"visibility_options\": [\n\"locations_question\"\n]\n}\n}",
+  "example_response": {
+    "preview_url": "http://company842.recruitee.internal:3003/o/previews/mtk5n"
+  },
+  "tags": [
+    "offers"
+  ]
+}

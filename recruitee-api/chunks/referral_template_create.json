@@ -1,0 +1,57 @@
+{
+  "id": "referral_template_create",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/{offer_id}/referral_templates",
+  "summary": "Create custom referral template for offer",
+  "description": "Create custom referral template for offer. Endpoint: POST /c/{company_id}/offers/{offer_id}/referral_templates. Required parameters: offer_id, referral_template, company_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "referral_template",
+      "type": "map",
+      "required": true,
+      "description": "Custom template params",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"referral_template\": {\n\"custom\": false,\n\"default\": false,\n\"name\": \"Default\",\n\"position\": 95,\n\"referral_questions\": [\n{\n\"kind\": \"string\",\n\"options\": [],\n\"position\": 104,\n\"required\": false,\n\"title\": \"Default\"\n}\n]\n}\n}",
+  "example_response": {
+    "referral_template": {
+      "default": false,
+      "id": 163,
+      "name": "Custom template",
+      "position": null,
+      "category": null,
+      "created_at": "2026-04-21T07:32:24.173542Z",
+      "updated_at": "2026-04-21T07:32:24.173542Z",
+      "custom": true,
+      "referral_questions": [
+        {
+          "id": 170,
+          "position": 104,
+          "options": [],
+          "title": "Default",
+          "required": false,
+          "kind": "string"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offers",
+    "referral_templates"
+  ]
+}

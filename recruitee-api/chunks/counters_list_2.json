@@ -1,0 +1,25 @@
+{
+  "id": "counters_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/candidates/counters",
+  "summary": "Sidebar counters for unseen candidates",
+  "description": "Sidebar counters for unseen candidates. Endpoint: GET /c/{company_id}/candidates/counters. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/candidates/counters\n\nRequired params: company_id",
+  "example_response": {
+    "offers": {},
+    "talent_pools": {}
+  },
+  "tags": [
+    "candidates",
+    "counters"
+  ]
+}

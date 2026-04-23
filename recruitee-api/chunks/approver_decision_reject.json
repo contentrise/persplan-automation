@@ -1,0 +1,36 @@
+{
+  "id": "approver_decision_reject",
+  "method": "PATCH",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/approver_decisions/{approver_decision_id}/reject",
+  "summary": "Reject requisition",
+  "description": "Reject requisition. Endpoint: PATCH /c/{company_id}/requisitions/{requisition_id}/approver_decisions/{approver_decision_id}/reject. Required parameters: requisition_id, approver_decision_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "approver_decision_id",
+      "type": "integer",
+      "required": true,
+      "description": "Approver Decision ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/requisitions/{requisition_id}/approver_decisions/{approver_decision_id}/reject\n\nRequired params: requisition_id, approver_decision_id, company_id",
+  "example_response": {},
+  "tags": [
+    "requisitions",
+    "approver_decisions"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "id": "report_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/admin/report",
+  "summary": "Update admin's report configuration",
+  "description": "Update admin's report configuration. Endpoint: PATCH /c/{company_id}/admin/report. Required parameters: interval, company_id. Optional parameters include time, day.",
+  "params": [
+    {
+      "name": "time",
+      "type": "string",
+      "required": false,
+      "description": "Report time (for example: ‘08:00:00’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "day",
+      "type": "integer",
+      "required": false,
+      "description": "Day of week as number (possible values: 1-7)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "interval",
+      "type": "string",
+      "required": true,
+      "description": "Report interval (possible values: ‘never’, ‘day’, ‘week’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"admin_report\": {\n\"day\": 4,\n\"interval\": \"week\",\n\"time\": \"14:00:00\"\n}\n}",
+  "example_response": {
+    "admin_report": {
+      "time": "14:00:00",
+      "day": 4,
+      "interval": "week",
+      "send_at": "2026-04-23T13:00:00Z"
+    }
+  },
+  "tags": [
+    "admin",
+    "report"
+  ]
+}

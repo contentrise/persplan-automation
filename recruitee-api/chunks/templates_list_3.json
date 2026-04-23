@@ -1,0 +1,54 @@
+{
+  "id": "templates_list_3",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/templates",
+  "summary": "List referral templates",
+  "description": "List referral templates. Endpoint: GET /c/{company_id}/referral/templates. Required parameters: company_id. Optional parameters include limit, page.",
+  "params": [
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (default: 1)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/templates\n\nRequired params: company_id\n\nOptional params: limit, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 1,
+      "page": 1
+    },
+    "referral_templates": [
+      {
+        "default": true,
+        "id": 104,
+        "name": "Default",
+        "position": 1,
+        "category": null,
+        "created_at": "2026-04-21T07:31:59.136061Z",
+        "updated_at": "2026-04-21T07:31:59.136061Z",
+        "custom": false
+      }
+    ]
+  },
+  "tags": [
+    "referral",
+    "templates"
+  ]
+}

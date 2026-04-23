@@ -1,0 +1,42 @@
+{
+  "id": "pending_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/deletion_requests/pending",
+  "summary": "Get pending deletion requests",
+  "description": "Get pending deletion requests. Endpoint: GET /c/{company_id}/deletion_requests/pending. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/deletion_requests/pending\n\nRequired params: company_id",
+  "example_response": {
+    "deletion_request": {
+      "active": true,
+      "data": {
+        "admin": {
+          "has_avatar": false,
+          "id": 7108,
+          "name": "John Doe",
+          "photo_thumb_url": "tmp/bow/admins/7108/thumb_avatar_hfn3lvubcyw3.png"
+        },
+        "company_provider": null,
+        "company_status": "active"
+      },
+      "id": 5,
+      "admin_id": 7108,
+      "company_id": 3442,
+      "canceled_at": null,
+      "created_at": "2026-04-21T07:33:23.660781Z"
+    }
+  },
+  "tags": [
+    "deletion_requests",
+    "pending",
+    "company"
+  ]
+}

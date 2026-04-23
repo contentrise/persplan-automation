@@ -1,0 +1,94 @@
+{
+  "id": "task_create",
+  "method": "POST",
+  "path": "/c/{company_id}/tasks",
+  "summary": "Create task",
+  "description": "Create task. Endpoint: POST /c/{company_id}/tasks. Required parameters: title, company_id. Optional parameters include description, candidate_id, timezone, admin_ids, due_date.",
+  "params": [
+    {
+      "name": "description",
+      "type": "string",
+      "required": false,
+      "description": "Description",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": false,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "timezone",
+      "type": "string",
+      "required": false,
+      "description": "Due date timezone (required, if due date is present)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "admin_ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of admins IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "due_date",
+      "type": "string",
+      "required": false,
+      "description": "Due date",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"task\": {\n\"due_date\": \"2026-04-28T07:33:23+00:00\",\n\"title\": \"Rate candidate\"\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 7015,
+        "type": "Admin",
+        "email": "john8605@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/7015/normal_avatar_v4hc4mwg13ue.png",
+        "photo_thumb_url": "tmp/bow/admins/7015/thumb_avatar_v4hc4mwg13ue.png",
+        "timezone": "Europe/Warsaw",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "task": {
+      "id": 50,
+      "description": null,
+      "title": "Rate candidate",
+      "admin_id": 7015,
+      "candidate_id": null,
+      "completed": false,
+      "timezone": "Europe/Warsaw",
+      "created_at": "2026-04-21T07:33:23.034817Z",
+      "updated_at": "2026-04-21T07:33:23.034817Z",
+      "completed_at": null,
+      "triggered": false,
+      "due_date": "2026-04-28T07:33:23.000000Z"
+    }
+  },
+  "tags": [
+    "tasks"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "blacklist_entry_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/careers/settings/blacklist_entry/{id}",
+  "summary": "Update a blacklist entry",
+  "description": "Update a blacklist entry. Endpoint: PATCH /c/{company_id}/careers/settings/blacklist_entry/{id}. Required parameters: id, email, phone, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "phone",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"blacklist_entry\": {\n\"email\": \"new@example.com\"\n}\n}",
+  "example_response": {
+    "blacklist_entry": {
+      "id": 13,
+      "email": "new@example.com",
+      "phone": "+4812345672983",
+      "blocked_by_id": 4098,
+      "blocked_at": "2026-04-21T07:32:25.060852Z"
+    }
+  },
+  "tags": [
+    "careers",
+    "settings"
+  ]
+}

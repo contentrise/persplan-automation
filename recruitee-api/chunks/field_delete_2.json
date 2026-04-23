@@ -1,0 +1,29 @@
+{
+  "id": "field_delete_2",
+  "method": "DELETE",
+  "path": "/c/{company_id}/custom_fields/fieldsets/fields",
+  "summary": "Remove fieldset field",
+  "description": "Remove fieldset field. Endpoint: DELETE /c/{company_id}/custom_fields/fieldsets/fields. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Field ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/custom_fields/fieldsets/fields\n\nRequired params: company_id\n\nOptional params: id",
+  "example_response": {},
+  "tags": [
+    "custom_fields",
+    "fieldsets"
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "id": "single_metric_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/report/single_metric",
+  "summary": "Returns query results for the specified single metric",
+  "description": "Returns query results for the specified single metric. Endpoint: GET /c/{company_id}/report/single_metric. Required parameters: metric, company_id. Optional parameters include filters, limit, sort_by, date_start, date_end, date_field, include_deleted_candidates, include_archived_jobs, and more.",
+  "params": [
+    {
+      "name": "filters",
+      "type": "string",
+      "required": false,
+      "description": "Filters in format type:value;type:value (example: job:5;department:10).",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results. Defaults to 30.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_by",
+      "type": "string",
+      "required": false,
+      "description": "Sort results by field.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_start",
+      "type": "string",
+      "required": false,
+      "description": "Used when date_range is ‘range’. Date from which data should be fetched. Should be in format ‘2022-03-01’.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_end",
+      "type": "string",
+      "required": false,
+      "description": "Used when date_range is ‘range’. Date to which data should be fetched. Should be in format ‘2022-03-01’.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_field",
+      "type": "string",
+      "required": false,
+      "description": "Field used for filtering by date.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "include_deleted_candidates",
+      "type": "boolean",
+      "required": false,
+      "description": "Includes results associated with deleted candidates.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "include_archived_jobs",
+      "type": "boolean",
+      "required": false,
+      "description": "Includes results associated with archived jobs.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "metric",
+      "type": "string",
+      "required": true,
+      "description": "Metric type.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "primary_group",
+      "type": "string",
+      "required": false,
+      "description": "Attribute used to aggregate results.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sort_order",
+      "type": "string",
+      "required": false,
+      "description": "Sort order. Can be: asc, desc. Defaults to desc.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number used for pagination, can be used only with the limit option.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_resource",
+      "type": "string",
+      "required": false,
+      "description": "Resource used for filtering by date.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "date_range",
+      "type": "string",
+      "required": false,
+      "description": "Date filter. Can be: range, today, yesterday, this_week, last_week, this_month, last_month, this_quarter, last_quarter, this_year, last_year, last_7_days, last_14_days, last_30_days, last_60_days, last_90_days, last_365_days. If value is range, additional parameters ‘date_start’ and ‘date_end’ must be provided.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/report/single_metric\n\nRequired params: metric, company_id\n\nOptional params: filters, limit, sort_by, date_start, date_end, date_field, include_deleted_candidates, include_archived_jobs",
+  "example_response": {
+    "meta": {
+      "date_start": "2010-01-01 23:59:59Z",
+      "date_end": "2030-01-01 23:59:59Z",
+      "date_range": "range"
+    },
+    "checksum": "607f0d3975c42da3140b9410b5108914",
+    "results": {
+      "columns": [],
+      "rows": [
+        {
+          "id": "fill_rate",
+          "name": "fill_rate",
+          "values": [
+            40
+          ]
+        }
+      ]
+    }
+  },
+  "tags": [
+    "report",
+    "single_metric"
+  ]
+}

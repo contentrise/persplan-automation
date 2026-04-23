@@ -1,0 +1,87 @@
+{
+  "id": "stage_create_3",
+  "method": "POST",
+  "path": "/c/{company_id}/pipeline_templates/{pipeline_template_id}/stages",
+  "summary": "Create stage",
+  "description": "Create stage. Endpoint: POST /c/{company_id}/pipeline_templates/{pipeline_template_id}/stages. Required parameters: stage, pipeline_template_id, company_id.",
+  "params": [
+    {
+      "name": "stage",
+      "type": "map",
+      "required": true,
+      "description": "Stage params: name (string, required) - stage name; category (string, required) - stage category; position (integer, required) - stage position; action_templates (array, optional) - stage automated actions; time_limit (integer, optional) - candidate time limit for stage; fair_evaluations_enabled (boolean, optional) - fair evaluation feature status",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "pipeline_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"stage\": {\n\"action_templates\": [\n{\n\"data\": {\n\"body_json\": {\n\"doc\": {\n\"content\": [\n{\n\"content\": [\n{\n\"text\": \"remind me!\",\n\"type\": \"text\"\n}\n],\n\"type\": \"paragraph\"\n}\n],\n\"type\": \"doc\"\n}\n},\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n},\n\"kind\": \"add_note\"\n}\n],\n\"category\": \"none\",\n\"group\": \"active\",\n\"name\": \"Limbo\",\n\"position\": 1\n}\n}",
+  "example_response": {
+    "stage": {
+      "id": 25569,
+      "name": "Limbo",
+      "position": 1,
+      "group": "active",
+      "category": "none",
+      "created_at": "2026-04-21T07:32:27.507654Z",
+      "updated_at": "2026-04-21T07:32:27.517418Z",
+      "fair_evaluations_enabled": false,
+      "action_templates": [
+        {
+          "data": {
+            "text": null,
+            "body": null,
+            "visibility": {
+              "admin_ids": [],
+              "level": "public",
+              "role_ids": []
+            },
+            "body_html": "<p>remind me!</p>",
+            "body_json": {
+              "doc": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "text": "remind me!",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  }
+                ],
+                "type": "doc"
+              }
+            }
+          },
+          "id": 179,
+          "kind": "add_note",
+          "references": []
+        }
+      ],
+      "pipeline_template_id": 3181,
+      "locked": false,
+      "placements_count": null,
+      "time_limit": null,
+      "candidate_anonymization_enabled": false,
+      "automation_ids": []
+    }
+  },
+  "tags": [
+    "pipeline_templates",
+    "stages",
+    "pipeline"
+  ]
+}

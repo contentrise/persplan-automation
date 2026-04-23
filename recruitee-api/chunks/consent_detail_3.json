@@ -1,0 +1,38 @@
+{
+  "id": "consent_detail_3",
+  "method": "GET",
+  "path": "/c/{company_id}/texting/consent/",
+  "summary": "Show consent for a given candidate",
+  "description": "Show consent for a given candidate. Endpoint: GET /c/{company_id}/texting/consent/. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/texting/consent/\n\nRequired params: company_id",
+  "example_response": {
+    "texting_consent": {
+      "id": 2,
+      "status": "no_consent",
+      "source": null,
+      "admin_id": null,
+      "company_id": 536,
+      "candidate_id": 223,
+      "admin": {
+        "has_avatar": false,
+        "initials": null,
+        "full_name": null,
+        "avatar_url": null
+      },
+      "status_changed_at": null
+    }
+  },
+  "tags": [
+    "texting",
+    "consent"
+  ]
+}

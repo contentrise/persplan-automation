@@ -1,0 +1,58 @@
+{
+  "id": "calendar_select",
+  "method": "PATCH",
+  "path": "/c/{company_id}/interview/calendars/{id}/select",
+  "summary": "Select external calendar",
+  "description": "Select external calendar. Endpoint: PATCH /c/{company_id}/interview/calendars/{id}/select. Required parameters: access, id, extenal_calendar_id, company_id.",
+  "params": [
+    {
+      "name": "access",
+      "type": "string",
+      "required": true,
+      "description": "Calendar access can be: ‘public’, ‘anonymous’ (default ‘public’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview calendar ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "extenal_calendar_id",
+      "type": "string",
+      "required": true,
+      "description": "External calendar ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_calendar\": {\n\"access\": \"anonymous\",\n\"external_calendar_id\": \"primary@calendar.google.com\",\n\"kind\": \"team\"\n}\n}",
+  "example_response": {
+    "interview_calendar": {
+      "access": "public",
+      "id": 24,
+      "name": "Primary calendar",
+      "status": "connected",
+      "kind": "team",
+      "admin_id": 2011,
+      "provider": "google",
+      "external_calendars": null,
+      "external_calendar_id": "primary@calendar.google.com",
+      "synced_at": "2026-04-21T06:33:24.743255Z",
+      "sync_email": null,
+      "subscription_active": true
+    }
+  },
+  "tags": [
+    "interview",
+    "calendars"
+  ]
+}

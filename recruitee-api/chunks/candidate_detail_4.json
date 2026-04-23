@@ -1,0 +1,34 @@
+{
+  "id": "candidate_detail_4",
+  "method": "GET",
+  "path": "/c/{company_id}/eeo/candidate/{candidate_id}",
+  "summary": "Get candidate's placements with no EEO data",
+  "description": "Get candidate's placements with no EEO data. Endpoint: GET /c/{company_id}/eeo/candidate/{candidate_id}. Required parameters: candidate_id, company_id.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/eeo/candidate/{candidate_id}\n\nRequired params: candidate_id, company_id",
+  "example_response": {
+    "no_eeo_data_placement_ids": [
+      1092,
+      1093
+    ]
+  },
+  "tags": [
+    "eeo",
+    "candidate"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "id": "locations_list_4",
+  "method": "GET",
+  "path": "/c/{company_id}/offer_templates/locations",
+  "summary": "List locations assigned to the offer template",
+  "description": "List locations assigned to the offer template. Endpoint: GET /c/{company_id}/offer_templates/locations. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offer_templates/locations\n\nRequired params: company_id",
+  "example_response": {
+    "locations": [
+      {
+        "id": 21,
+        "name": "Poznań HQ",
+        "is_valid": true,
+        "country_code": "PL",
+        "created_at": "2026-04-21T07:31:27.671853Z",
+        "updated_at": "2026-04-21T07:31:27.671853Z",
+        "note": "Kupiec Poznański",
+        "city": "Poznań",
+        "postal_code": "60-001",
+        "state_code": "30",
+        "lang_code": "en",
+        "street": "ul. Wiosny Ludów 2",
+        "translations": [
+          {
+            "default": true,
+            "name": "Poznań HQ",
+            "note": "Kupiec Poznański",
+            "city": "Poznań",
+            "postal_code": "60-001",
+            "lang_code": "en",
+            "street": "ul. Wiosny Ludów 2",
+            "filled_count": 5,
+            "total_count": 5,
+            "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+          }
+        ],
+        "state_name": "Wielkopolskie",
+        "active_offers_count": 0,
+        "active_requisitions_count": 0,
+        "is_deletable": true,
+        "archived_at": null,
+        "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+      },
+      {
+        "id": 23,
+        "name": "Berlin HQ",
+        "is_valid": true,
+        "country_code": "DE",
+        "created_at": "2026-04-21T07:31:27.672760Z",
+        "updated_at": "2026-04-21T07:31:27.672760Z",
+        "note": "Office in Berlin",
+        "city": "Berlin",
+        "postal_code": "10115",
+        "state_code": "BE",
+        "lang_code": "en",
+        "street": "Straße",
+        "translations": [
+          {
+            "default": true,
+            "name": "Berlin HQ",
+            "note": "Office in Berlin",
+            "city": "Berlin",
+            "postal_code": "10115",
+            "lang_code": "en",
+            "street": "Straße",
+            "filled_count": 5,
+            "total_count": 5,
+            "full_address": "Germany, Berlin, Berlin, 10115, Straße"
+          }
+        ],
+        "state_name": "Berlin",
+        "active_offers_count": 0,
+        "active_requisitions_count": 0,
+        "is_deletable": true,
+        "archived_at": "2026-04-21T07:31:27.672673Z",
+        "full_address": "Germany, Berlin, Berlin, 10115, Straße"
+      }
+    ]
+  },
+  "tags": [
+    "offer_templates",
+    "locations"
+  ]
+}

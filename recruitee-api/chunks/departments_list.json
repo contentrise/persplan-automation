@@ -1,0 +1,54 @@
+{
+  "id": "departments_list",
+  "method": "GET",
+  "path": "/c/{company_id}/departments",
+  "summary": "List company departments",
+  "description": "List company departments. Endpoint: GET /c/{company_id}/departments. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/departments\n\nRequired params: company_id",
+  "example_response": {
+    "departments": [
+      {
+        "id": 118,
+        "name": "Engineering",
+        "status": null,
+        "offers_count": 1,
+        "grouped_translations": {
+          "de": {
+            "name": null
+          },
+          "en": {
+            "name": "Engineering"
+          }
+        },
+        "talent_pools_count": 2
+      },
+      {
+        "id": 119,
+        "name": "Marketing",
+        "status": null,
+        "offers_count": 2,
+        "grouped_translations": {
+          "de": {
+            "name": null
+          },
+          "en": {
+            "name": "Marketing"
+          }
+        },
+        "talent_pools_count": 1
+      }
+    ]
+  },
+  "tags": [
+    "departments"
+  ]
+}

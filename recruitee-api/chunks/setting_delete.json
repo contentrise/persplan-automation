@@ -1,0 +1,61 @@
+{
+  "id": "setting_delete",
+  "method": "PATCH",
+  "path": "/c/{company_id}/texting/settings/delete_phone/{phone_number}",
+  "summary": "Delete phone number at provider for current company",
+  "description": "Delete phone number at provider for current company. Endpoint: PATCH /c/{company_id}/texting/settings/delete_phone/{phone_number}. Required parameters: phone_number, company_id.",
+  "params": [
+    {
+      "name": "phone_number",
+      "type": "string",
+      "required": true,
+      "description": "Phone number to delete, i.e. +48123456789",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/texting/settings/delete_phone/{phone_number}\n\nRequired params: phone_number, company_id",
+  "example_response": {
+    "texting_settings": {
+      "enabled": true,
+      "company_id": 1888,
+      "phone_numbers": [],
+      "provider_active": false,
+      "supported_countries": [
+        {
+          "requirements": [],
+          "country_code": "CA",
+          "country_name": "Canada"
+        },
+        {
+          "requirements": [
+            "address"
+          ],
+          "country_code": "NL",
+          "country_name": "Netherlands"
+        },
+        {
+          "requirements": [],
+          "country_code": "SE",
+          "country_name": "Sweden"
+        },
+        {
+          "requirements": [],
+          "country_code": "US",
+          "country_name": "United States"
+        }
+      ],
+      "free_credits_active": null
+    }
+  },
+  "tags": [
+    "texting",
+    "settings"
+  ]
+}

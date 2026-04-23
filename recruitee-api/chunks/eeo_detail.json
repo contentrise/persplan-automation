@@ -1,0 +1,21 @@
+{
+  "id": "eeo_detail",
+  "method": "GET",
+  "path": "/share/eeo/{data_request_token}",
+  "summary": "Shows EEO kind and company name",
+  "description": "Shows EEO kind and company name. Endpoint: GET /share/eeo/{data_request_token}. Required parameters: data_request_token.",
+  "params": [
+    {
+      "name": "data_request_token",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/eeo/{data_request_token}\n\nRequired params: data_request_token",
+  "example_response": {},
+  "tags": [
+    "eeo"
+  ]
+}

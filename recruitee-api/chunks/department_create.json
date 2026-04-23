@@ -1,0 +1,68 @@
+{
+  "id": "department_create",
+  "method": "POST",
+  "path": "/c/{company_id}/departments",
+  "summary": "Create company departments",
+  "description": "Create company departments. Endpoint: POST /c/{company_id}/departments. Required parameters: company_id. Optional parameters include department, departments.",
+  "params": [
+    {
+      "name": "department",
+      "type": "string",
+      "required": false,
+      "description": "Department name (deprecated)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "departments",
+      "type": "array",
+      "required": false,
+      "description": "Array of department names",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"departments\": [\n\"Engineering\",\n\"Marketing\"\n]\n}",
+  "example_response": {
+    "departments": [
+      {
+        "id": 136,
+        "name": "Engineering",
+        "status": "created",
+        "offers_count": 0,
+        "grouped_translations": {
+          "de": {
+            "name": null
+          },
+          "en": {
+            "name": "Engineering"
+          }
+        },
+        "talent_pools_count": 0
+      },
+      {
+        "id": 137,
+        "name": "Marketing",
+        "status": "created",
+        "offers_count": 0,
+        "grouped_translations": {
+          "de": {
+            "name": null
+          },
+          "en": {
+            "name": "Marketing"
+          }
+        },
+        "talent_pools_count": 0
+      }
+    ]
+  },
+  "tags": [
+    "departments"
+  ]
+}

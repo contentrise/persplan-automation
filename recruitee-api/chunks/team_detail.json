@@ -1,0 +1,49 @@
+{
+  "id": "team_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/teams/{id}",
+  "summary": "Get team by id",
+  "description": "Get team by id. Endpoint: GET /c/{company_id}/teams/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Team ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/teams/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "team": {
+      "id": 4,
+      "name": "Team 12",
+      "guid": null,
+      "members": [
+        {
+          "id": 332,
+          "email": "john515@recruitee.com",
+          "has_avatar": false,
+          "initials": "JD",
+          "photo_normal_url": "tmp/bow/admins/332/normal_avatar_b25e3mbf23pa.png",
+          "photo_thumb_url": "tmp/bow/admins/332/thumb_avatar_b25e3mbf23pa.png",
+          "timezone": "Europe/London",
+          "first_name": "John",
+          "last_name": "Doe",
+          "time_format24": true,
+          "anonymized_at": null
+        }
+      ]
+    }
+  },
+  "tags": [
+    "teams"
+  ]
+}

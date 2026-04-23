@@ -1,0 +1,82 @@
+{
+  "id": "email_templates_list",
+  "method": "GET",
+  "path": "/c/{company_id}/email_templates",
+  "summary": "List email templates",
+  "description": "List email templates. Endpoint: GET /c/{company_id}/email_templates. Required parameters: title, company_id.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/email_templates\n\nRequired params: title, company_id",
+  "example_response": {
+    "email_templates": [
+      {
+        "id": 4,
+        "position": 1,
+        "title": "Template 1",
+        "admin_id": 7129,
+        "subject": "Thanks for applying",
+        "created_at": "2026-04-21T07:33:23.901463Z",
+        "updated_at": "2026-04-21T07:33:23.901463Z",
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        },
+        "body_html": "Thanks for applying, Regards",
+        "template_attachment_assignments": []
+      },
+      {
+        "id": 5,
+        "position": 2,
+        "title": "Template 2",
+        "admin_id": 7129,
+        "subject": "Thanks for applying",
+        "created_at": "2026-04-21T07:33:23.901780Z",
+        "updated_at": "2026-04-21T07:33:23.901780Z",
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        },
+        "body_html": "Thanks for applying, Regards",
+        "template_attachment_assignments": []
+      },
+      {
+        "id": 6,
+        "position": 3,
+        "title": "Template 3",
+        "admin_id": 7127,
+        "subject": "Thanks for applying",
+        "created_at": "2026-04-21T07:33:23.902059Z",
+        "updated_at": "2026-04-21T07:33:23.902059Z",
+        "visibility": {
+          "level": "private",
+          "admin_ids": [
+            7127
+          ],
+          "role_ids": []
+        },
+        "body_html": "Thanks for applying, Regards",
+        "template_attachment_assignments": []
+      }
+    ]
+  },
+  "tags": [
+    "email_templates",
+    "mailbox"
+  ]
+}

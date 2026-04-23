@@ -1,0 +1,53 @@
+{
+  "id": "email_provider_toggle",
+  "method": "PATCH",
+  "path": "/c/{company_id}/email_provider/toggle",
+  "summary": "Toggle auto-forward for email provider",
+  "description": "Toggle auto-forward for email provider. Endpoint: PATCH /c/{company_id}/email_provider/toggle. Required parameters: auto_forward, company_id.",
+  "params": [
+    {
+      "name": "auto_forward",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"email_provider\": {\n\"auto_forward\": true\n}\n}",
+  "example_response": {
+    "email_provider": {
+      "id": 25,
+      "domain": "company596.test.recruitee.com",
+      "signature": null,
+      "email": "john.doe@acme.test.recruitee.com",
+      "username": "john.doe",
+      "provider": "recruitee",
+      "subdomain": "company596",
+      "migrated": false,
+      "auto_forward": true,
+      "domain_migration_date": null,
+      "domain_migration_future_email": null,
+      "domain_migration_infobox": false,
+      "ooo_message_text": null,
+      "ooo_message_html": null,
+      "ooo_message_json": null,
+      "ooo_enabled": false,
+      "ooo_starts_at": null,
+      "ooo_ends_at": null,
+      "ooo_status": "inactive",
+      "ooo_include_signature": false,
+      "username_display": "john.doe"
+    }
+  },
+  "tags": [
+    "email_provider",
+    "mailbox"
+  ]
+}

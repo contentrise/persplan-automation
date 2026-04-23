@@ -1,0 +1,51 @@
+{
+  "id": "version_checks_list",
+  "method": "GET",
+  "path": "/c/{company_id}/mobile_app/version_check",
+  "summary": "See if you're on a good version of the mobile app and optionally get a message to be shown to the user",
+  "description": "See if you're on a good version of the mobile app and optionally get a message to be shown to the user. Endpoint: GET /c/{company_id}/mobile_app/version_check. Required parameters: company_id. Optional parameters include locale, app_version, platform.",
+  "params": [
+    {
+      "name": "locale",
+      "type": "string",
+      "required": false,
+      "description": "f.e. ‘en’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "app_version",
+      "type": "string",
+      "required": false,
+      "description": "f.e. ‘0.0.2’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "platform",
+      "type": "string",
+      "required": false,
+      "description": "‘ios’ | ‘android’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/mobile_app/version_check\n\nRequired params: company_id\n\nOptional params: locale, app_version, platform",
+  "example_response": {
+    "message": {
+      "id": "2.1.2-api-update",
+      "title": "Update required",
+      "body_html": "Please update the Recruitee app to the latest version."
+    },
+    "update_available": true,
+    "update_required": true
+  },
+  "tags": [
+    "mobile_app",
+    "version_check"
+  ]
+}

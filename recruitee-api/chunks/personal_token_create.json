@@ -1,0 +1,33 @@
+{
+  "id": "personal_token_create",
+  "method": "POST",
+  "path": "/c/{company_id}/oauth/personal_tokens",
+  "summary": "Create new personal token",
+  "description": "Create new personal token. Endpoint: POST /c/{company_id}/oauth/personal_tokens. Required parameters: company_id. Optional parameters include meta.",
+  "params": [
+    {
+      "name": "meta",
+      "type": "map",
+      "required": false,
+      "description": "With a ‘name’ attribute",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"personal_token\": {}\n}",
+  "example_response": {
+    "error": [
+      "Forbidden"
+    ]
+  },
+  "tags": [
+    "personal_tokens",
+    "oauth"
+  ]
+}

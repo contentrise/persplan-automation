@@ -1,0 +1,29 @@
+{
+  "id": "activities_list_5",
+  "method": "GET",
+  "path": "/c/{company_id}/tracking/requisitions/{requisition_id}/activities",
+  "summary": "List activities for requisition",
+  "description": "List activities for requisition. Endpoint: GET /c/{company_id}/tracking/requisitions/{requisition_id}/activities. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/tracking/requisitions/{requisition_id}/activities\n\nRequired params: requisition_id, company_id",
+  "example_response": {},
+  "tags": [
+    "tracking",
+    "requisitions"
+  ]
+}

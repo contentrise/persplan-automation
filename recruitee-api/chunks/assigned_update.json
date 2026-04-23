@@ -1,0 +1,57 @@
+{
+  "id": "assigned_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/approval_flows/assigned",
+  "summary": "Update requisition approval flow approvers",
+  "description": "Update requisition approval flow approvers. Endpoint: PATCH /c/{company_id}/requisitions/{requisition_id}/approval_flows/assigned. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"approval_flow\": {\n\"steps\": [\n{\n\"id\": 36\n},\n{\n\"approver_ids\": [\n1511,\n1512\n],\n\"id\": 37\n}\n]\n}\n}",
+  "example_response": {
+    "approval_flow": {
+      "id": 36,
+      "title": "Approval Flow",
+      "custom": true,
+      "steps": [
+        {
+          "id": 36,
+          "position": 24,
+          "kind": "all",
+          "approver_ids": [
+            1510
+          ],
+          "allows_edit": true
+        },
+        {
+          "id": 37,
+          "position": 25,
+          "kind": "all",
+          "approver_ids": [
+            1511,
+            1512
+          ],
+          "allows_edit": true
+        }
+      ],
+      "assigned": true
+    }
+  },
+  "tags": [
+    "requisitions",
+    "approval_flows"
+  ]
+}

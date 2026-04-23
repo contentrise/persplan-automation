@@ -1,0 +1,30 @@
+{
+  "id": "message_send",
+  "method": "PATCH",
+  "path": "/c/{company_id}/texting/messages/send_now",
+  "summary": "Send now scheduled message",
+  "description": "Send now scheduled message. Endpoint: PATCH /c/{company_id}/texting/messages/send_now. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/texting/messages/send_now\n\nRequired params: company_id",
+  "example_response": {
+    "errors": [
+      {
+        "code": "unprocessable_entity",
+        "data": {},
+        "message": "Unprocessable Entity"
+      }
+    ]
+  },
+  "tags": [
+    "texting",
+    "messages"
+  ]
+}

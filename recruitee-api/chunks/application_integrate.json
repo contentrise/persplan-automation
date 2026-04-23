@@ -1,0 +1,22 @@
+{
+  "id": "application_integrate",
+  "method": "PATCH",
+  "path": "/c/{company_id}/linkedin/application/integrate",
+  "summary": "Integrate company's LinkedIn application",
+  "description": "Integrate company's LinkedIn application. Endpoint: PATCH /c/{company_id}/linkedin/application/integrate. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/linkedin/application/integrate\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "linkedin",
+    "application"
+  ]
+}

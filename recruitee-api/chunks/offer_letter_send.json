@@ -1,0 +1,167 @@
+{
+  "id": "offer_letter_send",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_letters/{id}/send",
+  "summary": "Send offer letter",
+  "description": "Send offer letter. Endpoint: POST /c/{company_id}/offer_letters/{id}/send. Required parameters: company_id. Optional parameters include id, cc, to, attachments, email_provider_id, subject, body_html, bcc.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer letter ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "cc",
+      "type": "array",
+      "required": false,
+      "description": "List of CC-recipients",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "to",
+      "type": "array",
+      "required": false,
+      "description": "List of TO-recipients",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "attachments",
+      "type": "array",
+      "required": false,
+      "description": "List of attachment IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email_provider_id",
+      "type": "integer",
+      "required": false,
+      "description": "Optional admin’s email provider",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "subject",
+      "type": "string",
+      "required": false,
+      "description": "Email subject",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "body_html",
+      "type": "string",
+      "required": false,
+      "description": "Email body (html)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "bcc",
+      "type": "array",
+      "required": false,
+      "description": "List of BCC-recipients",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_letter\": {\n\"email_body_html\": \"<p>New email body</p>\",\n\"email_subject\": \"New subject\",\n\"lang_code\": \"de\",\n\"title\": \"New title\"\n},\n\"to\": [\n{\n\"candidate_email\": \"john@doe.com\",\n\"candidate_id\": 2432\n}\n]\n}",
+  "example_response": {
+    "job": {
+      "uuid": "8ced14d6-d6fb-4b1d-8c32-6a7bc7838d04"
+    },
+    "offer_letter": {
+      "id": 40,
+      "status": "sent",
+      "title": "New title",
+      "token": "9496b800-bd3d-485b-ae1c-6dbd9eeb086a",
+      "details": [
+        {
+          "description": "Best Offer",
+          "title": "Position"
+        }
+      ],
+      "admin_id": 9728,
+      "candidate_id": 2432,
+      "created_at": "2026-04-21T07:33:59.288190Z",
+      "updated_at": "2026-04-21T07:33:59.293235Z",
+      "offer_id": 2051,
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          9728
+        ],
+        "role_ids": [
+          4964
+        ]
+      },
+      "lang_code": "de",
+      "email_subject": "New subject",
+      "email_body_html": "<p>New email body</p>",
+      "sent_at": "2026-04-21T07:33:59.293226Z",
+      "salary": {
+        "enabled": true,
+        "value": "10000",
+        "description": null,
+        "period": "month",
+        "currency": "EUR",
+        "heading": null
+      },
+      "published_at": "2026-04-21T07:33:59.293228Z",
+      "email_attachment_assignments": [],
+      "disclaimer": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "heading": {
+        "enabled": true,
+        "description_html": null,
+        "description_json": null,
+        "heading": "Welcome to the team, John Doe!"
+      },
+      "intro": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "role_description": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "summary": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "benefits": {
+        "enabled": true,
+        "items": [
+          {
+            "description": "Fully paid",
+            "title": "Insurance"
+          }
+        ],
+        "heading": "Benefits"
+      },
+      "start_date": {
+        "date": null,
+        "description": null,
+        "title": null
+      },
+      "link_deactivated": false
+    }
+  },
+  "tags": [
+    "offer_letters"
+  ]
+}

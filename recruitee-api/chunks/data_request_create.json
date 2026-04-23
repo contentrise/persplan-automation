@@ -1,0 +1,45 @@
+{
+  "id": "data_request_create",
+  "method": "POST",
+  "path": "/c/{company_id}/eeo/bulk/data_request",
+  "summary": "Request EEO data from a candidate/candidates",
+  "description": "Request EEO data from a candidate/candidates. Endpoint: POST /c/{company_id}/eeo/bulk/data_request. Required parameters: candidate_ids, company_id. Optional parameters include email_subject, email_body_html.",
+  "params": [
+    {
+      "name": "email_subject",
+      "type": "string",
+      "required": false,
+      "description": "Email subject",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email_body_html",
+      "type": "string",
+      "required": false,
+      "description": "Email body html",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_ids",
+      "type": "array",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidate_ids\": [\n2057,\n2058\n]\n}",
+  "example_response": {
+    "uuid": "5557e0f9-102c-4e12-b035-958580064566"
+  },
+  "tags": [
+    "eeo",
+    "data_request"
+  ]
+}

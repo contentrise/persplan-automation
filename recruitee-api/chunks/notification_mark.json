@@ -1,0 +1,29 @@
+{
+  "id": "notification_mark",
+  "method": "POST",
+  "path": "/c/{company_id}/tracking/notifications/mark_as_not_viewed",
+  "summary": "Mark selected notifications as not viewed",
+  "description": "Mark selected notifications as not viewed. Endpoint: POST /c/{company_id}/tracking/notifications/mark_as_not_viewed. Required parameters: company_id. Optional parameters include ids.",
+  "params": [
+    {
+      "name": "ids",
+      "type": "array",
+      "required": false,
+      "description": "Array of notification IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/tracking/notifications/mark_as_not_viewed\n\nRequired params: company_id\n\nOptional params: ids",
+  "example_response": {},
+  "tags": [
+    "tracking",
+    "notifications"
+  ]
+}

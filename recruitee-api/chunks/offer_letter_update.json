@@ -1,0 +1,182 @@
+{
+  "id": "offer_letter_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_letters/{id}",
+  "summary": "Update offer letter",
+  "description": "Update offer letter. Endpoint: PATCH /c/{company_id}/offer_letters/{id}. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer letter ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_letter\": {\n\"benefits\": {\n\"enabled\": true,\n\"heading\": \"New benefits\",\n\"items\": [\n{\n\"description\": \"New provider\",\n\"title\": \"New insurance\"\n}\n]\n},\n\"details\": [\n{\n\"description\": \"New description\",\n\"title\": \"New position\"\n},\n{\n\"description\": \"90\",\n\"title\": \"New vacation days\"\n}\n],\n\"disclaimer\": {\n\"description_json\": {\n\"doc\": {\n\"content\": [\n{\n\"content\": [\n{\n\"text\": \"New disclaimer text\",\n\"type\": \"text\"\n}\n],\n\"type\": \"paragraph\"\n}\n],\n\"type\": \"doc\"\n}\n},\n\"enabled\": true,\n\"heading\": \"New disclaimer\"\n},\n\"email_attachment_assignments\": [\n{\n\"attachment_id\": 223\n},\n{\n\"attachment_id\": 224\n}\n],\n\"email_body_html\": \"<p>New email body</p>\",\n\"email_subject\": \"New subject\",\n\"lang_code\": \"de\",\n\"salary\": {\n\"currency\": \"EUR\",\n\"description\": \"New description\",\n\"enabled\": true,\n\"heading\": null,\n\"period\": \"year\",\n\"value\": 100000\n},\n\"start_date\": {\n\"date\": \"2026-04-22T07:33:59.351654Z\",\n\"description\": \"New description\",\n\"enabled\": true,\n\"title\": \"New start date\"\n},\n\"title\": \"New title\",\n\"visibility\": {\n\"admin_ids\": [\n9736,\n9738\n],\n\"level\": \"protected\",\n\"role_ids\": []\n}\n}\n}",
+  "example_response": {
+    "offer_letter": {
+      "id": 43,
+      "status": "draft",
+      "title": "New title",
+      "token": "1efdb7bc-ac77-481d-add3-1745b996843a",
+      "details": [
+        {
+          "description": "New description",
+          "title": "New position"
+        },
+        {
+          "description": "90",
+          "title": "New vacation days"
+        }
+      ],
+      "admin_id": 9736,
+      "candidate_id": 2435,
+      "created_at": "2026-04-21T07:33:59.348933Z",
+      "updated_at": "2026-04-21T07:33:59.357715Z",
+      "offer_id": 2054,
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          9736,
+          9738
+        ],
+        "role_ids": [
+          4968
+        ]
+      },
+      "lang_code": "de",
+      "email_subject": "New subject",
+      "email_body_html": "<p>New email body</p>",
+      "sent_at": null,
+      "salary": {
+        "enabled": true,
+        "value": "100000",
+        "description": "New description",
+        "period": "year",
+        "currency": "EUR",
+        "heading": null
+      },
+      "published_at": null,
+      "email_attachment_assignments": [
+        {
+          "id": 1,
+          "attachment": {
+            "id": 223,
+            "status": "ok",
+            "filename": "avatar.png",
+            "extension": "png",
+            "source": "default",
+            "kind": "image",
+            "admin_id": 9739,
+            "candidate_id": null,
+            "file_size": null,
+            "created_at": "2026-04-21T07:33:59.352218Z",
+            "image_thumbnail_url": "tmp/bow/attachments/223/image_thumbnail_avatar.png",
+            "image_url": "tmp/bow/attachments/223/image_avatar.png",
+            "file_url": "tmp/bow/attachments/223/avatar.png",
+            "offer_id": null,
+            "talent_pool_id": null,
+            "requisition_id": null,
+            "guest_id": null,
+            "uploader": null
+          }
+        },
+        {
+          "id": 2,
+          "attachment": {
+            "id": 224,
+            "status": "ok",
+            "filename": "avatar.png",
+            "extension": "png",
+            "source": "default",
+            "kind": "image",
+            "admin_id": 9740,
+            "candidate_id": null,
+            "file_size": null,
+            "created_at": "2026-04-21T07:33:59.353325Z",
+            "image_thumbnail_url": "tmp/bow/attachments/224/image_thumbnail_avatar.png",
+            "image_url": "tmp/bow/attachments/224/image_avatar.png",
+            "file_url": "tmp/bow/attachments/224/avatar.png",
+            "offer_id": null,
+            "talent_pool_id": null,
+            "requisition_id": null,
+            "guest_id": null,
+            "uploader": null
+          }
+        }
+      ],
+      "disclaimer": {
+        "enabled": true,
+        "description_html": "<p>Mocked html</p>",
+        "description_json": {
+          "doc": {
+            "content": [
+              {
+                "content": [
+                  {
+                    "text": "New disclaimer text",
+                    "type": "text"
+                  }
+                ],
+                "type": "paragraph"
+              }
+            ],
+            "type": "doc"
+          }
+        },
+        "heading": "New disclaimer"
+      },
+      "heading": {
+        "enabled": true,
+        "description_html": null,
+        "description_json": null,
+        "heading": "Welcome to the team, John Doe!"
+      },
+      "intro": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "role_description": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "summary": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "benefits": {
+        "enabled": true,
+        "items": [
+          {
+            "description": "New provider",
+            "title": "New insurance"
+          }
+        ],
+        "heading": "New benefits"
+      },
+      "start_date": {
+        "date": "2026-04-22T07:33:59.351654Z",
+        "description": "New description",
+        "title": "New start date"
+      },
+      "link_deactivated": false
+    }
+  },
+  "tags": [
+    "offer_letters"
+  ]
+}

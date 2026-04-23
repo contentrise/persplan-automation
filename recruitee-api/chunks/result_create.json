@@ -1,0 +1,80 @@
+{
+  "id": "result_create",
+  "method": "POST",
+  "path": "/share/containers/{token}/candidates/{candidate_id}/results",
+  "summary": "Create interview result for candidate",
+  "description": "Create interview result for candidate. Endpoint: POST /share/containers/{token}/candidates/{candidate_id}/results. Required parameters: kind, token, candidate_id, auth_token, rating. Optional parameters include offer_id, stage_id, rating_note.",
+  "params": [
+    {
+      "name": "kind",
+      "type": "optional",
+      "required": true,
+      "description": "Result kind, only: ‘rating’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auth_token",
+      "type": "string",
+      "required": true,
+      "description": "Guest auth token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "rating",
+      "type": "string",
+      "required": true,
+      "description": "Rating, can be: ‘strong_yes’, ‘yes’, ‘neutral’, ‘no’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stage_id",
+      "type": "integer",
+      "required": false,
+      "description": "Stage ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "rating_note",
+      "type": "string",
+      "required": false,
+      "description": "Rating note",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_result\": {\n\"kind\": \"rating\",\n\"rating\": \"strong_yes\",\n\"rating_note\": \"Great skills\",\n\"talent_pool_id\": 1155\n}\n}",
+  "example_response": {
+    "error": [
+      "Talent pool id is not permitted, you do not have access"
+    ],
+    "error_fields": {
+      "talent_pool_id": [
+        "is not permitted, you do not have access"
+      ]
+    }
+  },
+  "tags": [
+    "containers",
+    "candidates"
+  ]
+}

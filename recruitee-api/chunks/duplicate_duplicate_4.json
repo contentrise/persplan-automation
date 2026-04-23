@@ -1,0 +1,64 @@
+{
+  "id": "duplicate_duplicate_4",
+  "method": "PATCH",
+  "path": "/c/{company_id}/locations/{id}/duplicate",
+  "summary": "Duplicate location",
+  "description": "Duplicate location. Endpoint: PATCH /c/{company_id}/locations/{id}/duplicate. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Location ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/locations/{id}/duplicate\n\nRequired params: id, company_id",
+  "example_response": {
+    "location": {
+      "id": 203,
+      "name": "Poznań HQ (2)",
+      "is_valid": true,
+      "country_code": "PL",
+      "created_at": "2026-04-21T07:32:39.705882Z",
+      "updated_at": "2026-04-21T07:32:39.705882Z",
+      "note": "Kupiec Poznański",
+      "city": "Poznań",
+      "postal_code": "60-001",
+      "state_code": "30",
+      "lang_code": "en",
+      "street": "ul. Wiosny Ludów 2",
+      "translations": [
+        {
+          "default": true,
+          "name": "Poznań HQ (2)",
+          "note": "Kupiec Poznański",
+          "city": "Poznań",
+          "postal_code": "60-001",
+          "lang_code": "en",
+          "street": "ul. Wiosny Ludów 2",
+          "filled_count": 5,
+          "total_count": 5,
+          "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+        }
+      ],
+      "state_name": "Wielkopolskie",
+      "active_offers_count": 0,
+      "active_requisitions_count": 0,
+      "is_deletable": true,
+      "archived_at": null,
+      "full_address": "Poland, Wielkopolskie, Poznań, 60-001, ul. Wiosny Ludów 2"
+    }
+  },
+  "tags": [
+    "locations",
+    "duplicate"
+  ]
+}

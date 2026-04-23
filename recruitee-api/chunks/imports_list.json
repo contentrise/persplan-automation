@@ -1,0 +1,115 @@
+{
+  "id": "imports_list",
+  "method": "GET",
+  "path": "/c/{company_id}/imports",
+  "summary": "List imports",
+  "description": "List imports. Endpoint: GET /c/{company_id}/imports. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/imports\n\nRequired params: company_id",
+  "example_response": {
+    "imports": [
+      {
+        "id": 6,
+        "name": "source1",
+        "status": "expired",
+        "file_name": "import.csv",
+        "admin_id": 1092,
+        "file_url": "tmp/bow/imports/6/import.csv",
+        "source_id": 10
+      },
+      {
+        "id": 5,
+        "name": null,
+        "status": "uploaded",
+        "file_name": "import.csv",
+        "admin_id": 1091,
+        "file_url": "tmp/bow/imports/5/import.csv"
+      },
+      {
+        "id": 4,
+        "name": null,
+        "status": "uploaded",
+        "file_name": "import.csv",
+        "admin_id": 1090,
+        "file_url": "tmp/bow/imports/4/import.csv"
+      },
+      {
+        "id": 3,
+        "name": null,
+        "status": "uploaded",
+        "file_name": "import.csv",
+        "admin_id": 1089,
+        "file_url": "tmp/bow/imports/3/import.csv"
+      }
+    ],
+    "references": [
+      {
+        "id": 1092,
+        "type": "Admin",
+        "email": "john474@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1092/normal_avatar_bba3ok7tbstm.png",
+        "photo_thumb_url": "tmp/bow/admins/1092/thumb_avatar_bba3ok7tbstm.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 1091,
+        "type": "Admin",
+        "email": "john473@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1091/normal_avatar_7knem7b5f51t.png",
+        "photo_thumb_url": "tmp/bow/admins/1091/thumb_avatar_7knem7b5f51t.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 1090,
+        "type": "Admin",
+        "email": "john472@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1090/normal_avatar_kus3mmsskogh.png",
+        "photo_thumb_url": "tmp/bow/admins/1090/thumb_avatar_kus3mmsskogh.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 1089,
+        "type": "Admin",
+        "email": "john471@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1089/normal_avatar_91tckwke6y69.png",
+        "photo_thumb_url": "tmp/bow/admins/1089/thumb_avatar_91tckwke6y69.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ]
+  },
+  "tags": [
+    "imports"
+  ]
+}

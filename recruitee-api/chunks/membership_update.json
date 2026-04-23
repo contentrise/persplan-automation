@@ -1,0 +1,63 @@
+{
+  "id": "membership_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/memberships/{id}",
+  "summary": "Update membership",
+  "description": "Update membership. Endpoint: PATCH /c/{company_id}/memberships/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Membership ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"membership\": {\n\"id\": 3780,\n\"offer_ids\": [\n1656\n],\n\"role_id\": 3897\n}\n}",
+  "example_response": {
+    "membership": {
+      "id": 3780,
+      "admin_id": 7782,
+      "role": "Administrator",
+      "role_admin": false,
+      "role_id": 3897,
+      "created_at": "2026-04-21T07:33:30.776116Z",
+      "show_academy_button": true,
+      "offer_ids": [
+        1656
+      ],
+      "talent_pool_ids": [],
+      "requisition_ids": [],
+      "is_active": true,
+      "accessible_placement_ids": [],
+      "two_factor_auth_enabled": false
+    },
+    "references": [
+      {
+        "id": 7782,
+        "type": "Admin",
+        "email": "john9817@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/7782/normal_avatar_3u2p7kpw9yhu.png",
+        "photo_thumb_url": "tmp/bow/admins/7782/thumb_avatar_3u2p7kpw9yhu.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ]
+  },
+  "tags": [
+    "memberships",
+    "company"
+  ]
+}

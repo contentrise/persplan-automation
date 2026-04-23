@@ -1,0 +1,31 @@
+{
+  "id": "app_enable",
+  "method": "PATCH",
+  "path": "/two_factor_authentication_settings/app/enable",
+  "summary": "Enables 2FA by app for current admin",
+  "description": "Enables 2FA by app for current admin. Endpoint: PATCH /two_factor_authentication_settings/app/enable. Required parameters: totp_code.",
+  "params": [
+    {
+      "name": "totp_code",
+      "type": "string",
+      "required": true,
+      "description": "One time password for authorization",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /two_factor_authentication_settings/app/enable\n\nRequired params: totp_code",
+  "example_response": {
+    "two_factor_authentication_settings": {
+      "phone": null,
+      "app_enabled": true,
+      "sms_enabled": false,
+      "show_account_recovered": false,
+      "updated_at": "2026-04-21T07:32:45.544324Z"
+    }
+  },
+  "tags": [
+    "two_factor_authentication_settings",
+    "app",
+    "admin"
+  ]
+}

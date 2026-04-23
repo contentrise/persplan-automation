@@ -1,0 +1,133 @@
+{
+  "id": "placement_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/placements/{id}",
+  "summary": "Delete placement",
+  "description": "Delete placement. Endpoint: DELETE /c/{company_id}/placements/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Placement ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/placements/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 2176,
+        "position": 322,
+        "status": "draft",
+        "type": "Offer",
+        "remote": false,
+        "description": "<p>Elixir</p>\n",
+        "title": "Best Offer",
+        "location": "",
+        "kind": "job",
+        "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+        "url": null,
+        "created_at": "2026-04-21T07:34:00.996253Z",
+        "department": null,
+        "lang_code": "en",
+        "department_id": null,
+        "slug": "best-offer415",
+        "hybrid": false,
+        "on_site": true,
+        "guid": "guid321",
+        "recruiter_id": null,
+        "hiring_manager_id": null,
+        "wysiwyg_editor": "redactor",
+        "pipeline_template_id": 6593,
+        "careers_job_page_layout_id": null,
+        "job_position_id": null,
+        "mailbox_email": null,
+        "highlight_html": "<p>Elixir</p>\n"
+      },
+      {
+        "id": 53257,
+        "name": "Applied",
+        "position": 6702,
+        "type": "Stage",
+        "group": "active",
+        "category": "none",
+        "created_at": "2026-04-21T07:34:00.997668Z",
+        "updated_at": "2026-04-21T07:34:00.997668Z",
+        "fair_evaluations_enabled": false,
+        "pipeline_template_id": null,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 2553,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:34:00.996874Z",
+        "updated_at": "2026-04-21T07:34:00.996874Z",
+        "is_hired": false,
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=2553&company=4725",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      }
+    ],
+    "placement": {
+      "id": 1391,
+      "position": 216,
+      "candidate_id": 2553,
+      "language": null,
+      "created_at": "2026-04-21T07:34:00.997841Z",
+      "updated_at": "2026-04-21T07:34:00.997841Z",
+      "offer_id": 2176,
+      "talent_pool_id": null,
+      "positive_ratings": null,
+      "ratings": {},
+      "hired_at": null,
+      "hired_by_id": null,
+      "location_ids": [],
+      "work_location_id": null,
+      "opening_id": null,
+      "overdue_diff": null,
+      "overdue_at": null,
+      "stage_id": 53257,
+      "job_starts_at": null,
+      "time_to_hire": null
+    }
+  },
+  "tags": [
+    "placements",
+    "pipeline"
+  ]
+}

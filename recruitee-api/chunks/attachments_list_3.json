@@ -1,0 +1,273 @@
+{
+  "id": "attachments_list_3",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/attachments",
+  "summary": "List attachments for requisitions",
+  "description": "List attachments for requisitions. Endpoint: GET /c/{company_id}/requisitions/{requisition_id}/attachments. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions/{requisition_id}/attachments\n\nRequired params: requisition_id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 2570,
+        "type": "Admin",
+        "email": "john446@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2570/normal_avatar_8efm7u4y9959.png",
+        "photo_thumb_url": "tmp/bow/admins/2570/thumb_avatar_8efm7u4y9959.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 2569,
+        "type": "Admin",
+        "email": "john445@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2569/normal_avatar_ldp2ak7m1o4v.png",
+        "photo_thumb_url": "tmp/bow/admins/2569/thumb_avatar_ldp2ak7m1o4v.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 2568,
+        "type": "Admin",
+        "email": "john444@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2568/normal_avatar_ygroygc15cwk.png",
+        "photo_thumb_url": "tmp/bow/admins/2568/thumb_avatar_ygroygc15cwk.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 2567,
+        "type": "Admin",
+        "email": "john443@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2567/normal_avatar_1grc6tc1dsrg.png",
+        "photo_thumb_url": "tmp/bow/admins/2567/thumb_avatar_1grc6tc1dsrg.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 2566,
+        "type": "Admin",
+        "email": "john442@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2566/normal_avatar_54evskw67f3y.png",
+        "photo_thumb_url": "tmp/bow/admins/2566/thumb_avatar_54evskw67f3y.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 2565,
+        "type": "Admin",
+        "email": "john441@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2565/normal_avatar_lsnvla36wcg2.png",
+        "photo_thumb_url": "tmp/bow/admins/2565/thumb_avatar_lsnvla36wcg2.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "attachments": [
+      {
+        "id": 114,
+        "status": "ok",
+        "filename": "avatar.png",
+        "extension": "png",
+        "source": "note",
+        "kind": "image",
+        "admin_id": 2570,
+        "candidate_id": null,
+        "file_size": null,
+        "created_at": "2026-04-21T07:31:48.870567Z",
+        "note_id": 52,
+        "image_thumbnail_url": "tmp/bow/attachments/114/image_thumbnail_avatar.png",
+        "image_url": "tmp/bow/attachments/114/image_avatar.png",
+        "file_url": "tmp/bow/attachments/114/avatar.png",
+        "offer_id": null,
+        "talent_pool_id": null,
+        "requisition_id": null,
+        "guest_id": null,
+        "uploader": null,
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        }
+      },
+      {
+        "id": 113,
+        "status": "ok",
+        "filename": "avatar.png",
+        "extension": "png",
+        "source": "note",
+        "kind": "image",
+        "admin_id": 2569,
+        "candidate_id": null,
+        "file_size": null,
+        "created_at": "2026-04-21T07:31:48.869869Z",
+        "note_id": 52,
+        "image_thumbnail_url": "tmp/bow/attachments/113/image_thumbnail_avatar.png",
+        "image_url": "tmp/bow/attachments/113/image_avatar.png",
+        "file_url": "tmp/bow/attachments/113/avatar.png",
+        "offer_id": null,
+        "talent_pool_id": null,
+        "requisition_id": null,
+        "guest_id": null,
+        "uploader": null,
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        }
+      },
+      {
+        "id": 112,
+        "status": "ok",
+        "filename": "avatar.png",
+        "extension": "png",
+        "source": "note",
+        "kind": "image",
+        "admin_id": 2568,
+        "candidate_id": null,
+        "file_size": null,
+        "created_at": "2026-04-21T07:31:48.869155Z",
+        "note_id": 51,
+        "image_thumbnail_url": "tmp/bow/attachments/112/image_thumbnail_avatar.png",
+        "image_url": "tmp/bow/attachments/112/image_avatar.png",
+        "file_url": "tmp/bow/attachments/112/avatar.png",
+        "offer_id": null,
+        "talent_pool_id": null,
+        "requisition_id": null,
+        "guest_id": null,
+        "uploader": null,
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        }
+      },
+      {
+        "id": 111,
+        "status": "ok",
+        "filename": "avatar.png",
+        "extension": "png",
+        "source": "note",
+        "kind": "image",
+        "admin_id": 2567,
+        "candidate_id": null,
+        "file_size": null,
+        "created_at": "2026-04-21T07:31:48.868319Z",
+        "note_id": 51,
+        "image_thumbnail_url": "tmp/bow/attachments/111/image_thumbnail_avatar.png",
+        "image_url": "tmp/bow/attachments/111/image_avatar.png",
+        "file_url": "tmp/bow/attachments/111/avatar.png",
+        "offer_id": null,
+        "talent_pool_id": null,
+        "requisition_id": null,
+        "guest_id": null,
+        "uploader": null,
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        }
+      },
+      {
+        "id": 110,
+        "status": "ok",
+        "filename": "avatar.png",
+        "extension": "png",
+        "source": "requisition",
+        "kind": "image",
+        "admin_id": 2566,
+        "candidate_id": null,
+        "file_size": null,
+        "created_at": "2026-04-21T07:31:48.867509Z",
+        "image_thumbnail_url": "tmp/bow/attachments/110/image_thumbnail_avatar.png",
+        "image_url": "tmp/bow/attachments/110/image_avatar.png",
+        "file_url": "tmp/bow/attachments/110/avatar.png",
+        "offer_id": null,
+        "talent_pool_id": null,
+        "requisition_id": 44,
+        "guest_id": null,
+        "uploader": null,
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        }
+      },
+      {
+        "id": 109,
+        "status": "ok",
+        "filename": "avatar.png",
+        "extension": "png",
+        "source": "requisition",
+        "kind": "image",
+        "admin_id": 2565,
+        "candidate_id": null,
+        "file_size": null,
+        "created_at": "2026-04-21T07:31:48.866426Z",
+        "image_thumbnail_url": "tmp/bow/attachments/109/image_thumbnail_avatar.png",
+        "image_url": "tmp/bow/attachments/109/image_avatar.png",
+        "file_url": "tmp/bow/attachments/109/avatar.png",
+        "offer_id": null,
+        "talent_pool_id": null,
+        "requisition_id": 44,
+        "guest_id": null,
+        "uploader": null,
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        }
+      }
+    ],
+    "hidden_attachments_exist": false
+  },
+  "tags": [
+    "requisitions",
+    "attachments"
+  ]
+}

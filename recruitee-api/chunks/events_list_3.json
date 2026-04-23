@@ -1,0 +1,36 @@
+{
+  "id": "events_list_3",
+  "method": "GET",
+  "path": "/share/interview/events/sync_calendar",
+  "summary": "Sync calendar",
+  "description": "Sync calendar. Endpoint: GET /share/interview/events/sync_calendar. Required parameters: company_id, sync_token. Optional parameters include scope.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Scope, can be: ‘my’, ‘all’ (default ‘all’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "interger",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "sync_token",
+      "type": "string",
+      "required": true,
+      "description": "Admin calendar sync token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/interview/events/sync_calendar\n\nRequired params: company_id, sync_token\n\nOptional params: scope",
+  "example_response": "BEGIN:VCALENDAR\nMETHOD:PUBLISH\nVERSION:2.0\nPRODID:-//Recruitee//Recruitee Events//EN\nCALSCALE:GREGORIAN\nBEGIN:VEVENT\nCLASS:PUBLIC\nDTSTART:20260421T073210Z\nDTEND:20260421T083210Z\nCREATED:20260421T073210Z\nDTSTAMP:20260421T073210Z\nORGANIZER;CN=John Doe:MAILTO:john2426@recruitee.com\nSUMMARY:Meeting for Best Offer - John Doe\nDESCRIPTION:Event link:\\nhttp://company1131.recruitee.internal:3003/v/even\nts/aBcDeFg123424\\n\\n---------------------\\nInformation for the candidate:\\\nnYou've been invited to Meeting about the Best Offer position in Test Comp\nany.\\nInterviewers: John Doe\\n\\n---------------------\\nInformation for the\ninterviewers:\\nIf you're attending this meeting as an interviewer\\, you c\nan view the candidate's information in Recruitee.\\nhttp://app.recruitee.in\nternal:3003/#candidates?candidate=1085&company=1854\\n\nLOCATION:Poznan\nURL:http://company1131.recruitee.internal:3003/v/events/aBcDeFg123424\nUID:aBcDeFg123424@recruitee.com\nEND:VEVENT\nBEGIN:VEVENT\nCLASS:PUBLIC\nDTSTART:20260421T073210Z\nDTEND:20260421T083210Z\nCREATED:20260421T073210Z\nDTSTAMP:20260421T073210Z\nORGANIZER;CN=John Doe:MAILTO:john2426@recruitee.com\nSUMMARY:Meeting for Best Offer - John Doe\nDESCRIPTION:Event link:\\nhttp://company1131.recruitee.internal:3003/v/even\nts/aBcDeFg123425\\n\\n---------------------\\nInformation for the candidate:\\\nnYou've been invited to Meeting about the Best Offer position in Test Comp\nany.\\nInterviewers: John Doe\\n\\n---------------------\\nInformation for the\ninterviewers:\\nIf you're attending this meeting as an interviewer\\, you c\nan view the candidate's information in Recruitee.\\nhttp://app.recruitee.in\nternal:3003/#candidates?candidate=1086&company=1854\\n\nLOCATION:Poznan\nURL:http://company1131.recruitee.internal:3003/v/events/aBcDeFg123425\nUID:aBcDeFg123425@recruitee.com\nEND:VEVENT\nEND:VCALENDAR",
+  "tags": [
+    "interview",
+    "events"
+  ]
+}

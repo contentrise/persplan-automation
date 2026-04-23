@@ -1,0 +1,32 @@
+{
+  "id": "regions_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/locations/regions",
+  "summary": "List all countries with codes",
+  "description": "List all countries with codes. Endpoint: GET /c/{company_id}/locations/regions. Required parameters: company_id. Optional parameters include country_code.",
+  "params": [
+    {
+      "name": "country_code",
+      "type": "string",
+      "required": false,
+      "description": "Country code (for example ‘PL’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/locations/regions\n\nRequired params: company_id\n\nOptional params: country_code",
+  "example_response": {
+    "regions": []
+  },
+  "tags": [
+    "locations",
+    "regions",
+    "resource"
+  ]
+}

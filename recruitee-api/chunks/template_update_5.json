@@ -1,0 +1,52 @@
+{
+  "id": "template_update_5",
+  "method": "PATCH",
+  "path": "/c/{company_id}/referral/templates/{id}",
+  "summary": "Update referral template",
+  "description": "Update referral template. Endpoint: PATCH /c/{company_id}/referral/templates/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Referral template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"referral_template\": {\n\"name\": \"New name\"\n}\n}",
+  "example_response": {
+    "referral_template": {
+      "default": false,
+      "id": 90,
+      "name": "New name",
+      "position": 21,
+      "category": null,
+      "created_at": "2026-04-21T07:31:59.045542Z",
+      "updated_at": "2026-04-21T07:31:59.047950Z",
+      "custom": false,
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0,
+      "referral_questions": [
+        {
+          "id": 95,
+          "position": 29,
+          "options": [],
+          "title": "Default",
+          "required": false,
+          "kind": "string"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "referral",
+    "templates"
+  ]
+}

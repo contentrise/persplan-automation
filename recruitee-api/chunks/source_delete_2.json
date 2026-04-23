@@ -1,0 +1,36 @@
+{
+  "id": "source_delete_2",
+  "method": "DELETE",
+  "path": "/c/{company_id}/sources",
+  "summary": "Remove candidate sources from company",
+  "description": "Remove candidate sources from company. Endpoint: DELETE /c/{company_id}/sources. Required parameters: company_id. Optional parameters include id, ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Source ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ids",
+      "type": "integer",
+      "required": false,
+      "description": "Source IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"ids\": [\n167\n]\n}",
+  "example_response": {},
+  "tags": [
+    "sources",
+    "tagging"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "id": "guest_update",
+  "method": "PUT",
+  "path": "/c/{company_id}/share/guests/{id}",
+  "summary": "Update guest",
+  "description": "Update guest. Endpoint: PUT /c/{company_id}/share/guests/{id}. Required parameters: id, name, email, company_id. Optional parameters include recruiter.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Guest ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "Email",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "recruiter",
+      "type": "boolean",
+      "required": false,
+      "description": "Guest type (default: ‘false’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"guest\": {\n\"email\": \"jan.kowalski@example.com\",\n\"name\": \"Jan Kowalski\"\n}\n}",
+  "example_response": {
+    "references": [],
+    "guest": {
+      "id": 20,
+      "name": "Jan Kowalski",
+      "email": "jan.kowalski@example.com",
+      "auth_token": "zXyuWv987311",
+      "has_avatar": false,
+      "initials": "JK",
+      "photo_thumb_url": "tmp/bow/guests/20/thumb_initials_r8u2lcgbp36k.png",
+      "created_at": "2026-04-21T07:31:49.595116Z",
+      "updated_at": "2026-04-21T07:31:49.607621Z",
+      "recruiter": true,
+      "container_ids": []
+    }
+  },
+  "tags": [
+    "guests",
+    "container"
+  ]
+}

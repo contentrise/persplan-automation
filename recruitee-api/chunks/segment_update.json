@@ -1,0 +1,78 @@
+{
+  "id": "segment_update",
+  "method": "PUT",
+  "path": "/c/{company_id}/search/segments/{id}",
+  "summary": "Update search segment",
+  "description": "Update search segment. Endpoint: PUT /c/{company_id}/search/segments/{id}. Required parameters: id, segment_name, segment_private, segment_query_params, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Segment ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "segment_name",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "segment_private",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "segment_query_params",
+      "type": "search query params",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"segment\": {\n\"name\": \"Updated segment\",\n\"private\": false,\n\"query_params\": {\n\"offset\": 0\n}\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 2849,
+        "type": "Admin",
+        "email": "john918@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2849/normal_avatar_gtpysfgfw8nf.png",
+        "photo_thumb_url": "tmp/bow/admins/2849/thumb_avatar_gtpysfgfw8nf.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "segment": {
+      "id": 8,
+      "name": "Updated segment",
+      "position": null,
+      "private": false,
+      "admin_id": 2849,
+      "query_params": {
+        "offset": 0
+      },
+      "segment_type": "custom"
+    }
+  },
+  "tags": [
+    "segments",
+    "search"
+  ]
+}

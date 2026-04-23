@@ -1,0 +1,48 @@
+{
+  "id": "contact_search",
+  "method": "GET",
+  "path": "/c/{company_id}/mailbox/contacts",
+  "summary": "Search for Admins, Candidates and mailbox history for contacts",
+  "description": "Search for Admins, Candidates and mailbox history for contacts. Endpoint: GET /c/{company_id}/mailbox/contacts. Required parameters: company_id. Optional parameters include q.",
+  "params": [
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search query, must be at least 3 characters long",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/mailbox/contacts\n\nRequired params: company_id\n\nOptional params: q",
+  "example_response": {
+    "references": [],
+    "candidates": [
+      {
+        "id": 1731,
+        "name": "Bob The Builder",
+        "title": null,
+        "emails": [
+          "bobwithhisverylongandfunnyemailaddress@example.com"
+        ],
+        "has_avatar": true,
+        "initials": "BT",
+        "photo_thumb_url": null,
+        "placements": [],
+        "salutation": null
+      }
+    ],
+    "admins": [],
+    "participants": []
+  },
+  "tags": [
+    "mailbox",
+    "contacts"
+  ]
+}

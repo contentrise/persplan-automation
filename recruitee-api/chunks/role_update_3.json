@@ -1,0 +1,22 @@
+{
+  "id": "role_update_3",
+  "method": "PATCH",
+  "path": "/c/{company_id}/roles/update_positions",
+  "summary": "Update roles positions",
+  "description": "Update roles positions. Endpoint: PATCH /c/{company_id}/roles/update_positions. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/roles/update_positions\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "roles",
+    "company"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "shared_email_providers_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/shared_email_providers",
+  "summary": "Browse Shared Email Providers",
+  "description": "Browse Shared Email Providers. Endpoint: GET /c/{company_id}/shared_email_providers. Required parameters: company_id. Optional parameters include provider, connection_status.",
+  "params": [
+    {
+      "name": "provider",
+      "type": "string",
+      "required": false,
+      "description": "optional",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "connection_status",
+      "type": "string",
+      "required": false,
+      "description": "optional",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/shared_email_providers\n\nRequired params: company_id\n\nOptional params: provider, connection_status",
+  "example_response": {},
+  "tags": [
+    "shared_email_providers",
+    "mailbox"
+  ]
+}

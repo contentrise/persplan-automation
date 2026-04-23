@@ -1,0 +1,45 @@
+{
+  "id": "application_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/linkedin/application",
+  "summary": "Update company's LinkedIn application data settings",
+  "description": "Update company's LinkedIn application data settings. Endpoint: PATCH /c/{company_id}/linkedin/application. Required parameters: company_id. Optional parameters include application.",
+  "params": [
+    {
+      "name": "application",
+      "type": "object",
+      "required": false,
+      "description": "Wrapper object with a data key containing application settings (e.g. %{application: %{data: %{apply_connect_company_enabled: boolean}}})",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"application\": {\n\"data\": {\n\"apply_connect_company_enabled\": true\n}\n}\n}",
+  "example_response": {
+    "application": {
+      "data": {
+        "apply_connect_company_enabled": true
+      },
+      "id": 5,
+      "integrations": [],
+      "client_id": null,
+      "domains": [],
+      "rsc_enabled_at": null,
+      "rsc_initial_sync_finished_at": null,
+      "linkedin_organization_urn": null,
+      "supported_integration_types": [
+        "APPLY_WITH_LINKEDIN"
+      ]
+    }
+  },
+  "tags": [
+    "linkedin",
+    "application"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "id": "approval_flow_create",
+  "method": "POST",
+  "path": "/c/{company_id}/requisitions/settings/approval_flows",
+  "summary": "Create requisition flow with steps",
+  "description": "Create requisition flow with steps. Endpoint: POST /c/{company_id}/requisitions/settings/approval_flows. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"approval_flow\": {\n\"department_ids\": [\n77,\n78\n],\n\"steps\": [\n{\n\"approver_ids\": [\n2665,\n2666\n],\n\"kind\": \"any\",\n\"position\": 1\n},\n{\n\"approver_ids\": [\n2666\n],\n\"position\": 2\n}\n],\n\"title\": \"First flow\"\n}\n}",
+  "example_response": {
+    "approval_flow": {
+      "default": false,
+      "id": 82,
+      "position": 36,
+      "title": "First flow",
+      "steps": [
+        {
+          "id": 81,
+          "position": 1,
+          "kind": "any",
+          "approver_ids": [
+            2665,
+            2666
+          ],
+          "allows_edit": false
+        },
+        {
+          "id": 82,
+          "position": 2,
+          "kind": "all",
+          "approver_ids": [
+            2666
+          ],
+          "allows_edit": false
+        }
+      ],
+      "department_ids": [
+        77,
+        78
+      ],
+      "steps_count": 2
+    }
+  },
+  "tags": [
+    "requisitions",
+    "settings"
+  ]
+}

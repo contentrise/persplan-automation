@@ -1,0 +1,87 @@
+{
+  "id": "template_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/templates/",
+  "summary": "Show interview template",
+  "description": "Show interview template. Endpoint: GET /c/{company_id}/interview/templates/. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/templates/\n\nRequired params: company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 1252,
+        "type": "Admin",
+        "email": "john750@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1252/normal_avatar_guabno9ye326.png",
+        "photo_thumb_url": "tmp/bow/admins/1252/thumb_avatar_guabno9ye326.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "interview_template": {
+      "id": 43,
+      "name": "Elixir developer",
+      "position": 1,
+      "category": "Development",
+      "kind": "interview",
+      "token": "abcdef123456",
+      "admin_id": 1252,
+      "created_at": "2026-04-21T07:30:54.735678Z",
+      "updated_at": "2026-04-21T07:30:54.735678Z",
+      "rating_required": null,
+      "interview_questions": [
+        {
+          "id": 116,
+          "position": 1,
+          "options": null,
+          "title": "Can you legally work in EU?",
+          "required": true,
+          "kind": "boolean",
+          "hint": "If person is not EU citizen ask for Visa"
+        },
+        {
+          "id": 117,
+          "position": 2,
+          "options": null,
+          "title": "How would you rate your Elixir knowledge?",
+          "required": true,
+          "kind": "single_choice",
+          "hint": "Ask how the candidate would rate himself",
+          "interview_question_options": [
+            {
+              "id": 191,
+              "position": 1,
+              "title": "Poor",
+              "hint": null
+            },
+            {
+              "id": 192,
+              "position": 2,
+              "title": "Excellent",
+              "hint": null
+            }
+          ]
+        }
+      ],
+      "info_title": "Interview preperation",
+      "info_description": "<p>Elixir Developer interview</p>\n"
+    }
+  },
+  "tags": [
+    "interview",
+    "templates"
+  ]
+}

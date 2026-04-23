@@ -1,0 +1,98 @@
+{
+  "id": "note_create_4",
+  "method": "POST",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/notes",
+  "summary": "Create note for requisition",
+  "description": "Create note for requisition. Endpoint: POST /c/{company_id}/requisitions/{requisition_id}/notes. Required parameters: requisition_id, company_id. Optional parameters include attachments.",
+  "params": [
+    {
+      "name": "attachments",
+      "type": "array",
+      "required": false,
+      "description": "Attachments ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"note\": {\n\"attachments\": [],\n\"body\": \"Test note\",\n\"visibility\": {\n\"admin_ids\": [\n9484\n],\n\"level\": \"protected\",\n\"role_ids\": [\n4797\n]\n}\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 9484,
+        "type": "Admin",
+        "email": "john1391@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9484/normal_avatar_vprm1wleu8mk.png",
+        "photo_thumb_url": "tmp/bow/admins/9484/thumb_avatar_vprm1wleu8mk.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "note": {
+      "id": 198,
+      "text": "Test note",
+      "replies": [],
+      "body": "<p>Test note</p>",
+      "admin_id": 9484,
+      "candidate_id": null,
+      "attachments": [],
+      "created_at": "2026-04-21T07:33:57.466543Z",
+      "updated_at": "2026-04-21T07:33:57.466543Z",
+      "offer_id": null,
+      "talent_pool_id": null,
+      "requisition_id": 187,
+      "guest_id": null,
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          9484
+        ],
+        "role_ids": [
+          4797,
+          4798
+        ]
+      },
+      "body_html": "<p>Test note</p>",
+      "reply_to_id": null,
+      "body_json": {
+        "doc": {
+          "content": [
+            {
+              "content": [
+                {
+                  "text": "Test note",
+                  "type": "text"
+                }
+              ],
+              "type": "paragraph"
+            }
+          ],
+          "type": "doc"
+        }
+      },
+      "triggered": false,
+      "pinned_at": null
+    }
+  },
+  "tags": [
+    "requisitions",
+    "notes"
+  ]
+}

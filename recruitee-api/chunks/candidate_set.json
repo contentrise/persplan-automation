@@ -1,0 +1,39 @@
+{
+  "id": "candidate_set",
+  "method": "PATCH",
+  "path": "/c/{company_id}/candidates/{id}/set_as_cover_letter/{attachment_id}",
+  "summary": "Set attachment as candidate's cover letter file",
+  "description": "Set attachment as candidate's cover letter file. Endpoint: PATCH /c/{company_id}/candidates/{id}/set_as_cover_letter/{attachment_id}. Required parameters: id, attachment_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "attachment_id",
+      "type": "integer",
+      "required": true,
+      "description": "Attachment ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/candidates/{id}/set_as_cover_letter/{attachment_id}\n\nRequired params: id, attachment_id, company_id",
+  "example_response": {
+    "error": [
+      "Unprocessable entity"
+    ]
+  },
+  "tags": [
+    "candidates"
+  ]
+}

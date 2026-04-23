@@ -1,0 +1,22 @@
+{
+  "id": "language_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/lang/languages/new",
+  "summary": "Get translations keys",
+  "description": "Get translations keys. Endpoint: GET /c/{company_id}/lang/languages/new. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/lang/languages/new\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "lang",
+    "languages"
+  ]
+}

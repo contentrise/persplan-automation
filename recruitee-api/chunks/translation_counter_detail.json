@@ -1,0 +1,22 @@
+{
+  "id": "translation_counter_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/dynamic_fields/translation_counters",
+  "summary": "Get fields translation counters",
+  "description": "Get fields translation counters. Endpoint: GET /c/{company_id}/dynamic_fields/translation_counters. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/dynamic_fields/translation_counters\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "dynamic_fields",
+    "translation_counters"
+  ]
+}

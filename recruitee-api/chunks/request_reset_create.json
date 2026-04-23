@@ -1,0 +1,23 @@
+{
+  "id": "request_reset_create",
+  "method": "POST",
+  "path": "/referral_portal/password/request_reset",
+  "summary": "Request reset referrers password",
+  "description": "Request reset referrers password. Endpoint: POST /referral_portal/password/request_reset. Required parameters: email.",
+  "params": [
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"request_reset\": {\n\"email\": \"imogene.turcotte@veum.com\"\n}\n}",
+  "example_response": {},
+  "tags": [
+    "referral_portal",
+    "password",
+    "referral"
+  ]
+}

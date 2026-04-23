@@ -1,0 +1,50 @@
+{
+  "id": "meeting_room_enable",
+  "method": "PATCH",
+  "path": "/c/{company_id}/interview/meeting_rooms/{id}",
+  "summary": "Enable meeting room",
+  "description": "Enable meeting room. Endpoint: PATCH /c/{company_id}/interview/meeting_rooms/{id}. Required parameters: id, company_id. Optional parameters include enabled.",
+  "params": [
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "required": false,
+      "description": "true | false",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Meeting room ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/interview/meeting_rooms/{id}\n\nRequired params: id, company_id\n\nOptional params: enabled",
+  "example_response": {
+    "meeting_room": {
+      "enabled": false,
+      "id": 58,
+      "name": "room 46",
+      "status": "disconnected",
+      "floor": 1,
+      "available": null,
+      "provider": "google",
+      "external_id": "room_46@provider.com",
+      "synced_at": null,
+      "building": "Kupiec Poznanski",
+      "capacity": 10
+    }
+  },
+  "tags": [
+    "interview",
+    "meeting_rooms"
+  ]
+}

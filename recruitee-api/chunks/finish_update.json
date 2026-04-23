@@ -1,0 +1,29 @@
+{
+  "id": "finish_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/imports/{id}/finish",
+  "summary": "Import candidates",
+  "description": "Import candidates. Endpoint: PATCH /c/{company_id}/imports/{id}/finish. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Import ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/imports/{id}/finish\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "imports",
+    "finish"
+  ]
+}

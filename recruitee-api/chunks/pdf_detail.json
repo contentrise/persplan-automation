@@ -1,0 +1,32 @@
+{
+  "id": "pdf_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/invoices/pdf",
+  "summary": "Gets PDF url for invoice or credit note based on resource_type param",
+  "description": "Gets PDF url for invoice or credit note based on resource_type param. Endpoint: GET /c/{company_id}/invoices/pdf. Required parameters: company_id. Optional parameters include resource_type.",
+  "params": [
+    {
+      "name": "resource_type",
+      "type": "string",
+      "required": false,
+      "description": "Resource type for PDF url: invoice | credit_note",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/invoices/pdf\n\nRequired params: company_id\n\nOptional params: resource_type",
+  "example_response": {
+    "pdf_url": "http://example.com/INV01C3.pdf"
+  },
+  "tags": [
+    "invoices",
+    "pdf",
+    "billing"
+  ]
+}

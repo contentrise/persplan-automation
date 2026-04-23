@@ -1,0 +1,27 @@
+{
+  "id": "counters_list",
+  "method": "GET",
+  "path": "/c/{company_id}/oauth/client_auths/counters",
+  "summary": "List counters of authorized clients in the team",
+  "description": "List counters of authorized clients in the team. Endpoint: GET /c/{company_id}/oauth/client_auths/counters. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/oauth/client_auths/counters\n\nRequired params: company_id",
+  "example_response": {
+    "counters": {
+      "zapier": 2
+    }
+  },
+  "tags": [
+    "client_auths",
+    "counters",
+    "oauth"
+  ]
+}

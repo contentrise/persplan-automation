@@ -1,0 +1,38 @@
+{
+  "id": "role_update",
+  "method": "PUT",
+  "path": "/c/{company_id}/roles/{id}",
+  "summary": "Update role",
+  "description": "Update role. Endpoint: PUT /c/{company_id}/roles/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Role ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"role\": {\n\"abilities\": [\n\"manage_jobs\"\n],\n\"name\": \"New role\"\n}\n}",
+  "example_response": {
+    "error": [
+      "Admin action is not allowed"
+    ],
+    "error_fields": {
+      "admin": [
+        "action is not allowed"
+      ]
+    }
+  },
+  "tags": [
+    "roles",
+    "company"
+  ]
+}

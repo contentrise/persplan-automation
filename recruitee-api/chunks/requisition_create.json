@@ -1,0 +1,55 @@
+{
+  "id": "requisition_create",
+  "method": "POST",
+  "path": "/c/{company_id}/requisitions",
+  "summary": "Create requisition",
+  "description": "Create requisition. Endpoint: POST /c/{company_id}/requisitions. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"requisition\": {\n\"approval_flow_id\": 482,\n\"title\": \"Test requisition\"\n}\n}",
+  "example_response": {
+    "requisition": {
+      "id": 407,
+      "status": "draft",
+      "title": "Test requisition",
+      "form": {
+        "fields": [
+          "department"
+        ],
+        "dynamic_field_ids": []
+      },
+      "dynamic_fields": [],
+      "openings_count": 0,
+      "offers": [],
+      "offers_count": 0,
+      "created_at": "2026-04-21T07:34:07.468531Z",
+      "updated_at": "2026-04-21T07:34:07.468531Z",
+      "notes_count": 0,
+      "followed": true,
+      "attachments_count": 0,
+      "department_id": null,
+      "guid": "ks329",
+      "archived_at": null,
+      "follower_ids": [
+        11015
+      ],
+      "openings": [],
+      "approval_request": null,
+      "openings_with_deleted_candidate_count": 0,
+      "hires_count": 0,
+      "approval_flow_id": 482,
+      "rejection_reason": null,
+      "rejected_by_id": null
+    }
+  },
+  "tags": [
+    "requisitions"
+  ]
+}

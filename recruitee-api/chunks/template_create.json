@@ -1,0 +1,54 @@
+{
+  "id": "template_create",
+  "method": "POST",
+  "path": "/c/{company_id}/interview/templates",
+  "summary": "Create interview template",
+  "description": "Create interview template. Endpoint: POST /c/{company_id}/interview/templates. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_template\": {\n\"category\": \"ENGINEERING\",\n\"kind\": \"interview\",\n\"name\": \"Ruby developer interview\",\n\"rating_required\": false\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 1229,
+        "type": "Admin",
+        "email": "john692@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1229/normal_avatar_m5pwb58p9lku.png",
+        "photo_thumb_url": "tmp/bow/admins/1229/thumb_avatar_m5pwb58p9lku.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "interview_template": {
+      "id": 19,
+      "name": "Ruby developer interview",
+      "position": 1,
+      "category": "ENGINEERING",
+      "kind": "interview",
+      "token": "pn37uyv29w66",
+      "admin_id": 1229,
+      "created_at": "2026-04-21T07:30:50.079075Z",
+      "updated_at": "2026-04-21T07:30:50.079075Z",
+      "rating_required": false,
+      "interview_questions": [],
+      "info_title": null,
+      "info_description": null
+    }
+  },
+  "tags": [
+    "interview",
+    "templates"
+  ]
+}

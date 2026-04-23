@@ -1,0 +1,66 @@
+{
+  "id": "duplicate_duplicate_2",
+  "method": "POST",
+  "path": "/c/{company_id}/custom_fields/fieldsets/{id}/duplicate",
+  "summary": "Duplicate company fieldset",
+  "description": "Duplicate company fieldset. Endpoint: POST /c/{company_id}/custom_fields/fieldsets/{id}/duplicate. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Fieldset ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/custom_fields/fieldsets/{id}/duplicate\n\nRequired params: id, company_id",
+  "example_response": {
+    "fieldset": {
+      "default": false,
+      "id": 38,
+      "name": "Engineering (2)",
+      "position": 2,
+      "fields": [
+        {
+          "id": 12,
+          "name": "Field 6",
+          "position": 1,
+          "visible": true,
+          "kind": "single_line",
+          "visibility": {
+            "level": "public",
+            "admin_ids": [],
+            "role_ids": []
+          }
+        },
+        {
+          "id": 13,
+          "name": "Field 7",
+          "position": 2,
+          "visible": true,
+          "kind": "single_line",
+          "visibility": {
+            "level": "public",
+            "admin_ids": [],
+            "role_ids": []
+          }
+        }
+      ],
+      "category": "NEW",
+      "updated_at": "2026-04-21T07:30:45.708367Z",
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0
+    }
+  },
+  "tags": [
+    "custom_fields",
+    "fieldsets"
+  ]
+}

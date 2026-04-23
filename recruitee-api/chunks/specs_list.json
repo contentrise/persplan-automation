@@ -1,0 +1,22 @@
+{
+  "id": "specs_list",
+  "method": "GET",
+  "path": "/c/{company_id}/features/spec",
+  "summary": "List current features",
+  "description": "List current features. Endpoint: GET /c/{company_id}/features/spec. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/features/spec\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "features",
+    "spec"
+  ]
+}

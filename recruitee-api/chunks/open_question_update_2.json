@@ -1,0 +1,43 @@
+{
+  "id": "open_question_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{offer_id}/open_question_templates/open_questions/update_positions",
+  "summary": "Update open questions positions",
+  "description": "Update open questions positions. Endpoint: PATCH /c/{company_id}/offers/{offer_id}/open_question_templates/open_questions/update_positions. Required parameters: offer_id, open_question_ids, source_template_id, company_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "open_question_ids",
+      "type": "array",
+      "required": true,
+      "description": "Array of Open Question IDs in requested order",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Open Question template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question_ids\": [\n58,\n57,\n56\n],\n\"source_template_id\": 51\n}",
+  "example_response": {},
+  "tags": [
+    "offers",
+    "open_question_templates"
+  ]
+}

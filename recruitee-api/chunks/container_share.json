@@ -1,0 +1,28 @@
+{
+  "id": "container_share",
+  "method": "PATCH",
+  "path": "/c/{company_id}/share/containers/{id}/share",
+  "summary": "Public (share container) link",
+  "description": "Public (share container) link. Endpoint: PATCH /c/{company_id}/share/containers/{id}/share. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Container ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/share/containers/{id}/share\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "containers"
+  ]
+}

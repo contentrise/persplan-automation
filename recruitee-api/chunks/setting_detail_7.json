@@ -1,0 +1,59 @@
+{
+  "id": "setting_detail_7",
+  "method": "GET",
+  "path": "/c/{company_id}/texting/settings",
+  "summary": "Show texting settings for current company",
+  "description": "Show texting settings for current company. Endpoint: GET /c/{company_id}/texting/settings. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/texting/settings\n\nRequired params: company_id",
+  "example_response": {
+    "texting_settings": {
+      "enabled": false,
+      "company_id": 1875,
+      "phone_numbers": [
+        {
+          "number": "+1 123123123",
+          "country_code": "US"
+        }
+      ],
+      "provider_active": false,
+      "supported_countries": [
+        {
+          "requirements": [],
+          "country_code": "CA",
+          "country_name": "Canada"
+        },
+        {
+          "requirements": [
+            "address"
+          ],
+          "country_code": "NL",
+          "country_name": "Netherlands"
+        },
+        {
+          "requirements": [],
+          "country_code": "SE",
+          "country_name": "Sweden"
+        },
+        {
+          "requirements": [],
+          "country_code": "US",
+          "country_name": "United States"
+        }
+      ],
+      "free_credits_active": null
+    }
+  },
+  "tags": [
+    "texting",
+    "settings"
+  ]
+}

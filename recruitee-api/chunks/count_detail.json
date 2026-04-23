@@ -1,0 +1,24 @@
+{
+  "id": "count_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/gdpr/auto_consent/count",
+  "summary": "Gets candidates count eligible for auto consent",
+  "description": "Gets candidates count eligible for auto consent. Endpoint: GET /c/{company_id}/gdpr/auto_consent/count. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/gdpr/auto_consent/count\n\nRequired params: company_id",
+  "example_response": {
+    "candidates_count": 3
+  },
+  "tags": [
+    "gdpr",
+    "auto_consent"
+  ]
+}

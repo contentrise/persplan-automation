@@ -1,0 +1,43 @@
+{
+  "id": "opening_unassign",
+  "method": "PATCH",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/openings/{opening_id}/unassign",
+  "summary": "Unassign filled opening when candidate is deleted",
+  "description": "Unassign filled opening when candidate is deleted. Endpoint: PATCH /c/{company_id}/requisitions/{requisition_id}/openings/{opening_id}/unassign. Required parameters: requisition_id, opening_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "opening_id",
+      "type": "integer",
+      "required": true,
+      "description": "Opening ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/requisitions/{requisition_id}/openings/{opening_id}/unassign\n\nRequired params: requisition_id, opening_id, company_id",
+  "example_response": {
+    "opening": {
+      "id": 3,
+      "status": "open",
+      "placement_id": null,
+      "filled_at": null
+    }
+  },
+  "tags": [
+    "requisitions",
+    "openings"
+  ]
+}

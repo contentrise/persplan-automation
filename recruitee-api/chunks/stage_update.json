@@ -1,0 +1,89 @@
+{
+  "id": "stage_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{offer_id}/pipeline_templates/stages/",
+  "summary": "Update pipeline template stage",
+  "description": "Update pipeline template stage. Endpoint: PATCH /c/{company_id}/offers/{offer_id}/pipeline_templates/stages/. Required parameters: stage, offer_id, source_template_id, company_id.",
+  "params": [
+    {
+      "name": "stage",
+      "type": "map",
+      "required": true,
+      "description": "Stage params: name (string, required) - stage name; category (string, required) - stage category; action_templates (array, optional) - stage automated actions; time_limit (integer, optional) - candidate time limit for stage; fair_evaluations_enabled (boolean, optional) - fair evaluation feature status",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"source_template_id\": 4413,\n\"stage\": {\n\"fair_evaluations_enabled\": true\n}\n}",
+  "example_response": {
+    "stage": {
+      "id": 35525,
+      "name": "Interview",
+      "position": 6,
+      "group": "active",
+      "category": "none",
+      "fair_evaluations_enabled": true,
+      "action_templates": [
+        {
+          "data": {
+            "text": null,
+            "body": null,
+            "visibility": {
+              "admin_ids": [],
+              "level": "public",
+              "role_ids": []
+            },
+            "body_html": null,
+            "body_json": {
+              "doc": {
+                "content": [
+                  {
+                    "content": [
+                      {
+                        "text": "Update this note!",
+                        "type": "text"
+                      }
+                    ],
+                    "type": "paragraph"
+                  }
+                ],
+                "type": "doc"
+              }
+            }
+          },
+          "id": 274,
+          "kind": "add_note",
+          "references": []
+        }
+      ],
+      "locked": false,
+      "placements_count": null,
+      "time_limit": null,
+      "candidate_anonymization_enabled": false
+    }
+  },
+  "tags": [
+    "offers",
+    "pipeline_templates"
+  ]
+}

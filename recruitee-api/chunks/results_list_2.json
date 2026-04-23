@@ -1,0 +1,302 @@
+{
+  "id": "results_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/results",
+  "summary": "List interview results for candidate",
+  "description": "List interview results for candidate. Endpoint: GET /c/{company_id}/interview/results. Required parameters: company_id. Optional parameters include scope, limit, kind, candidate_id, admin_ids, page.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Limit by result scope, can be: ‘my’, ‘all’ (default ‘all’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default is unlimited",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "required": false,
+      "description": "Limit by result kind, can be: ‘evaluation’, ‘questionnaire’, ‘all’ (default ‘all’)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": false,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "admin_ids",
+      "type": "array",
+      "required": false,
+      "description": "Limit to selected admins",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number used for pagination, can be used only with the limit option (1, 2, 3, 4…)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/results\n\nRequired params: company_id\n\nOptional params: scope, limit, kind, candidate_id, admin_ids, page",
+  "example_response": {
+    "meta": {
+      "counters": {
+        "pending": 0,
+        "completed": 8,
+        "dismissed": 0
+      }
+    },
+    "references": [
+      {
+        "id": 64,
+        "name": "James Smith",
+        "type": "Guest",
+        "email": "james6778@example.com",
+        "has_avatar": false,
+        "initials": "JS",
+        "created_at": "2026-04-21T07:33:01.992748Z",
+        "updated_at": "2026-04-21T07:33:01.992748Z",
+        "recruiter": false
+      },
+      {
+        "id": 1520,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:33:01.992414Z",
+        "updated_at": "2026-04-21T07:33:01.992414Z",
+        "is_hired": false,
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=1520&company=3185",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      },
+      {
+        "id": 1377,
+        "position": 51,
+        "status": "draft",
+        "type": "Offer",
+        "remote": false,
+        "description": "<p>Elixir</p>\n",
+        "title": "Best Offer",
+        "location": "",
+        "kind": "job",
+        "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+        "url": null,
+        "created_at": "2026-04-21T07:33:01.991083Z",
+        "department": null,
+        "lang_code": "en",
+        "department_id": null,
+        "slug": "best-offer940",
+        "hybrid": false,
+        "on_site": true,
+        "guid": "guid900",
+        "recruiter_id": null,
+        "hiring_manager_id": null,
+        "wysiwyg_editor": "redactor",
+        "pipeline_template_id": 4576,
+        "careers_job_page_layout_id": null,
+        "job_position_id": null,
+        "mailbox_email": null,
+        "highlight_html": "<p>Elixir</p>\n"
+      },
+      {
+        "id": 36849,
+        "name": "Applied",
+        "position": 22915,
+        "type": "Stage",
+        "group": "active",
+        "category": "none",
+        "created_at": "2026-04-21T07:33:01.989214Z",
+        "updated_at": "2026-04-21T07:33:01.990202Z",
+        "fair_evaluations_enabled": false,
+        "pipeline_template_id": 4576,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 6224,
+        "type": "Admin",
+        "email": "john6773@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/6224/normal_avatar_5a4ddbkv4bo7.png",
+        "photo_thumb_url": "tmp/bow/admins/6224/thumb_avatar_5a4ddbkv4bo7.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 6225,
+        "type": "Admin",
+        "email": "john6775@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/6225/normal_avatar_kk72c7tfu59o.png",
+        "photo_thumb_url": "tmp/bow/admins/6225/thumb_avatar_kk72c7tfu59o.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 36850,
+        "name": "Applied",
+        "position": 22916,
+        "type": "Stage",
+        "group": "active",
+        "category": "none",
+        "created_at": "2026-04-21T07:33:01.989530Z",
+        "updated_at": "2026-04-21T07:33:01.990293Z",
+        "fair_evaluations_enabled": true,
+        "pipeline_template_id": 4576,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 36851,
+        "name": "Applied",
+        "position": 22917,
+        "type": "Stage",
+        "group": "active",
+        "category": "none",
+        "created_at": "2026-04-21T07:33:01.989738Z",
+        "updated_at": "2026-04-21T07:33:01.990355Z",
+        "fair_evaluations_enabled": true,
+        "pipeline_template_id": 4576,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      }
+    ],
+    "interview_results": [
+      {
+        "id": 60,
+        "kind": "rating",
+        "admin_id": null,
+        "candidate_id": 1520,
+        "rating": "strong_yes",
+        "created_at": "2026-04-21T07:33:01.993819Z",
+        "updated_at": "2026-04-21T07:33:01.993819Z",
+        "offer_id": 1377,
+        "talent_pool_id": null,
+        "guest_id": 64,
+        "stage_id": 36849,
+        "interview_result_answers": [],
+        "interview_template_name": null,
+        "rating_note": null,
+        "interview_template_info_title": null,
+        "interview_template_info_description": null,
+        "rating_required": null
+      },
+      {
+        "id": 59,
+        "kind": "rating",
+        "admin_id": null,
+        "candidate_id": 1520,
+        "rating": "strong_yes",
+        "created_at": "2026-04-21T07:33:01.993156Z",
+        "updated_at": "2026-04-21T07:33:01.993156Z",
+        "offer_id": 1377,
+        "talent_pool_id": null,
+        "guest_id": 64,
+        "stage_id": 36849,
+        "interview_result_answers": [],
+        "interview_template_name": null,
+        "rating_note": null,
+        "interview_template_info_title": null,
+        "interview_template_info_description": null,
+        "rating_required": null
+      }
+    ],
+    "hidden_results_preview": [
+      {
+        "count": 3,
+        "candidate_id": 1518,
+        "updated_at": "2026-04-21T07:33:01.995565",
+        "offer_id": 1377,
+        "admin_ids": [
+          6224
+        ],
+        "stage_id": 36850,
+        "guest_ids": [
+          64
+        ]
+      },
+      {
+        "count": 1,
+        "candidate_id": 1519,
+        "updated_at": "2026-04-21T07:33:01.998059",
+        "offer_id": 1377,
+        "admin_ids": [
+          6225
+        ],
+        "stage_id": 36850,
+        "guest_ids": []
+      },
+      {
+        "count": 2,
+        "candidate_id": 1519,
+        "updated_at": "2026-04-21T07:33:01.997134",
+        "offer_id": 1377,
+        "admin_ids": [
+          6225,
+          6224
+        ],
+        "stage_id": 36851,
+        "guest_ids": []
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "results"
+  ]
+}

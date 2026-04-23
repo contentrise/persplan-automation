@@ -1,0 +1,33 @@
+{
+  "id": "fs_count_create",
+  "method": "POST",
+  "path": "/c/{company_id}/search/new/fs_counts",
+  "summary": "Full Search Counts",
+  "description": "Get total count of results for at least one full search",
+  "params": [
+    {
+      "name": "searches",
+      "type": "string",
+      "required": true,
+      "description": "Array of search params, f.e. [{view: ‘candidates’, filters: […]}]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"searches\": [\n{\n\"filters\": [\n{\n\"field\": \"gdpr_uncompleted_change_request_created_at\",\n\"gte\": 0\n}\n],\n\"view\": \"candidates\"\n},\n{\n\"filters\": [\n{\n\"field\": \"gdpr_uncompleted_removal_request_created_at\",\n\"gte\": 0\n}\n],\n\"view\": \"candidates\"\n},\n{\n\"filters\": [\n{\n\"filter\": \"gdpr_status\",\n\"in\": [\n\"consent_requested\",\n\"no_consent\"\n]\n}\n],\n\"view\": \"candidates\"\n}\n]\n}",
+  "example_response": [
+    3,
+    2,
+    2
+  ],
+  "tags": [
+    "fs_counts",
+    "search"
+  ]
+}

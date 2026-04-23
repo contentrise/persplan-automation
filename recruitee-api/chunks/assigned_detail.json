@@ -1,0 +1,37 @@
+{
+  "id": "assigned_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions/{requisition_id}/approval_flows/assigned",
+  "summary": "Show a single approval flow assigned to requisition",
+  "description": "Show a single approval flow assigned to requisition. Endpoint: GET /c/{company_id}/requisitions/{requisition_id}/approval_flows/assigned. Required parameters: requisition_id, company_id.",
+  "params": [
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions/{requisition_id}/approval_flows/assigned\n\nRequired params: requisition_id, company_id",
+  "example_response": {
+    "approval_flow": {
+      "id": 39,
+      "title": "Approval Flow",
+      "custom": false,
+      "steps": [],
+      "assigned": true
+    }
+  },
+  "tags": [
+    "requisitions",
+    "approval_flows"
+  ]
+}

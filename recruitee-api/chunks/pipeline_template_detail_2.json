@@ -1,0 +1,248 @@
+{
+  "id": "pipeline_template_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/{id}",
+  "summary": "Show pipeline template",
+  "description": "Show pipeline template. Endpoint: GET /c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/{id}. Required parameters: id, offer_template_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/{id}\n\nRequired params: id, offer_template_id, company_id",
+  "example_response": {
+    "pipeline_template": {
+      "default": false,
+      "id": 2646,
+      "position": 1,
+      "title": "Pipeline Template",
+      "category": "SAMPLE CATEGORY",
+      "custom": false,
+      "stages": [
+        {
+          "id": 21219,
+          "name": "Referred",
+          "position": -3,
+          "group": "applicants",
+          "category": "referred",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21220,
+          "name": "Sourced",
+          "position": -2,
+          "group": "applicants",
+          "category": "sourced",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21221,
+          "name": "Applied",
+          "position": -1,
+          "group": "applicants",
+          "category": "apply",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": true,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21222,
+          "name": "Phone interview",
+          "position": 1,
+          "group": "active",
+          "category": "phone_screen",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21223,
+          "name": "On-site interview",
+          "position": 2,
+          "group": "active",
+          "category": "interview",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21224,
+          "name": "Evaluation",
+          "position": 3,
+          "group": "active",
+          "category": "evaluation",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21225,
+          "name": "Offer",
+          "position": 4,
+          "group": "active",
+          "category": "offer",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21226,
+          "name": "Hired",
+          "position": 5,
+          "group": "hires",
+          "category": "hire",
+          "fair_evaluations_enabled": false,
+          "action_templates": [],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21235,
+          "name": "AA assign",
+          "position": 7359,
+          "group": "active",
+          "category": "none",
+          "fair_evaluations_enabled": false,
+          "action_templates": [
+            {
+              "data": {
+                "offer_ids": [
+                  774
+                ],
+                "talent_pool_ids": []
+              },
+              "id": 168,
+              "kind": "assign",
+              "references": {
+                "offers": [
+                  {
+                    "id": 774,
+                    "status": "draft",
+                    "title": "Best Offer",
+                    "location": ", ",
+                    "kind": "job",
+                    "slug": "best-offer290"
+                  }
+                ],
+                "talent_pools": []
+              }
+            }
+          ],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        },
+        {
+          "id": 21236,
+          "name": "AA send email",
+          "position": 7360,
+          "group": "active",
+          "category": "none",
+          "fair_evaluations_enabled": false,
+          "action_templates": [
+            {
+              "data": {
+                "signature": null,
+                "from": null,
+                "to_recruiter": null,
+                "to_hiring_manager": null,
+                "subject": null,
+                "visibility": null,
+                "body_html": null,
+                "attachment_ids": [
+                  146
+                ],
+                "send_at_timezone": null,
+                "bcc_admin_ids": null,
+                "bcc_candidate": null,
+                "bcc_hiring_manager": null,
+                "bcc_recruiter": null,
+                "cc_admin_ids": null,
+                "cc_candidate": null,
+                "cc_hiring_manager": null,
+                "cc_recruiter": null,
+                "from_kind": null,
+                "send_after_at_hour": null,
+                "send_after_at_minute": null,
+                "send_after_days": null,
+                "to_admin_ids": null,
+                "to_candidate": null
+              },
+              "id": 169,
+              "kind": "send_email",
+              "references": {
+                "attachments": [
+                  {
+                    "id": 146,
+                    "status": "ok",
+                    "filename": "avatar.png",
+                    "extension": "png",
+                    "source": "default",
+                    "kind": "image",
+                    "admin_id": 3587,
+                    "candidate_id": null,
+                    "file_size": null,
+                    "created_at": "2026-04-21T07:32:09.586616Z",
+                    "image_thumbnail_url": "tmp/bow/attachments/146/image_thumbnail_avatar.png",
+                    "image_url": "tmp/bow/attachments/146/image_avatar.png",
+                    "file_url": "tmp/bow/attachments/146/avatar.png",
+                    "offer_id": null,
+                    "talent_pool_id": null,
+                    "requisition_id": null,
+                    "guest_id": null,
+                    "uploader": null
+                  }
+                ]
+              }
+            }
+          ],
+          "locked": false,
+          "time_limit": null,
+          "candidate_anonymization_enabled": false
+        }
+      ],
+      "requires_adjustment": false
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "pipeline_templates"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "offer_mark",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{id}/draft",
+  "summary": "Mark job as draft",
+  "description": "Mark job as draft. Endpoint: PATCH /c/{company_id}/offers/{id}/draft. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/offers/{id}/draft\n\nRequired params: id, company_id",
+  "example_response": {},
+  "tags": [
+    "offers"
+  ]
+}

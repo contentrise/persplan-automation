@@ -1,0 +1,36 @@
+{
+  "id": "fields_list",
+  "method": "GET",
+  "path": "/c/{company_id}/imports/fields",
+  "summary": "Available fields",
+  "description": "Available fields. Endpoint: GET /c/{company_id}/imports/fields. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/imports/fields\n\nRequired params: company_id",
+  "example_response": {
+    "fields": [
+      "first_name",
+      "last_name",
+      "name",
+      "offers",
+      "emails",
+      "phones",
+      "tags",
+      "sources",
+      "links",
+      "social_links",
+      "cover_letter"
+    ]
+  },
+  "tags": [
+    "imports",
+    "fields"
+  ]
+}

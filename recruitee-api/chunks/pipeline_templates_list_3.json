@@ -1,0 +1,59 @@
+{
+  "id": "pipeline_templates_list_3",
+  "method": "GET",
+  "path": "/c/{company_id}/pipeline_templates",
+  "summary": "List of pipeline templates",
+  "description": "List of pipeline templates. Endpoint: GET /c/{company_id}/pipeline_templates. Required parameters: company_id. Optional parameters include title.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": false,
+      "description": "Filter by title",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/pipeline_templates\n\nRequired params: company_id\n\nOptional params: title",
+  "example_response": {
+    "pipeline_templates": [
+      {
+        "default": true,
+        "id": 2535,
+        "position": 1,
+        "title": "Pipeline Template",
+        "category": "SAMPLE CATEGORY",
+        "custom": false,
+        "requires_adjustment": false
+      },
+      {
+        "default": false,
+        "id": 2536,
+        "position": 2,
+        "title": "First template",
+        "category": "Some category",
+        "custom": false,
+        "requires_adjustment": false
+      },
+      {
+        "default": false,
+        "id": 2537,
+        "position": 3,
+        "title": "Second template",
+        "category": "Another category",
+        "custom": false,
+        "requires_adjustment": false
+      }
+    ]
+  },
+  "tags": [
+    "pipeline_templates",
+    "pipeline"
+  ]
+}

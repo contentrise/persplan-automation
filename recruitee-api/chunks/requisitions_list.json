@@ -1,0 +1,57 @@
+{
+  "id": "requisitions_list",
+  "method": "GET",
+  "path": "/c/{company_id}/offers/requisitions",
+  "summary": "List requisitions assigned to offer",
+  "description": "List requisitions assigned to offer. Endpoint: GET /c/{company_id}/offers/requisitions. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/offers/requisitions\n\nRequired params: company_id",
+  "example_response": {
+    "requisitions": [
+      {
+        "id": 81,
+        "status": "draft",
+        "remote": false,
+        "title": "Backend Developer",
+        "location": null,
+        "country_code": null,
+        "openings_count": 0,
+        "offers": [
+          {
+            "id": 1561,
+            "status": "draft",
+            "title": "Best Offer",
+            "location": null,
+            "slug": "best-offer1124",
+            "guid": "guid1076"
+          }
+        ],
+        "offers_count": 1,
+        "created_at": "2026-04-21T07:33:24.552073Z",
+        "updated_at": "2026-04-21T07:33:24.552073Z",
+        "city": null,
+        "state_code": null,
+        "department": null,
+        "department_id": null,
+        "guid": "guid47",
+        "archived_at": null,
+        "shared_openings_count": 0,
+        "openings": [],
+        "data_mismatch": false,
+        "has_filled_openings_in_job": false
+      }
+    ]
+  },
+  "tags": [
+    "offers",
+    "requisitions"
+  ]
+}

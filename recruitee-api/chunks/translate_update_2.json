@@ -1,0 +1,29 @@
+{
+  "id": "translate_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/translate",
+  "summary": "Update offer template translations",
+  "description": "Update offer template translations. Endpoint: PATCH /c/{company_id}/offer_templates/{offer_template_id}/translate. Required parameters: offer_template_id, company_id.",
+  "params": [
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/offer_templates/{offer_template_id}/translate\n\nRequired params: offer_template_id, company_id",
+  "example_response": {},
+  "tags": [
+    "offer_templates",
+    "translate"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "personal_token_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/oauth/personal_tokens/{id}",
+  "summary": "Update the name of a personal token",
+  "description": "Update the name of a personal token. Endpoint: PATCH /c/{company_id}/oauth/personal_tokens/{id}. Required parameters: id, company_id. Optional parameters include meta.",
+  "params": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "meta",
+      "type": "map",
+      "required": false,
+      "description": "With a ‘name’ attribute",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"personal_token\": {\n\"meta\": {\n\"name\": \"Updated name\"\n}\n},\n\"secure_change_token\": \"SFMyNTY.g2gDYgAAHMZuBgDRT_WunQFiAAFRgA.wIza1-7eBrrGxXKKr_96htkgOVnCiDCLYSi0i6OCLrs\"\n}",
+  "example_response": {
+    "personal_token": {
+      "id": "de593c25-a833-42da-8ae6-384e3799f0f3",
+      "meta": {
+        "name": "Updated name"
+      },
+      "value": "xxx",
+      "created_at": "2026-04-21T07:33:25.586591Z"
+    }
+  },
+  "tags": [
+    "personal_tokens",
+    "oauth"
+  ]
+}

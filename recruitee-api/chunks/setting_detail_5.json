@@ -1,0 +1,28 @@
+{
+  "id": "setting_detail_5",
+  "method": "GET",
+  "path": "/c/{company_id}/mailbox/settings",
+  "summary": "Get mailbox settings",
+  "description": "Get mailbox settings. Endpoint: GET /c/{company_id}/mailbox/settings. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/mailbox/settings\n\nRequired params: company_id",
+  "example_response": {
+    "domain": "company4.test.recruitee.com",
+    "subdomain": "company4",
+    "migrated": false,
+    "catch_all_address": "apply",
+    "protected_domains": []
+  },
+  "tags": [
+    "mailbox",
+    "settings"
+  ]
+}

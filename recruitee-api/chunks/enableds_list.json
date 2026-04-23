@@ -1,0 +1,32 @@
+{
+  "id": "enableds_list",
+  "method": "GET",
+  "path": "/c/{company_id}/referral/offers/enabled",
+  "summary": "List offers enabled for referrals",
+  "description": "List offers enabled for referrals. Endpoint: GET /c/{company_id}/referral/offers/enabled. Required parameters: company_id. Optional parameters include q.",
+  "params": [
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search query",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/referral/offers/enabled\n\nRequired params: company_id\n\nOptional params: q",
+  "example_response": {
+    "references": [],
+    "offer_assignments": []
+  },
+  "tags": [
+    "referral",
+    "offers"
+  ]
+}

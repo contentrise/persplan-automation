@@ -1,0 +1,225 @@
+{
+  "id": "grouped_detail",
+  "method": "GET",
+  "path": "/c/{company_id}/trigger/offers/{offer_slug}/action_sets/grouped",
+  "summary": "Gets all ActionSets for current account.",
+  "description": "Gets all ActionSets for current account.. Endpoint: GET /c/{company_id}/trigger/offers/{offer_slug}/action_sets/grouped. Required parameters: offer_slug, company_id. Optional parameters include limit, page.",
+  "params": [
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default is unlimited",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_slug",
+      "type": "Offer slug or ID.",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/trigger/offers/{offer_slug}/action_sets/grouped\n\nRequired params: offer_slug, company_id\n\nOptional params: limit, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 4,
+      "page": 1
+    },
+    "action_set_groups": [
+      {
+        "stage": {
+          "id": 43438,
+          "name": "Stage 2",
+          "position": 29864
+        },
+        "action_sets": [
+          {
+            "id": 16,
+            "status": "created",
+            "admin_id": 7973,
+            "company_id": 3918,
+            "candidate_id": 2022,
+            "candidate": {
+              "id": 2022,
+              "name": "John Doe",
+              "emails": [
+                "john_doe@acme.com"
+              ],
+              "has_avatar": true,
+              "initials": "JD",
+              "photo_thumb_url": null,
+              "is_anonymous": false,
+              "currently_revealed_for_ids": []
+            },
+            "stage": {
+              "id": 43438,
+              "name": "Stage 2",
+              "position": 29864
+            },
+            "offer_id": 1693,
+            "talent_pool_id": null,
+            "actions": [],
+            "stage_id": 43438,
+            "disqualify_reason_id": null,
+            "previous_stage": {
+              "id": 43437,
+              "name": "Stage 1",
+              "position": 29863
+            },
+            "previous_stage_id": 43437
+          },
+          {
+            "id": 17,
+            "status": "created",
+            "admin_id": 7973,
+            "company_id": 3918,
+            "candidate_id": 2023,
+            "candidate": {
+              "id": 2023,
+              "name": "John Doe",
+              "emails": [
+                "john_doe@acme.com"
+              ],
+              "has_avatar": true,
+              "initials": "JD",
+              "photo_thumb_url": null,
+              "is_anonymous": false,
+              "currently_revealed_for_ids": []
+            },
+            "stage": {
+              "id": 43438,
+              "name": "Stage 2",
+              "position": 29864
+            },
+            "offer_id": 1693,
+            "talent_pool_id": null,
+            "actions": [],
+            "stage_id": 43438,
+            "disqualify_reason_id": null,
+            "previous_stage": {
+              "id": 43437,
+              "name": "Stage 1",
+              "position": 29863
+            },
+            "previous_stage_id": 43437
+          }
+        ],
+        "previous_stage": {
+          "id": 43437,
+          "name": "Stage 1",
+          "position": 29863
+        }
+      },
+      {
+        "stage": {
+          "id": 43439,
+          "name": "Stage 3",
+          "position": 29865
+        },
+        "action_sets": [
+          {
+            "id": 18,
+            "status": "created",
+            "admin_id": 7973,
+            "company_id": 3918,
+            "candidate_id": 2024,
+            "candidate": {
+              "id": 2024,
+              "name": "John Doe",
+              "emails": [
+                "john_doe@acme.com"
+              ],
+              "has_avatar": true,
+              "initials": "JD",
+              "photo_thumb_url": null,
+              "is_anonymous": false,
+              "currently_revealed_for_ids": []
+            },
+            "stage": {
+              "id": 43439,
+              "name": "Stage 3",
+              "position": 29865
+            },
+            "offer_id": 1693,
+            "talent_pool_id": null,
+            "actions": [],
+            "stage_id": 43439,
+            "disqualify_reason_id": null,
+            "previous_stage": {
+              "id": 43438,
+              "name": "Stage 2",
+              "position": 29864
+            },
+            "previous_stage_id": 43438
+          }
+        ],
+        "previous_stage": {
+          "id": 43438,
+          "name": "Stage 2",
+          "position": 29864
+        }
+      },
+      {
+        "stage": {
+          "id": 43437,
+          "name": "Stage 1",
+          "position": 29863
+        },
+        "action_sets": [
+          {
+            "id": 15,
+            "status": "created",
+            "admin_id": 7973,
+            "company_id": 3918,
+            "candidate_id": 2021,
+            "candidate": {
+              "id": 2021,
+              "name": "John Doe",
+              "emails": [
+                "john_doe@acme.com"
+              ],
+              "has_avatar": true,
+              "initials": "JD",
+              "photo_thumb_url": null,
+              "is_anonymous": false,
+              "currently_revealed_for_ids": []
+            },
+            "stage": {
+              "id": 43437,
+              "name": "Stage 1",
+              "position": 29863
+            },
+            "offer_id": 1693,
+            "talent_pool_id": null,
+            "actions": [],
+            "stage_id": 43437,
+            "disqualify_reason_id": null,
+            "previous_stage": null,
+            "previous_stage_id": null
+          }
+        ],
+        "previous_stage": null
+      }
+    ]
+  },
+  "tags": [
+    "trigger",
+    "offers"
+  ]
+}

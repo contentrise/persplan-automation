@@ -1,0 +1,17 @@
+{
+  "id": "terms_list_3",
+  "method": "GET",
+  "path": "/referral_portal/terms",
+  "summary": "List terms & privacy policy for company's Referral program",
+  "description": "List terms & privacy policy for company's Referral program. Endpoint: GET /referral_portal/terms.",
+  "params": [],
+  "example_request": "GET /referral_portal/terms",
+  "example_response": {
+    "terms": []
+  },
+  "tags": [
+    "referral_portal",
+    "terms",
+    "referral"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "consent_detail_2",
+  "method": "GET",
+  "path": "/share/gdpr/consent/",
+  "summary": "Shows fields for ConsentLink",
+  "description": "Shows fields for ConsentLink. Endpoint: GET /share/gdpr/consent/. Required parameters: subdomain, consent_link_token.",
+  "params": [
+    {
+      "name": "subdomain",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "consent_link_token",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/gdpr/consent/\n\nRequired params: subdomain, consent_link_token",
+  "example_response": {
+    "consent_link": {
+      "candidate_id": 19,
+      "language": "en",
+      "candidate_name": "John Doe",
+      "extension_days": 100,
+      "company_name": "Test Company",
+      "consent_privacy_link": null,
+      "candidate_token": "tok"
+    }
+  },
+  "tags": [
+    "gdpr",
+    "consent"
+  ]
+}

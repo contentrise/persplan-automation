@@ -1,0 +1,46 @@
+{
+  "id": "field_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/custom_fields/fieldsets/fields/{id}",
+  "summary": "Update fieldset field",
+  "description": "Update fieldset field. Endpoint: PATCH /c/{company_id}/custom_fields/fieldsets/fields/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Field ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"field\": {\n\"visibility\": {\n\"admin_ids\": [\n1063\n],\n\"level\": \"protected\",\n\"role_ids\": [\n545\n]\n}\n}\n}",
+  "example_response": {
+    "field": {
+      "id": 28,
+      "name": "Salary",
+      "position": 22,
+      "visible": true,
+      "kind": "single_line",
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          1063
+        ],
+        "role_ids": [
+          545
+        ]
+      }
+    }
+  },
+  "tags": [
+    "custom_fields",
+    "fieldsets"
+  ]
+}

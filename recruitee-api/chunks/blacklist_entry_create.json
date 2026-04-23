@@ -1,0 +1,45 @@
+{
+  "id": "blacklist_entry_create",
+  "method": "POST",
+  "path": "/c/{company_id}/careers/settings/blacklist_entry",
+  "summary": "Create a new blacklist entry",
+  "description": "Create a new blacklist entry. Endpoint: POST /c/{company_id}/careers/settings/blacklist_entry. Required parameters: email, phone, company_id.",
+  "params": [
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "phone",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"blacklist_entry\": {}\n}",
+  "example_response": {
+    "error": [
+      "Data is invalid"
+    ],
+    "error_fields": {
+      "data": [
+        "is invalid"
+      ]
+    }
+  },
+  "tags": [
+    "careers",
+    "settings"
+  ]
+}

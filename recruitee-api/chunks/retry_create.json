@@ -1,0 +1,29 @@
+{
+  "id": "retry_create",
+  "method": "POST",
+  "path": "/c/{company_id}/trigger/actions/{action_id}/retry",
+  "summary": "Retry a single action.",
+  "description": "Retry a single action.. Endpoint: POST /c/{company_id}/trigger/actions/{action_id}/retry. Required parameters: action_id, company_id.",
+  "params": [
+    {
+      "name": "action_id",
+      "type": "integer",
+      "required": true,
+      "description": "Action ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/trigger/actions/{action_id}/retry\n\nRequired params: action_id, company_id",
+  "example_response": {},
+  "tags": [
+    "trigger",
+    "actions"
+  ]
+}

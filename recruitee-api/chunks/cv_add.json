@@ -1,0 +1,45 @@
+{
+  "id": "cv_add",
+  "method": "POST",
+  "path": "/c/{company_id}/imports/{import_id}/cvs",
+  "summary": "Add CV to import",
+  "description": "Add CV to import. Endpoint: POST /c/{company_id}/imports/{import_id}/cvs. Required parameters: file, import_id, company_id.",
+  "params": [
+    {
+      "name": "file",
+      "type": "file",
+      "required": true,
+      "description": "CV file",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "import_id",
+      "type": "integer",
+      "required": true,
+      "description": "Import ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"cv\": {\n\"file\": {\n\"filename\": \"import.cvs\",\n\"path\": \"test/files/imports/import.cvs\",\n\"content_type\": null\n}\n}\n}",
+  "example_response": {
+    "error": [
+      "File extension invalid"
+    ],
+    "error_fields": {
+      "file": [
+        "extension invalid"
+      ]
+    }
+  },
+  "tags": [
+    "imports",
+    "cvs"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "disqualify_reason_create",
+  "method": "POST",
+  "path": "/c/{company_id}/disqualify_reasons",
+  "summary": "Create single disqualify reason",
+  "description": "Create single disqualify reason. Endpoint: POST /c/{company_id}/disqualify_reasons. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"disqualify_reason\": {\n\"name\": \" Disqualify reason \",\n\"position\": 1\n}\n}",
+  "example_response": {
+    "disqualify_reason": {
+      "id": 96,
+      "name": "Disqualify reason",
+      "position": 1,
+      "action_templates": [],
+      "automation_ids": []
+    }
+  },
+  "tags": [
+    "disqualify_reasons",
+    "pipeline"
+  ]
+}

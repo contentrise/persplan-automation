@@ -1,0 +1,46 @@
+{
+  "id": "email_template_duplicate",
+  "method": "POST",
+  "path": "/c/{company_id}/email_templates/{source_id}",
+  "summary": "Duplicate email template",
+  "description": "Duplicate email template. Endpoint: POST /c/{company_id}/email_templates/{source_id}. Required parameters: source_id, company_id.",
+  "params": [
+    {
+      "name": "source_id",
+      "type": "integer",
+      "required": true,
+      "description": "ID of the source template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/email_templates/{source_id}\n\nRequired params: source_id, company_id",
+  "example_response": {
+    "email_template": {
+      "id": 40,
+      "position": 2,
+      "title": "Template (2)",
+      "admin_id": 7172,
+      "subject": "Thanks for applying",
+      "created_at": "2026-04-21T07:33:24.291552Z",
+      "updated_at": "2026-04-21T07:33:24.291552Z",
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      },
+      "body_html": "Thanks for applying, Regards",
+      "template_attachment_assignments": []
+    }
+  },
+  "tags": [
+    "email_templates",
+    "mailbox"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "sm_send",
+  "method": "PATCH",
+  "path": "/two_factor_authentication_settings/sms/send_code",
+  "summary": "Sends verification SMS needed for activation",
+  "description": "Sends verification SMS needed for activation. Endpoint: PATCH /two_factor_authentication_settings/sms/send_code. Required parameters: phone.",
+  "params": [
+    {
+      "name": "phone",
+      "type": "string",
+      "required": true,
+      "description": "Phone number for 2FA SMSs",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /two_factor_authentication_settings/sms/send_code\n\nRequired params: phone",
+  "example_response": {},
+  "tags": [
+    "two_factor_authentication_settings",
+    "sms",
+    "admin"
+  ]
+}

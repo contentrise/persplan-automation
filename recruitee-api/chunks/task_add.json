@@ -1,0 +1,38 @@
+{
+  "id": "task_add",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/task",
+  "summary": "Add task to candidates",
+  "description": "Add task to candidates. Endpoint: PATCH /c/{company_id}/bulk/candidates/task. Required parameters: company_id. Optional parameters include task, candidates.",
+  "params": [
+    {
+      "name": "task",
+      "type": "map",
+      "required": false,
+      "description": "Task details (fields: title, due_date, timezone, admin_ids)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n447,\n448,\n449\n],\n\"task\": {\n\"title\": \"Solve problem\"\n}\n}",
+  "example_response": {
+    "uuid": "bcb86f74-8b94-45ec-b329-e630ababb66f"
+  },
+  "tags": [
+    "candidates",
+    "task"
+  ]
+}

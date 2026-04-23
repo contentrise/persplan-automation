@@ -1,0 +1,43 @@
+{
+  "id": "offer_tag_merge_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_tags/merge",
+  "summary": "Merge offer tags",
+  "description": "Merge offer tags. Endpoint: PATCH /c/{company_id}/offer_tags/merge. Required parameters: name, company_id. Optional parameters include id, ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer tag ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "New offer tag name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ids",
+      "type": "integer",
+      "required": false,
+      "description": "Offer tag IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/offer_tags/merge\n\nRequired params: name, company_id\n\nOptional params: id, ids",
+  "example_response": {},
+  "tags": [
+    "offer_tags",
+    "tagging"
+  ]
+}

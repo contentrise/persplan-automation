@@ -1,0 +1,29 @@
+{
+  "id": "shared_email_provider_create",
+  "method": "POST",
+  "path": "/c/{company_id}/shared_email_providers",
+  "summary": "Create new Shared Email Provider",
+  "description": "Create new Shared Email Provider. Endpoint: POST /c/{company_id}/shared_email_providers. Required parameters: provider, company_id.",
+  "params": [
+    {
+      "name": "provider",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/shared_email_providers\n\nRequired params: provider, company_id",
+  "example_response": {},
+  "tags": [
+    "shared_email_providers",
+    "mailbox"
+  ]
+}

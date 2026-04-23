@@ -1,0 +1,29 @@
+{
+  "id": "setting_detail_6",
+  "method": "GET",
+  "path": "/c/{company_id}/requisitions/settings",
+  "summary": "Show company's requisition settings",
+  "description": "Show company's requisition settings. Endpoint: GET /c/{company_id}/requisitions/settings. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/requisitions/settings\n\nRequired params: company_id",
+  "example_response": {
+    "settings": {
+      "enabled": false,
+      "departments_required_for_approval_flows": false,
+      "requisitions_required_for_offers": false,
+      "auto_create_job_after_approval": false
+    }
+  },
+  "tags": [
+    "requisitions",
+    "settings"
+  ]
+}

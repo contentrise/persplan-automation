@@ -1,0 +1,29 @@
+{
+  "id": "duplicate_duplicate_11",
+  "method": "POST",
+  "path": "/c/{company_id}/workflow_automations/disqualify_reasons/automations/{automation_id}/duplicate",
+  "summary": "Duplicate automation",
+  "description": "Duplicate automation. Endpoint: POST /c/{company_id}/workflow_automations/disqualify_reasons/automations/{automation_id}/duplicate. Required parameters: automation_id, company_id.",
+  "params": [
+    {
+      "name": "automation_id",
+      "type": "integer",
+      "required": true,
+      "description": "Automation ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/workflow_automations/disqualify_reasons/automations/{automation_id}/duplicate\n\nRequired params: automation_id, company_id",
+  "example_response": {},
+  "tags": [
+    "workflow_automations",
+    "automations"
+  ]
+}

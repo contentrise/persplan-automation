@@ -1,0 +1,45 @@
+{
+  "id": "talent_pool_create",
+  "method": "POST",
+  "path": "/c/{company_id}/talent_pools",
+  "summary": "Create talent pool",
+  "description": "Create talent pool. Endpoint: POST /c/{company_id}/talent_pools. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"talent_pool\": {\n\"company\": {\n\"name\": \"TEST\"\n},\n\"description\": \"<p>Elixir</p>\\n\",\n\"title\": \"The Plaza Diner\"\n}\n}",
+  "example_response": {
+    "talent_pool": {
+      "id": 1848,
+      "position": 1,
+      "status": "draft",
+      "description": "<p>Elixir</p>\n",
+      "title": "The Plaza Diner",
+      "admins": [],
+      "candidates_count": 0,
+      "created_at": "2026-04-21T07:33:54.359674Z",
+      "updated_at": "2026-04-21T07:33:54.359674Z",
+      "admin_ids": [],
+      "notes_count": 0,
+      "followed": false,
+      "attachments_count": 0,
+      "adminapp_url": "http://app.recruitee.internal:3003/#/talent_pools/the-plaza-diner",
+      "example": false,
+      "department_id": null,
+      "slug": "the-plaza-diner",
+      "guid": "mselo",
+      "mailbox_email": "tp.mselo@company609.test.recruitee.com",
+      "followers": [],
+      "follower_ids": []
+    }
+  },
+  "tags": [
+    "talent_pools"
+  ]
+}

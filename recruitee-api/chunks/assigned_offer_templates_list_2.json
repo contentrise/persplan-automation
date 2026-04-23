@@ -1,0 +1,94 @@
+{
+  "id": "assigned_offer_templates_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/dynamic_fields/{id}/assigned_offer_templates",
+  "summary": "List given field's assigned offer templates",
+  "description": "List given field's assigned offer templates. Endpoint: GET /c/{company_id}/dynamic_fields/{id}/assigned_offer_templates. Required parameters: id, company_id. Optional parameters include q, limit, page.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Field ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search offer templates",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/dynamic_fields/{id}/assigned_offer_templates\n\nRequired params: id, company_id\n\nOptional params: q, limit, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 3,
+      "page": 1
+    },
+    "assigned_offer_templates": [
+      {
+        "id": 40,
+        "name": "Backend Developer Template",
+        "remote": false,
+        "title": "Best Offer",
+        "created_at": "2026-04-21T07:30:26.188988Z",
+        "updated_at": "2026-04-21T07:30:26.188988Z",
+        "department": null,
+        "location_ids": [],
+        "hybrid": false,
+        "on_site": false
+      },
+      {
+        "id": 41,
+        "name": "Backend Developer Template",
+        "remote": false,
+        "title": "Best Offer",
+        "created_at": "2026-04-21T07:30:26.192056Z",
+        "updated_at": "2026-04-21T07:30:26.192056Z",
+        "department": null,
+        "location_ids": [],
+        "hybrid": false,
+        "on_site": false
+      },
+      {
+        "id": 42,
+        "name": "Backend Developer Template",
+        "remote": false,
+        "title": "Best Offer",
+        "created_at": "2026-04-21T07:30:26.194982Z",
+        "updated_at": "2026-04-21T07:30:26.194982Z",
+        "department": null,
+        "location_ids": [],
+        "hybrid": false,
+        "on_site": false
+      }
+    ]
+  },
+  "tags": [
+    "dynamic_fields",
+    "assigned_offer_templates"
+  ]
+}

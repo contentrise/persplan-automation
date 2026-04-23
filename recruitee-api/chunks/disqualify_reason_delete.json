@@ -1,0 +1,43 @@
+{
+  "id": "disqualify_reason_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/disqualify_reasons/{id}",
+  "summary": "Delete disqualify reason",
+  "description": "Delete disqualify reason. Endpoint: DELETE /c/{company_id}/disqualify_reasons/{id}. Required parameters: id, company_id. Optional parameters include fallback_disqualify_reason_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Disqualify reason ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "fallback_disqualify_reason_id",
+      "type": "integer",
+      "required": false,
+      "description": "Disqualify reason ID to replace in OpenQuestionOptions",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/disqualify_reasons/{id}\n\nRequired params: id, company_id\n\nOptional params: fallback_disqualify_reason_id",
+  "example_response": {
+    "disqualify_reason": {
+      "id": 105,
+      "name": "Not a fit",
+      "position": 1,
+      "action_templates": []
+    }
+  },
+  "tags": [
+    "disqualify_reasons",
+    "pipeline"
+  ]
+}

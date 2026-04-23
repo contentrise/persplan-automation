@@ -1,0 +1,31 @@
+{
+  "id": "setting_detail_2",
+  "method": "GET",
+  "path": "/c/{company_id}/eeo/settings",
+  "summary": "Show company's EEO settings",
+  "description": "Show company's EEO settings. Endpoint: GET /c/{company_id}/eeo/settings. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/eeo/settings\n\nRequired params: company_id",
+  "example_response": {
+    "company_settings": {
+      "enabled": false,
+      "id": 2,
+      "kind": "eeo",
+      "email_subject": "[company] - Please fill in self-identification questionnaire.",
+      "email_body_html": "<p>Hi [candidate.full],<br />Thank you for your interest in [job_offer.all].</p>\n<p>Since [company] is committed to equal employment opportunity and nondiscrimination, federal law requires us to reach out to, hire, and provide equal opportunity to qualified people without regard to race, color, religion, sex, national origin, age, veteran status, genetic information, disability or any legally protected status. We are also subject to certain nondiscrimination recordkeeping and reporting requirements which require us to invite employees to voluntarily self-identify their race/ethnicity and gender.</p>\n<p>To help us be an equal opportunity employer <strong>please answer the self-identification questionnaire below</strong>. Submission of this information is <strong>voluntary</strong> and refusal to provide it will not subject you to any adverse treatment. The information provided will be used only in ways that are not inconsistent with the provisions of applicable laws, executive orders, and regulations.</p>\n",
+      "data_retention_days": 0
+    }
+  },
+  "tags": [
+    "eeo",
+    "settings"
+  ]
+}

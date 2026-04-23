@@ -1,0 +1,116 @@
+{
+  "id": "reactivate_reactivate_3",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offer_letters/{id}/reactivate",
+  "summary": "Reactivate offer letter link",
+  "description": "Reactivate offer letter link. Endpoint: PATCH /c/{company_id}/offer_letters/{id}/reactivate. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer letter ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/offer_letters/{id}/reactivate\n\nRequired params: company_id\n\nOptional params: id",
+  "example_response": {
+    "offer_letter": {
+      "id": 53,
+      "status": "sent",
+      "title": "Offer Letter for John Doe",
+      "token": "9b962c35-6759-4bc8-9f4e-7d3e883ee424",
+      "details": [
+        {
+          "description": "Best Offer",
+          "title": "Position"
+        }
+      ],
+      "admin_id": 9768,
+      "candidate_id": 2445,
+      "created_at": "2026-04-14T07:33:59.588101Z",
+      "updated_at": "2026-04-14T07:33:59.588101Z",
+      "offer_id": 2063,
+      "visibility": {
+        "level": "protected",
+        "admin_ids": [
+          9768
+        ],
+        "role_ids": [
+          4987
+        ]
+      },
+      "lang_code": "en",
+      "email_subject": "Default subject",
+      "email_body_html": "<p>Default body</p>",
+      "sent_at": null,
+      "salary": {
+        "enabled": true,
+        "value": "10000",
+        "description": null,
+        "period": "month",
+        "currency": "EUR",
+        "heading": null
+      },
+      "published_at": "2026-04-21T07:33:59.590594Z",
+      "email_attachment_assignments": [],
+      "disclaimer": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "heading": {
+        "enabled": true,
+        "description_html": null,
+        "description_json": null,
+        "heading": "Welcome to the team, John Doe!"
+      },
+      "intro": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "role_description": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "summary": {
+        "enabled": false,
+        "description_html": null,
+        "description_json": null,
+        "heading": null
+      },
+      "benefits": {
+        "enabled": true,
+        "items": [
+          {
+            "description": "Fully paid",
+            "title": "Insurance"
+          }
+        ],
+        "heading": "Benefits"
+      },
+      "start_date": {
+        "date": null,
+        "description": null,
+        "title": null
+      },
+      "link_deactivated": false
+    }
+  },
+  "tags": [
+    "offer_letters",
+    "reactivate"
+  ]
+}

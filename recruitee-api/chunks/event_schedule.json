@@ -1,0 +1,94 @@
+{
+  "id": "event_schedule",
+  "method": "POST",
+  "path": "/c/{company_id}/interview/events/{id}/schedule",
+  "summary": "Schedule interview event and notify participants",
+  "description": "Schedule interview event and notify participants. Endpoint: POST /c/{company_id}/interview/events/{id}/schedule. Required parameters: id, company_id. Optional parameters include candidate_email, notify_config, reminders, notify_candidate, notify_interviewers, grant_access, candidate_message, interviewers_message.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview event ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_email",
+      "type": "string",
+      "required": false,
+      "description": "Candidate email which will be used for reminders. Need to match candidate email",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "notify_config",
+      "type": "map",
+      "required": false,
+      "description": "Notification parameters",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "reminders",
+      "type": "array",
+      "required": false,
+      "description": "Array of objects with minutes_before",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "notify_candidate",
+      "type": "boolean",
+      "required": false,
+      "description": "Notify candidate",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "notify_interviewers",
+      "type": "boolean",
+      "required": false,
+      "description": "Notify interviewers",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "grant_access",
+      "type": "array",
+      "required": false,
+      "description": "Array of admin_id (integer) & placement_id/offer_id/talent_pool_id (integer; based on access type to be granted)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_message",
+      "type": "string",
+      "required": false,
+      "description": "Message to candidate (parameters: subject, body_html, to, attachments)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "interviewers_message",
+      "type": "string",
+      "required": false,
+      "description": "Message to interviewers (parameters: subject, body_html, to, cc, bcc, attachments)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_event\": {\n\"candidate_email\": \"test@o2.pl\",\n\"candidate_message\": {\n\"body_html\": \"<b>Phone Interview</b>\",\n\"subject\": \"Phone Interview\"\n},\n\"interviewers_message\": {\n\"bcc\": [\n{\n\"email\": \"another@example.com\"\n}\n],\n\"body_html\": \"<b>Phone Interview</b>\",\n\"cc\": [\n{\n\"email_provider_id\": 342\n}\n],\n\"subject\": \"Phone Interview\",\n\"to\": [\n{\n\"email_provider_id\": 518\n},\n{\n\"email\": \"admin@example.com\"\n}\n]\n},\n\"notify_candidate\": true,\n\"notify_interviewers\": true\n}\n}",
+  "example_response": {
+    "error": [
+      "Candidate email is invalid"
+    ],
+    "error_fields": {
+      "candidate_email": [
+        "is invalid"
+      ]
+    }
+  },
+  "tags": [
+    "interview",
+    "events"
+  ]
+}

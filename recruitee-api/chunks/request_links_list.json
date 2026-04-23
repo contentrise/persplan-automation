@@ -1,0 +1,117 @@
+{
+  "id": "request_links_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/candidates/{candidate_id}/request_links",
+  "summary": "List interview request links",
+  "description": "List interview request links. Endpoint: GET /c/{company_id}/interview/candidates/{candidate_id}/request_links. Required parameters: company_id. Optional parameters include status, kind, candidate_id.",
+  "params": [
+    {
+      "name": "status",
+      "type": "string",
+      "required": false,
+      "description": "Limit by request link status, can be: ‘pending’, ‘completed’, ‘all’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "required": false,
+      "description": "Limit by request link kind, can be: ‘schedule’, ‘questionnaire’, ‘all’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": false,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/candidates/{candidate_id}/request_links\n\nRequired params: company_id\n\nOptional params: status, kind, candidate_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 5215,
+        "type": "Admin",
+        "email": "john4924@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/5215/normal_avatar_3ldmvendfv3f.png",
+        "photo_thumb_url": "tmp/bow/admins/5215/thumb_avatar_3ldmvendfv3f.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 1324,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:32:48.633144Z",
+        "updated_at": "2026-04-21T07:32:48.633144Z",
+        "is_hired": false,
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=1324&company=2711",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      },
+      {
+        "id": 142,
+        "name": "Elixir Developer",
+        "position": 69,
+        "type": "InterviewTemplate",
+        "category": "Engineering",
+        "kind": "questionnaire",
+        "token": "abcdef123456",
+        "info_title": "Interview preperation",
+        "info_description": "<p>Elixir Developer interview</p>\n"
+      }
+    ],
+    "interview_request_links": [
+      {
+        "id": 74,
+        "admin_id": 5215,
+        "candidate_id": 1324,
+        "created_at": "2026-04-21T07:32:48.638781Z",
+        "updated_at": "2026-04-21T07:32:48.638781Z",
+        "interview_template_id": 142,
+        "sent_at": null,
+        "interview_schedule_id": null
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "candidates"
+  ]
+}

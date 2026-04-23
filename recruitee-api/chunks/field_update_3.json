@@ -1,0 +1,75 @@
+{
+  "id": "field_update_3",
+  "method": "PATCH",
+  "path": "/c/{company_id}/custom_fields/fieldsets/{fieldset_id}/fields/update_positions",
+  "summary": "Update fieldset fields' positions",
+  "description": "Update fieldset fields' positions. Endpoint: PATCH /c/{company_id}/custom_fields/fieldsets/{fieldset_id}/fields/update_positions. Required parameters: field_ids, company_id. Optional parameters include fieldset_id.",
+  "params": [
+    {
+      "name": "fieldset_id",
+      "type": "integer",
+      "required": false,
+      "description": "Fieldset ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "field_ids",
+      "type": "array",
+      "required": true,
+      "description": "Array of fields IDs in requested order",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"field_ids\": [\n22,\n20,\n21\n]\n}",
+  "example_response": {
+    "fields": [
+      {
+        "id": 22,
+        "name": "Field 15",
+        "position": 1,
+        "visible": true,
+        "kind": "single_line",
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        }
+      },
+      {
+        "id": 20,
+        "name": "Field 13",
+        "position": 2,
+        "visible": true,
+        "kind": "single_line",
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        }
+      },
+      {
+        "id": 21,
+        "name": "Field 14",
+        "position": 3,
+        "visible": true,
+        "kind": "single_line",
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        }
+      }
+    ]
+  },
+  "tags": [
+    "custom_fields",
+    "fieldsets"
+  ]
+}

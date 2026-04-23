@@ -1,0 +1,95 @@
+{
+  "id": "availables_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/meeting_rooms/available",
+  "summary": "Lists enabled meeting rooms with availability info",
+  "description": "Lists enabled meeting rooms with availability info. Endpoint: GET /c/{company_id}/interview/meeting_rooms/available. Required parameters: duration, available_for, company_id. Optional parameters include timezone, exclude_event_id.",
+  "params": [
+    {
+      "name": "timezone",
+      "type": "string",
+      "required": false,
+      "description": "Timezone to assume, default: admin’s timezone or UTC",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "duration",
+      "type": "string",
+      "required": true,
+      "description": "What period of time should we check [in minutes]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "available_for",
+      "type": "datetime",
+      "required": true,
+      "description": "From when to check availability [in ISO format]",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "exclude_event_id",
+      "type": "integer",
+      "required": false,
+      "description": "Exclude given event when calculating rooms availability (Google only)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/meeting_rooms/available\n\nRequired params: duration, available_for, company_id\n\nOptional params: timezone, exclude_event_id",
+  "example_response": {
+    "meeting_rooms": [
+      {
+        "enabled": true,
+        "id": 19,
+        "name": "room 7",
+        "status": "connected",
+        "floor": 1,
+        "available": null,
+        "provider": "google",
+        "external_id": "room_7@provider.com",
+        "external_calendar_id": "room 7@resource.calendar.google.com",
+        "synced_at": "2026-04-21T02:42:38.501264Z",
+        "building": "Kupiec Poznanski",
+        "capacity": 10
+      },
+      {
+        "enabled": true,
+        "id": 20,
+        "name": "room 8",
+        "status": "connected",
+        "floor": 1,
+        "available": null,
+        "provider": "google",
+        "external_id": "room_8@provider.com",
+        "external_calendar_id": "room 8@resource.calendar.google.com",
+        "synced_at": "2026-04-21T02:29:38.502427Z",
+        "building": "Kupiec Poznanski",
+        "capacity": 10
+      },
+      {
+        "enabled": true,
+        "id": 21,
+        "name": "room 9",
+        "status": "connected",
+        "floor": 1,
+        "available": null,
+        "provider": "google",
+        "external_id": "room_9@provider.com",
+        "external_calendar_id": "room 9@resource.calendar.google.com",
+        "synced_at": "2026-04-21T04:28:38.503390Z",
+        "building": "Kupiec Poznanski",
+        "capacity": 10
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "meeting_rooms"
+  ]
+}

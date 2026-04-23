@@ -1,0 +1,29 @@
+{
+  "id": "automation_create_4",
+  "method": "POST",
+  "path": "/c/{company_id}/workflow_automations/pipeline_templates/{id}/automations",
+  "summary": "Creates a new automation",
+  "description": "Creates a new automation. Endpoint: POST /c/{company_id}/workflow_automations/pipeline_templates/{id}/automations. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Context related resource ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/workflow_automations/pipeline_templates/{id}/automations\n\nRequired params: company_id\n\nOptional params: id",
+  "example_response": {},
+  "tags": [
+    "workflow_automations",
+    "pipeline_templates"
+  ]
+}

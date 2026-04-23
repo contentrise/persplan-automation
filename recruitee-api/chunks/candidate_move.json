@@ -1,0 +1,46 @@
+{
+  "id": "candidate_move",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/change_stage",
+  "summary": "Move candidates to different stage",
+  "description": "Move candidates to different stage. Endpoint: PATCH /c/{company_id}/bulk/candidates/change_stage. Required parameters: company_id. Optional parameters include candidates, offer_id, stage_id.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": false,
+      "description": "Offer id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stage_id",
+      "type": "integer",
+      "required": false,
+      "description": "Stage ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n482,\n483,\n484\n],\n\"offer_id\": 434,\n\"stage_id\": 11964\n}",
+  "example_response": {
+    "error": [
+      "Can not perform bulk hire!"
+    ]
+  },
+  "tags": [
+    "candidates"
+  ]
+}

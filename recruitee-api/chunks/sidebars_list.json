@@ -1,0 +1,30 @@
+{
+  "id": "sidebars_list",
+  "method": "GET",
+  "path": "/c/{company_id}/dashboard/sidebar",
+  "summary": "Counters for dashboard sidebar",
+  "description": "Counters for dashboard sidebar. Endpoint: GET /c/{company_id}/dashboard/sidebar. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/dashboard/sidebar\n\nRequired params: company_id",
+  "example_response": {
+    "counters": {
+      "tasks": 3,
+      "due_today_tasks": 1,
+      "overdue_tasks": 1,
+      "interview_events": 1,
+      "interview_result_requests": 1
+    }
+  },
+  "tags": [
+    "dashboard",
+    "sidebar"
+  ]
+}

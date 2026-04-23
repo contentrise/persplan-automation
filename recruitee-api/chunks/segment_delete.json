@@ -1,0 +1,55 @@
+{
+  "id": "segment_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/search/segments/{id}",
+  "summary": "Delete search segment",
+  "description": "Delete search segment. Endpoint: DELETE /c/{company_id}/search/segments/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Segment ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/search/segments/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 2848,
+        "type": "Admin",
+        "email": "john916@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/2848/normal_avatar_noobsdw8uunf.png",
+        "photo_thumb_url": "tmp/bow/admins/2848/thumb_avatar_noobsdw8uunf.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "segment": {
+      "id": 7,
+      "name": "Segment 1",
+      "position": null,
+      "private": true,
+      "admin_id": 2848,
+      "query_params": {},
+      "segment_type": "custom"
+    }
+  },
+  "tags": [
+    "segments",
+    "search"
+  ]
+}

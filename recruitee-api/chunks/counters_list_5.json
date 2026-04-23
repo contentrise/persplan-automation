@@ -1,0 +1,64 @@
+{
+  "id": "counters_list_5",
+  "method": "GET",
+  "path": "/c/{company_id}/tracking/notifications/counters",
+  "summary": "Unread notification counters",
+  "description": "Unread notification counters. Endpoint: GET /c/{company_id}/tracking/notifications/counters. Required parameters: company_id. Optional parameters include events, offers, talent_pools, requisitions, start_date, end_date.",
+  "params": [
+    {
+      "name": "events",
+      "type": "string",
+      "required": false,
+      "description": "List of events names",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offers",
+      "type": "array",
+      "required": false,
+      "description": "Array of offer ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "talent_pools",
+      "type": "array",
+      "required": false,
+      "description": "Array of talent pool ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "requisitions",
+      "type": "array",
+      "required": false,
+      "description": "Array of requisition ids",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "start_date",
+      "type": "string",
+      "required": false,
+      "description": "Start date, format: 12 Sep 2015",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "end_date",
+      "type": "string",
+      "required": false,
+      "description": "End date, format: 12 Sep 2015",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/tracking/notifications/counters\n\nRequired params: company_id\n\nOptional params: events, offers, talent_pools, requisitions, start_date, end_date",
+  "example_response": {},
+  "tags": [
+    "tracking",
+    "notifications"
+  ]
+}

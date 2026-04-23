@@ -1,0 +1,120 @@
+{
+  "id": "dashboard_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/report/dashboards/update_positions",
+  "summary": "Update dashboards positions",
+  "description": "Update dashboards positions. Endpoint: PATCH /c/{company_id}/report/dashboards/update_positions. Required parameters: company_id. Optional parameters include id, position.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Id of a dashboard.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "position",
+      "type": "integer",
+      "required": false,
+      "description": "Dashboard position.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"dashboards\": [\n{\n\"id\": 23,\n\"position\": 1\n},\n{\n\"id\": 22,\n\"position\": 2\n},\n{\n\"id\": 21,\n\"position\": 3\n},\n{\n\"id\": 24,\n\"position\": 4\n}\n]\n}",
+  "example_response": {
+    "references": [],
+    "dashboards": [
+      {
+        "id": 23,
+        "name": "Sample dashboard",
+        "origin": null,
+        "filters": [],
+        "generated": false,
+        "symbol": null,
+        "components": [],
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        },
+        "date_filter": {},
+        "is_available": true,
+        "template_id": null,
+        "unavailable_reason": null,
+        "show_banner": false
+      },
+      {
+        "id": 22,
+        "name": "Sample dashboard",
+        "origin": null,
+        "filters": [],
+        "generated": false,
+        "symbol": null,
+        "components": [],
+        "visibility": {
+          "level": "private",
+          "admin_ids": [
+            8322
+          ],
+          "role_ids": []
+        },
+        "date_filter": {},
+        "is_available": true,
+        "template_id": null,
+        "unavailable_reason": null,
+        "show_banner": false
+      },
+      {
+        "id": 21,
+        "name": "Sample dashboard",
+        "origin": null,
+        "filters": [],
+        "generated": false,
+        "symbol": null,
+        "components": [],
+        "visibility": {
+          "level": "public",
+          "admin_ids": [],
+          "role_ids": []
+        },
+        "date_filter": {},
+        "is_available": true,
+        "template_id": null,
+        "unavailable_reason": null,
+        "show_banner": false
+      },
+      {
+        "id": 24,
+        "name": "Sample dashboard",
+        "origin": null,
+        "filters": [],
+        "generated": false,
+        "symbol": null,
+        "components": [],
+        "visibility": {
+          "level": "protected",
+          "admin_ids": [
+            8322
+          ],
+          "role_ids": []
+        },
+        "date_filter": {},
+        "is_available": true,
+        "template_id": null,
+        "unavailable_reason": null,
+        "show_banner": false
+      }
+    ]
+  },
+  "tags": [
+    "report",
+    "dashboards"
+  ]
+}

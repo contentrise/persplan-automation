@@ -1,0 +1,65 @@
+{
+  "id": "stage_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/stages",
+  "summary": "Create pipeline template stage",
+  "description": "Create pipeline template stage. Endpoint: POST /c/{company_id}/offer_templates/{offer_template_id}/pipeline_templates/stages. Required parameters: stage, offer_template_id, source_template_id, company_id.",
+  "params": [
+    {
+      "name": "stage",
+      "type": "map",
+      "required": true,
+      "description": "Stage params: name (string, required) - stage name; category (string, required) - stage category; position (integer, required) - stage position; action_templates (array, optional) - stage automated actions; time_limit (integer, optional) - candidate time limit for stage; fair_evaluations_enabled (boolean, optional) - fair evaluation feature status",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer template id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"source_template_id\": 3329,\n\"stage\": {\n\"action_templates\": [\n{\n\"data\": {\n\"attachment_ids\": [],\n\"body_html\": \"<div>Testing</div>\",\n\"from\": null,\n\"from_kind\": \"admin_performing_action\",\n\"send_after_at_hour\": 8,\n\"send_after_at_minute\": 5,\n\"send_after_days\": 181,\n\"send_at_timezone\": \"Europe/Warsaw\",\n\"signature\": false,\n\"subject\": \"Testing subject\",\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n},\n\"kind\": \"send_email\",\n\"references\": []\n}\n],\n\"category\": \"none\",\n\"fairEvaluationsEnabled\": false,\n\"group\": \"active\",\n\"locked\": false,\n\"name\": \"Luktuc\",\n\"placementsCount\": null,\n\"position\": \"1\",\n\"time_limit\": null\n}\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": null,
+        "data": {},
+        "message": "Send after days must be less than or equal to 180",
+        "source": "stage/action_templates/send_after_days"
+      }
+    ],
+    "resources": {
+      "action_templates": [
+        {
+          "send_after_days": [
+            {
+              "code": null,
+              "data": {},
+              "message": "must be less than or equal to 180"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "tags": [
+    "offer_templates",
+    "pipeline_templates"
+  ]
+}

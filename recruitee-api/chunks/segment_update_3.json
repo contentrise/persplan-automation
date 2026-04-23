@@ -1,0 +1,43 @@
+{
+  "id": "segment_update_3",
+  "method": "PATCH",
+  "path": "/c/{company_id}/search/segments/update_positions",
+  "summary": "Update search segment positions",
+  "description": "Update search segment positions. Endpoint: PATCH /c/{company_id}/search/segments/update_positions. Required parameters: positions_position, positions_segment_type, company_id. Optional parameters include positions_segment_id.",
+  "params": [
+    {
+      "name": "positions_position",
+      "type": "integer",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "positions_segment_id",
+      "type": "integer",
+      "required": false,
+      "description": "required if segment_type is ‘custom’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "positions_segment_type",
+      "type": "string",
+      "required": true,
+      "description": "‘custom’ | ‘all’ | ‘new’ | ‘not_contacted’ | ‘followed’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"positions\": [\n{\n\"position\": 1,\n\"segment_id\": null,\n\"segment_type\": \"followed\"\n},\n{\n\"position\": 2,\n\"segment_id\": null,\n\"segment_type\": \"not_contacted\"\n},\n{\n\"position\": 3,\n\"segment_id\": 13,\n\"segment_type\": \"custom\"\n},\n{\n\"position\": 4,\n\"segment_id\": 14,\n\"segment_type\": \"custom\"\n},\n{\n\"position\": 5,\n\"segment_id\": null,\n\"segment_type\": \"all\"\n},\n{\n\"position\": 6,\n\"segment_id\": 15,\n\"segment_type\": \"custom\"\n}\n]\n}",
+  "example_response": {},
+  "tags": [
+    "segments",
+    "search"
+  ]
+}

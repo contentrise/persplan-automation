@@ -1,0 +1,45 @@
+{
+  "id": "template_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/interview/templates/{id}",
+  "summary": "Update interview template",
+  "description": "Update interview template. Endpoint: PATCH /c/{company_id}/interview/templates/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_template\": {\n\"interview_questions\": [\n{\n\"hint\": \"\",\n\"id\": 12,\n\"kind\": \"info\",\n\"position\": 1\n},\n{\n\"hint\": \"\",\n\"id\": 13,\n\"kind\": \"boolean\",\n\"position\": 2,\n\"title\": \"\"\n}\n]\n}\n}",
+  "example_response": {
+    "error": [],
+    "error_fields": {
+      "interview_questions": [
+        {
+          "hint": [
+            "can't be blank"
+          ]
+        },
+        {
+          "title": [
+            "can't be blank"
+          ]
+        }
+      ]
+    }
+  },
+  "tags": [
+    "interview",
+    "templates"
+  ]
+}

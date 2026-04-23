@@ -1,0 +1,85 @@
+{
+  "id": "billing_information_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/billing_information",
+  "summary": "Update billing information",
+  "description": "Update billing information. Endpoint: PATCH /c/{company_id}/billing_information. Required parameters: company_id. Optional parameters include address, email, country_code, company_name, city, postal_code, vat_number, stripe_token, and more.",
+  "params": [
+    {
+      "name": "address",
+      "type": "string",
+      "required": false,
+      "description": "Address",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "required": false,
+      "description": "E-mail",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "country_code",
+      "type": "string",
+      "required": false,
+      "description": "Country Code",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_name",
+      "type": "string",
+      "required": false,
+      "description": "Company Name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "city",
+      "type": "string",
+      "required": false,
+      "description": "City",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "postal_code",
+      "type": "string",
+      "required": false,
+      "description": "Postal Code",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "vat_number",
+      "type": "string",
+      "required": false,
+      "description": "VAT Number",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stripe_token",
+      "type": "string",
+      "required": false,
+      "description": "Stripe token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "primary_contact_id",
+      "type": "integer",
+      "required": false,
+      "description": "Primary Contact ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/billing_information\n\nRequired params: company_id\n\nOptional params: address, email, country_code, company_name, city, postal_code, vat_number, stripe_token",
+  "example_response": {},
+  "tags": [
+    "billing_information",
+    "billing"
+  ]
+}

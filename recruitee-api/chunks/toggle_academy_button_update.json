@@ -1,0 +1,22 @@
+{
+  "id": "toggle_academy_button_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/toggle_academy_button",
+  "summary": "Update membership show_academy_button",
+  "description": "Update membership show_academy_button. Endpoint: PATCH /c/{company_id}/toggle_academy_button. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/toggle_academy_button\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "toggle_academy_button",
+    "company"
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "id": "custom_create",
+  "method": "POST",
+  "path": "/c/{company_id}/offers/{offer_id}/auto_reply_templates/custom",
+  "summary": "Creates custom auto reply template from currently assigned template and applies given params",
+  "description": "Creates custom auto reply template from currently assigned template and applies given params. Endpoint: POST /c/{company_id}/offers/{offer_id}/auto_reply_templates/custom. Required parameters: offer_id, source_template_id, company_id. Optional parameters include auto_reply_template.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auto_reply_template",
+      "type": "map",
+      "required": false,
+      "description": "Auto-reply template params; see update_custom/3 docs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Auto-reply template ID — pass nil to start from scratch",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"auto_reply_template\": {\n\"translations\": [\n{\n\"body_html\": \"Body\",\n\"lang_code\": \"en\",\n\"subject\": \"Subject\"\n}\n]\n},\n\"source_template_id\": null\n}",
+  "example_response": {
+    "auto_reply_template": {
+      "default": false,
+      "id": 152,
+      "position": null,
+      "title": null,
+      "created_at": "2026-04-21T07:32:44.802761Z",
+      "updated_at": "2026-04-21T07:32:44.802761Z",
+      "translations": [
+        {
+          "subject": "Subject",
+          "lang_code": "en",
+          "body_html": "Body"
+        }
+      ],
+      "template_attachment_assignments": []
+    }
+  },
+  "tags": [
+    "offers",
+    "auto_reply_templates"
+  ]
+}

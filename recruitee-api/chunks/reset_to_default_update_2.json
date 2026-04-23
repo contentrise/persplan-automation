@@ -1,0 +1,1152 @@
+{
+  "id": "reset_to_default_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/tracking/activity_subscriptions_preset/{role_id}/reset_to_defaults",
+  "summary": "Reset activity subscriptions presets to defaults",
+  "description": "Reset activity subscriptions presets to defaults. Endpoint: PATCH /c/{company_id}/tracking/activity_subscriptions_preset/{role_id}/reset_to_defaults. Required parameters: role_id, company_id.",
+  "params": [
+    {
+      "name": "role_id",
+      "type": "integer",
+      "required": true,
+      "description": "Role ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/tracking/activity_subscriptions_preset/{role_id}/reset_to_defaults\n\nRequired params: role_id, company_id",
+  "example_response": {
+    "activity_subscriptions_presets": {
+      "requisition_assignment_remove": {
+        "email": true,
+        "web": true,
+        "mobile": true
+      },
+      "requisition_opening_filled": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "assignment_remove": {
+        "email": true,
+        "web": true,
+        "mobile": true
+      },
+      "requisition_location_updated": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_opening_unassigned": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_result_request_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "screening_assistant_turned_off_for_job": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "mailbox_thread_unarchived": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_campaign_created": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_hiring_manager_change": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_event_request_sent": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_requisition_archived": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "assignment_add": {
+        "email": true,
+        "web": true,
+        "mobile": true
+      },
+      "job_hiring_manager_clear": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_published_requisition_mismatch": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_message_sent": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "task_due_today": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "requisition_archived": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "screening_limit_reached": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_location_updated": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_threads_archived": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "disqualify_reason_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_overdue_candidates": {
+        "email": true,
+        "web": true,
+        "mobile": false
+      },
+      "import_finish": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_field_updated": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_event_rescheduled_by_candidate": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_recruiter_change": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_retrieved": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "offer_letter_created": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_disabled": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "requisition_approval_flow_create": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_assignment_add": {
+        "email": true,
+        "web": true,
+        "mobile": true
+      },
+      "job_auto_close_fail": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "location_deleted": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "share_result_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_add": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "requisition_note_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_message_sent_by_candidate": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_follower_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_offer_assign": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "offer_template_added": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "interview_event_scheduled": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_attachment_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "referral_program_updated": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "job_archived_over_limit": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_attachment_upload": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_screening_result_overwritten": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_follower_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_import": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_thread_converted": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_disqualify": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "location_updated": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_follower_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_enabled": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "candidate_sent_to_hr": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_expiring_candidates": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "location_archived": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_phone_number_deleted": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_auto_publish_fail": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "requisition_approver_decision_approved": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_disabled": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_work_model_updated": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "share_note_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_job_added": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_note_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_approval_request_canceled": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_offer_template_inserted": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_consent_granted_by_candidate": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_campaign_ended": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_event_rescheduled": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_remove": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "stage_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "screening_assistant_turned_on": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "interview_event_deleted": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_auto_disqualify": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "tag_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_event_candidate_rsvp_changed": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "candidate_note_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_follower_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_unassigned": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_form_updated": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_attachment_upload": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_scheduler_clear": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "candidate_attachment_upload": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_threads_unarchived": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_approver_decision_canceled": {
+        "email": true,
+        "web": true,
+        "mobile": false
+      },
+      "share_container_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_offer_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "offer_letter_sent": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "stage_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_thread_archived": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "import_revert": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "share_container_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_approver_decision_pending": {
+        "email": true,
+        "web": true,
+        "mobile": false
+      },
+      "requisition_approver_decision_rejected": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_result_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_candidate_hired": {
+        "email": true,
+        "web": true,
+        "mobile": false
+      },
+      "candidate_field_deleted": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "import_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_import_from_linkedin": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "disqualify_reason_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_tags": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_result_update": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_consent_added": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_matching_assigned": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "offer_letter_updated": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_event_remove": {
+        "email": true,
+        "web": true,
+        "mobile": true
+      },
+      "location_assigned_requisition_retrieved": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_created": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "gdpr_request_add": {
+        "email": true,
+        "web": true,
+        "mobile": false
+      },
+      "referral_reward_unassigned": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_referred": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "requisition_opening_removed": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_thread_pinned": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "task_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_result_request_sent": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "followed_candidates": {
+        "email": true,
+        "web": true,
+        "mobile": true
+      },
+      "texting_consent_withdrawn_by_candidate": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_recruiter_clear": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_message_received": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_reply_sent": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "location_retrieved": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_requested_result_add": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "member_add": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "requisition_approval_flow_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "referral_reward_claimed": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "task_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_attachment_converted": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_approval_flow_changed": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "referral_reward_assigned": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_result_requests_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "screening_criteria_edited_for_job": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "task_overdue": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "candidate_stage_change": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_phone_number_removed_by_system": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "member_role_change": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "interview_result_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_message_forwarded": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "location_assigned_job_retrieved": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_consent_withdrawn": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_screened": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_apply": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "offer_letter_deleted": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "share_attachment_upload": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_follower_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_status_change": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "candidate_tags_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "matching_assistant_turned_on": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "location_assigned_requisition_archived": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_enabled": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "interview_event_change": {
+        "email": true,
+        "web": true,
+        "mobile": true
+      },
+      "location_created": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_expiring": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "matching_generation_completed": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_posting_published": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "interview_event_rsvp_changed": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_requisition_filled": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_hiring_manager_change": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "matching_assistant_turned_on_for_job": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "gdpr_custom_expires_at_updated": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_note_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_requalify": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "referral_offer_status_change": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "note_reaction": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_approval_flow_update": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "screening_assistant_turned_off": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "locations_merged": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_work_model_updated": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_declined_retention_period": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "gdpr_consent_link_sent": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "note_mention": {
+        "email": true,
+        "web": true,
+        "mobile": true
+      },
+      "candidate_hired": {
+        "email": true,
+        "web": true,
+        "mobile": false
+      },
+      "job_tags": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_reply_received": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_accepted_retention_period": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "task_complete": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_requisition_opening_removed": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_status_change": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "matching_assistant_turned_off": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_scheduler_change": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "requisition_approver_decision_reminder": {
+        "email": true,
+        "web": true,
+        "mobile": false
+      },
+      "matching_search_requested": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_posting_unpublished": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "matching_assistant_turned_off_for_job": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "candidate_attachment_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_follower_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_phone_number_registered": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "interview_result_requested": {
+        "email": true,
+        "web": true,
+        "mobile": true
+      },
+      "member_remove": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "job_campaign_product_status_update": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_access_received": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "event_reminder_sent": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_approval_requested": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_automatically_created_from_requisition": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "job_tags_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_merge": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "screening_assistant_turned_on_for_job": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_note_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_requisition_retrieved": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_overdue": {
+        "email": true,
+        "web": true,
+        "mobile": false
+      },
+      "candidate_field_created": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "offer_template_deleted": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "interview_requested_event_add": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_submit_to_job_boards": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "placement_location_updated": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "location_assigned_job_archived": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "whatsapp_candidate_reply": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "requisition_assigned": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_campaign_removed_by_system": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "mailbox_thread_removed": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_screening_failed": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "candidate_note_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "note_reply": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_recruiter_change": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "mailbox_admins_added": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_deleted": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "job_status_auto_change": {
+        "email": false,
+        "web": true,
+        "mobile": true
+      },
+      "whatsapp_company_configuration_error": {
+        "email": false,
+        "web": true,
+        "mobile": false
+      },
+      "job_attachment_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "tag_remove": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "requisition_approvers_changed": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      },
+      "texting_message_sent": {
+        "email": false,
+        "web": false,
+        "mobile": false
+      }
+    }
+  },
+  "tags": [
+    "tracking",
+    "activity_subscriptions_preset"
+  ]
+}

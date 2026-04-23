@@ -1,0 +1,193 @@
+{
+  "id": "component_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/report/dashboards/components/update_positions",
+  "summary": "Update component positions",
+  "description": "Update component positions. Endpoint: PATCH /c/{company_id}/report/dashboards/components/update_positions. Required parameters: id, grid, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Id of a component.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "grid",
+      "type": "map",
+      "required": true,
+      "description": "Position on a dashboard.",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"components\": [\n{\n\"grid\": {\n\"cols\": 1,\n\"rows\": 1,\n\"x\": 0,\n\"y\": 2\n},\n\"id\": 2\n},\n{\n\"grid\": {\n\"cols\": 1,\n\"rows\": 1,\n\"x\": 0,\n\"y\": 1\n},\n\"id\": 3\n},\n{\n\"grid\": {\n\"cols\": 1,\n\"rows\": 1,\n\"x\": 0,\n\"y\": 0\n},\n\"id\": 4\n}\n]\n}",
+  "example_response": {
+    "references": [],
+    "components": [
+      {
+        "id": 2,
+        "name": "Fill rate",
+        "options": {
+          "include_deleted_candidates": null,
+          "include_archived_jobs": true,
+          "include_archived_requisitions": true,
+          "show_all_data": null
+        },
+        "origin": null,
+        "description": "Fill rate",
+        "filters": [],
+        "generated": false,
+        "sort_by": null,
+        "kind": "single_metric",
+        "updated_at": "2026-04-21T07:33:00.247873Z",
+        "settings": {
+          "functions": [],
+          "custom": {},
+          "amount_of_data_displayed": null,
+          "local_sort_by": null,
+          "local_sort_order": null
+        },
+        "grid": {
+          "rows": 1,
+          "cols": 1,
+          "y": 2,
+          "x": 0
+        },
+        "date_field": {
+          "resource": null,
+          "field": null
+        },
+        "date_filter": {},
+        "include_deleted_candidates": null,
+        "chart_type": null,
+        "end_point": null,
+        "include_archived_jobs": true,
+        "include_archived_requisitions": true,
+        "is_available": true,
+        "local_id": "a9b0d5ee-86e4-45fc-911e-97dd4fd57cf0",
+        "metric": "fill_rate",
+        "template_id": null,
+        "primary_group": null,
+        "secondary_group": null,
+        "show_all_data": null,
+        "sort_order": null,
+        "start_point": null,
+        "unavailable_reason": null,
+        "view_mode": null
+      },
+      {
+        "id": 3,
+        "name": "Number of hires per job",
+        "options": {
+          "include_deleted_candidates": null,
+          "include_archived_jobs": true,
+          "include_archived_requisitions": true,
+          "show_all_data": null
+        },
+        "origin": null,
+        "description": "Number of hires per job",
+        "filters": [],
+        "generated": false,
+        "sort_by": null,
+        "kind": "breakdown",
+        "updated_at": "2026-04-21T07:33:00.248270Z",
+        "settings": {
+          "functions": [],
+          "custom": {},
+          "amount_of_data_displayed": null,
+          "local_sort_by": null,
+          "local_sort_order": null
+        },
+        "grid": {
+          "rows": 1,
+          "cols": 1,
+          "y": 1,
+          "x": 0
+        },
+        "date_field": {
+          "resource": null,
+          "field": null
+        },
+        "date_filter": {},
+        "include_deleted_candidates": null,
+        "chart_type": null,
+        "end_point": null,
+        "include_archived_jobs": true,
+        "include_archived_requisitions": true,
+        "is_available": true,
+        "local_id": "9ff265af-53f7-49e1-a101-a8f4ba9bf83e",
+        "metric": "hires",
+        "template_id": null,
+        "primary_group": null,
+        "secondary_group": null,
+        "show_all_data": null,
+        "sort_order": null,
+        "start_point": null,
+        "unavailable_reason": null,
+        "view_mode": null
+      },
+      {
+        "id": 4,
+        "name": "Total number of hires",
+        "options": {
+          "include_deleted_candidates": null,
+          "include_archived_jobs": true,
+          "include_archived_requisitions": true,
+          "show_all_data": null
+        },
+        "origin": null,
+        "description": "Total number of hires",
+        "filters": [],
+        "generated": false,
+        "sort_by": null,
+        "kind": "breakdown",
+        "updated_at": "2026-04-21T07:33:00.248447Z",
+        "settings": {
+          "functions": [],
+          "custom": {},
+          "amount_of_data_displayed": null,
+          "local_sort_by": null,
+          "local_sort_order": null
+        },
+        "grid": {
+          "rows": 1,
+          "cols": 1,
+          "y": 0,
+          "x": 0
+        },
+        "date_field": {
+          "resource": null,
+          "field": null
+        },
+        "date_filter": {},
+        "include_deleted_candidates": null,
+        "chart_type": null,
+        "end_point": null,
+        "include_archived_jobs": true,
+        "include_archived_requisitions": true,
+        "is_available": true,
+        "local_id": "203b5084-5d27-4eb9-964d-f1daa3703593",
+        "metric": "hires",
+        "template_id": null,
+        "primary_group": null,
+        "secondary_group": null,
+        "show_all_data": null,
+        "sort_order": null,
+        "start_point": null,
+        "unavailable_reason": null,
+        "view_mode": null
+      }
+    ]
+  },
+  "tags": [
+    "report",
+    "dashboards"
+  ]
+}

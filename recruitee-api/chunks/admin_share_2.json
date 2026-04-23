@@ -1,0 +1,41 @@
+{
+  "id": "admin_share_2",
+  "method": "POST",
+  "path": "/c/{company_id}/candidates/share/admins",
+  "summary": "Share candidate",
+  "description": "Share candidate. Endpoint: POST /c/{company_id}/candidates/share/admins. Required parameters: admin_ids, placement_id, company_id.",
+  "params": [
+    {
+      "name": "admin_ids",
+      "type": "array",
+      "required": true,
+      "description": "List of Admin IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "placement_id",
+      "type": "integer",
+      "required": true,
+      "description": "Placement ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"admin_ids\": [\n2836,\n2837\n],\n\"placement_id\": 485\n}",
+  "example_response": {
+    "candidate": {
+      "shared_container_count": 0,
+      "shared_admin_count": 2
+    }
+  },
+  "tags": [
+    "candidates",
+    "admins"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "tag_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/tags",
+  "summary": "Create candidate tags",
+  "description": "Create candidate tags. Endpoint: POST /c/{company_id}/tags. Required parameters: company_id. Optional parameters include tag, candidate_id, tags.",
+  "params": [
+    {
+      "name": "tag",
+      "type": "string",
+      "required": false,
+      "description": "Tag",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": false,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "tags",
+      "type": "array",
+      "required": false,
+      "description": "Array of tags",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"tags\": [\n\"Development\",\n\"Sales\"\n]\n}",
+  "example_response": {
+    "tags": [
+      {
+        "id": 91,
+        "name": "Development",
+        "status": null,
+        "context": "tags",
+        "taggings_count": 0,
+        "searchable_name": "development"
+      },
+      {
+        "id": 92,
+        "name": "Sales",
+        "status": "created",
+        "context": "tags",
+        "taggings_count": 0,
+        "searchable_name": "sales"
+      }
+    ]
+  },
+  "tags": [
+    "tags",
+    "tagging"
+  ]
+}

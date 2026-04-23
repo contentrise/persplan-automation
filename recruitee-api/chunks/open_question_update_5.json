@@ -1,0 +1,103 @@
+{
+  "id": "open_question_update_5",
+  "method": "PATCH",
+  "path": "/c/{company_id}/open_questions/template/{template_id}/open_questions/{id}",
+  "summary": "Update open question for a given template",
+  "description": "Update open question for a given template. Endpoint: PATCH /c/{company_id}/open_questions/template/{template_id}/open_questions/{id}. Required parameters: id, open_question, template_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Open question ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "open_question",
+      "type": "map",
+      "required": true,
+      "description": "Open Question params",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question\": {\n\"kind\": \"multi_choice\",\n\"open_question_options\": [\n{\n\"id\": 156,\n\"position\": 1\n},\n{\n\"id\": 155,\n\"position\": 2\n},\n{\n\"id\": 154,\n\"position\": 3\n}\n],\n\"translations\": [\n{\n\"body\": \"Question Body Updated\",\n\"lang_code\": \"en\"\n}\n]\n}\n}",
+  "example_response": {
+    "open_question": {
+      "id": 127,
+      "position": 1,
+      "visible": true,
+      "options": null,
+      "required": false,
+      "kind": "multi_choice",
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      },
+      "open_question_options": [
+        {
+          "id": 156,
+          "position": 1,
+          "options": {},
+          "translations": [
+            {
+              "body": "Option C Body",
+              "lang_code": "en"
+            }
+          ],
+          "disqualify_reason_id": null
+        },
+        {
+          "id": 155,
+          "position": 2,
+          "options": {},
+          "translations": [
+            {
+              "body": "Option B Body",
+              "lang_code": "en"
+            }
+          ],
+          "disqualify_reason_id": null
+        },
+        {
+          "id": 154,
+          "position": 3,
+          "options": {},
+          "translations": [
+            {
+              "body": "Option A Body",
+              "lang_code": "en"
+            }
+          ],
+          "disqualify_reason_id": null
+        }
+      ],
+      "translations": [
+        {
+          "body": "Question Body Updated",
+          "lang_code": "en"
+        }
+      ],
+      "open_question_template_id": 119,
+      "is_knockout_question": false
+    }
+  },
+  "tags": [
+    "open_questions",
+    "template"
+  ]
+}

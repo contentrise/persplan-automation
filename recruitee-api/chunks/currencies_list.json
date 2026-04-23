@@ -1,0 +1,22 @@
+{
+  "id": "currencies_list",
+  "method": "GET",
+  "path": "/c/{company_id}/currencies",
+  "summary": "List all currencies",
+  "description": "List all currencies. Endpoint: GET /c/{company_id}/currencies. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/currencies\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "currencies",
+    "iso"
+  ]
+}

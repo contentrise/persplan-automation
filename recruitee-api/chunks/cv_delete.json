@@ -1,0 +1,45 @@
+{
+  "id": "cv_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/imports/{import_id}/cvs/{id}",
+  "summary": "Delete import CV",
+  "description": "Delete import CV. Endpoint: DELETE /c/{company_id}/imports/{import_id}/cvs/{id}. Required parameters: id, import_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Import CV ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "import_id",
+      "type": "integer",
+      "required": true,
+      "description": "Import ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/imports/{import_id}/cvs/{id}\n\nRequired params: id, import_id, company_id",
+  "example_response": {
+    "references": [],
+    "cv": {
+      "id": 15,
+      "file_name": "james_bond_cv.pdf",
+      "file_url": "tmp/bow/import_cvs/15/pdf_james_bond_cv.pdf",
+      "original_file_url": "tmp/bow/import_cvs/15/james_bond_cv.pdf",
+      "import_candidate_id": null
+    }
+  },
+  "tags": [
+    "imports",
+    "cvs"
+  ]
+}

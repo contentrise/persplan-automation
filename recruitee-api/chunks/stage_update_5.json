@@ -1,0 +1,62 @@
+{
+  "id": "stage_update_5",
+  "method": "PATCH",
+  "path": "/c/{company_id}/pipeline_templates/{pipeline_template_id}/stages/{id}",
+  "summary": "Update stage",
+  "description": "Update stage. Endpoint: PATCH /c/{company_id}/pipeline_templates/{pipeline_template_id}/stages/{id}. Required parameters: id, stage, pipeline_template_id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Stage ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "stage",
+      "type": "map",
+      "required": true,
+      "description": "Stage params: name (string, required) - stage name; category (string, required) - stage category; position (integer, required) - stage position; action_templates (array, optional) - stage automated actions; time_limit (integer, optional) - candidate time limit for stage; fair_evaluations_enabled (boolean, optional) - fair evaluation feature status",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "pipeline_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"stage\": {\n\"action_templates\": [\n{\n\"_destroy\": true,\n\"id\": 193\n}\n],\n\"id\": 26191\n}\n}",
+  "example_response": {
+    "stage": {
+      "id": 26191,
+      "name": "Applied",
+      "position": 12383,
+      "group": "active",
+      "category": "none",
+      "created_at": "2026-04-21T07:32:29.989644Z",
+      "updated_at": "2026-04-21T07:32:29.993207Z",
+      "fair_evaluations_enabled": false,
+      "action_templates": [],
+      "pipeline_template_id": 3257,
+      "locked": false,
+      "placements_count": null,
+      "time_limit": null,
+      "candidate_anonymization_enabled": false,
+      "automation_ids": []
+    }
+  },
+  "tags": [
+    "pipeline_templates",
+    "stages",
+    "pipeline"
+  ]
+}

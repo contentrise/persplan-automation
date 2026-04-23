@@ -1,0 +1,57 @@
+{
+  "id": "template_create_2",
+  "method": "POST",
+  "path": "/c/{company_id}/open_questions/template",
+  "summary": "Create a new open questions template",
+  "description": "Create a new open questions template. Endpoint: POST /c/{company_id}/open_questions/template. Required parameters: title, company_id. Optional parameters include category, open_questions.",
+  "params": [
+    {
+      "name": "title",
+      "type": "string",
+      "required": true,
+      "description": "Name of the template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "required": false,
+      "description": "Template category",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "open_questions",
+      "type": "array",
+      "required": false,
+      "description": "Array of Open Questions to create with a template",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question_template\": {\n\"category\": \"AWESOME CATEGORY\",\n\"title\": \"Awesome Template\"\n}\n}",
+  "example_response": {
+    "open_question_template": {
+      "default": false,
+      "id": 172,
+      "position": 1,
+      "title": "Awesome Template",
+      "category": "AWESOME CATEGORY",
+      "created_at": "2026-04-21T07:33:31.257657Z",
+      "updated_at": "2026-04-21T07:33:31.257657Z",
+      "custom": false,
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0,
+      "open_questions": []
+    }
+  },
+  "tags": [
+    "open_questions",
+    "template"
+  ]
+}

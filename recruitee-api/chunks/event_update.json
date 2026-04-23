@@ -1,0 +1,189 @@
+{
+  "id": "event_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/interview/events/{id}",
+  "summary": "Update interview event",
+  "description": "Update interview event. Endpoint: PATCH /c/{company_id}/interview/events/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Interview event ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_event\": {\n\"interview_room_bookings\": [\n{\n\"id\": 3,\n\"interview_meeting_room_id\": 77\n},\n{\n\"interview_meeting_room_id\": 79\n}\n]\n}\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 10503,
+        "type": "Admin",
+        "email": "john325@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/10503/normal_avatar_ge17w8dnghs4.png",
+        "photo_thumb_url": "tmp/bow/admins/10503/thumb_avatar_ge17w8dnghs4.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 2873,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:34:04.691779Z",
+        "updated_at": "2026-04-21T07:34:04.691779Z",
+        "is_hired": false,
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=2873&company=4902",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      },
+      {
+        "id": 2455,
+        "position": 95,
+        "status": "draft",
+        "type": "Offer",
+        "remote": false,
+        "description": "<p>Elixir</p>\n",
+        "title": "Best Offer",
+        "location": "",
+        "kind": "job",
+        "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+        "url": null,
+        "created_at": "2026-04-21T07:34:04.691133Z",
+        "department": null,
+        "lang_code": "en",
+        "department_id": null,
+        "slug": "best-offer95",
+        "hybrid": false,
+        "on_site": true,
+        "guid": "guid94",
+        "recruiter_id": null,
+        "hiring_manager_id": null,
+        "wysiwyg_editor": "redactor",
+        "pipeline_template_id": 7029,
+        "careers_job_page_layout_id": null,
+        "job_position_id": null,
+        "mailbox_email": null,
+        "highlight_html": "<p>Elixir</p>\n"
+      },
+      {
+        "id": 56870,
+        "name": "Applied",
+        "position": 1215,
+        "type": "Stage",
+        "group": "active",
+        "category": "none",
+        "created_at": "2026-04-21T07:34:04.690831Z",
+        "updated_at": "2026-04-21T07:34:04.690831Z",
+        "fair_evaluations_enabled": false,
+        "pipeline_template_id": null,
+        "locked": false,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      }
+    ],
+    "interview_event": {
+      "rescheduled_at": null,
+      "candidate_email": null,
+      "interview_meeting_rooms": [
+        {
+          "enabled": true,
+          "id": 77,
+          "name": "room 0"
+        },
+        {
+          "enabled": true,
+          "id": 79,
+          "name": "room 2"
+        }
+      ],
+      "old_timezone": null,
+      "admin_id": 10503,
+      "rescheduler_id": null,
+      "duration": 60,
+      "video_provider": null,
+      "rescheduled_by": null,
+      "reminders": [],
+      "private": false,
+      "created_at": "2026-04-21T07:34:04.692217Z",
+      "updated_at": "2026-04-21T07:34:04.699028Z",
+      "reschedule_reason": null,
+      "old_starts_at": null,
+      "video": null,
+      "talent_pool_id": null,
+      "candidate_id": 2873,
+      "interview_result_requests": [],
+      "organizer_id": 10503,
+      "kind": "meeting",
+      "notify_config": null,
+      "starts_at": "2026-04-21T07:34:04.688259Z",
+      "event_candidate_attendees": [],
+      "note": null,
+      "scheduler": "Admin",
+      "stage_id": 56870,
+      "id": 233,
+      "google_calendar_url": "https://www.google.com/calendar/render?location=Poznan&text=Meeting+for+Best+Offer+-+John+Doe&action=TEMPLATE&details=%3Cb%3EEvent+link%3C%2Fb%3E%3A%0Ahttp%3A%2F%2Fcompany79.recruitee.internal%3A3003%2Fv%2Fevents%2FaBcDeFg123446%0A%0A%3Cb%3EInformation+for+the+candidate%3C%2Fb%3E%3A%0AYou%27ve+been+invited+to+Meeting+about+the+Best+Offer+position+in+Test+Company.%0AInterviewers%3A+John+Doe%0A%0A%3Cb%3EInformation+for+the+interviewers%3C%2Fb%3E%3A%0AIf+you%27re+attending+this+meeting+as+an+interviewer%2C+you+can+view+the+candidate%27s+information+in+Recruitee.%0Ahttp%3A%2F%2Fapp.recruitee.internal%3A3003%2F%23candidates%3Fcandidate%3D2873%26company%3D4902%0A&dates=20260421T073404Z%2F20260421T083404Z",
+      "timezone": "Europe/Amsterdam",
+      "rescheduled": false,
+      "event_attendees": [
+        {
+          "admin_id": 10503,
+          "response_status": "needs_action"
+        }
+      ],
+      "custom_name": null,
+      "scheduled": true,
+      "exclude_candidate_from_attendees": false,
+      "event_url": "http://company79.recruitee.internal:3003/v/events/aBcDeFg123446",
+      "yahoo_calendar_url": "https://calendar.yahoo.com/?st=20260421T073404Z&title=Meeting+for+Best+Offer+-+John+Doe&desc=Event+link%3A%0Ahttp%3A%2F%2Fcompany79.recruitee.internal%3A3003%2Fv%2Fevents%2FaBcDeFg123446%0A%0A---------------------%0AInformation+for+the+candidate%3A%0AYou%27ve+been+invited+to+Meeting+about+the+Best+Offer+position+in+Test+Company.%0AInterviewers%3A+John+Doe%0A%0A---------------------%0AInformation+for+the+interviewers%3A%0AIf+you%27re+attending+this+meeting+as+an+interviewer%2C+you+can+view+the+candidate%27s+information+in+Recruitee.%0Ahttp%3A%2F%2Fapp.recruitee.internal%3A3003%2F%23candidates%3Fcandidate%3D2873%26company%3D4902%0A&v=60&dur=0100&in_loc=Poznan",
+      "offer_id": 2455,
+      "admin_ids": [
+        10503
+      ],
+      "location": "Poznan",
+      "sync_url": "https://api.recruitee.internal:4000/share/interview/events/aBcDeFg123446/sync",
+      "video_url": null,
+      "hide_candidates_names": false,
+      "public_note": null
+    }
+  },
+  "tags": [
+    "interview",
+    "events"
+  ]
+}

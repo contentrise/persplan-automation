@@ -1,0 +1,29 @@
+{
+  "id": "thread_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/mailbox/threads/{id}",
+  "summary": "Delete thread",
+  "description": "Delete thread. Endpoint: DELETE /c/{company_id}/mailbox/threads/{id}. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Thread ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/mailbox/threads/{id}\n\nRequired params: company_id\n\nOptional params: id",
+  "example_response": {},
+  "tags": [
+    "mailbox",
+    "threads"
+  ]
+}

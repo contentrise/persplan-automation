@@ -1,0 +1,464 @@
+{
+  "id": "result_requests_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/result_requests",
+  "summary": "List interview result requests",
+  "description": "List interview result requests. Endpoint: GET /c/{company_id}/interview/result_requests. Required parameters: company_id. Optional parameters include scope, status, limit, candidate_id, admin_ids, page.",
+  "params": [
+    {
+      "name": "scope",
+      "type": "string",
+      "required": false,
+      "description": "Limit by request scope, can be: ‘my’, ‘all’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "required": false,
+      "description": "Limit by request status, can be: ‘pending’, ‘dismissed’, ‘completed’, ‘all’",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default is unlimited",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": false,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "admin_ids",
+      "type": "array",
+      "required": false,
+      "description": "Limit to selected admins",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number used for pagination, can be used only with the limit option (1, 2, 3, 4…)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/result_requests\n\nRequired params: company_id\n\nOptional params: scope, status, limit, candidate_id, admin_ids, page",
+  "example_response": {
+    "meta": {
+      "counters": {
+        "pending": 1,
+        "completed": 1,
+        "dismissed": 2
+      }
+    },
+    "references": [
+      {
+        "id": 180,
+        "name": "Elixir Developer",
+        "position": 10,
+        "type": "InterviewTemplate",
+        "category": "Engineering",
+        "kind": "interview",
+        "token": "abcdef123456",
+        "info_title": "Interview preperation",
+        "info_description": "<p>Elixir Developer interview</p>\n"
+      },
+      {
+        "id": 9110,
+        "type": "Admin",
+        "email": "john787@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9110/normal_avatar_hk4sr2h2fmge.png",
+        "photo_thumb_url": "tmp/bow/admins/9110/thumb_avatar_hk4sr2h2fmge.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 2249,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:33:55.496460Z",
+        "updated_at": "2026-04-21T07:33:55.496460Z",
+        "is_hired": false,
+        "placements": [
+          {
+            "id": 1234,
+            "position": 61,
+            "candidate_id": 2249,
+            "language": null,
+            "created_at": "2026-04-21T07:33:55.499657Z",
+            "updated_at": "2026-04-21T07:33:55.499657Z",
+            "offer_id": 1918,
+            "talent_pool_id": null,
+            "positive_ratings": null,
+            "ratings": {},
+            "hired_at": null,
+            "hired_by_id": null,
+            "hired_in_other_placement": false,
+            "hired_in_this_placement": false,
+            "department_id": null,
+            "department_name": null,
+            "overdue_diff": null,
+            "overdue_at": null,
+            "stage_id": 49253,
+            "job_starts_at": null
+          },
+          {
+            "id": 1235,
+            "position": 62,
+            "candidate_id": 2249,
+            "language": null,
+            "created_at": "2026-04-21T07:33:55.502133Z",
+            "updated_at": "2026-04-21T07:33:55.502133Z",
+            "offer_id": null,
+            "talent_pool_id": 1919,
+            "positive_ratings": null,
+            "ratings": {},
+            "hired_at": null,
+            "hired_by_id": null,
+            "hired_in_other_placement": false,
+            "hired_in_this_placement": false,
+            "department_id": null,
+            "department_name": null,
+            "overdue_diff": null,
+            "overdue_at": null,
+            "stage_id": null,
+            "job_starts_at": null
+          }
+        ],
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": false,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=2249&company=4477",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      },
+      {
+        "id": 1918,
+        "position": 73,
+        "status": "draft",
+        "type": "Offer",
+        "remote": false,
+        "description": "<p>Elixir</p>\n",
+        "title": "Best Offer",
+        "location": "",
+        "kind": "job",
+        "requirements": "<ul>\n\t<li>Phoenix</li>\n</ul>\n",
+        "url": null,
+        "created_at": "2026-04-21T07:33:55.498883Z",
+        "department": null,
+        "lang_code": "en",
+        "department_id": null,
+        "slug": "best-offer147",
+        "hybrid": false,
+        "on_site": true,
+        "guid": "guid72",
+        "recruiter_id": null,
+        "hiring_manager_id": null,
+        "wysiwyg_editor": "redactor",
+        "pipeline_template_id": 6111,
+        "careers_job_page_layout_id": null,
+        "job_position_id": null,
+        "mailbox_email": null,
+        "highlight_html": "<p>Elixir</p>\n"
+      },
+      {
+        "id": 49253,
+        "name": "Referred",
+        "position": -3,
+        "type": "Stage",
+        "group": "applicants",
+        "category": "referred",
+        "created_at": "2026-04-21T07:33:55.497866Z",
+        "updated_at": "2026-04-21T07:33:55.497866Z",
+        "fair_evaluations_enabled": false,
+        "pipeline_template_id": 6111,
+        "locked": true,
+        "placements_count": null,
+        "time_limit": null,
+        "candidate_anonymization_enabled": false
+      },
+      {
+        "id": 169,
+        "private": false,
+        "scheduler": "Admin",
+        "type": "InterviewEvent",
+        "location": "Poznan",
+        "kind": "meeting",
+        "admin_id": 9110,
+        "candidate_id": 2249,
+        "timezone": "Europe/Amsterdam",
+        "created_at": "2026-04-21T07:33:55.505820Z",
+        "duration": 60,
+        "updated_at": "2026-04-21T07:33:55.505820Z",
+        "offer_id": 1918,
+        "talent_pool_id": null,
+        "note": null,
+        "stage_id": 49253,
+        "custom_name": null,
+        "public_note": null,
+        "starts_at": "2026-04-21T07:33:55.503758Z",
+        "candidate_email": null,
+        "video_provider": null,
+        "video_url": null,
+        "hide_candidates_names": false,
+        "notify_config": null,
+        "scheduled": true,
+        "exclude_candidate_from_attendees": false,
+        "video": null,
+        "organizer_id": null
+      },
+      {
+        "id": 179,
+        "name": "Elixir Developer",
+        "position": 9,
+        "type": "InterviewTemplate",
+        "category": "Engineering",
+        "kind": "interview",
+        "token": "abcdef123456",
+        "info_title": "Interview preperation",
+        "info_description": "<p>Elixir Developer interview</p>\n"
+      },
+      {
+        "id": 1919,
+        "position": 76,
+        "status": "draft",
+        "type": "TalentPool",
+        "description": "<p>What a description!</p>",
+        "title": "Talent pool offer",
+        "created_at": "2026-04-21T07:33:55.501707Z",
+        "department": null,
+        "department_id": null,
+        "slug": "best-talent-pool148",
+        "guid": "talent-pool-guid75"
+      },
+      {
+        "id": 170,
+        "private": false,
+        "scheduler": "Admin",
+        "type": "InterviewEvent",
+        "location": "Poznan",
+        "kind": "meeting",
+        "admin_id": 9110,
+        "candidate_id": 2249,
+        "timezone": "Europe/Amsterdam",
+        "created_at": "2026-04-21T07:33:55.508389Z",
+        "duration": 60,
+        "updated_at": "2026-04-21T07:33:55.508389Z",
+        "offer_id": null,
+        "talent_pool_id": 1919,
+        "note": null,
+        "stage_id": null,
+        "custom_name": null,
+        "public_note": null,
+        "starts_at": "2026-04-21T07:33:55.506525Z",
+        "candidate_email": null,
+        "video_provider": null,
+        "video_url": null,
+        "hide_candidates_names": false,
+        "notify_config": null,
+        "scheduled": true,
+        "exclude_candidate_from_attendees": false,
+        "video": null,
+        "organizer_id": null
+      },
+      {
+        "id": 178,
+        "name": "Elixir Developer",
+        "position": 8,
+        "type": "InterviewTemplate",
+        "category": "Engineering",
+        "kind": "interview",
+        "token": "abcdef123456",
+        "info_title": "Interview preperation",
+        "info_description": "<p>Elixir Developer interview</p>\n"
+      },
+      {
+        "id": 177,
+        "name": "Elixir Developer",
+        "position": 7,
+        "type": "InterviewTemplate",
+        "category": "Engineering",
+        "kind": "interview",
+        "token": "abcdef123456",
+        "info_title": "Interview preperation",
+        "info_description": "<p>Elixir Developer interview</p>\n"
+      }
+    ],
+    "interview_result_requests": [
+      {
+        "id": 27,
+        "status": "completed",
+        "admin_id": 9110,
+        "candidate_id": 2249,
+        "created_at": "2026-04-21T07:33:55.516459Z",
+        "offer_id": 1918,
+        "talent_pool_id": null,
+        "stage_id": 49253,
+        "triggered": false,
+        "interview_event_id": 169,
+        "requester_id": null,
+        "interview_template_id": 180,
+        "requested_by": null,
+        "candidate_placements": [
+          {
+            "status": "draft",
+            "title": "Talent pool offer",
+            "kind": "talent_pool",
+            "offer_id": null,
+            "talent_pool_id": 1919,
+            "stage_id": null
+          },
+          {
+            "status": "draft",
+            "title": "Best Offer",
+            "kind": "job",
+            "offer_id": 1918,
+            "talent_pool_id": null,
+            "stage_id": 49253
+          }
+        ]
+      },
+      {
+        "id": 26,
+        "status": "dismissed",
+        "admin_id": 9110,
+        "candidate_id": 2249,
+        "created_at": "2026-04-21T07:33:55.514397Z",
+        "offer_id": null,
+        "talent_pool_id": 1919,
+        "stage_id": null,
+        "triggered": false,
+        "interview_event_id": 170,
+        "requester_id": null,
+        "interview_template_id": 179,
+        "requested_by": null,
+        "candidate_placements": [
+          {
+            "status": "draft",
+            "title": "Talent pool offer",
+            "kind": "talent_pool",
+            "offer_id": null,
+            "talent_pool_id": 1919,
+            "stage_id": null
+          },
+          {
+            "status": "draft",
+            "title": "Best Offer",
+            "kind": "job",
+            "offer_id": 1918,
+            "talent_pool_id": null,
+            "stage_id": 49253
+          }
+        ]
+      },
+      {
+        "id": 25,
+        "status": "dismissed",
+        "admin_id": 9110,
+        "candidate_id": 2249,
+        "created_at": "2026-04-21T07:33:55.512768Z",
+        "offer_id": 1918,
+        "talent_pool_id": null,
+        "stage_id": 49253,
+        "triggered": false,
+        "interview_event_id": 169,
+        "requester_id": null,
+        "interview_template_id": 178,
+        "requested_by": null,
+        "candidate_placements": [
+          {
+            "status": "draft",
+            "title": "Talent pool offer",
+            "kind": "talent_pool",
+            "offer_id": null,
+            "talent_pool_id": 1919,
+            "stage_id": null
+          },
+          {
+            "status": "draft",
+            "title": "Best Offer",
+            "kind": "job",
+            "offer_id": 1918,
+            "talent_pool_id": null,
+            "stage_id": 49253
+          }
+        ]
+      },
+      {
+        "id": 24,
+        "status": "pending",
+        "admin_id": 9110,
+        "candidate_id": 2249,
+        "created_at": "2026-04-21T07:33:55.510659Z",
+        "offer_id": 1918,
+        "talent_pool_id": null,
+        "stage_id": 49253,
+        "triggered": false,
+        "interview_event_id": 169,
+        "requester_id": null,
+        "interview_template_id": 177,
+        "requested_by": null,
+        "candidate_placements": [
+          {
+            "status": "draft",
+            "title": "Talent pool offer",
+            "kind": "talent_pool",
+            "offer_id": null,
+            "talent_pool_id": 1919,
+            "stage_id": null
+          },
+          {
+            "status": "draft",
+            "title": "Best Offer",
+            "kind": "job",
+            "offer_id": 1918,
+            "talent_pool_id": null,
+            "stage_id": 49253
+          }
+        ]
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "result_requests"
+  ]
+}

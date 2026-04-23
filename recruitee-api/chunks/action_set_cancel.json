@@ -1,0 +1,58 @@
+{
+  "id": "action_set_cancel",
+  "method": "PATCH",
+  "path": "/c/{company_id}/trigger/action_sets/{action_set_id}/cancel",
+  "summary": "Cancels whole action set.",
+  "description": "Cancels whole action set.. Endpoint: PATCH /c/{company_id}/trigger/action_sets/{action_set_id}/cancel. Required parameters: action_set_id, company_id.",
+  "params": [
+    {
+      "name": "action_set_id",
+      "type": "integer",
+      "required": true,
+      "description": "Action Set ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/trigger/action_sets/{action_set_id}/cancel\n\nRequired params: action_set_id, company_id",
+  "example_response": {
+    "id": 11,
+    "status": "canceled",
+    "admin_id": 7964,
+    "company_id": 3914,
+    "candidate_id": 2017,
+    "offer_id": 1689,
+    "talent_pool_id": null,
+    "actions": [
+      {
+        "id": 1,
+        "errors": [],
+        "completed_at": null,
+        "action_template": {
+          "data": {
+            "tags": [
+              "one",
+              "two"
+            ]
+          },
+          "id": 292,
+          "kind": "add_tags",
+          "references": []
+        },
+        "canceled": true
+      }
+    ],
+    "stage_id": null,
+    "disqualify_reason_id": null
+  },
+  "tags": [
+    "trigger",
+    "action_sets"
+  ]
+}

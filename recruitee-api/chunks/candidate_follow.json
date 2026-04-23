@@ -1,0 +1,30 @@
+{
+  "id": "candidate_follow",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/candidates/follow",
+  "summary": "Follow candidates in bulk",
+  "description": "Follow candidates in bulk. Endpoint: PATCH /c/{company_id}/bulk/candidates/follow. Required parameters: company_id. Optional parameters include candidates.",
+  "params": [
+    {
+      "name": "candidates",
+      "type": "array",
+      "required": false,
+      "description": "Array of candidate IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"candidates\": [\n468,\n469,\n470\n]\n}",
+  "example_response": {
+    "uuid": "a72b371b-d52b-4389-b2ff-71491433121c"
+  },
+  "tags": [
+    "candidates"
+  ]
+}

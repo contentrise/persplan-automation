@@ -1,0 +1,248 @@
+{
+  "id": "result_request_create",
+  "method": "POST",
+  "path": "/c/{company_id}/interview/candidates/{candidate_id}/result_requests",
+  "summary": "Create interview result requests",
+  "description": "Create interview result requests. Endpoint: POST /c/{company_id}/interview/candidates/{candidate_id}/result_requests. Required parameters: candidate_id, company_id. Optional parameters include interview_result_requests, grant_access.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "interview_result_requests",
+      "type": "array",
+      "required": false,
+      "description": "Array of result requests (parameters: admin_id, interview_template_id, offer_id, talent_pool_id, stage_id)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "grant_access",
+      "type": "array",
+      "required": false,
+      "description": "Array of admin_id (integer) & placement_id/offer_id/talent_pool_id (integer; based on access type to be granted)",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_result_requests\": [\n{\n\"admin_id\": 9137,\n\"interview_template_id\": 184,\n\"talent_pool_id\": 1921\n},\n{\n\"admin_id\": 9138,\n\"interview_template_id\": 184,\n\"talent_pool_id\": 1921\n},\n{\n\"admin_id\": 9139,\n\"interview_template_id\": 184,\n\"talent_pool_id\": 1921\n}\n]\n}",
+  "example_response": {
+    "meta": {},
+    "references": [
+      {
+        "id": 184,
+        "name": "Interview template",
+        "position": 1,
+        "type": "InterviewTemplate",
+        "category": "Engineering",
+        "kind": "interview",
+        "token": "abcdef123456",
+        "info_title": "Interview preperation",
+        "info_description": "<p>Elixir Developer interview</p>\n"
+      },
+      {
+        "id": 9137,
+        "type": "Admin",
+        "email": "john821@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9137/normal_avatar_vvhbsupkrma7.png",
+        "photo_thumb_url": "tmp/bow/admins/9137/thumb_avatar_vvhbsupkrma7.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 2251,
+        "name": "John Doe",
+        "type": "Candidate",
+        "title": null,
+        "source": null,
+        "admin_id": null,
+        "emails": [
+          "john_doe@acme.com"
+        ],
+        "has_avatar": true,
+        "initials": "JD",
+        "photo_thumb_url": null,
+        "referrer": null,
+        "created_at": "2026-04-21T07:33:55.561872Z",
+        "updated_at": "2026-04-21T07:33:55.561872Z",
+        "is_hired": false,
+        "placements": [
+          {
+            "id": 1237,
+            "position": 64,
+            "candidate_id": 2251,
+            "language": null,
+            "created_at": "2026-04-21T07:33:55.563062Z",
+            "updated_at": "2026-04-21T07:33:55.563062Z",
+            "offer_id": null,
+            "talent_pool_id": 1921,
+            "positive_ratings": null,
+            "ratings": {},
+            "hired_at": null,
+            "hired_by_id": null,
+            "hired_in_other_placement": false,
+            "hired_in_this_placement": false,
+            "department_id": null,
+            "department_name": null,
+            "overdue_diff": null,
+            "overdue_at": null,
+            "stage_id": null,
+            "job_starts_at": null
+          }
+        ],
+        "positive_ratings": null,
+        "ratings": {},
+        "ratings_count": 0,
+        "salutation": null,
+        "pending_result_request": true,
+        "upcoming_event": false,
+        "adminapp_url": "http://app.recruitee.internal:3003/#/dashboard/overview?candidate=2251&company=4481",
+        "is_anonymous": false,
+        "phones": [],
+        "example": false,
+        "invalid_emails": [],
+        "tasks_count": 0,
+        "viewed": false,
+        "is_revealed": false,
+        "ever_revealed_for_ids": [],
+        "last_message_at": null
+      },
+      {
+        "id": 1921,
+        "position": 77,
+        "status": "draft",
+        "type": "TalentPool",
+        "description": "<p>What a description!</p>",
+        "title": "Best Talent Pool",
+        "created_at": "2026-04-21T07:33:55.562731Z",
+        "department": null,
+        "department_id": null,
+        "slug": "best-talent-pool153",
+        "guid": "talent-pool-guid76"
+      },
+      {
+        "id": 9138,
+        "type": "Admin",
+        "email": "john823@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9138/normal_avatar_5m514wb6bmrn.png",
+        "photo_thumb_url": "tmp/bow/admins/9138/thumb_avatar_5m514wb6bmrn.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 9139,
+        "type": "Admin",
+        "email": "john825@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/9139/normal_avatar_mvwm5wcnacp4.png",
+        "photo_thumb_url": "tmp/bow/admins/9139/thumb_avatar_mvwm5wcnacp4.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "interview_result_requests": [
+      {
+        "id": 31,
+        "status": "pending",
+        "admin_id": 9137,
+        "candidate_id": 2251,
+        "created_at": "2026-04-21T07:33:55.568090Z",
+        "offer_id": null,
+        "talent_pool_id": 1921,
+        "stage_id": null,
+        "triggered": false,
+        "interview_event_id": null,
+        "requester_id": 9137,
+        "interview_template_id": 184,
+        "requested_by": "John Doe",
+        "candidate_placements": [
+          {
+            "status": "draft",
+            "title": "Best Talent Pool",
+            "kind": "talent_pool",
+            "offer_id": null,
+            "talent_pool_id": 1921,
+            "stage_id": null
+          }
+        ]
+      },
+      {
+        "id": 32,
+        "status": "pending",
+        "admin_id": 9138,
+        "candidate_id": 2251,
+        "created_at": "2026-04-21T07:33:55.568446Z",
+        "offer_id": null,
+        "talent_pool_id": 1921,
+        "stage_id": null,
+        "triggered": false,
+        "interview_event_id": null,
+        "requester_id": 9137,
+        "interview_template_id": 184,
+        "requested_by": "John Doe",
+        "candidate_placements": [
+          {
+            "status": "draft",
+            "title": "Best Talent Pool",
+            "kind": "talent_pool",
+            "offer_id": null,
+            "talent_pool_id": 1921,
+            "stage_id": null
+          }
+        ]
+      },
+      {
+        "id": 33,
+        "status": "pending",
+        "admin_id": 9139,
+        "candidate_id": 2251,
+        "created_at": "2026-04-21T07:33:55.568657Z",
+        "offer_id": null,
+        "talent_pool_id": 1921,
+        "stage_id": null,
+        "triggered": false,
+        "interview_event_id": null,
+        "requester_id": 9137,
+        "interview_template_id": 184,
+        "requested_by": "John Doe",
+        "candidate_placements": [
+          {
+            "status": "draft",
+            "title": "Best Talent Pool",
+            "kind": "talent_pool",
+            "offer_id": null,
+            "talent_pool_id": 1921,
+            "stage_id": null
+          }
+        ]
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "candidates"
+  ]
+}

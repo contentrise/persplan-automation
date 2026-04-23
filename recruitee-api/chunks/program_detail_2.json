@@ -1,0 +1,547 @@
+{
+  "id": "program_detail_2",
+  "method": "GET",
+  "path": "/referral_portal/program",
+  "summary": "Show current referral program details",
+  "description": "Show current referral program details. Endpoint: GET /referral_portal/program.",
+  "params": [],
+  "example_request": "GET /referral_portal/program",
+  "example_response": {
+    "program": {
+      "description": "Portal description",
+      "company_name": "Test Company",
+      "company_language": "en",
+      "form_settings": {
+        "title": "hidden",
+        "email": "optional",
+        "phone": "optional",
+        "cv": "optional",
+        "salutation": "hidden",
+        "social_links": "optional"
+      },
+      "cv_upload_enabled": true,
+      "referral_status_visible": true,
+      "rewards_visible": true,
+      "logo_url": null,
+      "salutations_config": {
+        "translations": [
+          {
+            "lang_code": "en",
+            "greetings": [
+              {
+                "label": "Dear Mr. %{name}",
+                "value": "mr"
+              },
+              {
+                "label": "Dear Ms. %{name}",
+                "value": "ms"
+              },
+              {
+                "label": "Dear Mr. Dr. %{name}",
+                "value": "mr_dr"
+              },
+              {
+                "label": "Dear Ms. Dr. %{name}",
+                "value": "ms_dr"
+              },
+              {
+                "label": "Dear Mr. Prof. %{name}",
+                "value": "mr_prof"
+              },
+              {
+                "label": "Dear Ms. Prof. %{name}",
+                "value": "ms_prof"
+              },
+              {
+                "label": "Dear Dr. %{name}",
+                "value": "dr"
+              },
+              {
+                "label": "Dear Prof. %{name}",
+                "value": "prof"
+              },
+              {
+                "label": "Dear %{name}",
+                "value": "none"
+              }
+            ],
+            "salutations": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "Mr.",
+                "value": "mr"
+              },
+              {
+                "label": "Ms.",
+                "value": "ms"
+              }
+            ],
+            "titles": [
+              {
+                "label": "None",
+                "value": "none"
+              },
+              {
+                "label": "Dr.",
+                "value": "dr"
+              },
+              {
+                "label": "Prof.",
+                "value": "prof"
+              },
+              {
+                "label": "Dr.",
+                "value": "mr_dr"
+              },
+              {
+                "label": "Prof.",
+                "value": "mr_prof"
+              },
+              {
+                "label": "Dr.",
+                "value": "ms_dr"
+              },
+              {
+                "label": "Prof.",
+                "value": "ms_prof"
+              }
+            ]
+          },
+          {
+            "lang_code": "nl",
+            "greetings": [
+              {
+                "label": "candidate.greetings.mr",
+                "value": "mr"
+              },
+              {
+                "label": "candidate.greetings.ms",
+                "value": "ms"
+              },
+              {
+                "label": "candidate.greetings.mr_dr",
+                "value": "mr_dr"
+              },
+              {
+                "label": "candidate.greetings.ms_dr",
+                "value": "ms_dr"
+              },
+              {
+                "label": "candidate.greetings.mr_prof",
+                "value": "mr_prof"
+              },
+              {
+                "label": "candidate.greetings.ms_prof",
+                "value": "ms_prof"
+              },
+              {
+                "label": "candidate.greetings.dr",
+                "value": "dr"
+              },
+              {
+                "label": "candidate.greetings.prof",
+                "value": "prof"
+              },
+              {
+                "label": "candidate.greetings.none",
+                "value": "none"
+              }
+            ],
+            "salutations": [
+              {
+                "label": "candidate.salutations.none",
+                "value": "none"
+              },
+              {
+                "label": "candidate.salutations.mr",
+                "value": "mr"
+              },
+              {
+                "label": "candidate.salutations.ms",
+                "value": "ms"
+              }
+            ],
+            "titles": [
+              {
+                "label": "candidate.titles.none",
+                "value": "none"
+              },
+              {
+                "label": "candidate.titles.dr",
+                "value": "dr"
+              },
+              {
+                "label": "candidate.titles.prof",
+                "value": "prof"
+              },
+              {
+                "label": "candidate.titles.mr_dr",
+                "value": "mr_dr"
+              },
+              {
+                "label": "candidate.titles.mr_prof",
+                "value": "mr_prof"
+              },
+              {
+                "label": "candidate.titles.ms_dr",
+                "value": "ms_dr"
+              },
+              {
+                "label": "candidate.titles.ms_prof",
+                "value": "ms_prof"
+              }
+            ]
+          },
+          {
+            "lang_code": "de",
+            "greetings": [
+              {
+                "label": "candidate.greetings.mr",
+                "value": "mr"
+              },
+              {
+                "label": "candidate.greetings.ms",
+                "value": "ms"
+              },
+              {
+                "label": "candidate.greetings.mr_dr",
+                "value": "mr_dr"
+              },
+              {
+                "label": "candidate.greetings.ms_dr",
+                "value": "ms_dr"
+              },
+              {
+                "label": "candidate.greetings.mr_prof",
+                "value": "mr_prof"
+              },
+              {
+                "label": "candidate.greetings.ms_prof",
+                "value": "ms_prof"
+              },
+              {
+                "label": "candidate.greetings.dr",
+                "value": "dr"
+              },
+              {
+                "label": "candidate.greetings.prof",
+                "value": "prof"
+              },
+              {
+                "label": "candidate.greetings.none",
+                "value": "none"
+              }
+            ],
+            "salutations": [
+              {
+                "label": "candidate.salutations.none",
+                "value": "none"
+              },
+              {
+                "label": "candidate.salutations.mr",
+                "value": "mr"
+              },
+              {
+                "label": "candidate.salutations.ms",
+                "value": "ms"
+              }
+            ],
+            "titles": [
+              {
+                "label": "candidate.titles.none",
+                "value": "none"
+              },
+              {
+                "label": "candidate.titles.dr",
+                "value": "dr"
+              },
+              {
+                "label": "candidate.titles.prof",
+                "value": "prof"
+              },
+              {
+                "label": "candidate.titles.mr_dr",
+                "value": "mr_dr"
+              },
+              {
+                "label": "candidate.titles.mr_prof",
+                "value": "mr_prof"
+              },
+              {
+                "label": "candidate.titles.ms_dr",
+                "value": "ms_dr"
+              },
+              {
+                "label": "candidate.titles.ms_prof",
+                "value": "ms_prof"
+              }
+            ]
+          },
+          {
+            "lang_code": "fr",
+            "greetings": [
+              {
+                "label": "candidate.greetings.mr",
+                "value": "mr"
+              },
+              {
+                "label": "candidate.greetings.ms",
+                "value": "ms"
+              },
+              {
+                "label": "candidate.greetings.mr_dr",
+                "value": "mr_dr"
+              },
+              {
+                "label": "candidate.greetings.ms_dr",
+                "value": "ms_dr"
+              },
+              {
+                "label": "candidate.greetings.mr_prof",
+                "value": "mr_prof"
+              },
+              {
+                "label": "candidate.greetings.ms_prof",
+                "value": "ms_prof"
+              },
+              {
+                "label": "candidate.greetings.dr",
+                "value": "dr"
+              },
+              {
+                "label": "candidate.greetings.prof",
+                "value": "prof"
+              },
+              {
+                "label": "candidate.greetings.none",
+                "value": "none"
+              }
+            ],
+            "salutations": [
+              {
+                "label": "candidate.salutations.none",
+                "value": "none"
+              },
+              {
+                "label": "candidate.salutations.mr",
+                "value": "mr"
+              },
+              {
+                "label": "candidate.salutations.ms",
+                "value": "ms"
+              }
+            ],
+            "titles": [
+              {
+                "label": "candidate.titles.none",
+                "value": "none"
+              },
+              {
+                "label": "candidate.titles.dr",
+                "value": "dr"
+              },
+              {
+                "label": "candidate.titles.prof",
+                "value": "prof"
+              },
+              {
+                "label": "candidate.titles.mr_dr",
+                "value": "mr_dr"
+              },
+              {
+                "label": "candidate.titles.mr_prof",
+                "value": "mr_prof"
+              },
+              {
+                "label": "candidate.titles.ms_dr",
+                "value": "ms_dr"
+              },
+              {
+                "label": "candidate.titles.ms_prof",
+                "value": "ms_prof"
+              }
+            ]
+          },
+          {
+            "lang_code": "sv",
+            "greetings": [
+              {
+                "label": "candidate.greetings.mr",
+                "value": "mr"
+              },
+              {
+                "label": "candidate.greetings.ms",
+                "value": "ms"
+              },
+              {
+                "label": "candidate.greetings.mr_dr",
+                "value": "mr_dr"
+              },
+              {
+                "label": "candidate.greetings.ms_dr",
+                "value": "ms_dr"
+              },
+              {
+                "label": "candidate.greetings.mr_prof",
+                "value": "mr_prof"
+              },
+              {
+                "label": "candidate.greetings.ms_prof",
+                "value": "ms_prof"
+              },
+              {
+                "label": "candidate.greetings.dr",
+                "value": "dr"
+              },
+              {
+                "label": "candidate.greetings.prof",
+                "value": "prof"
+              },
+              {
+                "label": "candidate.greetings.none",
+                "value": "none"
+              }
+            ],
+            "salutations": [
+              {
+                "label": "candidate.salutations.none",
+                "value": "none"
+              },
+              {
+                "label": "candidate.salutations.mr",
+                "value": "mr"
+              },
+              {
+                "label": "candidate.salutations.ms",
+                "value": "ms"
+              }
+            ],
+            "titles": [
+              {
+                "label": "candidate.titles.none",
+                "value": "none"
+              },
+              {
+                "label": "candidate.titles.dr",
+                "value": "dr"
+              },
+              {
+                "label": "candidate.titles.prof",
+                "value": "prof"
+              },
+              {
+                "label": "candidate.titles.mr_dr",
+                "value": "mr_dr"
+              },
+              {
+                "label": "candidate.titles.mr_prof",
+                "value": "mr_prof"
+              },
+              {
+                "label": "candidate.titles.ms_dr",
+                "value": "ms_dr"
+              },
+              {
+                "label": "candidate.titles.ms_prof",
+                "value": "ms_prof"
+              }
+            ]
+          },
+          {
+            "lang_code": "fi",
+            "greetings": [
+              {
+                "label": "candidate.greetings.mr",
+                "value": "mr"
+              },
+              {
+                "label": "candidate.greetings.ms",
+                "value": "ms"
+              },
+              {
+                "label": "candidate.greetings.mr_dr",
+                "value": "mr_dr"
+              },
+              {
+                "label": "candidate.greetings.ms_dr",
+                "value": "ms_dr"
+              },
+              {
+                "label": "candidate.greetings.mr_prof",
+                "value": "mr_prof"
+              },
+              {
+                "label": "candidate.greetings.ms_prof",
+                "value": "ms_prof"
+              },
+              {
+                "label": "candidate.greetings.dr",
+                "value": "dr"
+              },
+              {
+                "label": "candidate.greetings.prof",
+                "value": "prof"
+              },
+              {
+                "label": "candidate.greetings.none",
+                "value": "none"
+              }
+            ],
+            "salutations": [
+              {
+                "label": "candidate.salutations.none",
+                "value": "none"
+              },
+              {
+                "label": "candidate.salutations.mr",
+                "value": "mr"
+              },
+              {
+                "label": "candidate.salutations.ms",
+                "value": "ms"
+              }
+            ],
+            "titles": [
+              {
+                "label": "candidate.titles.none",
+                "value": "none"
+              },
+              {
+                "label": "candidate.titles.dr",
+                "value": "dr"
+              },
+              {
+                "label": "candidate.titles.prof",
+                "value": "prof"
+              },
+              {
+                "label": "candidate.titles.mr_dr",
+                "value": "mr_dr"
+              },
+              {
+                "label": "candidate.titles.mr_prof",
+                "value": "mr_prof"
+              },
+              {
+                "label": "candidate.titles.ms_dr",
+                "value": "ms_dr"
+              },
+              {
+                "label": "candidate.titles.ms_prof",
+                "value": "ms_prof"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "tags": [
+    "referral_portal",
+    "program",
+    "referral"
+  ]
+}

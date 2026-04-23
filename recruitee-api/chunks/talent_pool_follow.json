@@ -1,0 +1,82 @@
+{
+  "id": "talent_pool_follow",
+  "method": "PATCH",
+  "path": "/c/{company_id}/talent_pools/{id}/follow",
+  "summary": "Follow talent pool (join talent pool)",
+  "description": "Follow talent pool (join talent pool). Endpoint: PATCH /c/{company_id}/talent_pools/{id}/follow. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Talent Pool ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/talent_pools/{id}/follow\n\nRequired params: id, company_id",
+  "example_response": {
+    "talent_pool": {
+      "id": 1863,
+      "position": 41,
+      "status": "draft",
+      "description": "<p>What a description!</p>",
+      "title": "Best Talent Pool",
+      "admins": [
+        {
+          "id": 9026,
+          "email": "john656@recruitee.com",
+          "has_avatar": false,
+          "initials": "JD",
+          "photo_normal_url": "tmp/bow/admins/9026/normal_avatar_m3s6n2rbtpeu.png",
+          "photo_thumb_url": "tmp/bow/admins/9026/thumb_avatar_m3s6n2rbtpeu.png",
+          "timezone": "Europe/London",
+          "first_name": "John",
+          "last_name": "Doe",
+          "time_format24": true
+        }
+      ],
+      "candidates_count": 0,
+      "created_at": "2026-04-21T07:33:54.590772Z",
+      "updated_at": "2026-04-21T07:33:54.590772Z",
+      "admin_ids": [
+        9026
+      ],
+      "notes_count": 0,
+      "followed": true,
+      "attachments_count": 0,
+      "adminapp_url": "http://app.recruitee.internal:3003/#/talent_pools/best-talent-pool100",
+      "example": false,
+      "department_id": null,
+      "slug": "best-talent-pool100",
+      "guid": "talent-pool-guid40",
+      "mailbox_email": "tp.talent-pool-guid40@company648.test.recruitee.com",
+      "followers": [
+        {
+          "id": 9026,
+          "email": "john656@recruitee.com",
+          "has_avatar": false,
+          "initials": "JD",
+          "photo_normal_url": "tmp/bow/admins/9026/normal_avatar_m3s6n2rbtpeu.png",
+          "photo_thumb_url": "tmp/bow/admins/9026/thumb_avatar_m3s6n2rbtpeu.png",
+          "timezone": "Europe/London",
+          "first_name": "John",
+          "last_name": "Doe",
+          "time_format24": true
+        }
+      ],
+      "follower_ids": [
+        9026
+      ]
+    }
+  },
+  "tags": [
+    "talent_pools"
+  ]
+}

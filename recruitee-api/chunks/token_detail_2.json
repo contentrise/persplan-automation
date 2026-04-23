@@ -1,0 +1,31 @@
+{
+  "id": "token_detail_2",
+  "method": "POST",
+  "path": "/secure_change/token",
+  "summary": "Get secure change token",
+  "description": "Get secure change token. Endpoint: POST /secure_change/token. Required parameters: email_code.",
+  "params": [
+    {
+      "name": "email_code",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"secure_change\": {\n\"magic_beans\": 123\n}\n}",
+  "example_response": {
+    "errors": [
+      {
+        "code": "params_invalid",
+        "data": {},
+        "message": "email_code is required"
+      }
+    ]
+  },
+  "tags": [
+    "secure_change",
+    "token",
+    "admin"
+  ]
+}

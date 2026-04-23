@@ -1,0 +1,53 @@
+{
+  "id": "company_create",
+  "method": "POST",
+  "path": "/c/{company_id}/companies",
+  "summary": "Create company",
+  "description": "Create company. Endpoint: POST /c/{company_id}/companies. Required parameters: company_id. Optional parameters include name, language, country_code, subdomain.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "description": "Name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "language",
+      "type": "string",
+      "required": false,
+      "description": "Language ISO 639-1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "country_code",
+      "type": "string",
+      "required": false,
+      "description": "Address country code ISO 3166-1 alpha 2",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "subdomain",
+      "type": "string",
+      "required": false,
+      "description": "Subdomain",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"company\": {}\n}",
+  "example_response": {
+    "error": [
+      "Unprocessable entity"
+    ]
+  },
+  "tags": [
+    "companies"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "language_detail_3",
+  "method": "GET",
+  "path": "/share/lang/languages",
+  "summary": "Get languages",
+  "description": "Get languages. Endpoint: GET /share/lang/languages. Optional parameters include host.",
+  "params": [
+    {
+      "name": "host",
+      "type": "string",
+      "required": false,
+      "description": "Host",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /share/lang/languages\n\nOptional params: host",
+  "example_response": {},
+  "tags": [
+    "lang",
+    "languages"
+  ]
+}

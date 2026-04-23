@@ -1,0 +1,107 @@
+{
+  "id": "assigned_offers_list_3",
+  "method": "GET",
+  "path": "/c/{company_id}/auto_reply_templates/{id}/assigned_offers",
+  "summary": "List given auto-reply's assigned offers",
+  "description": "List given auto-reply's assigned offers. Endpoint: GET /c/{company_id}/auto_reply_templates/{id}/assigned_offers. Required parameters: id, company_id. Optional parameters include q, limit, page.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Auto-reply template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "q",
+      "type": "string",
+      "required": false,
+      "description": "Search offers",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "required": false,
+      "description": "Limit number of results, default: 1000",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "page",
+      "type": "integer",
+      "required": false,
+      "description": "Page number (1, 2, 3, …), default: 1",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/auto_reply_templates/{id}/assigned_offers\n\nRequired params: id, company_id\n\nOptional params: q, limit, page",
+  "example_response": {
+    "meta": {
+      "limit": 1000,
+      "total_count": 3,
+      "page": 1
+    },
+    "assigned_offers": [
+      {
+        "id": 875,
+        "status": "draft",
+        "remote": false,
+        "title": "Best Offer",
+        "country_code": null,
+        "created_at": "2026-04-21T07:32:25.979736Z",
+        "updated_at": "2026-04-21T07:32:25.979736Z",
+        "city": null,
+        "state_code": null,
+        "department": "Dept 29",
+        "location_ids": [],
+        "slug": "best-offer433",
+        "hybrid": false,
+        "on_site": true
+      },
+      {
+        "id": 876,
+        "status": "draft",
+        "remote": false,
+        "title": "Best Offer",
+        "country_code": null,
+        "created_at": "2026-04-21T07:32:25.982508Z",
+        "updated_at": "2026-04-21T07:32:25.982508Z",
+        "city": null,
+        "state_code": null,
+        "department": "Dept 29",
+        "location_ids": [],
+        "slug": "best-offer434",
+        "hybrid": false,
+        "on_site": true
+      },
+      {
+        "id": 877,
+        "status": "draft",
+        "remote": false,
+        "title": "Best Offer",
+        "country_code": null,
+        "created_at": "2026-04-21T07:32:25.984819Z",
+        "updated_at": "2026-04-21T07:32:25.984819Z",
+        "city": null,
+        "state_code": null,
+        "department": "Dept 29",
+        "location_ids": [],
+        "slug": "best-offer435",
+        "hybrid": false,
+        "on_site": true
+      }
+    ]
+  },
+  "tags": [
+    "auto_reply_templates",
+    "assigned_offers",
+    "mailbox"
+  ]
+}

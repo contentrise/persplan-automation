@@ -1,0 +1,30 @@
+{
+  "id": "candidate_conceal",
+  "method": "PATCH",
+  "path": "/c/{company_id}/candidates/{id}/conceal",
+  "summary": "Conceal revealed anonymous candidate",
+  "description": "Conceal revealed anonymous candidate. Endpoint: PATCH /c/{company_id}/candidates/{id}/conceal. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "PATCH /c/{company_id}/candidates/{id}/conceal\n\nRequired params: id, company_id",
+  "example_response": {
+    "success": true
+  },
+  "tags": [
+    "candidates"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": "open_question_create_3",
+  "method": "POST",
+  "path": "/c/{company_id}/open_questions/template/{template_id}/open_questions",
+  "summary": "Create open question for a given template",
+  "description": "Create open question for a given template. Endpoint: POST /c/{company_id}/open_questions/template/{template_id}/open_questions. Required parameters: open_question, template_id, company_id.",
+  "params": [
+    {
+      "name": "open_question",
+      "type": "map",
+      "required": true,
+      "description": "Open Question params",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"open_question\": {\n\"kind\": \"boolean\",\n\"open_question_options\": [\n{\n\"disqualify_reason_id\": 54,\n\"options\": {\n\"kind\": \"yes\"\n}\n},\n{\n\"options\": {\n\"kind\": \"no\"\n},\n\"translations\": [\n{\n\"body\": \"GenServer\",\n\"lang_code\": \"en\"\n}\n]\n}\n],\n\"required\": false,\n\"translations\": [\n{\n\"body\": \"Select best tool for background jobs\",\n\"lang_code\": \"en\"\n}\n],\n\"visibility\": {\n\"admin_ids\": [],\n\"level\": \"public\",\n\"role_ids\": []\n}\n}\n}",
+  "example_response": {
+    "open_question": {
+      "id": 116,
+      "position": 1,
+      "visible": true,
+      "options": null,
+      "required": false,
+      "kind": "boolean",
+      "visibility": {
+        "level": "public",
+        "admin_ids": [],
+        "role_ids": []
+      },
+      "open_question_options": [
+        {
+          "id": 135,
+          "position": null,
+          "options": {
+            "kind": "yes"
+          },
+          "translations": [],
+          "disqualify_reason_id": 54
+        },
+        {
+          "id": 136,
+          "position": null,
+          "options": {
+            "kind": "no"
+          },
+          "translations": [
+            {
+              "body": "GenServer",
+              "lang_code": "en"
+            }
+          ],
+          "disqualify_reason_id": null
+        }
+      ],
+      "translations": [
+        {
+          "body": "Select best tool for background jobs",
+          "lang_code": "en"
+        }
+      ],
+      "open_question_template_id": 106,
+      "is_knockout_question": true
+    }
+  },
+  "tags": [
+    "open_questions",
+    "template"
+  ]
+}

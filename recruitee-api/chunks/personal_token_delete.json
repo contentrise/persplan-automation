@@ -1,0 +1,33 @@
+{
+  "id": "personal_token_delete",
+  "method": "DELETE",
+  "path": "/c/{company_id}/oauth/personal_tokens/{id}",
+  "summary": "Delete personal token",
+  "description": "Delete personal token. Endpoint: DELETE /c/{company_id}/oauth/personal_tokens/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/oauth/personal_tokens/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "error": [
+      "Forbidden"
+    ]
+  },
+  "tags": [
+    "personal_tokens",
+    "oauth"
+  ]
+}

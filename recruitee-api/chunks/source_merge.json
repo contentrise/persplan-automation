@@ -1,0 +1,52 @@
+{
+  "id": "source_merge",
+  "method": "PATCH",
+  "path": "/c/{company_id}/sources/{id}/merge",
+  "summary": "Merge candidate sources",
+  "description": "Merge candidate sources. Endpoint: PATCH /c/{company_id}/sources/{id}/merge. Required parameters: name, company_id. Optional parameters include id, ids.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Source ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "New Source name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "ids",
+      "type": "integer",
+      "required": false,
+      "description": "Source IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"source\": {\n\"name\": \"Linkedin\"\n}\n}",
+  "example_response": {
+    "source": {
+      "id": 139,
+      "name": "Linkedin",
+      "status": null,
+      "context": "sources",
+      "taggings_count": 1,
+      "searchable_name": "linkedin"
+    }
+  },
+  "tags": [
+    "sources",
+    "tagging"
+  ]
+}

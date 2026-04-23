@@ -1,0 +1,32 @@
+{
+  "id": "destroy_delete_3",
+  "method": "PATCH",
+  "path": "/c/{company_id}/bulk/memberships/destroy",
+  "summary": "Delete memberships in bulk",
+  "description": "Delete memberships in bulk. Endpoint: PATCH /c/{company_id}/bulk/memberships/destroy. Required parameters: memberships, company_id.",
+  "params": [
+    {
+      "name": "memberships",
+      "type": "array",
+      "required": true,
+      "description": "Array of memberships IDs",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"memberships\": [\n178,\n179\n]\n}",
+  "example_response": {
+    "uuid": "52477f19-6786-456e-8c18-d678a8272ad8"
+  },
+  "tags": [
+    "memberships",
+    "destroy",
+    "company"
+  ]
+}

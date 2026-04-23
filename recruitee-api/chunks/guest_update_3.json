@@ -1,0 +1,54 @@
+{
+  "id": "guest_update_3",
+  "method": "PATCH",
+  "path": "/share/containers/{token}/guests",
+  "summary": "Update guest",
+  "description": "Update guest. Endpoint: PATCH /share/containers/{token}/guests. Required parameters: name, token, email, auth_token.",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "token",
+      "type": "integer",
+      "required": true,
+      "description": "Container token",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "required": true,
+      "description": "Email",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "auth_token",
+      "type": "integer",
+      "required": true,
+      "description": "Guest token",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"guest\": {\n\"email\": \"adam.nowak@example.com\",\n\"name\": \"Adam Nowak\"\n}\n}",
+  "example_response": {
+    "guest": {
+      "id": 104,
+      "name": "Adam Nowak",
+      "email": "adam.nowak@example.com",
+      "auth_token": "zXyuWv987393",
+      "photo_thumb_url": "tmp/bow/guests/104/thumb_initials_2v4fy4g4e85g.png",
+      "created_at": "2026-04-21T07:33:32.986543Z",
+      "updated_at": "2026-04-21T07:33:32.993694Z",
+      "recruiter": false
+    }
+  },
+  "tags": [
+    "containers",
+    "guests"
+  ]
+}

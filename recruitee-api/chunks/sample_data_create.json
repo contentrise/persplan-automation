@@ -1,0 +1,22 @@
+{
+  "id": "sample_data_create",
+  "method": "POST",
+  "path": "/c/{company_id}/sample_data",
+  "summary": "Creates sample data for company",
+  "description": "Creates sample data for company. Endpoint: POST /c/{company_id}/sample_data. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "POST /c/{company_id}/sample_data\n\nRequired params: company_id",
+  "example_response": {},
+  "tags": [
+    "sample_data",
+    "onboarding"
+  ]
+}

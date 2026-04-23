@@ -1,0 +1,133 @@
+{
+  "id": "availables_list_2",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/schedules/available",
+  "summary": "List interview schedules available for insert",
+  "description": "List interview schedules available for insert. Endpoint: GET /c/{company_id}/interview/schedules/available. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/schedules/available\n\nRequired params: company_id",
+  "example_response": {
+    "references": [
+      {
+        "id": 4294,
+        "type": "Admin",
+        "email": "john3313@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/4294/normal_avatar_tbt3166syagt.png",
+        "photo_thumb_url": "tmp/bow/admins/4294/thumb_avatar_tbt3166syagt.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 4295,
+        "type": "Admin",
+        "email": "john3315@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/4295/normal_avatar_ke5h2wgngwwg.png",
+        "photo_thumb_url": "tmp/bow/admins/4295/thumb_avatar_ke5h2wgngwwg.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 4296,
+        "type": "Admin",
+        "email": "john3317@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/4296/normal_avatar_8rm9lky3wutf.png",
+        "photo_thumb_url": "tmp/bow/admins/4296/thumb_avatar_8rm9lky3wutf.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 4293,
+        "type": "Admin",
+        "email": "john3311@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/4293/normal_avatar_9pfk6394sf7l.png",
+        "photo_thumb_url": "tmp/bow/admins/4293/thumb_avatar_9pfk6394sf7l.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "interview_schedules": [
+      {
+        "id": 33,
+        "name": "Interview availability",
+        "private": false,
+        "kind": "meeting",
+        "token": "aBcDeFg123433",
+        "created_at": "2026-04-21T07:32:26.238117Z",
+        "updated_at": "2026-04-21T07:32:26.238117Z",
+        "admin_ids": [
+          4294,
+          4295,
+          4296
+        ],
+        "note": "Private note 2",
+        "custom_name": null,
+        "public_note": "Public note 2",
+        "video_provider": null,
+        "hide_candidates_names": false,
+        "exclude_candidate_from_attendees": false,
+        "video": null,
+        "organizer_id": 4293,
+        "request_links_pending_count": null,
+        "request_links_scheduled_count": null,
+        "reschedule_enabled": true,
+        "assign_any_interviewer": false
+      },
+      {
+        "id": 32,
+        "name": "Interview availability",
+        "private": false,
+        "kind": "meeting",
+        "token": "aBcDeFg123432",
+        "created_at": "2026-04-21T07:32:26.236525Z",
+        "updated_at": "2026-04-21T07:32:26.236525Z",
+        "admin_ids": [
+          4293
+        ],
+        "note": "Private note 1",
+        "custom_name": null,
+        "public_note": null,
+        "video_provider": null,
+        "hide_candidates_names": false,
+        "exclude_candidate_from_attendees": false,
+        "video": null,
+        "organizer_id": 4293,
+        "request_links_pending_count": null,
+        "request_links_scheduled_count": null,
+        "reschedule_enabled": true,
+        "assign_any_interviewer": false
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "schedules"
+  ]
+}

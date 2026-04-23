@@ -1,0 +1,37 @@
+{
+  "id": "disqualify_reason_update",
+  "method": "PATCH",
+  "path": "/c/{company_id}/disqualify_reasons/{id}",
+  "summary": "Update single disqualify reason",
+  "description": "Update single disqualify reason. Endpoint: PATCH /c/{company_id}/disqualify_reasons/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Disqualify Reason ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"disqualify_reason\": {\n\"action_templates\": [\n{\n\"data\": {\n\"tags\": [\n\"not_a_tag\"\n]\n},\n\"kind\": \"add_tags\"\n}\n],\n\"id\": 86,\n\"name\": \"Updated reason\"\n}\n}",
+  "example_response": {
+    "disqualify_reason": {
+      "id": 86,
+      "name": "Updated reason",
+      "position": 3,
+      "action_templates": [],
+      "automation_ids": []
+    }
+  },
+  "tags": [
+    "disqualify_reasons",
+    "pipeline"
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "stage_delete",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{offer_id}/pipeline_templates/stages/delete_and_move_placements/",
+  "summary": "Delete pipeline template stage and move placements to given destination stage",
+  "description": "Delete pipeline template stage and move placements to given destination stage. Endpoint: PATCH /c/{company_id}/offers/{offer_id}/pipeline_templates/stages/delete_and_move_placements/. Required parameters: offer_id, source_template_id, company_id. Optional parameters include destination_stage_id.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID or slug",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "source_template_id",
+      "type": "integer",
+      "required": true,
+      "description": "Pipeline template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "destination_stage_id",
+      "type": "integer",
+      "required": false,
+      "description": "Placements destination stage ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"destination_stage_id\": 35313,\n\"source_template_id\": 4389\n}",
+  "example_response": {
+    "stage": {
+      "id": 35330,
+      "name": "Interview",
+      "position": 6,
+      "group": "active",
+      "category": "none",
+      "fair_evaluations_enabled": false,
+      "action_templates": [],
+      "locked": false,
+      "placements_count": null,
+      "time_limit": null,
+      "candidate_anonymization_enabled": false
+    }
+  },
+  "tags": [
+    "offers",
+    "pipeline_templates"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "id": "template_delete_2",
+  "method": "DELETE",
+  "path": "/c/{company_id}/open_questions/template/{id}",
+  "summary": "Delete open question template",
+  "description": "Delete open question template. Endpoint: DELETE /c/{company_id}/open_questions/template/{id}. Required parameters: id, company_id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": true,
+      "description": "Open Question template ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "DELETE /c/{company_id}/open_questions/template/{id}\n\nRequired params: id, company_id",
+  "example_response": {
+    "errors": [
+      {
+        "code": "no_assoc_constraint",
+        "data": {},
+        "message": "Assigned offer templates are still associated with this entry",
+        "source": "open_question_template/assigned_offer_templates"
+      }
+    ],
+    "resources": {
+      "assigned_offer_templates": [
+        {
+          "code": "no_assoc_constraint",
+          "data": {},
+          "message": "are still associated with this entry"
+        }
+      ]
+    }
+  },
+  "tags": [
+    "open_questions",
+    "template"
+  ]
+}

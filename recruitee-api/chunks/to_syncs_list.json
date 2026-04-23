@@ -1,0 +1,64 @@
+{
+  "id": "to_syncs_list",
+  "method": "GET",
+  "path": "/c/{company_id}/interview/meeting_rooms/to_sync",
+  "summary": "List calendars that can be synced as meeting rooms",
+  "description": "List calendars that can be synced as meeting rooms. Endpoint: GET /c/{company_id}/interview/meeting_rooms/to_sync. Required parameters: calendar_id, company_id.",
+  "params": [
+    {
+      "name": "calendar_id",
+      "type": "integer",
+      "required": true,
+      "description": "Temporary interview calendar ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/interview/meeting_rooms/to_sync\n\nRequired params: calendar_id, company_id",
+  "example_response": {
+    "meeting_rooms": [
+      {
+        "id": "not_synced_room@resource.calendar.google.com",
+        "name": "not_synced_room",
+        "floor": null,
+        "already_synced": false,
+        "building": null,
+        "capacity": null
+      },
+      {
+        "id": "room 51@resource.calendar.google.com",
+        "name": "room 51",
+        "floor": 1,
+        "already_synced": true,
+        "building": "Kupiec Poznanski",
+        "capacity": 10
+      },
+      {
+        "id": "room 52@resource.calendar.google.com",
+        "name": "room 52",
+        "floor": 1,
+        "already_synced": true,
+        "building": "Kupiec Poznanski",
+        "capacity": 10
+      },
+      {
+        "id": "room 53@resource.calendar.google.com",
+        "name": "room 53",
+        "floor": 1,
+        "already_synced": true,
+        "building": "Kupiec Poznanski",
+        "capacity": 10
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "meeting_rooms"
+  ]
+}

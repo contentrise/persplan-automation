@@ -1,0 +1,94 @@
+{
+  "id": "opening_fill",
+  "method": "PATCH",
+  "path": "/c/{company_id}/offers/{offer_id}/requisitions/{requisition_id}/openings",
+  "summary": "Fill open openings",
+  "description": "Fill open openings. Endpoint: PATCH /c/{company_id}/offers/{offer_id}/requisitions/{requisition_id}/openings. Required parameters: offer_id, requisition_id, company_id. Optional parameters include fill_openings.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "requisition_id",
+      "type": "integer",
+      "required": true,
+      "description": "Requisition ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "fill_openings",
+      "type": "array",
+      "required": false,
+      "description": "A list of maps with opening_id and placement_id",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"fill_openings\": [\n{\n\"opening_id\": 22,\n\"placement_id\": 1105\n},\n{\n\"opening_id\": 23,\n\"placement_id\": 1106\n}\n]\n}",
+  "example_response": {
+    "openings": [
+      {
+        "id": 23,
+        "status": "filled",
+        "placement": {
+          "id": 1106,
+          "offer": {
+            "id": 1593,
+            "status": "draft",
+            "title": "Best Offer",
+            "slug": "best-offer1156"
+          },
+          "candidate": {
+            "id": 1940,
+            "name": "John Doe",
+            "initials": "JD",
+            "photo_thumb_url": null,
+            "anonymized_at": null,
+            "deleted_at": null
+          },
+          "disqualify_reason": null
+        },
+        "placement_id": 1106,
+        "filled_at": "2026-04-21T07:33:25.248325Z"
+      },
+      {
+        "id": 22,
+        "status": "filled",
+        "placement": {
+          "id": 1105,
+          "offer": {
+            "id": 1593,
+            "status": "draft",
+            "title": "Best Offer",
+            "slug": "best-offer1156"
+          },
+          "candidate": {
+            "id": 1939,
+            "name": "John Doe",
+            "initials": "JD",
+            "photo_thumb_url": null,
+            "anonymized_at": null,
+            "deleted_at": null
+          },
+          "disqualify_reason": null
+        },
+        "placement_id": 1105,
+        "filled_at": "2026-04-21T07:33:25.247308Z"
+      }
+    ]
+  },
+  "tags": [
+    "offers",
+    "requisitions"
+  ]
+}

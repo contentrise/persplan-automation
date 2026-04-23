@@ -1,0 +1,57 @@
+{
+  "id": "offer_tag_delete_2",
+  "method": "DELETE",
+  "path": "/c/{company_id}/offers/{offer_id}/offer_tags",
+  "summary": "Remove offer's offer tags",
+  "description": "Remove offer's offer tags. Endpoint: DELETE /c/{company_id}/offers/{offer_id}/offer_tags. Required parameters: offer_id, company_id. Optional parameters include offer_tags, offer_tag.",
+  "params": [
+    {
+      "name": "offer_id",
+      "type": "integer",
+      "required": true,
+      "description": "Offer ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_tags",
+      "type": "array",
+      "required": false,
+      "description": "Array of offer_tags",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "offer_tag",
+      "type": "string",
+      "required": false,
+      "description": "Offer tag",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"offer_tag\": \"On-Site\"\n}",
+  "example_response": {
+    "offer_tags": [
+      {
+        "id": 40,
+        "name": "On-Site",
+        "status": null,
+        "context": "offer_tags",
+        "taggings_count": 0,
+        "searchable_name": "on-site",
+        "offer_taggings_count": 0,
+        "offer_template_taggings_count": 0
+      }
+    ]
+  },
+  "tags": [
+    "offers",
+    "offer_tags",
+    "tagging"
+  ]
+}

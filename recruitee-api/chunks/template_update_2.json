@@ -1,0 +1,61 @@
+{
+  "id": "template_update_2",
+  "method": "PATCH",
+  "path": "/c/{company_id}/interview/templates/update_positions",
+  "summary": "Update interview templates positions",
+  "description": "Update interview templates positions. Endpoint: PATCH /c/{company_id}/interview/templates/update_positions. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"interview_templates\": [\n{\n\"id\": 48,\n\"position\": 2\n},\n{\n\"id\": 49,\n\"position\": 1\n}\n]\n}",
+  "example_response": {
+    "references": [
+      {
+        "id": 1258,
+        "type": "Admin",
+        "email": "john762@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/1258/normal_avatar_8fk252nlgevs.png",
+        "photo_thumb_url": "tmp/bow/admins/1258/thumb_avatar_8fk252nlgevs.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ],
+    "interview_templates": [
+      {
+        "id": 49,
+        "name": "Interview template 2",
+        "position": 1,
+        "category": "Engineering",
+        "kind": "interview",
+        "token": "abcdef123456",
+        "info_title": "Interview preperation",
+        "info_description": "<p>Elixir Developer interview</p>\n"
+      },
+      {
+        "id": 48,
+        "name": "Interview template 1",
+        "position": 2,
+        "category": "Engineering",
+        "kind": "interview",
+        "token": "abcdef123456",
+        "info_title": "Interview preperation",
+        "info_description": "<p>Elixir Developer interview</p>\n"
+      }
+    ]
+  },
+  "tags": [
+    "interview",
+    "templates"
+  ]
+}

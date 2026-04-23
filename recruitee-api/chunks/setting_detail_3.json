@@ -1,0 +1,28 @@
+{
+  "id": "setting_detail_3",
+  "method": "GET",
+  "path": "/c/{company_id}/intelligence/settings",
+  "summary": "Show company's Intelligence settings",
+  "description": "Show company's Intelligence settings. Endpoint: GET /c/{company_id}/intelligence/settings. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/intelligence/settings\n\nRequired params: company_id",
+  "example_response": {
+    "company_settings": {
+      "id": 4,
+      "ai_writer_enabled": true,
+      "evaluation_insights_enabled": true
+    }
+  },
+  "tags": [
+    "intelligence",
+    "settings"
+  ]
+}

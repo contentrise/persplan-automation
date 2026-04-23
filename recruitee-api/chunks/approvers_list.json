@@ -1,0 +1,67 @@
+{
+  "id": "approvers_list",
+  "method": "GET",
+  "path": "/c/{company_id}/marketplace/feature_request/approvers",
+  "summary": "List available approvers",
+  "description": "List available approvers. Endpoint: GET /c/{company_id}/marketplace/feature_request/approvers. Required parameters: company_id.",
+  "params": [
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/marketplace/feature_request/approvers\n\nRequired params: company_id",
+  "example_response": {
+    "approvers": [
+      {
+        "id": 5163,
+        "type": "Admin",
+        "email": "john4839@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/5163/normal_avatar_mst9nhpt4vuw.png",
+        "photo_thumb_url": "tmp/bow/admins/5163/thumb_avatar_mst9nhpt4vuw.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 5164,
+        "type": "Admin",
+        "email": "john4840@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/5164/normal_avatar_y244o6acp6c2.png",
+        "photo_thumb_url": "tmp/bow/admins/5164/thumb_avatar_y244o6acp6c2.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      },
+      {
+        "id": 5165,
+        "type": "Admin",
+        "email": "john4841@recruitee.com",
+        "has_avatar": false,
+        "initials": "JD",
+        "photo_normal_url": "tmp/bow/admins/5165/normal_avatar_6v4ppesphyrb.png",
+        "photo_thumb_url": "tmp/bow/admins/5165/thumb_avatar_6v4ppesphyrb.png",
+        "timezone": "Europe/London",
+        "first_name": "John",
+        "last_name": "Doe",
+        "time_format24": true,
+        "anonymized_at": null
+      }
+    ]
+  },
+  "tags": [
+    "marketplace",
+    "feature_request"
+  ]
+}

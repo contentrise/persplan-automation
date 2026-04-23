@@ -1,0 +1,29 @@
+{
+  "id": "automations_list_6",
+  "method": "GET",
+  "path": "/c/{company_id}/workflow_automations/offers/automations",
+  "summary": "Lists context automations",
+  "description": "Lists context automations. Endpoint: GET /c/{company_id}/workflow_automations/offers/automations. Required parameters: company_id. Optional parameters include id.",
+  "params": [
+    {
+      "name": "id",
+      "type": "integer",
+      "required": false,
+      "description": "Context related resource ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/workflow_automations/offers/automations\n\nRequired params: company_id\n\nOptional params: id",
+  "example_response": {},
+  "tags": [
+    "workflow_automations",
+    "offers"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "id": "fieldsets_list",
+  "method": "GET",
+  "path": "/c/{company_id}/custom_fields/fieldsets",
+  "summary": "List company fieldsets",
+  "description": "List company fieldsets. Endpoint: GET /c/{company_id}/custom_fields/fieldsets. Required parameters: company_id. Optional parameters include query.",
+  "params": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": false,
+      "description": "Query string for searching",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/custom_fields/fieldsets\n\nRequired params: company_id\n\nOptional params: query",
+  "example_response": {
+    "fieldsets": [
+      {
+        "default": true,
+        "id": 10,
+        "name": "Engineering",
+        "position": 1,
+        "fields": [],
+        "category": null,
+        "updated_at": "2026-04-21T07:30:45.215730Z"
+      },
+      {
+        "default": false,
+        "id": 11,
+        "name": "Marketing",
+        "position": 2,
+        "fields": [],
+        "category": null,
+        "updated_at": "2026-04-21T07:30:45.216024Z"
+      }
+    ]
+  },
+  "tags": [
+    "custom_fields",
+    "fieldsets"
+  ]
+}

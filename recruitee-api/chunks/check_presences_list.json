@@ -1,0 +1,38 @@
+{
+  "id": "check_presences_list",
+  "method": "GET",
+  "path": "/c/{company_id}/candidates/check_presence",
+  "summary": "Check if candidate already exists",
+  "description": "Returns {status: “not_found”}, {status: “name_match”} or {status: “email_match”}",
+  "params": [
+    {
+      "name": "name",
+      "type": "string",
+      "required": false,
+      "description": "Full name",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "email",
+      "type": "array",
+      "required": false,
+      "description": "Array of email addresses",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/candidates/check_presence\n\nRequired params: company_id\n\nOptional params: name, email",
+  "example_response": {
+    "status": "email_match"
+  },
+  "tags": [
+    "candidates",
+    "check_presence"
+  ]
+}

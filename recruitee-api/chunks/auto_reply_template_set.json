@@ -1,0 +1,42 @@
+{
+  "id": "auto_reply_template_set",
+  "method": "PATCH",
+  "path": "/c/{company_id}/auto_reply_templates/set_default",
+  "summary": "Set default auto-reply template",
+  "description": "Set default auto-reply template. Endpoint: PATCH /c/{company_id}/auto_reply_templates/set_default. Required parameters: default, company_id.",
+  "params": [
+    {
+      "name": "default",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "Headers:\nContent-Type: application/json\n\nBody:\n{\n\"auto_reply_template\": {\n\"default\": false\n}\n}",
+  "example_response": {
+    "auto_reply_template": {
+      "default": false,
+      "id": 108,
+      "position": 50,
+      "title": "Template49",
+      "created_at": "2026-04-21T07:32:26.026279Z",
+      "updated_at": "2026-04-21T07:32:26.028085Z",
+      "assigned_offers_count": 0,
+      "assigned_offer_templates_count": 0,
+      "translations": [],
+      "template_attachment_assignments": []
+    }
+  },
+  "tags": [
+    "auto_reply_templates",
+    "mailbox"
+  ]
+}

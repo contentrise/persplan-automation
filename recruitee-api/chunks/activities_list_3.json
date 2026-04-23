@@ -1,0 +1,29 @@
+{
+  "id": "activities_list_3",
+  "method": "GET",
+  "path": "/c/{company_id}/tracking/candidates/{candidate_id}/activities",
+  "summary": "List activities for candidate",
+  "description": "List activities for candidate. Endpoint: GET /c/{company_id}/tracking/candidates/{candidate_id}/activities. Required parameters: candidate_id, company_id.",
+  "params": [
+    {
+      "name": "candidate_id",
+      "type": "integer",
+      "required": true,
+      "description": "Candidate ID",
+      "source": "URI Parameters"
+    },
+    {
+      "name": "company_id",
+      "type": "integer",
+      "required": true,
+      "description": "Company ID",
+      "source": "URI Parameters"
+    }
+  ],
+  "example_request": "GET /c/{company_id}/tracking/candidates/{candidate_id}/activities\n\nRequired params: candidate_id, company_id",
+  "example_response": {},
+  "tags": [
+    "tracking",
+    "candidates"
+  ]
+}
